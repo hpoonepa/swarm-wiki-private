@@ -1,0 +1,257 @@
+---
+layout: ../layouts/ContentLayout.astro
+title: CRISPR-interference
+header: https://static.igem.wiki/teams/5612/headerpics/therapeutics.webp
+description: 'Novel Approach to Treat Lyme Using CRISPR-interference and Lipid Nanoparticles'
+icon: "Plane"
+color: "green"
+tabLabels: ["Overview", "CRISPRi", "LNPs"]
+tabLinks: ["therapeutics-overview", "therapeutics-crispri", "therapeutics-lnps"]
+---
+
+import TwoColPara from "../components/md_components/TwoColPara";
+import Wip from "../components/md_components/Wip";
+import Image from "../components/md_components/Image";
+import Reference from "../components/md_components/Reference";
+import PDFAccordian from "../components/md_components/PDFAccordian";
+import ImageCarousel from "../components/md_components/ImageCarousel"
+
+
+# CRISPRi Overview
+The CRISPR-interference (CRISPRi) system uses a deactivated Cas9 (dCas9) enzyme guided by a single-guide RNA (sgRNA) to downregulate specific genes without permanently editing the DNA (Horizon, nd). By binding to a complementary target region, the dCas9-sgRNA complex prevents downstream transcription and inhibits gene expression (see Fig. 1; see  [Therapeutic Overview](/lambert-ga/therapeutics-overview/)) (Marshall et al., 2018).
+
+<iframe title="Lambert-GA: CRISPRi Animation (2025)" width="560" height="315" src="https://video.igem.org/videos/embed/79xhnAMF8YJ3KEH8UaU48F" allow="fullscreen" sandbox="allow-same-origin allow-scripts allow-popups allow-forms" style="border: 0px;"></iframe>
+*Figure 1. Animation of CRiSPR-interference (CRISPRi) system.*
+
+
+## Justification
+Over other methods of genomic regulation, CRISPRi provides non-permanent, reversible, and highly-specific genetic inhibition, enabling LANCET to silence genes of interest with great precision and safety (see Table 1).
+
+| RNAi (RNA interference) (Boettcher & McManus, 2015) | CRISPR (Yang et al., 2020) | CRISPRi (Larson et al., 2013; SigmaAldrich.com, 2021)|
+|------------------------------------------------------|----------------------------|---------|
+| Uses small interfering RNA (siRNA) to target mRNA | Uses catalytically active Cas9 protein | Uses catalytically inactive dCas9 protein |
+| Degrades mRNA transcripts | Permanently edits DNA sequences | Temporarily blocks transcription |
+| Moderate off-target effects from nonspecific mRNA binding | Creates irreversible genomic changes | Creates reversible gene downregulation |
+|  | Highly specific with low off-target effects | Minimal off-target effects |
+
+*Table 1. Comparison of characteristics between methods of genetic regulation*
+
+## Target Gene Selection
+To select the most appropriate target genes, we developed a set of criteria that ensure the CRISPRi system will be used most effectively and safely:
+
+- Sequences must be unique to the target bacteria and not found in humans
+- Consistent across species, with low variation and mutation rate
+- Critical to function, survival, and pathogenicity of bacteria
+- Minimal SOS side effect or triggering of alternate pathways when repressed
+
+We accordingly applied these criteria to the genome of *Borrelia burgdorferi*, and considered several targets, eventually finalizing on the genes *Bb0250* and *Bb0841* (see Table 2).
+
+| Gene of Interest | Family/Function | Primary Criteria | Effect of Repression |
+|-----------------|----------------|----------------|-------------------|
+| *Bb0250* (Liang et al., 2010) | Part of the *dedA* family; encodes integral membrane proteins required for cell division | Low mutation rate; critical for pathogenicity and survival | Causes imbalanced membrane phospholipid composition, resulting in cell death and prevents successful bacterial reproduction |
+| *Bb0841* (Grassmann et al., 2023) | Part of the *arcA* family; encodes proteins for cell wall biosynthesis | Critical for survival and reproduction; minimal SOS side effects | Disrupts cell wall function weakens cell, reducing growth and survival |
+| *vlsE* | Encodes antigenically variable cell-surface protein that evades the antibody response | Critical for survival; high SOS side effect; high mutation rate | Would NOT be used for CRISPRi in this case. |
+
+*Table 2. Comparison of characteristics between genes of interest in B. burgdorferi*
+
+Although genes with similar name and function can be found in other bacteria, the specific sequences of *Bb0250* and *Bb0841* are unique to *B. burgdorferi*, ensuring minimal risk of off-target effects.
+
+# CRISPRi Design
+
+## dCas9 Design
+Lambert iGEM utilized pCD017-dCas9 ([BBa_K5096056](https://registry.igem.org/parts/bba-k5096056)), which encodes for dCas9 derived from *Streptococcus pyogenes* (see Fig. 2).  We obtained the plasmid from Dr. Vincent Noireaux, a researcher at the University of Minnesota who specializes in cell free expression of CRISPRi. This plasmid is frequently used in CRISPRi applications due to its proven efficacy and the protocols outlined in the literature.
+
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/dcas9updated.avif"
+ caption="Figure 2. Full Sequence Map of pCD017-dCas9 from Benchling (Benchling, 2024)"
+ size="md"
+/>
+
+## sgRNA Design
+We selected our target binding sites considering the following criteria to design the most effective guide RNAs.
+- The chosen site has to be located within 100 nucleotides of a PAM site, a specific 3-nt long sequence that is recognized by the dCas9.
+- Target sites with NGG PAMs were prioritized since they most efficiently bind to dCas9.
+- Using Benchling’s software, sgRNAs should have the highest predicted on-target effects with the CRISPRi system.
+- This ensured a 100% chance of not having off-target effects (see Fig. 3).
+
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/benchlingpredictions.webp"
+ caption="Figure 3. Predictions from Benchling software showing high on-target effects for Bb0250. (Benchling, 2025)"
+ size="md"
+/>
+
+### Bb02520 & Bb0841 sgRNAs
+We retrieved the full gene sequences for both our genes from the National Library of Medicine and used Benchling’s software to identify sgRNA binding sites that maximized on-target effects (Benchling, 2025). This process allowed us to identify four optimal sgRNA sequences predicted to achieve the highest on-target effects on the non-coding strand of the our chosen gene sequence for the CRISPRi system (see Fig. 3).
+
+## Target Construct Design
+We designed our target constructs by assembling linear DNA constructs tagged with deGFP following the target sequence (see Figs 4-5). Successful binding of our sgRNAs to our genes of interest will lead to a quantifiable decrease in fluorescence, as dCas9 inhibits downstream transcription of GFP.
+
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/bb0250construct.webp"
+ caption="Figure 4. Linear DNA Construct of the Bb0250 target construct."
+ size="md"
+/>
+
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/bb0841construct.webp"
+ caption="Figure 5. Linear DNA Construct of the Bb0841 target construct."
+ size="md"
+/>
+
+## In Vivo Experimentation Design
+We continued our experimentation by testing CRISPRi in vivo with *Escherichia coli*, targeting the *rpsL* gene. We selected this gene as a proof-of-concept target in *E. coli* because CRISPRi-mediated repression for gene function in previous studies showed a strong impact of *rpsL* repression on cell death, and chose to use the sgRNA proved to have the most effective downregulation (Cui et al., 2018).
+
+We decided to utilize a plasmid encoding the dCas9 protein and the guide RNA sequence. An existing backbone plasmid containing dCas9 from AddGene, called pBbdCas9S, was ordered and we sent it to the plasmid subcloning service at Genscript in order to have our sgRNA sequence inserted (see Fig. 6). This enables the plasmid to simultaneously express dCas9 and the sgRNA, allowing for efficient targeted repression of *rpsL*.
+
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/pbbdcas9s.webp"
+ caption="Figure 6. Full Sequence Map of pBbdCas9S from Addgene (Addgene, 2025)
+"
+ size="md"
+/>
+
+# CRISPRi Experimentation
+
+## In Vitro Experimentation
+To validate our CRISPRi system, we began experimentation in vitro, using the TXTL Pro Kit to express our reagents in a cell free extract. We verified that the Pro Kit was functional with commercial control plasmids and used the lysate to confirm that our dCas9 protein and sgRNAs were viable. Starting with experiments in vitro allowed us to minimize biosafety concerns and rapidly troubleshoot our system before transitioning to a more intensive in vivo model.
+
+## Experimental Modifications
+During the 2024 Lambert iGEM project, SHIELD, we finalized the concentrations of each reagent for the CRISPRi system with guidance from Esther Lee, an undergraduate from Georgia Institute of Technology with experience in CRISPRi experimentation (see Table 3).
+
+| Reagent | Stock Concentration | Final Concentration | Volume Added |
+|-----------|-----------|-----------|-----------|
+| deGFP | 20 nM | 1 nM | 0.6 μL |
+| dCas9 | 20 nM | 1 nM | 0.6 μL |
+| Chi6 | 48 μM | 2 μM | 0.5 μL |
+| sgRNA | 120 nM | 5 nM | 0.5 μL |
+| Sigma70 Master Mix | - | - | 9 μL |
+| Water | - | - | Add as needed to make final volume 12 μL |
+
+*Table 3. Table detailing the concentrations and volumes of reagents utilized in the CRISPRi reaction.*
+
+### Preparing Reagents
+
+#### Target constructs & sgRNAs
+The lyophilized constructs from IDT were directly hydrated to a 10ng/uL solution and then amplified through PCR in order to bring them to closer working concentrations as shown in the 2024 SHIELD project protocol. Following PCR purification, we determined the new concentrations of the constructs with the Nanodrop (see Table 4).
+
+| **Construct** | Bb0250 Target | sgRNA60.5 | sgRNA55.0 | Bb0841 Target | sgRNA62.1 | sgRNA54.3
+|-------|-------|-------|-------|-------|-------|-------|
+| **Post-PCR Concentration** | 94.6 nM | 621.11 nM | 508.64 nM | 81.4 nM | 555.79 nM | 593.85 nM |
+
+*Table 4. Table detailing concentrations of stock reagents*
+
+## Individual Optimization of Genes
+
+### Bb0250 (dedA)
+
+#### Testing Bb0250 Target Construct
+After preparing our Bb0250 target construct, we tested the amplified concentration of Bb0250 target construct (1 nM working concentration) by measuring the RFU values of deGFP fluorescence produced (see Fig. 7).
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/crispri-fig7.webp"
+ caption="Figure 7. Graph showing fluorescent expression from the Bb0250 target concentration under experimental conditions."
+ size="xl"
+/>
+
+#### Testing Bb0250 sgRNAs Candidates
+For preliminary experimentation, we individually tested the Bb0250 sgRNAs (60.5 and 55.0) and used their amplified concentrations, approximately conserving the 1:5 ratio of construct:sgRNA.
+
+From our experimentation, we determined that sgRNA60.5 was able to produce the lowest RFU values of the sgRNAs, at a guide RNA concentration of 621.113 nM and target construct concentration of 94.6 nM (see Fig. 8).
+
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/crispri-fig8.webp"
+ caption="Figure 8. Successful Bb0250 CRISPRi using sgRNA60.5 (621.113 nM) and Bb0250 target construct (94.6 nM) achieving 71.04% decrease in fluorescence compared to the positive control, while sgRNA55.0 only repressed 63.94%."
+ size="xl"
+/>
+
+To validate the consistency of sgRNA60.5’s repression, we performed identical quadruplicate reactions of the CRISPRi. The results revealed a range of fluorescent repression from 70.16% to 74.63%, proving general reliability of the system (see Fig. 9).
+
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/updated0250validation.avif"
+ caption="Figure 9. Quadruplicate reactions show an average of 72.59% repression in fluorescence compared to the positive control, showing sufficient downregulation to minimize gene function."
+ size="xl"
+/>
+
+With successful testing from Bb0250 gene, we moved to determining the most effective sgRNA for the Bb0841 gene.
+
+### Bb0841 (arcA)
+
+#### Testing Bb0841 Target Construct
+We followed the same procedure used for Bb0250 to test for the Bb0841 target concentration, also at a 1 nM working concentration by measuring deGFP fluorescence (see Fig. 10).
+
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/crispri-fig-10.webp"
+ caption="Figure 10. Graph showing fluorescent expression from the Bb0841 target concentration under experimental conditions."
+ size="xl"
+/>
+
+#### Testing Bb0841 sgRNA Candidates
+We ran reactions with the two sgRNAs predicted to have greatest on target effect for Bb0841, 62.1 and 54.3, and determined which had the greatest repressive capability. The constructs were all used at their amplified concentrations. The results show sgRNA54.3 exhibiting the highest repression between the two candidates, at 65.64% compared to 47.09% in sgRNA62.1 (see Fig. 11).
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/crispri-fig-11.webp"
+ caption="Figure 11. Successful Bb0841 CRISPRi using sgRNA54.3 (593.85 nM) and Bb0250 target construct (81.4 nM) achieving 65.64% decrease in fluorescence compared to the positive control, while sgRNA62.1 only repressed 47.09%."
+ size="xl"
+/>
+
+Following this, we also confirmed consistency of repression in sgRNA54.3 by performing a quadruplicate reaction of identical protocol from the original reaction. The experimentation proved that the sgRNA is reliable, with repression ranging from 63.84% to 67.56% (see Fig. 12).
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/updated0841validation.avif"
+ caption="Figure 12. Quadruplicate reactions show an average of 65.12% repression in fluorescence compared to the positive control, showing sufficient downregulation to minimize gene function."
+ size="xl"
+/>
+
+
+### Multiplexing
+After determining the most effective sgRNAs per gene, we moved to running multiplexed CRISPRi reactions, where the reactions for each gene were combined (see: [Experiments](/lambert-ga/experiments/) ). The model for the multiplexed reaction (see.[Modeling](/lambert-ga/model#crispri) )  predicted a near additive value of fluorescence in relation to individual gene constructs, and how the presence of both genes’ systems simultaneously would not interfere with the repression of the other.
+
+In order to adjust for the concentrations in the combined reaction, we used a concentration of dCas9 that was double than individual gene reactions (40 nM). Additionally, the volume set aside for water was instead used for the reagents of the second gene (detailed protocol outlined in [Experiments](/lambert-ga/experiments/) ).
+
+With sgRNA60.5 for Bb0250, and sgRNA54.3 for Bb0841, we ran triplicate multiplexed reactions of the CRISPRi system, in addition to positive and negative controls. Close to the results of our model with 74.63% repression, we achieved 76.01% repression on average between the reactions. This reveals how repressive capability was not lost in the combining of the systems, and that multiplexed CRISPRi does allow for strong repression across the genome of a bacteria (see Fig. 13)
+
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/crispri-fig-13.webp"
+ caption="Figure 13. Average of triplicate reactions show 76.01% repression overall, showing sufficient repression of combined CRISPRi systems."
+ size="xl"
+/>
+
+## In Vivo Experimentation
+In order to simulate the effect of the CRISPRi system on Borrelia cell death more accurately, we decided to move forward with testing the system in vivo. However, our primary lab is BSL1, and the pathogenicity of B.b exceeds these regulations, so we chose to work with E. coli bacteria, which is similarly gram negative.
+
+### Preparing Reagents
+To introduce the targeting CRISPRi system into the bacteria, we created a plasmid encoding the dCas9-sgRNA complex. A backbone plasmid with dCas9 was purchased from AddGene and sent to Genscript’s plasmid subcloning service to have the *rpsL* targeting sgRNA added in.
+
+### Transformation & Pre-Assay work
+We utilized DH5 Alpha E.coli competent cells for transformation of all plasmids. Three transformations were done with the original pBbdCas9 plasmid from AddGene, and another three were done using the final plasmids, pdCas9sgRNA obtained from the Genscript service (Lab Notebook). The transformations were spread on plates as following, using spectinomycin for the antibiotic of resistance.
+
+
+Following 24 hour incubation at 37C, the plates were used as liquid inoculations to prepare the cells for the BacLight Assay.
+
+### Assay & Analysis 
+The Thermofisher LIVE/DEAD™ BacLight™ Bacterial Viability Kits were used to quantify the in vivo effect of the CRISPRi system using red and green fluorescence. Using our SynTek plate reader, setting two reads at wavelengths 528/20 (green), 645/40 (red). From the data, we determined successful fatal effect of the CRISPRi. We determined two conclusions from the data.
+1. The sample transformed with pdCas9sgRNA (dCas9-sgRNA)  had a 9.53-fold decrease in viable biomass in comparison to the sample transformed with just pBbdCas9s (dCas9 alone), measured using the average value of green RFU in each sample (see Fig 14.). This shows how the presence of the full CRISPRi system prevented and slowed overall bacterial growth.
+
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/viable-biomass-diagram.webp"
+ caption="Figure 14. Average Green RFU for dCas9 alone was 1,005,200, and 105,466.67 for dCas9-sgRNA, showing a 9.53-fold decrease for the experimental group, and proving the preventative effect of the CRISPRi."
+ size="xl"
+/>
+
+2. The sample transformed with pdCas9sgRNA also had a 14.26-fold increase in the proportion of dead to alive bacteria compared to the sample transformed with pBbdCas9. The full CRISPRi system successfully killed a comparably large portion of the sample, proving the system’s efficacy in vivo (see Fig. 15). 
+
+<Image
+ src="https://static.igem.wiki/teams/5612/crisprilnp/dead-alive-ratio.webp"
+ caption="Figure 15. Average dead/alive ratio for dCas9 alone was 0.219, and 3.13 for dCas9-sgRNA, a 14.26-fold increase in experimental dead/alive bacteria. The dCas9-sgRNA group also showed the dead cell signal constituting 60.7% of the total, with dCas alone presenting just 17.7%."
+ size="xl"
+/>
+
+## References
+<Reference children="Benchling. (2024, January). pCD017 (dCas9) · Benchling. Benchling.com. https://benchling.com/s/seq-OXtoM5btSPJiIpCfNHuG/edit"></Reference>
+<Reference children="Benchling. (2025). Cloud-Based Informatics Platform for Life Sciences R&D. Benchling."></Reference>
+<Reference children="Cui, L., Vigouroux, A., Rousset, F., Varet, H., Khanna, V., & Bikard, D. (2018). A CRISPRi screen in *E. coli* reveals sequence-specific toxicity of dCas9. *Nature Communications, 9*(1). https://doi.org/10.1038/s41467-018-04209-5"></Reference>
+<Reference children="Fang Ting Liang, Q., Xu, Q., Sikdar, R., Xiao, Y., Cox, J. S., & Doerrler, W. T. (2010). BB0250 of *Borrelia burgdorferi* is a conserved and essential inner membrane protein required for cell division. Retrieved June 19, 2025, from https://pubmed.ncbi.nlm.nih.gov/20870761/"></Reference>
+<Reference children="Grassmann, A. A., Tokarz, R., Golino, C., McLain, M. A., Groshong, A. M., Radolf, J. D., & Caimano, M. J. (2023). BosR and PlzA reciprocally regulate RpoS function to sustain *Borrelia burgdorferi* in ticks and mammals. *Journal of Clinical Investigation, 133*(5). https://doi.org/10.1172/jci166710"></Reference>
+<Reference children="Horizon Discovery. (n.d.). CRISPR interference. Horizondiscovery.com. https://horizondiscovery.com/en/applications/crisprmod/crispri#:~:text=CRISPR%20interference%20(CRISPRi)%20is%20a"></Reference>
+<Reference children="Larson, M. H., Gilbert, L. A., Wang, X., Lim, W. A., Weissman, J. S., & Qi, L. S. (2013). CRISPR interference (CRISPRi) for sequence-specific control of gene expression. *Nature Protocols, 8*(11), 2180–2196. https://doi.org/10.1038/nprot.2013.132"></Reference>
+<Reference children="Marshall, R., Maxwell, C. S., Collins, S. P., Beisel, C. L., & Noireaux, V. (2017). Short DNA containing χ sites enhances DNA stability and gene expression in *E. coli* cell-free transcription-translation systems. *Biotechnology and Bioengineering, 114*(9), 2137–2141. https://doi.org/10.1002/bit.26333"></Reference>
+<Reference children="SigmaAldrich.com. (n.d.). CRISPRI Human Whole Genome and Long Non-Coding Library Screening User Manual. In SigmaAldrich.com [Manual]. https://www.sigmaaldrich.com/deepweb/assets/sigmaaldrich/marketing/global/documents/405/061/user-guide-crispri-ug7724en-ms.pdf?srsltid=AfmBOorH9P6U8KAa6ROjE2zP73oUgooV6ArIy3wW7C6Cd6lLYo20Zxq_"></Reference>
+<Reference children="Synthego. (2019). Synthego | Full Stack Genome Engineering. Synthego.com. https://www.synthego.com/guide/how-to-use-crispr/sgrna"></Reference>
+

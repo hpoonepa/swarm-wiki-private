@@ -1,0 +1,883 @@
+--- 
+layout: ../layouts/ContentLayout.astro 
+title: Model 
+header: https://static.igem.wiki/teams/5612/headerpics/modeling.webp 
+description: 'A Set of Mathematical Models Designed to Inform our Project' 
+icon: "Plane" 
+color: "green" 
+---
+
+import TwoColPara from "../components/md_components/TwoColPara"; 
+import Wip from "../components/md_components/Wip"; 
+import Image from "../components/md_components/Image"; 
+import Reference from "../components/md_components/Reference"; 
+import PDFAccordian from "../components/md_components/PDFAccordian"; 
+import ImageCarousel from "../components/md_components/ImageCarousel"  
+
+# Models Overview
+To optimize our multi-step detection platform, we developed ordinary differential equation models for proximity-dependent ligation (PDL), recombinase polymerase amplification (RPA), CRISPR-Cas12a (Cas12a), and CRISPR-interference (CRISPRi) using MATLAB SimBiology. The models employed mass action kinetics for molecular interactions, Michaelis-Menten equations for enzyme catalysis, and Hill equations for cooperative binding. With guidance from Dr. Mark Styczynski at the Georgia Institute of Technology, we refined model parameters through iterative experimental validation.
+
+Each model served distinct purposes: PDL simulations identified optimal aptamer concentrations for sufficient double-stranded (dsDNA) generation ([see PDL Modeling](/lambert-ga/model#pdl));RPA modeling predicted amplification kinetics and guided primer optimization ([see RPA Modeling](/lambert-ga/model#rpa));Cas12a models characterized trans-cleavage dynamics and fluorescence timescales ([see Cas12a Modeling](/lambert-ga/model#cas12a)); and CRISPRi simulations optimized repression parameters for individual targets Bb0250 and Bb0841, and multiplexed repression scenarios ([see CRISPRi Modeling](/lambert-ga/model#crispri)). This modeling framework enabled systematic optimization across all detection stages and provided predictive capabilities for future refinement. 
+Current methods for tracking Lyme disease lack predictive capability for identifying future outbreak hotspots. We developed geospatial models integrating historical case trends, socioeconomic factors, and environmental variables to predict exposure risk and case prevalence at the county and subnational level. Using multiple linear regression (LSR), we generated risk intensity heatmaps for U.S. counties and European regions, visualizing current spatial risk patterns. To forecast future disease burden, we implemented an XGBoost model predicting case counts through 2050 at decadal intervals. Cross-validation and hold-out testing confirmed model reliability. These predictive tools enable healthcare providers to target allocation of LANCET diagnostic and therapeutic resources to regions facing the greatest Lyme disease burden ([see HP Modeling](/lambert-ga/model#hp)).
+
+
+
+# Judging
+
+1) **What kind of modeling is being done and what information will it provide?**  
+Lambert iGEM created multiple sets of mathematical models using Ordinary Differential Equations (ODEs) to predict the kinetic changes of several important wetlab reactions. These models describe how the concentrations of enzymes, substrates, and products change over time by applying principles of Michaelis-Menten equations, mass-action kinetics, and Hill equations to represent different rates of biochemical reactions ([see PDL Model Development](/lambert-ga/model#development));([see RPA Model Development](/lambert-ga/model#development-1));([see Cas12a Model Development](/lambert-ga/model#development-2));([see CRISPRi Model Development](/lambert-ga/model#development-3)).
+Lambert iGEM also utilized a least square regression (LSR) to calculate the risk intensity of Lyme disease at the county level and created a deep learning XG Boost model to predict future cases in 2025, 2030, 2040, and 2050 ([see HP Model Development](/lambert-ga/model#development-4)).
+
+2) **What kind of data was used to build/assess the model?**  
+o build the models, we used data from different wetlab reaction concentrations found in their respective wetlab design manuals and literature. Parameter values used in the models were gathered from relevant research papers or calculated from our own wetlab reaction values. In particular, we compared these parameter values to our experimental data, allowing us to fit the parameters to be more specific to our wet lab conditions ([see PDL Model](/lambert-ga/model#pdl));([see RPA Model](/lambert-ga/model#rpa));([see Cas12a Model](/lambert-ga/model#cas12a));([see CRISPRi Model Development](/lambert-ga/model#crispri)).
+For the deep learning model, we utilized open-source government datasets of historical Lyme disease trends, environmental, and socioeconomic data, scaled at the United States county level and European subnational level ([see HP Model](/lambert-ga/model#hp)).
+
+3) **What assumptions were made and why?**  
+Our ODE models relied on several key assumptions to ensure computational efficiency and compatibility within MATLAB. First, we assumed rate constants to remain stable throughout our reactions. This assumption is justified because our in vitro experimentation occurs under controlled conditions without significant environmental fluctuations that could alter kinetic parameters. Second, the model assumes precise knowledge of all initial species concentrations, which were determined experimentally or obtained from past literature. Third, we assume that polymerase enzymes, such as RNA and DNA polymerases, maintain consistent synthesis rates regardless of target sequences. This simplification allows computationally feasible modeling while capturing the essential reaction dynamics, though sequence-dependent effects on polymerase processivity are not explicitly represented ([see PDL Model Assumptions](/lambert-ga/model#assumptions));([see RPA Model Assumptions](/lambert-ga/model#assumptions-1));([see Cas12a Model Assumptions](/lambert-ga/model#assumptions-2));([see CRISPRi Model Assumptions](/lambert-ga/model#assumptions-3)).
+Our LSR heatmap assumes socio-environmental factors remain stable over time and that linear relationships exist between standardized predictors and per-capita cases, enabling interpretable risk assessment. The XGBoost model assumes 1 to 2 year lag features adequately capture disease dynamics, that optimal hyperparameters and patterns learned from 2010 to 2023 data generalize to future decades, and that the CDC's underreporting factor remains constant. These assumptions balance model tractability with predictive capability while acknowledging potential deviations in future conditions ([see Heatmap Model Assumptions](/lambert-ga/model#assumptions-4));([see XGBoost Model Assumptions](/lambert-ga/model#assumptions-5)).
+
+4) **How did the model results affect the project design and development?**  
+The model identified specific reagent concentration limitations that prevented certain assays from achieving sufficient product yields. We adjusted experimental conditions for PDL based on our model’s predictions, specifically increasing aptamer concentrations which resulted in drastically improved amplification outcomes. Additionally, our models provided predictive baselines for RPA, Cas12a, and CRISPRi experiments, which guided wetlab experimental design. After running our experiments, we used an Analysis of Variance model coupled with a Tukey Post-Hoc test to verify the statistical significance of our results[(see PDL Model Results](/lambert-ga/model#results));([see RPA Model Results](/lambert-ga/model#results-1));([see Cas12a Model Results](/lambert-ga/model#results-2));([see CRISPRi Model Results).](/lambert-ga/model#results-3)
+This modeling-experimental feedback loop enabled systematic optimization by aligning theoretical predictions with practical constraints.
+Our predictive models will directly inform LANCET implementation strategy. By identifying counties at highest current risk and forecasting future hotspots through 2050, we can target deployment to parks and public health agencies in high-burden regions. These risk assessments will guide decisions about where LANCET diagnostics would have maximum impact, enabling proactive resource allocation to areas with growing Lyme disease prevalence before outbreaks escalate ([see HP Model](/lambert-ga/model#results-4)).
+
+# PDL
+
+## Overview
+To develop a rapid blood-based diagnostic for Lyme Disease, Lambert iGEM is using a PDL  assay that detects bacterial protein biomarkers using high-affinity aptamers. This reaction follows 4 main steps: 
+-  **Binding**: Two single stranded DNA (ssDNA) aptamers selectively bind to the surface of the CspZ target protein (Guérin et al., 2025)
+-  **Hybridization**: A complementary ssDNA bridge simultaneously binds to both aptamers (Fredriksson et al., 2002)
+-  **Ligation**: T4 DNA ligase joins together the two aptamer constructs and ssDNA bridge sequence (Fredriksson et al., 2002)
+-  **Extension**: T4 DNA polymerase initiates DNA synthesis, producing a double stranded final product (TakaraBio, 2025)
+## Development
+Because the CspZ protein remains even after *B. Burgdorferi* leaves the bloodstream, we needed to determine how long the protein remains detectable for our assay. To address this, we developed a deterministic kinetic model to track protein concentration over time. We used MATLAB to predict protein concentration over 300 days using mass action kinetics, which describe the rate of molecular interactions in solution.
+To optimize the reaction process of the PDL pathway, our team utilized various ODEs to simulate the progression of the assay. Our model uses initial target protein and aptamer concentration into account to predict DNA product yield, guiding data analysis and informing wetlab workflow. After using our model to guide experimentation, we refined model parameters based on experimental results, improving its predictive capability for future research.
+## Signalling Pathway
+By utilizing MATLAB’s built-in SimBiology software, we were able to map out the full PDL pathway using the Law of Mass Action and Michaelis-Menten equations (see Fig. 1). Michaelis-Menten equations are used to map out reactions involving enzyme kinetics, and Mass-Action kinetics simulate basic collisions of reactants. 
+<Image
+src="https://static.igem.wiki/teams/5612/modelingpdl/google-keep-note.webp"
+  caption="Figure 1. Representation of the PDL reaction pathway using SimBiology."
+  size="lg"
+/>
+##  Biochemical Reactions
+The PDL model contains 6 core biochemical reactions as shown below (see Table 1):
+| # | Reaction | Description |
+|---|-----------|-------------|
+| 1 | P + A1 &harr; [P-A1] | Aptamer 1 binds to the CspZ protein, creating an Aptamer 1–Protein complex. |
+| 2 | [P-A1] + A2 &harr; [P-A] | Aptamer 2 binds to the Aptamer1–Protein complex, creating a Protein–Aptamer complex. |
+| 3 | [P-A] + B &harr; [P-A-B] | The Bridge binds to the Protein–Aptamer complex, creating a Protein–Aptamer–Bridge complex. |
+| 4 | L + [P-A-B] &rarr; X + [Free-P] + [Free-L] | Ligase connects the Aptamers and Bridge sequences together on the Protein–Aptamer–Bridge complex, creating the PDL Product. |
+| 5 | P &rarr; null | The CspZ protein degrades over time. |
+| 6 | X rharr; null | The PDL Product degrades over time. |
+
+<center>*Table 1. Reactions and descriptions of the 6 biochemical reactions in the PDL pathway.*</center>
+
+## Initial Values of Species
+To simulate our reactions, we initialized each component of our model by using initial values for each species that were derived from the wetlab protocols for PDL (see Table 2; [see Experiments).](/lambert-ga/experiments/) 
+| #  | Name   | Value        | Units     |
+|----|--------|---------------|------------|
+| 1  | P      | 2.1000e6      | molarity   |
+| 2  | A1     | 2.0000e-8     | molarity   |
+| 3  | P-A1   | 0             | molarity   |
+| 4  | A2     | 2.0000e-8     | molarity   |
+| 5  | P-A    | 0             | molarity   |
+| 6  | L      | 8.3000e-15    | molarity   |
+| 7  | Free-P | 0             | molarity   |
+| 8  | Free-L | 0             | molarity   |
+| 9  | B      | 4.0000e-7     | molarity   |
+| 10 | P-A-B  | 0             | molarity   |
+| 11 | X      | 0             | molarity   |
+
+<center>*Table 2. Initial PDL wetlab protocol values and units.*</center>
+
+## Parameters
+Rate constants and degradation rates were inputted into our Mass Action and Michaelis-Menten equations. These parameters were either sourced from existing literature or estimated through experimentation when values could not be found. The value for each parameter is listed below (see Table 3):
+| #  | Name     | Reaction                                                                 | Value       | Units              | Resource              |
+|----|----------|---------------------------------------------------------------------------|--------------|--------------------|------------------------|
+| 1  | kf_PA1   | Forward rate constant for Aptamer 1 binding to Protein                    | 1.0000e6     | liter/mole/second  | estimated             |
+| 2  | kf_PA    | Forward rate constant for Aptamer 2 binding to the [P-A1] complex         | 1.0000e6     | liter/mole/second  | estimated             |
+| 3  | k_P      | First-order degradation rate of the CspZ protein                          | 1.2000e-7    | 1/second           | estimated             |
+| 4  | kf_X     | First-order degradation rate of PDL product                               | 1.0000e-5    | 1/second           | estimated             |
+| 5  | Vm_PAML  | Maximum velocity of Ligase-catalyzed product formation                    | 3.3000e-15   | molarity/second    | (Alkhamis et al. 3)   |
+| 6  | Km_PABL  | Michaelis-Menten constant for Ligase-catalyzed reaction                   | 2.5000e-9    | molarity           | estimated             |
+| 7  | kf_PAB   | Forward rate constant for Bridge binding to Protein-Aptamer complex        | 1.0000e6     | liter/mole/second  | estimated             |
+| 8  | kr_PA1   | Reverse rate constant for dissociation of Aptamer 1-Protein complex       | 0.2082       | 1/second           | (Alkhamis et al. 3)   |
+| 9  | kr_PA    | Reverse rate constant for dissociation of Aptamer 2 from Protein-Aptamer complex | 0.2082   | 1/second           | (Alkhamis et al. 3)   |
+
+<center>*Table 3. Reactions and values of PDL parameters.*</center>
+
+
+## Ordinary Differential Equations
+We incorporated the Mass Action Kinetic Laws and Michaelis-Menten Equations to represent the reactions for the PDL model. We generated 11 ordinary differential equations for the full ligation pathway, as shown below (see Table 4):
+<div class="math-table-container">
+| # | Ordinary Differential Equations |
+|---|--------------------------------|
+| 1 | $$\frac{d(P)}{dt} = \frac{1}{pdlsystem} \left[ -\left((kf_{PA1} \cdot P \cdot A1) \cdot pdlsystem - (kr_{PA1} \cdot [P\text{-}A1]) \cdot pdlsystem\right) - ((k_P \cdot P) \cdot pdlsystem) \right]$$ |
+| 2 | $$\frac{d(A1)}{dt} = \frac{1}{pdlsystem} \left[ -\left((kf_{PA1} \cdot P \cdot A1) \cdot pdlsystem - (kr_{PA1} \cdot [P\text{-}A1]) \cdot pdlsystem\right) \right]$$ |
+| 3 | $$\frac{d([P\text{-}A1])}{dt} = \frac{1}{pdlsystem} \left[ ((kf_{PA1} \cdot P \cdot A1) \cdot pdlsystem - (kr_{PA1} \cdot [P\text{-}A1]) \cdot pdlsystem) - ((kf_{PA} \cdot [P\text{-}A1] \cdot A2) \cdot pdlsystem - (kr_{PA} \cdot [P\text{-}A]) \cdot pdlsystem) \right]$$ |
+| 4 | $$\frac{d(A2)}{dt} = \frac{1}{pdlsystem} \left[ -\left((kf_{PA} \cdot [P\text{-}A1] \cdot A2) \cdot pdlsystem - (kr_{PA} \cdot [P\text{-}A]) \cdot pdlsystem\right) \right]$$ |
+| 5 | $$\frac{d([P\text{-}A])}{dt} = \frac{1}{pdlsystem} \left[ ((kf_{PA} \cdot [P\text{-}A1] \cdot A2) \cdot pdlsystem - (kr_{PA} \cdot [P\text{-}A]) \cdot pdlsystem) - ((kf_{PAB} \cdot B \cdot [P\text{-}A]) \cdot pdlsystem - (kr_{PAB} \cdot [P\text{-}A\text{-}B]) \cdot pdlsystem) \right]$$ |
+| 6 | $$\frac{d(L)}{dt} = \frac{1}{pdlsystem} \left[ -\left(\frac{Vm_{PAML} \cdot [P\text{-}A]}{Km_{PABL} + [P\text{-}A]}\right) \cdot pdlsystem \right]$$ |
+| 7 | $$\frac{d([Free\text{-}P])}{dt} = \frac{1}{pdlsystem} \left[ \left(\frac{Vm_{PAML} \cdot [P\text{-}A]}{Km_{PABL} + [P\text{-}A]}\right) \cdot pdlsystem \right]$$ |
+| 8 | $$\frac{d([Free\text{-}L])}{dt} = \frac{1}{pdlsystem} \left[ \left(\frac{Vm_{PAML} \cdot [P\text{-}A]}{Km_{PABL} + [P\text{-}A]}\right) \cdot pdlsystem \right]$$ |
+| 9 | $$\frac{d(B)}{dt} = \frac{1}{pdlsystem} \left[ -\left((kf_{PAB} \cdot B \cdot [P\text{-}A]) \cdot pdlsystem - (kr_{PAB} \cdot [P\text{-}A\text{-}B]) \cdot pdlsystem\right) \right]$$ |
+| 10 | $$\frac{d([P\text{-}A\text{-}B])}{dt} = \frac{1}{pdlsystem} \left[ \left(\frac{Vm_{PAML} \cdot [P\text{-}A]}{Km_{PABL} + [P\text{-}A]}\right) \cdot pdlsystem + ((kf_{PAB} \cdot B \cdot [P\text{-}A]) \cdot pdlsystem - (kr_{PAB} \cdot [P\text{-}A\text{-}B]) \cdot pdlsystem) \right]$$ |
+| 11 | $$\frac{d(X)}{dt} = \frac{1}{pdlsystem} \left[ \left(\frac{Vm_{PAML} \cdot [P\text{-}A]}{Km_{PABL} + [P\text{-}A]}\right) \cdot pdlsystem - ((kf_X \cdot X) \cdot pdlsystem) \right]$$ |
+</div>
+
+<center>*Table 4. ODE equations for PDL reactions.*</center>
+
+## Assumptions
+Our PDL ODE model assumes that all rate constants and parameters remain constant, disregarding external environmental factors. Thus, the model replicates only uses the aptamer-protein binding process to simulate dsDNA product formation. The model also assumes that the total initial quantities of CspZ protein, aptamers, ligase, and bridge are known. 
+
+## Results
+###  CspZ Protein Degradation
+Using MATLAB, we modeled CspZ protein concentration over time. We estimated a half-life of 14 days based on published values for bacterial outer-surface proteins and simulated the corresponding degradation curve (See Fig. 2).
+
+<Image  src="https://static.igem.wiki/teams/5612/modelingpdl/cspz-concentration-over-time.webp"
+  caption="Figure 2. Modeled graph depicting CspZ concentration over time."
+  size="lg"
+/>
+
+
+Our model predicted protein concentration in nanomolar (nM) units over time. To compare with our PDL assay threshold of 24,000 molecules/microliter, we converted the curve to equivalent molecular units (see Fig. 3). Based on our model predictions and reported PDL thresholds in literature, we anticipated assay viability up to 86 days post-infection (pi). Experimental validation, however, revealed sustained detectability to at least 250 days pi ([see PDL Results](/lambert-ga/results/))
+<Image  src="https://static.igem.wiki/teams/5612/modelingpdl/cspz-protein-concentration-over-time.webp
+"
+  caption="Figure 3. Modeled graph predicting CspZ concentration over time using the PDL assay threshold."
+  size="lg"
+/>
+
+
+### PDL
+After developing a complete set of ODEs, we utilized Simbiology’s Model Analyzer to simulate the quantity of DNA product over 75 minutes with 20 picomolar of aptamer initially (see Fig. 4). The PDL product increases linearly over time, showing an end result of ~0.6 copies.
+
+<Image  src="https://static.igem.wiki/teams/5612/modelingpdl/realmodelingpdl/realmodelingpdl/pdl-product-concentration-analysis.webp"
+  caption="Figure 4. Simulated graph predicting PDL product concentration over time using a lower aptamer concentration"
+  size="lg"
+/>
+
+Because our model predicted fewer than one copy of dsDNA product, indicating limited assay sensitivity, we performed a sensitivity analysis to identify critical concentrations (Fig. 5). This analysis revealed that dsDNA yield was most sensitive to aptamer concentration. 
+
+<Image  src="https://static.igem.wiki/teams/5612/realmodelpdl/sensany-pdl-from-figma.webp"
+  caption="Figure 5. Bar graph showing the sensitivity of PDL products based on initial concentrations of aptamer 1, aptamer 2, and cspZ protein. "
+  size="lg"
+/>
+Based on this insight, we tested increasing aptamer concentrations in our model and found that raising the concentration from 20 pM to 20 nM would yield 1.01 × 10^-14 M dsDNA (~800 copies), sufficient for downstream amplification (See Fig. 6).
+
+<Image  src="https://static.igem.wiki/teams/5612/realmodelpdl/pdl-product-concentration-analysis-1.webp"
+  caption="Figure 6. Modeled graph depicting PDL product concentration over time with optimal aptamer concentration."
+  size="lg"
+/>
+Experimental results confirmed that higher aptamer concentrations successfully produced detectable PCR products (See Fig. 7), demonstrating that our initial conditions had generated insufficient PDL product for downstream amplification, consistent with ODE model predictions.
+
+<Image  src="https://static.igem.wiki/teams/5612/realmodelpdl/pdlgelmodel.webp"
+  caption="Figure 7. Successful PCR PDL Product formation with higher aptamer concentration."
+  size="lg"
+/>
+# RPA
+
+## Overview
+RPA is used in Lambert iGEM’s diagnostic system to rapidly amplify the DNA produced by PDL, which helps with detection of Lyme-associated biomarkers. We modeled the RPA reaction to evaluate how amplified DNA yield can change over time according to varying template concentration and limited biochemical resources. This takes place with four main steps:  
+- **Binding:** Recombinase proteins bind to forward and backward primers, creating a recombinase-primer complex.  
+- **Strand Displacement:** The recombinase–primer complex locates and invades the double stranded DNA, the primers displace their respective strands and pair with their complementary targets. SSBPs (single-stranded binding proteins) stabilize the displaced strands.  
+- **Extension:** DNA polymerase extends the bound primer, synthesizing new DNA without the need for thermal cycling.  
+- **Amplification:** The newly formed DNA strands act as templates for additional recombinase–primer complexes. This process repeats, producing exponential amplification of the target sequence in minutes.  
+
+## Development
+To understand the reaction process of the RPA pathway, our team utilized a variety of ODEs to simulate the progression of the system. Our model takes the initial PDL dsDNA product concentration, primer concentrations, and recombinase protein concentration to predict the amount of amplified DNA over the entire duration of the RPA reaction (See Fig. 8). Through iterative cycles of model-guided experimentation and parameter refinement based on experimental data, we improved the model's predictive accuracy for future applications.
+
+## Signalling Pathway
+By utilizing MATLAB’s built-in SimBiology software, we were able to map out the full RPA pathway using the Law of Mass Action and Michaelis-Menten equations. Michaelis-Menten equations are used to map out reactions involving enzyme kinetics, while Mass Action Kinetics are used to diagram the collision of reactants. 
+<Image
+src="https://static.igem.wiki/teams/5612/modelingrpa/google-keep-note-7.webp"
+  caption="Figure 8. Representation of the RPA reaction pathway using SimBiology."
+  size="lg"
+/>
+## Biochemical Reactions 
+The model contains a total of six biochemical reactions for the RPA pathway (see Table 5):
+| # | Reaction | Description |
+|---|-----------|-------------|
+| 1 | Rec + Prime &rarr; RecP | Recombinase protein and Primer form Recombinase Primer Complex. |
+| 2 | RecP + PDL_product &rarr; DNA_open | Recombinase Primer Complex binds to the PDL Product, creating an open strand of DNA. |
+| 3 | DNA_open + SSB &rarr; DNA_stab | SSBs bind to the open strand of DNA and stabilize the DNA. |
+| 4 | DNA_stab + DNA_poly &rarr; DNA_amp + PDL_product + PDL_product_copy | DNA Polymerase binds to the stabilized strand of DNA, generating amplified DNA from the PDL Product. |
+| 5 | PDL_product_copy &rarr; PDL_product | The PDL Product becomes the new template, and gets amplified further. |
+| 6 | DNA_amp &rarr; null | Amplified DNA degrades over time. |
+
+<center>*Table 5. Reactions and descriptions of the six biochemical reactions in the RPA pathway.*</center>
+
+## Initial Values of Species
+In order to simulate our reactions, our team needed to input quantities to initialize each component in our model (See Table 6). The initial value of each species was obtained from RPA wetlab protocols (see Experiments; ([see PDL](/lambert-ga/experiments/)). 
+| #  | Name              | Value        | Units     |
+|----|-------------------|--------------|------------|
+| 1  | rpa_system        | 1            | liter      |
+| 2  | Rec               | 1.0000e-4    | molarity   |
+| 3  | Prime             | 1.0000e-4    | molarity   |
+| 4  | RecP              | 1.0000e-4    | molarity   |
+| 5  | PDL_product       | 3.5200e-16   | molarity   |
+| 6  | DNA_open          | 0            | molarity   |
+| 7  | SSB               | 3.0000e-6    | molarity   |
+| 8  | DNA_stab          | 0            | molarity   |
+| 9  | DNA_poly          | 1.5000e-6    | molarity   |
+| 10 | DNA_amp           | 0            | molarity   |
+| 11 | PDL_product_copy  | 0            | molarity   |
+
+<center>*Table 6. Initial concentrations and values of RPA species.*</center>
+
+## Parameters
+Rate constants and degradation rates are required as input in our Mass Action Laws and Michaelis-Menten Equations. These values were derived from literature or estimated if the values could not be found. The value of each parameter is as shown (see Table 7):
+| Name         | Reaction                                                                                                      | Value       | Units              | Resource |
+|---------------|--------------------------------------------------------------------------------------------------------------|--------------|--------------------|-----------|
+| k_RecP        | Rate at which recombinase proteins and primers form a recombinase primer complex.                            | 1.000000e6   | liter/mole/second  | (K.M. Juma, T. Takita, K. Ito et al., 197) |
+| k_prime       | Rate at which recombinase primer complex binds to the PDL product, creating an open strand of DNA.            | 1.000000e7   | liter/mole/second  | (K.M. Juma, T. Takita, K. Ito et al., 197) |
+| k_ssb         | Rate at which SSB proteins bind to the open strand of DNA and stabilize the DNA.                             | 4.000000e7   | liter/mole/second  | (K.M. Juma, T. Takita, K. Ito et al., 197) |
+| Vm_poly       | Maximal velocity of DNA Polymerase binding to the stabilized strand of DNA, generating amplified DNA from the PDL Product. | 6.670e-7     | molarity/second    | (K.M. Juma, T. Takita, K. Ito et al., 198) |
+| Km_poly       | Michaelis-Menten constant for DNA polymerase binding                                                         | 1.4500e-6    | molarity           | (K.M. Juma, T. Takita, K. Ito et al., 198) |
+| k_dna_deg     | Rate at which DNA degrades                                                                                   | 0.00001      | 1/second           | (Bhoyar et al., 2024) |
+
+<center>*Table 7. Rates for RPA reactions.*</center>
+
+## ODEs
+We used the Mass Action Kinetic Laws and Michaelis-Menten Equations to represent different reactions for the RPA model. We generated five ordinary differential equations for the full RPA system (see Table 8): 
+<div class="math-table-container">
+| # | Ordinary Differential Equation |
+|---|--------------------------------|
+| 1 | $$\frac{d(PDL_{product})}{dt} = \frac{1}{rpa_{system}} \left[ -\left(k_{prime} \cdot RecP \cdot PDL_{product} \cdot rpa_{system}\right) + \left(\frac{Vm_{poly} \cdot DNA_{stab}}{Km_{poly} + DNA_{stab}}\right) \cdot rpa_{system} + (kf \cdot PDL_{product\_copy}) \right]$$ |
+| 2 | $$\frac{d(DNA_{open})}{dt} = \frac{1}{rpa_{system}} \left[ (k_{prime} \cdot RecP \cdot PDL_{product} \cdot rpa_{system}) - (k_{ssb} \cdot DNA_{open} \cdot SSB \cdot rpa_{system}) \right]$$ |
+| 3 | $$\frac{d(DNA_{stab})}{dt} = \frac{1}{rpa_{system}} \left[ (k_{ssb} \cdot DNA_{open} \cdot SSB \cdot rpa_{system}) - \left(\frac{Vm_{poly} \cdot DNA_{stab}}{Km_{poly} + DNA_{stab}}\right) \cdot rpa_{system} \right]$$ |
+| 4 | $$\frac{d(DNA_{amp})}{dt} = \frac{1}{rpa_{system}} \left[ \left(\frac{Vm_{poly} \cdot DNA_{stab}}{Km_{poly} + DNA_{stab}}\right) \cdot rpa_{system} \right]$$ |
+| 5 | $$\frac{d(PDL_{product\_copy})}{dt} = \frac{1}{rpa_{system}} \left[ \left(\frac{Vm_{poly} \cdot DNA_{stab}}{Km_{poly} + DNA_{stab}}\right) \cdot rpa_{system} - (kf \cdot PDL_{product\_copy}) \right]$$ |
+</div>
+<center>*Table 8. ODE equations for RPA reactions.*</center>
+
+## Assumptions
+Our RPA ODE model assumes rate constants as continuous, as there are no environmental factors that can influence the reaction. Therefore, the model is able to isolate the RPA process to simulate the amplification rate over time. The model also keeps the initial concentrations of PDL product, primers, recombinase proteins, and polymerase constant over time. 
+
+## Results
+### RPA
+We used MATLAB’s SimBiology software to construct an ODE-based model of the RPA pathway, predicting the DNA amplification dynamics from the PDL dsDNA product. Our model ran with an initial concentration of 1.01E-14 molarity (M), over 25 minutes. Our graph shows an exponential increase of PDL product over time (See Fig. 9). 
+<Image
+src="https://static.igem.wiki/teams/5612/realrpamodel/amplified-dna-concentration-over-time-2.webp"
+  caption="Figure 9. Initial ODE Graph of RPA amplification over time."
+  size="lg"
+/>
+
+After creating our initial model, we consulted Dr. Styzynski from Georgia Institute of Technology, and after examining our model, he noted that our output was off by a factor of two. After accounting for this, we were able to achieve a final concentration of 3.18E-12M (see Fig. 10), which correlates to 1.92E+12 copies.
+
+<Image
+src="https://static.igem.wiki/teams/5612/realrpamodel/amplified-dna-concentration-over-time-1.webp"
+  caption="Figure 10. Final ODE Graph of RPA amplification over time."
+  size="lg"
+/>
+Densities for our experimental RPA reactions were quantified using the ImageJ software, normalized to the negative controls and standardized against the DNA ladder. By using bands on the ladder of known nanogram weight, the standardized integrated densities of samples can be converted to copies of DNA produced (see Fig. 11). 
+
+<Image
+
+src="https://static.igem.wiki/teams/5612/rpa/more-graphs-1.webp"
+
+  caption="Figure 11. Comparison of experimental and theoretical RPA amplification on PDL products over time; higher values from the ODE model as compared with observed values shows that experimental samples are lacking in amplification efficiency."
+
+  size="lg"
+
+/>
+Experimental validation using the RPA target construct and 2-day post-infection PDL samples showed that DNA yields remained within the model's predicted range, though consistently toward the lower boundary (see Fig. 11). The model's tendency to predict higher yields is expected given that it represents idealized reaction conditions, whereas experimental systems are subject to inefficiencies and variability not captured in the simplified kinetic framework.
+### Statistical Analysis
+#### ANOVA
+In addition to our ODE model, we conducted a significance test using RStudio – a statistical analysis platform built on R – to validate the statistical significance of our results with RPA. Specifically, we performed an Analysis of Variance (ANOVA) model to compare the mean signal intensity of standardized integrated densities across PDL protein concentrations corresponding to 2, 25, 50, 75, 100, and 150 days pi after amplification with PCR and RPA. 
+
+The critical statistical values for our ANOVA analysis include the following (Bevans, 2020):
+**F value**: the test statistic from an F test; the greater the F value, the greater the likelihood that the variation between groups is caused by the independent variable(s) and not from random chance 
+**Pr(>F)**: the p value of the F statistic; a measure of the significance of the F value and how likely it is that the resultant F value could occur due to random chance under the null hypothesis
+**Residual variance**: the sum of the squares of the residuals of the data set; a smaller residual variance indicates that the independent variables explain more of the variation
+
+To begin, we ran two separate one-way ANOVAs to model signal intensity as a function of the method of amplification and as a function of the time passed pi. Based on the results above, the p-values for both one-way ANOVAs are < 0.01, showing a likelihood that method of amplification and time elapsed have a real impact on signal intensity (see Tables 9- 10). If the independent variables mapped were not statistically significant, there would be a 5.29e-7% and 0.055% chance, respectively, for results from differing methods and times to happen by random chance. 
+| Source     | Df  | Sum Sq | Mean Sq | F value | Pr(>F)   |
+|-------------|-----|---------|----------|----------|----------|
+| Method      | 1   | 7.890   | 7.890    | 37.99    | 5.29e-7  |
+| Residuals   | 34  | 7.061   | 0.208    |          |          |
+
+<center>*Table 9. Results of one-way ANOVA on experimental results with amplification method as the independent variable mapping signal intensity.*</center>
+
+| Source     | Df  | Sum Sq | Mean Sq | F value | Pr(>F) |
+|-------------|-----|---------|----------|----------|--------|
+| Time        | 5   | 4.355   | 0.871    | 2.466    | 0.055  |
+| Residuals   | 30  | 10.596  | 0.3532   |          |        |
+
+<center>*Table 10. Results of one-way ANOVA on experimental results with time elapsed as the independent variable mapping signal intensity.*</center>
+
+We then ran a two-way ANOVA, which would model signal intensity as a function of both amplification method and time elapsed. Combining the two conditions improved our model’s predictions, as the residual variance not explained by our independent variables decreased from 7.061 and 10.596 to 2.706 (see Table 11). Both the amplification method and time passed were once again statistically significant (p-values < 0.001), showing that both variables likely impact the amount of DNA product generated. 
+| Source     | Df  | Sum Sq | Mean Sq | F value | Pr(>F)   |
+|-------------|-----|---------|----------|----------|----------|
+| Method      | 1   | 7.890   | 7.890    | 84.552   | 4.27e-10 |
+| Time        | 5   | 4.355   | 0.871    | 9.335    | 2.20e-5  |
+| Residuals   | 29  | 2.706   | 0.093    |          |          |
+| **Signif. codes** | **0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1** |  |  |  |  |
+
+<center>*Table 11. Results of two-way ANOVA on experimental results for amplification of PDL products at protein concentration over time run with PCR and RPA.*</center>
+
+Finally, we ran an ANOVA analysis that tested whether the independent variables have an interactive effect, where time elapsed may also affect the activity of the amplification methods. The interaction ANOVA showed significant effects of Method (F(1,24) = 5456.1, p < 0.001), Time (F(5,24) = 602.4, p < 0.001), and their interaction (F(5,24) = 369.5, p < 0.001). Because the ‘Method:Time’ variable has a relatively high sum-of-squares value, low p-value, and small residual variance, much of the variation can be explained by the interaction between amplification method and time elapsed (see Table 12). 
+
+If the differences were not statistically significant, the data would follow the null hypothesis and there would only be a 2e-16% for the results to occur under random change (see Table 8). Therefore, the interaction between our amplification methods and time elapsed past infection experimentally show a significant difference which is not due to random chance. 
+| Source        | Df  | Sum Sq | Mean Sq | F value | Pr(>F)   |
+|----------------|-----|---------|----------|----------|----------|
+| Method         | 1   | 7.890   | 7.890    | 5456.1   | &lt;2e-16   |
+| Time           | 5   | 4.355   | 0.871    | 602.4    | &lt;2e-16   |
+| Method:Time    | 5   | 2.671   | 0.534    | 369.5    | &lt;2e-16   |
+| Residuals      | 24  | 0.035   | 0.001    |          |          |
+| **Signif. codes** | **0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1** |  |  |  |  |
+
+<center>*Table 12. Results of interaction ANOVA on experimental results for amplification of PDL product at protein concentration over time run with PCR and RPA.*</center>
+
+To decide which of our four different ANOVA models is the ‘best-fit’ to explain the data, we utilized the Akaike information criteria (AIC) test. The calculated AIC values show that the information value of the interaction ANOVA is the lowest, and has 100% of the AIC weight, meaning it is best fit to explain the variation in the data (see Table 13). 
+| Model           | K  | AICc   | Delta_AICc | AICcWt | Cum.Wt | LL     |
+|-----------------|----|--------|-------------|--------|--------|--------|
+| interaction     | 13 | -105.29 | 0.00        | 1      | 1      | 73.92  |
+| two.way         | 8  | 30.33   | 135.62      | 0      | 1      | -4.50  |
+| one.way.method. | 3  | 50.27   | 155.56      | 0      | 1      | -21.76 |
+| one.way.time    | 7  | 76.13   | 181.42      | 0      | 1      | -29.07 |
+
+<center>*Table 13. ANOVA model selection based on the AICc (Corrected Akaike Information Criterion) values, indicating that the ANOVA with interaction between variables is the best fit model for our dat..*</center>
+#### Homoscedasticity 
+To check if our analysis was homoscedastic, an assumption that residual variance is constant across independent variables, we also plotted various diagnostic plots of our model (See Fig. 5).
+
+<Image
+
+src="https://static.igem.wiki/teams/5612/rpa/png-image.avif"
+
+  caption="Figure 12. Residual diagnostic plots for the two-way ANOVA with interaction, indicating adherence to homoscedasticity. "
+
+  size="lg"
+
+/>
+Our diagnostic plots display the residual variance across the range of the observed data in multiple ways. The Residuals vs. Fitted graph has a roughly constant amount of variance and is mostly centered at zero, meaning there are no major outliers causing variance. 
+
+The Q-Q Residuals graph plots a regression between the theoretical residuals of a perfectly homoscedastic model and our actual residuals. Our Q-Q plot is very close to a slope of 1 with slight deviation at the extremes, meaning there is generally a low level of variability. 
+
+For the Scale-Location graph and Leverage plot, the mean of the residuals (the red line) is generally constant, meaning the variance of our data set is stable and there are no extreme outliers. From these residual plots we find that our ANOVA model fits the assumption of homoscedasticity. 
+#### Tukey HSD Post-Hoc Test
+ANOVA analyses are prone to confounding experimental error rates, especially as the number of groups compared increases. This error rate can be up to 97% for a comparison between 12 groups (Bevans, 2020). To control this variability, we ran Tukey’s Honest Significant Difference (HSD) post-hoc test to adjust the p-values by comparing the pairwise difference between each specific mean at a 95% confidence interval. 
+
+We then plotted the confidence intervals, which demonstrates no significant internal differences between the PCR groups, as intervals largely overlap zero across all time points (see Fig. 13). 
+
+<Image
+
+src="https://static.igem.wiki/teams/5612/modelingfinal/png-image.avif"
+
+  caption="Figure 13. Tukey HSD 95% confidence interval plot of signal intensities across PCR and RPA groups across varying periods of time."
+
+  size="lg"
+
+/>
+
+The faceted plot revealed that all PCR groups (a) remain statistically indistinguishable and cluster at low intensities (~0.2–0.3), indicating no significant time effect for PCR (see Fig. 14). 
+RPA groups, however, are separated into distinct subsets with RPA:2 being the highest (b), RPA:25 & RPA:50 intermediate (c), RPA:75 & RPA:100 lower (d), and RPA:150 as the lowest (e) (see Fig. 14). 
+
+
+Figure 14
+
+<Image
+
+src="https://static.igem.wiki/teams/5612/rpa/more-graphs.webp"
+
+  caption="Figure 14. Faceted plot of Signal Intensity by Method and Time with Tukey HSD group comparisons; all PCR groups (a), RPA:2 (b), RPA:25 and RPA:50 (c), RPA:75 and RPA:100 (d), and RPA:150 (e)."
+
+  size="lg"
+
+/>
+In addition to the Tukey post-hoc test, we graphed the standardized integrated densities of post-PDL PCR and post-PDL RPA at 2 days pi. The plot clearly showed that the signal intensity for RPA was greater by a factor of ten compared to PCR (see Fig. 15). 
+
+<Image
+src="https://static.igem.wiki/teams/5612/modelingrpa/google-keep-note-12.webp"
+  caption="Figure 15. ImageJ analysis comparing post-PDL PCR reaction and post-PDL RPA reaction, quantitatively showing a significantly greater amplification activity by RPA."
+  size="lg"
+/>
+Together, the adjusted p-values from the post-hoc Tukey HSD test and graph of post-PDL PCR compared to post-PDL RPA validates our choice of RPA within LANCET’s diagnostic workflow. Our statistical analysis demonstrates that RPA groups are always significantly greater than PCR groups, even at the latest time points. These findings support RPA’s greater sensitivity and stronger amplification efficiency as compared to PCR, experimentally confirming that LANCET is better suited for point-of-care testing as compared to traditional methods of DNA amplification.  
+
+# Cas12a
+## Overview
+
+In order to quantify the amount of target DNA following our previous systems, Lambert iGEM implemented the CRISPR-Cas12a system, which uses a guide RNA to bind and cleave a targeted dsDNA sequence (see Fig. 16). 
+After the initial cut, the Cas12a enzyme remains activated and begins indiscriminately cleaving nearby ssDNA. To detect this activity, we introduced reporter molecules: short strands of ssDNA tagged with a fluorophore and a quencher. When cleaved by the activated Cas12a enzyme, the fluorophore separates from the quencher, producing a detectable fluorescent signal that is proportional to the amount of target DNA.
+<Image
+src="https://static.igem.wiki/teams/5612/modelingcas12a/google-keep-note-13.webp"
+  caption="Figure 16. Image depicting collateral cleavage by Cas12a resulting in activated fluorophores.
+"
+  size="lg"
+/>
+
+## Development
+We created a deterministic ODE model to simulate the CRISPR-Cas12a system, with guidance from Dr. Mark Styczynski at the Georgia Institute of Technology on parameter selection and model structure. This model was designed to serve as a baseline for our wetlab results, predicting the fluorescence output based on target DNA concentration. By modeling the activation of the Cas12a enzyme and its trans-cleavage of fluorophore-quencher probes, we created a reference curve that helps guide experimentation. After CRISPR-Cas12a experimentation finished, their results refined our parameters, creating a collaborative data streamline.
+## Signaling Pathway
+We used MATLAB’s SimBiology software to map out the Cas-12a workflow using the Law of Mass Action and Michaelis-Menten equations (see Fig. 17). Michaelis-Menten equations are used to map out reactions involving enzyme kinetics, whereas Mass Action equations are used to diagram the collision of reactants in a solution. The pathway begins with the introduction of the Cas-12a enzyme and crRNA, and ends with the fluorescence output of the FAM-6 fluorophore.
+<Image
+src="https://static.igem.wiki/teams/5612/modelingcas12a/google-keep-note-14.webp"
+  caption="Figure 17. Representation of the Cas12a reaction pathway using SimBiology.
+
+"
+  size="lg"
+/>
+
+## Biochemical Reactions
+The model contains a total of three biochemical reactions for the Cas12a pathway (see Table 14) :
+
+
+|  | Reaction | Description |
+|-----|-----------|-------------|
+| 1 | cas12a + crRNA &harr; cas_crRNA | The Cas-12 Enzyme, LbCpf1, binds to a crRNA, forming a Cas12a–crRNA complex. |
+| 2 | cas_crRNA + target &rarr; byproduct2 + byproduct1 + act_cas12 | The Cas12a-crRNA complex cleaves the target DNA. |
+| 3 | act_cas12 + reporter &rarr; fluorophore + quencher | The activated enzyme cleaves the reporter probe, splitting apart the FAM-6 fluorophore and quencher. |
+<center> *Table 14. Reactions and descriptions of the 3 biochemical reactions in the Cas12a pathway.* </center>
+
+## Initial Values of Species
+In order to simulate our reactions, our team needed to input quantities to initialize each component in our model. The initial value of each species was obtained from Cas12a wetlab protocols (see Table 15; [see Experiments](/lambert-ga/experiments)):
+| Name          | Value   | Units |
+|----------------|----------|--------|
+| cas12system    | 1        | L      |
+| cas12a         | 2.5e-7   | M      |
+| crRNA          | 2.5e-7   | M      |
+| cas_crRNA      | 0        | M      |
+| target         | 2.5e-7   | M      |
+| byproduct1     | 0        | M      |
+| byproduct2     | 0        | M      |
+| act_cas12a     | 0        | M      |
+| reporter       | 2.5e-7   | M      |
+| fluorophore    | 0        | M      |
+| quencher       | 0        | M      |
+<center>*Table 15. Initial Cas12a wetlab protocol values and units.*</center>
+
+## Parameters
+Rate constants and degradation rates are required as input in our Mass Action Laws and Michaelis-Menten Equations. These values were derived from literature or estimated if the values could not be found. The value of each parameter is as shown (see Table 16):
+| Name        | Reaction                                                                 | Value      | Units                 | Reference                |
+|--------------|--------------------------------------------------------------------------|-------------|------------------------|---------------------------|
+| k_complex    | Rate at which the Cas-12 Enzyme binds to a crRNA.                        | 76000000    | liter/mole/second      | (Nalefski et al., 2021)  |
+| kr_complex   | Rate at which the Cas-12 Enzyme separates from the crRNA.                | 0.00024     | 1/second               | (Nalefski et al., 2021)  |
+| k_cleave     | Rate at which Cas12a-crRNA complex cleaves the Target DNA.               | 81000000    | liter/mole/second      | (Strohkendl et al., 2018) |
+| Vm_act       | Maximal velocity at which the activated enzyme cleaves the reporter probe. | 8.45e-8     | molarity/second        | (Nalefski et al., 2021)  |
+| Km_act       | Michaelis-Menten constant for Cas12a trans-cleavage.                     | 0.0000337   | molarity               | (Nalefski et al., 2021)  |
+<center>*Table 16. Reactions and values of Cas12a parameters.*</center>
+
+## Ordinary Differentials Equations
+We used the Mass Action Kinetic Laws and Michaelis-Menten Equations to represent different reactions for the Cas12a model. We generated nine ordinary differential equations for the full Cas12a system (see Table 17). 
+<div class="math-table-container">
+| Number | ODE Equation |
+|---------|--------------|
+| 1 | $$\frac{d(crRNA)}{dt} = \frac{1}{cas12system} \left[ -\left((k_{complex} \cdot cas12a \cdot crRNA) \cdot cas12system - (kr_{complex} \cdot cas\_crRNA) \cdot cas12system\right) \right]$$ |
+| 2 | $$\frac{d(cas\_crRNA)}{dt} = \frac{1}{cas12system} \left[ ((k_{complex} \cdot cas12a \cdot crRNA) \cdot cas12system - (kr_{complex} \cdot cas\_crRNA) \cdot cas12system) - ((k_{cleave} \cdot cas\_crRNA \cdot target) \cdot cas12system) \right]$$ |
+| 3 | $$\frac{d(target)}{dt} = \frac{1}{cas12system} \left[ -((k_{cleave} \cdot cas\_crRNA \cdot target) \cdot cas12system) \right]$$ |
+| 4 | $$\frac{d(byproduct2)}{dt} = \frac{1}{cas12system} \left[ ((k_{cleave} \cdot cas\_crRNA \cdot target) \cdot cas12system) \right]$$ |
+| 5 | $$\frac{d(byproduct1)}{dt} = \frac{1}{cas12system} \left[ ((k_{cleave} \cdot cas\_crRNA \cdot target) \cdot cas12system) \right]$$ |
+| 6 | $$\frac{d(act\_cas12)}{dt} = \frac{1}{cas12system} \left[ ((k_{cleave} \cdot cas\_crRNA \cdot target) \cdot cas12system) - \left(\frac{Vm_{act} \cdot reporter}{Km_{act} + reporter}\right) \cdot cas12system \right]$$ |
+| 7 | $$\frac{d(reporter)}{dt} = \frac{1}{cas12system} \left[ -\left(\frac{Vm_{act} \cdot reporter}{Km_{act} + reporter}\right) \cdot cas12system \right]$$ |
+| 8 | $$\frac{d(fluorophore)}{dt} = \frac{1}{cas12system} \left[ \left(\frac{Vm_{act} \cdot reporter}{Km_{act} + reporter}\right) \cdot cas12system \right]$$ |
+| 9 | $$\frac{d(quencher)}{dt} = \frac{1}{cas12system} \left[ \left(\frac{Vm_{act} \cdot reporter}{Km_{act} + reporter}\right) \cdot cas12system \right]$$ |
+</div>
+
+<center>*Table 17. ODE equations for Cas12a reactions.*</center>
+
+## Assumptions
+The Cas12a ODE model assumes rate constants as continuous, due to a lack of external environmental factors. Therefore, the model can predict fluorophore release from the reporter probe to capture the resulting fluorescence. The model also assumes that the total quantities of the LbCPf1 Cas-12 enzyme, crRNA, Target DNA, and Reporter Probe are known initially and remain constant over time. Additionally, the model assumes that Cas12a cleavage of target DNA and reporter probes occurs at a constant rate regardless of target DNA or reporter probes.
+
+## Results
+### Cas12a
+We developed a complete set of ODEs describing the Cas12a collateral cleavage mechanism and implemented them in MATLAB SimBiology. Using SimBiology's Model Analyzer, we simulated 6FAM fluorophore concentration over 30 minutes with an initial dsDNA target concentration of $$2.5 \times 10^{-7}$$ M (see Fig. 18). The model captures the sequential reaction mechanism: Cas12a binds and cleaves the target dsDNA, becoming activated and subsequently executing collateral cleavage of the ssDNA reporter probe to separate the fluorophore from its quencher, generating a fluorescent signal.
+<Image
+src="https://static.igem.wiki/teams/5612/modelingcas12a/cas12a-fluorophore-concentration-from-model-analyzer.webp"
+  caption="Figure 18. ODE graph showing increasing Cas12a fluorophore concentration over time."
+  size="lg"
+/>
+
+### Experimental vs Theoretical Cas12a
+We analyzed experimental fluorescence data from Cas12a trans-cleavage reactions. Fluorescence was detected by the plate reader as reporter probes were cleaved. To compare with model predictions, we converted RFU measurements to 6FAM fluorophore concentrations using our calibration equation $$RFU = 94.1 \times [6FAM]$$ (see Fig. 19). The resulting experimental concentration profiles closely matched simulated data (see Table 18), validating our ODE model's ability to predict Cas12a detection kinetics.
+<Image
+src="https://static.igem.wiki/teams/5612/modelingcas12a/rfu-to-6-fam-calibration-curve-from-model-analyzers.webp"
+  caption="Figure 19. Calibration curve of RFU over concentration of 6-FAM probe."
+  size="lg"
+/>
+
+<div class="horiz">
+<Image
+src="https://static.igem.wiki/teams/5612/modelingcas12a/cas12a-fluorophore-concentration-from-model-analyzers.webp"
+  size="lg"/>  <Image
+src="https://static.igem.wiki/teams/5612/modelingcas12a/cas12a-fluorophore-concentration-from-model-analyzer.webp"
+  size="lg"/>  
+</div>
+<center>*Table 18. Experimental (left) vs. Modeled (right) Cas12a fluorophore concentration over time.*</center>
+
+# CRISPRi
+## Overview
+In 2024, Lambert iGEM developed a system of deterministic ODEs to model our CRISPRi reaction. CRISPRi can be summarized by the steps below: 
+**Protein synthesis**: Proteins required for the CRISPRi system are synthesized and translated using the Sigma70 cell-free TXTL kit, which provides all components for in vitro protein expression.
+**Binding**: The scaffold region of the sgRNA associates with dCas9 to form a stable dCas9–sgRNA complex that guides the system to its target.
+Knockdown: The sgRNA–dCas9 complex binds to the complementary DNA sequence of the target gene, reducing fluorescence by inhibiting Green Fluorescent Protein (GFP) expression.
+## Development
+To assist in interpreting and validating CRISPRi reactions, we incorporated an ODE model to simulate the reaction and correlate fluorescence expressed by a target DNA construct to time elapsed. We consulted with Dr. Mark Styczynski from the Georgia Institute of Technology to identify certain parameters and rate constants. Comparison between model predictions and experimental fluorescence data enabled parameter refinement, yielding an improved ODE model with updated kinetic parameters. Using this refined model, we generated sgRNA concentration curves to optimize repression efficiency and extended the framework to incorporate our multiplexing approach, enabling prediction of multi-target CRISPRi performance.
+## Signaling Pathway
+We used MATLAB’s SimBiology software to diagram each reaction using the Law of Mass Action, Michaelis Menten Enzyme Kinetics, and Hill Equations. The Mass Action equations are used to diagram the collision of reactants in a solution, which is needed for all the reactants in our reaction pathways. Michaelis Menten and Hill equations are to properly diagram catalytic enzyme kinetics when utilizing multiple ligand areas. The pathway begins with the introduction of a DNA construct into the system and ends with the production of GFP (see Fig. 20).
+
+<Image
+src="https://static.igem.wiki/teams/5612/modelingcrispri/google-keep-note-19.webp"
+  caption="Figure 20. Representation of the CRISPRi reaction pathway using SimBiology."
+  size="lg"
+/>
+
+## Biochemical Reactions
+The CRISPRi model contains a total of 16 biochemical reactions for the overall pathway, as shown below (see Table 19):
+| #  | Reaction                            | Description                                                                 |
+|----|-------------------------------------|------------------------------------------------------------------------------|
+| 1  | sgDNA_0250 + RNAP &rarr; sgRNA_0250   | RNA Polymerase transcribes the guide DNA construct for the 0250 gene into the sgRNA construct. |
+| 2  | RNAP + sgDNA_0841 &rarr; sgRNA_0841    | RNA Polymerase transcribes the guide DNA construct for the 0841 gene into the sgRNA construct. |
+| 3  | dCas9_P + TXTL &rarr; dCas9            | dCas9 Protein synthesized in the cell-free system. |
+| 4  | sgRNA_0841 + dCas9 &rarr; d_sg_0841    | 0841 Guide RNA binds with dCas9 to form sgRNA_dCas9 complex. |
+| 5  | sgRNA_0250 + dCas9 &rarr; d_sg_0250    | 0250 Guide RNA binds with dCas9 to form sgRNA_dCas9 complex. |
+| 6  | d_sg_0250 + TC_0250 &harr; TC_d_sg_0250 | 0250 sgRNA_dCas9 complex binds to 0250 Target Construct, inhibiting its GFP expression. |
+| 7  | TC_0841 + d_sg_0841 &harr; TC_d_sg_0841 | 0841 sgRNA_dCas9 complex binds to 0250 Target Construct, inhibiting its GFP expression. |
+| 8  | TC_0250 &rarr; GFP                     | Before inhibition, the 0250 target construct is producing GFP. |
+| 9  | TC_0841 &rarr; GFP                     | Before inhibition, the 0841 target construct is producing GFP. |
+| 10 | sgDNA_0250 &rarr; null                 | DNA degrades over time. |
+| 11 | sgDNA_0841 &rarr; null                 | DNA degrades over time. |
+| 12 | RNAP &rarr; null                       | RNA Polymerase degrades over time. |
+| 13 | dCas9 &rarr; null                      | Deactivated Cas9 degrades over time. |
+| 14 | TC_0250 &rarr; null                    | Gene 0250 Target Construct degrades over time. |
+| 15 | TC_0841 &rarr; null                    | Gene 0841 Target Construct degrades over time. |
+| 16 | GFP &rarr; null                        | GFP Protein degrades over time. |
+<center>*Table 19. Reactions and descriptions of the 16 biochemical reactions in the CRISPRi pathway.*</center>
+## Initial Values of Species
+In order to simulate our reactions, our team needed to input quantities to initialize each component in our model (see Table 20). The initial value of each species was obtained from CRISPRi wetlab protocols ([see Experiments](/lambert-ga/experiments/)): 
+| Variable       | Species                                                      | Initial Value | Units     |
+|----------------|--------------------------------------------------------------|----------------|------------|
+| sgDNA_0250     | 0250 sgRNA DNA construct                                     | 5.08643e-7     | Molarity   |
+| sgDNA_0841     | 0841 sgRNA DNA construct                                     | 5.93846e-7     | Molarity   |
+| RNAP           | RNA Polymerase                                               | 4e-7           | Molarity   |
+| sgRNA_0250     | 0250 sgRNA                                                   | 0              | Molarity   |
+| sgRNA_0841     | 0841 sgRNA                                                   | 0              | Molarity   |
+| dCas9_P        | dCas9 plasmid                                                | 4e-8           | Molarity   |
+| TXTL           | TXTL cell-free system                                        | 3e-8           | Molarity   |
+| dCas9          | dCas9 protein                                                | 0              | Molarity   |
+| d_sg_0250      | dCas9 and sgRNA 0250 complex                                 | 0              | Molarity   |
+| d_sg_0841      | dCas9 and sgRNA 0841 complex                                 | 0              | Molarity   |
+| TC_0250        | 0250 gene target construct                                   | 8.14000e-8     | Molarity   |
+| TC_0841        | 0841 gene target construct                                   | 9.5000e-8      | Molarity   |
+| GFP            | GFP Protein                                                  | 0              | Molarity   |
+| TC_d_sg_0250   | 0250 Target Construct, with dCas9 and sgRNA 0250 complex     | 0              | Molarity   |
+| TC_d_sg_0841   | 0841 Target Construct, with dCas9 and sgRNA 0841 complex     | 0              | Molarity   |
+<center>*Table 20.  Initial CRISPRi wetlab protocol values and units.*</center>
+## Parameters
+Rate constants and degradation rates were inputted into our Mass Action equations. These parameters were either sourced from existing literature or estimated when values could not be found. The value for each parameter is listed below (see Table 21):
+| Variable       | Reaction                                                                                     | Values     | Units             | Citation |
+|----------------|-----------------------------------------------------------------------------------------------|-------------|--------------------|-----------|
+| kf_plas        | Rate of protein synthesis from dCas9 plasmid to dCas9 protein                                | 2.6000e-8  | liter/mole/second  | (Marshall et al., 2017) |
+| kf_complex     | Rate at which guide RNAs bind with dCas9 to form sgRNA_dCas9 complexes                        | 0.9800     | liter/mole/second  | (Marshall et al., 2017) |
+| kf_0250        | Rate at which the 0250 sgRNA_dCas9 complex binds to the 0250 Target Construct, inhibiting its GFP expression | 1.0000e-5  | liter/mole/second  | (Marshall, Beisel, & Noireaux, 2020) |
+| kf_0841        | Rate at which the 0841 sgRNA_dCas9 complex binds to the 0841 Target Construct, inhibiting its GFP expression | 1.0000e-9  | liter/mole/second  | (Marshall, Beisel, & Noireaux, 2020) |
+| Vm_RNAP        | Maximal velocity at which RNA Polymerase transcribes the guide DNA constructs                 | 6.5000e-4  | molarity/second    | (Marshall et al., 2017) |
+| Km_RNAP        | Michaelis-Menten constant for RNA Polymerase transcription                                    | 0.0100     | molarity           | (Marshall et al., 2017) |
+| Vm_0250        | Maximal velocity at which the 0250 target construct produces GFP                              | 2.0000e-4  | 1/second           | experimentation |
+| Kp_0250        | Michaelis-Menten constant for 0250 target construct production of GFP                         | 1.0000e-5  | molarity           | experimentation |
+| Vm_0841        | Maximal velocity at which the 0841 target construct produces GFP                              | 9.0000e-5  | 1/second           | experimentation |
+| Kp_0841        | Michaelis-Menten constant for 0841 target construct production of GFP                         | 1.0000e-5  | molarity           | experimentation |
+| kr_0250        | Rate at which the 0250 sgRNA_dCas9 complex releases from the 0250 Target Construct            | 1.0000e-7  | 1/second           | (Marshall, Beisel, & Noireaux, 2020) |
+| kr_0841        | Rate at which the 0841 sgRNA_dCas9 complex releases from the 0841 Target Construct            | 1.0000e-7  | 1/second           | (Marshall, Beisel, & Noireaux, 2020) |
+| k_dna_deg      | Rate at which DNA degrades                                                                    | 1.0000e-6  | 1/second           | (Marshall et al., 2017) |
+| k_protein_deg  | Rate at which protein degrades                                                                | 3.9000e-7  | 1/second           | (Marshall et al., 2017) |
+<center>*Table 21. Reactions and values for CRISPRi parameters.*</center>
+
+## Ordinary Differential Equations
+We used the Mass Action Kinetic Laws, Michaelis-Menten Equations, and Hill equations to represent different reactions for the CRISPRi model. We created 12 ordinary differential equations for the full CRISPRi system (see Table 22):
+<div id="makl" class="math-table-container">
+| Number | ODE Equation |
+|---------|---------------|
+| 1 | $$\frac{d(RNAP)}{dt} = \frac{1}{crisprsystem}\left[-\left(\frac{V_m^{RNAP} \cdot sgDNA_{0250}}{K_m^{RNAP}+sgDNA_{0250}}\right) \cdot crisprsystem - \left(\frac{V_m^{RNAP} \cdot sgDNA_{0841}}{K_m^{RNAP}+sgDNA_{0841}}\right) \cdot crisprsystem - (k_{protein\_deg} \cdot RNAP) \cdot crisprsystem\right]$$ |
+| 2 | $$\frac{d(sgRNA_{0250})}{dt} = \frac{1}{crisprsystem}\left[\left(\frac{V_m^{RNAP} \cdot sgDNA_{0250}}{K_m^{RNAP}+sgDNA_{0250}}\right) \cdot crisprsystem - (k_f^{complex} \cdot sgRNA_{0250} \cdot dCas9) \cdot crisprsystem\right]$$ |
+| 3 | $$\frac{d(sgRNA_{0841})}{dt} = \frac{1}{crisprsystem}\left[\left(\frac{V_m^{RNAP} \cdot sgDNA_{0841}}{K_m^{RNAP}+sgDNA_{0841}}\right) \cdot crisprsystem - (k_f^{complex} \cdot sgRNA_{0841} \cdot dCas9) \cdot crisprsystem\right]$$ |
+| 4 | $$\frac{d(TXTL)}{dt} = \frac{1}{crisprsystem}\left[-(k_f^{plas} \cdot dCas9_P \cdot TXTL) \cdot crisprsystem\right]$$ |
+| 5 | $$\frac{d(dCas9)}{dt} = \frac{1}{crisprsystem}\left[(k_f^{plas} \cdot dCas9_P \cdot TXTL) \cdot crisprsystem - (k_f^{complex} \cdot sgRNA_{0841} \cdot dCas9) \cdot crisprsystem - (k_f^{complex} \cdot sgRNA_{0250} \cdot dCas9) \cdot crisprsystem - (k_{protein\_deg} \cdot dCas9) \cdot crisprsystem\right]$$ |
+| 6 | $$\frac{d(d\_sg_{0841})}{dt} = \frac{1}{crisprsystem}\left[(k_f^{complex} \cdot sgRNA_{0841} \cdot dCas9) \cdot crisprsystem - (k_f^{0841} \cdot TC_{0841} \cdot d\_sg_{0841}) \cdot crisprsystem - (k_r^{0841} \cdot TC\_d\_sg_{0841}) \cdot crisprsystem\right]$$ |
+| 7 | $$\frac{d(d\_sg_{0250})}{dt} = \frac{1}{crisprsystem}\left[(k_f^{complex} \cdot sgRNA_{0250} \cdot dCas9) \cdot crisprsystem - (k_f^{0250} \cdot d\_sg_{0250} \cdot TC_{0250}) \cdot crisprsystem - (k_r^{0250} \cdot TC\_d\_sg_{0250}) \cdot crisprsystem\right]$$ |
+| 8 | $$\frac{d(TC_{0250})}{dt} = \frac{1}{crisprsystem}\left[-(k_f^{0250} \cdot d\_sg_{0250} \cdot TC_{0250}) \cdot crisprsystem - (k_r^{0250} \cdot TC\_d\_sg_{0250}) \cdot crisprsystem - \left(\frac{V_m^{0250} \cdot TC_{0250}}{1+(d\_sg_{0250}/K_p^{0250})^2}\right) \cdot crisprsystem - (k_{dna\_deg} \cdot TC_{0250}) \cdot crisprsystem\right]$$ |
+| 9 | $$\frac{d(TC_{0841})}{dt} = \frac{1}{crisprsystem}\left[-(k_f^{0841} \cdot TC_{0841} \cdot d\_sg_{0841}) \cdot crisprsystem - (k_r^{0841} \cdot TC\_d\_sg_{0841}) \cdot crisprsystem - \left(\frac{V_m^{0841} \cdot TC_{0841}}{1+(d\_sg_{0841}/K_p^{0841})^2}\right) \cdot crisprsystem - (k_{dna\_deg} \cdot TC_{0841}) \cdot crisprsystem\right]$$ |
+| 10 | $$\frac{d(GFP)}{dt} = \frac{1}{crisprsystem}\left[\left(\frac{V_m^{0250} \cdot TC_{0250}}{1+(d\_sg_{0250}/K_p^{0250})^2}\right) \cdot crisprsystem + \left(\frac{V_m^{0841} \cdot TC_{0841}}{1+(d\_sg_{0841}/K_p^{0841})^2}\right) \cdot crisprsystem - (k_{protein\_deg} \cdot GFP) \cdot crisprsystem\right]$$ |
+| 11 | $$\frac{d(TC\_d\_sg_{0250})}{dt} = \frac{1}{crisprsystem}\left[(k_f^{0250} \cdot d\_sg_{0250} \cdot TC_{0250}) \cdot crisprsystem - (k_r^{0250} \cdot TC\_d\_sg_{0250}) \cdot crisprsystem\right]$$ |
+| 12 | $$\frac{d(TC\_d\_sg_{0841})}{dt} = \frac{1}{crisprsystem}\left[(k_f^{0841} \cdot TC_{0841} \cdot d\_sg_{0841}) \cdot crisprsystem - (k_r^{0841} \cdot TC\_d\_sg_{0841}) \cdot crisprsystem\right]$$ |
+</div>
+
+<center>*Table 22. ODE equations for CRISPRi reactions.*</center>
+
+## Assumptions
+The CRISPRi ODE model assumes rate constants to be continuous, as there are no environmental factors that can influence the reaction in the in vitro cell free mix. Therefore, the model is able to isolate the CRISPRi process to simulate repression activity. The model also assumes the total initial concentrations of dCas9 plasmid, target constructs, sgRNA construct, sigma70 ribosome, Chi6, and RecBCD protein. Additionally, the sigma70 RNA polymerase is expected to synthesize DNA at the same rate regardless of whether the construct being transcribed is a plasmid or linear sequence.
+## Results
+### CRISPRi
+After creating a complete set of ODEs, we utilized Simbiology’s Model Analyzer to simulate the concentration of GFP over 16 hours with an initial target construct concentration of 81.4 nM for gene 0250 and 95 nM for gene 0841 (See Figs. 21-22). As time passes, the target construct produces GFP, and as the dCas9 enzyme goes downstream, it represses the construct. 
+
+<div class="horiz">
+<Image
+src="https://static.igem.wiki/teams/5612/modelingcrispri/realfigs/bb0250-crispri-gfp-concentration-analysis.webp"
+  caption="Figure 21. ODE graph of Bb0250 CRISPRi GFP concentration over time."
+  size="lg"/>
+
+<Image
+src="https://static.igem.wiki/teams/5612/modelingcrispri/realfigs/bb0841-crispri-gfp-concentration.webp"
+  caption="Figure 22. ODE graph of Bb0841 CRISPRi GFP concentration over time."
+  size="lg"/>
+</div>
+#### Experimental vs Theoretical CRISPRi
+We analyzed fluorescence data from our CRISPRi experiments targeting **Bb0250** and **Bb0841**. During the first 5 hours, RFU values remained elevated, indicating active GFP production. Subsequently, a noticeable plateau in RFU becomes evident, correlating with the inhibition of GFP transcription. To evaluate the effectiveness of our wetlab experimentation, we utilized a line-of-best-fit between GFP expression and fluorescence to correlate the reactions, represented by the equation: $$RFU = 2.27 \times 10^{8} \times [GFP]$$ for our plate reader (See Fig. 23). By converting our relative fluorescence to GFP concentration, the similarity presented by the logarithmic shape of our model and our experimental results proves the accuracy of our wetlab (see Tables 23-24).
+
+<Image
+src="https://static.igem.wiki/teams/5612/modelingcrispri/realfigs/rfu-to-gfp-calibration-curve-from-model-analyzers.webp"
+  caption="Figure 23. Graph depicting amount RFU based on GFP concentration."
+  size="lg"/>
+
+<div class="horiz">
+<Image src="https://static.igem.wiki/teams/5612/modelingcrispri/realfigs/bb0250-crispri-gfp-concentration-from-model-analyzers.webp" size="lg"/>  <Image src="https://static.igem.wiki/teams/5612/modelingcrispri/realfigs/bb0250-crispri-gfp-concentration-analysis.webp" size="lg"/> 
+</div>
+<center>*Table 23. Experimental (left) vs, Modeled (right) Bb0250 CRISPRi GFP Concentration.*</center>
+
+
+<div class="horiz">
+<Image src="https://static.igem.wiki/teams/5612/modelingcrispri/realfigs/crispri-gfp-concentration-results.webp" size="lg"/> <Image src="https://static.igem.wiki/teams/5612/modelingcrispri/realfigs/bb0841-crispri-gfp-concentration.webp" size="lg"/> 
+</div>
+<center>*Table 24. Experimental (left) vs, Modeled (right) Bb0841 CRISPRi GFP Concentration.*</center>
+
+
+### Multiplexed CRISPRi
+After demonstrating successful repression of individual target genes, we sought to achieve more comprehensive bacterial inhibition through multiplexing—simultaneous repression of both Bb0250 and Bb0841. We constructed a multiplexed CRISPRi model in MATLAB SimBiology incorporating negative regulation pathways for both targets. Using initial target construct concentrations of 81.4 nM for Bb0250 and 95 nM for Bb0841, we simulated GFP expression over 16 hours. The model predicted a plateau in GFP concentration following dCas9-sgRNA complex formation (see Fig. 24), indicating effective dual-target repression.
+
+<Image
+src="https://static.igem.wiki/teams/5612/modelingcrispri/realfigs/crispri-gfp-concentration-results-1.webp"
+  caption="Figure 24. ODE multiplexed CRISPRi GFP concentration over time."
+  size="lg"/>
+
+#### Experimental vs Theoretical Multiplexed CRISPRi 
+We analyzed fluorescence data from our multiplexed CRISPRi experiments where Bb0250 and Bb0841 were simultaneously targeted. RFU values remained elevated during the first 5 hours, indicating active GFP production from both target constructs, before plateauing as CRISPRi-mediated repression of both genes took effect. To enable quantitative comparison with our multiplexed ODE model, we converted RFU measurements to GFP concentrations using the relationship: $$RFU = 2.27 \times 10^{8} \times [GFP]$$. Both experimental and simulated data for the multiplexed system exhibited similar characteristic logarithmic profiles (see Table 25), demonstrating that our model accurately predicts dual-target CRISPRi kinetics.
+
+<div class="horiz">
+<Image
+src="https://static.igem.wiki/teams/5612/modelingcrispri/realfigs/crispri-gfp-concentration-experimental.webp"
+  size="lg"/>  <Image
+src="https://static.igem.wiki/teams/5612/modelingcrispri/realfigs/crispri-gfp-concentration-results-1.webp"
+  size="lg"/>  
+</div>
+
+<center>*Table 25. Experimental (left) vs. Modeled (right) Multiplexed CRISPRi GFP Concentration graphs, showing that our model accurately predicts our CRISPRi system.*</center>
+
+# HP
+## Overview
+As the incidence of Lyme disease continues to escalate, the absence of predictive tools limits proactive public health responses. To address this gap in disease forecasting, we developed projection models based on machine learning to identify regions of high-risk and inform strategic resource allocation. By integrating various factors our models assess future case prevalence at the county level in the U.S. and subnational level in Europe. 
+
+## Development
+Our model utilizes LSR to estimate county-level Lyme disease risk by integrating socioeconomic, demographic, and environmental features. To forecast future disease burden, we implemented an XGBoost model, which is an ensemble gradient boosting algorithm based on decision trees, to project case counts for 2025, 2030, 2040, and 2050. The model incorporated temporal lag features, which leverage historical case data to capture disease trends, and systematically tuned hyperparameters, adjustable settings that control learning behavior, to maximize performance.
+
+The accuracy of our model was evaluated by Root Mean Square Error (RMSE) to quantify average error of predictions andcross-validating performance across multiple data subsets to ensure reliability and prevent overfitting. These models identify counties at higher risk, providing a data-driven strategy for deploying Lyme disease diagnostics such as LANCET in vulnerable communities [(see Deployment)](/lambert-ga/implementation#Deployment). To demonstrate global applicability, we generated an additional heatmap for European subnational regions.
+
+### Dataset Development
+To develop county-level predictive models, we integrated official public datasets capturing key transmission risk factors from 2010 to 2023. Sources included CDC case counts, U.S. Census demographics and geography, Bureau of Economic Analysis income statistics, U.S. Forest Service land cover estimates, and NOAA climate data. Datasets were merged by county (see Table 26):
+| Dataset | Year | Description |
+|----------|-------|----------------|
+| Lyme Disease Count | 2010–2023 | Reported cases per county per year (CDC) |
+| Population | 2010–2023 | Annual county population (Census) |
+| Personal Income | 2023 | Per capita personal income, USD (BEA) |
+| Vulnerable Risk Age (Under 5 & Over 65)| 2023 | Population risk ages (United States Census) | 
+| Forest Cover | 2019 | Acres of forested land (USFS) |
+| Average Temperature (May–July) | 2023 | °F seasonal average (NOAA) |
+| Average Precipitation (May–July) | 2023 | Inches seasonal average (NOAA) |
+| County Area | 2020 | Square miles (Gazetteer) |
+| Latitude / Longitude | 2020 | Coordinates (Gazetteer) |
+
+<center>*Table 26. Data sources and variables for county-level Lyme disease prediction models (2010-2023).*</center>
+### Heatmap
+To quantify county-level risk intensity, we developed an LSR model combining observed cases with socio-environmental factors. LSR provides interpretable coefficient estimates for each feature while maintaining predictive accuracy, deriving year-specific intensity scores scaled as representative risk percentages.
+
+### Assumptions:
+Our LSR heatmap model assumes that socio-environmental factors ranging from 2010-2023 remain constant as factors are stable over time. The model standardizes all predictor variables using z-scores and combines them linearly using an LSR. The model also assumes that linear relationships exist between these standardized features and per-capita case rates.
+
+### Feature Engineering
+Population sizes were normalized and per-capita cases were calculated to standardize comparison across counties. Seven parameters influencing Lyme disease were standardized using z-scores, ensuring equal contribution with zero mean and unit variance.
+
+We applied LSR to estimate linear relationships between standardized parameters and per-capita cases, producing a socio-environmental risk component value for each county. This value was calculated through weighting and normalization, then scaled on a range from one to ten based on intensity distribution. 
+
+County-level intensity scores were used to generate interactive heatmaps using the Folium software spanning from 2010 to 2023 (See Fig. 25). Counties were color-coded from lime (low risk) to black (highest risk). Interactive features including a time slider, searchable sidebar, and legend enable yearly risk interpretation and county-specific data access. 
+
+<Image
+  src="https://static.igem.wiki/teams/5612/modelinghp/usacountylevelheatmap.webp"
+  caption="Figure 25. Heatmap Representing Lyme Disease by County (2023)."
+  size="lg"
+/>
+
+## XGBoost
+To forecast trends beyond current data, we applied XGBoost regression using historical cases alongside socioeconomic and environmental variables, projecting Lyme disease incidence for 2025, 2030, 2040, and 2050. These projections identify emerging high-risk regions and can help inform targeted public health strategies.
+### Assumptions:
+Our XGBoost forecasting model assumes that lag features capturing cases from 1-2 years prior adequately represent time-based disease dynamics. Socio-environmental features and hyperparameters are set constant and optimal across all forecast periods. The model also assumes that the patterns learned from training data can be generalized to future decades and the NIH conversion factor remains constant across all predicted years and regions applied. 
+
+### Feature Engineering
+To help the model recognize patterns that change over time, we created lag features using data from previous years. The variables **cases_lag_1** and **cases_lag_2** represent the number of cases one and two years earlier, respectively, allowing the model to learn how past outbreaks influence current trends. The variable **population_lag_1** captures the population from the previous year to adjust for changes in population size. We also included **cases_per_capita_lag_1**, which measures the number of cases relative to population, and **years_since_start**, which tracks long-term trends over the forecast period. Together, these features help the model understand both temporal correlations and population-driven effects on disease incidence.
+
+### Model Tuning
+We trained XGBoost to forecast county-level cases using historical data from 2010 to 2023. To optimize performance, we fine-tuned the following hyperparameters (See Table 27):
+| Hyperparameters | Value |
+|----------------------|---------|
+| objective | 'reg:squarederror' |
+| n_estimators | 1000 |
+| learning_rate | 0.05 |
+| max_depth | 5 |
+| subspace | 0.8 |
+| colsample_bytree | 0.8 |
+| random_state | 42 |
+| n_jobs | -1 |
+
+<center>*Table 27. Hyperparameters for model optimization.*</center>
+
+XGBoost was configured as a regression since case counts are continuous values. We set n_estimators to 1000 with a learning rate of 0.05 to allow for gradual learning and reduce overfitting risk. We set a maximum tree depth of five to balance the model’s complexity to allow for the algorithm’s ability to capture nonlinear interactions between each of the datasets.The stochastic subsampling of 80% of both training and feature instances per tree introduces randomness which reduces the sensitivity to outliers and correlated variables. 
+
+
+### Forecasted Case
+Using the model, we predicted county-level Lyme disease cases for 2025, 2030, 2040, and 2050. Lyme disease is severely underdiagnosed and underreported, with many cases going unconfirmed due to testing limitations and lack of healthcare access. Our model predicts confirmed case counts based on historical reporting data. We then applied the NIH’s established methodology for estimating total case burden, reflecting the true disease prevalence (see Table 28) (Kugeler et al., 2021).
+| Year | Predicted Confirmed Cases | Predicted Total Cases |
+|-------|----------------------------------|----------------------------|
+| 2025 | 105,681 | 476,000 |
+| 2030 | 176,771 | 707,085 |
+| 2040 | 226,011 | 904,044 |
+| 2050 | 240,473 | 961,892 |
+
+<center>*Table 28. Predicted Reported Cases and Total Cases for years 2025, 2030, 2040, and 2050.*</center>
+
+These predictions indicate substantial increases in Lyme disease burden across the United States over the coming decades. Current case tracking underestimates true incidence due to underreporting and limited testing, making local and national risk assessment challenging. By aggregating county-level forecasts, our XGBoost model accounts for multiple risk factors and identifies emerging hotspots that may be underrepresented in current surveillance. This predictive tool enables proactive public health planning and intervention before outbreaks escalate. 
+## Results
+To visualize predicted Lyme disease case distribution, choropleth maps were generated for each forecast year (see Figs. 26-29). Maps are presented in log scale to enhance visibility of differences between high and low case count counties, clearly identifying emerging hotspots.
+<Image
+  src="https://static.igem.wiki/teams/5612/modelinghp/choropleth2025.webp"
+  caption="Figure 26. 2025 Chloropleth of Lyme Disease cases in the United States."
+  size="lg"
+/>
+
+<Image
+  src="https://static.igem.wiki/teams/5612/modelinghp/choropleth2030.webp"
+  caption="Figure 27. 2030 Chloropleth of Lyme Disease cases in the United States."
+  size="lg"
+/>
+
+<Image
+  src="https://static.igem.wiki/teams/5612/modelinghp/choropleth2040.webp"
+  caption="Figure 28. 2040 Chloropleth of Lyme Disease cases in the United States."
+  size="lg"
+/>
+
+
+<Image
+  src="https://static.igem.wiki/teams/5612/modelinghp/choropleth2040.webp"
+  caption="Figure 29. 2050 Chloropleth of Lyme Disease cases in the United States"
+  size="lg"
+/>
+Logarithmic scaling is particularly beneficial given wide variation in county-level incidence, with some counties reporting very few cases historically. This transformation ensures all counties, not just highest incidence areas, remain visible and interpretable for public health planning and resource allocation.
+### Impact
+These forecasts provide insights into future Lyme disease risk across U.S. counties, enabling officials to allocate resources and monitor high-risk areas. By combining historical trends, socioeconomic factors, environmental data, and machine learning, this tool identifies emerging hotspots in regions with underreporting and limited diagnostic access.
+### Validation
+To validate model accuracy and robustness, we performed a cross-validation and a hold-out validation.
+In the cross-validation, each year from 2012 to 2021 was sequentially excluded from training data and used as the test set. The model trained on remaining years and was evaluated on the excluded year to assess generalization across temporal contexts. Performance was measured using RMSE, quantifying average difference between predicted and actual case counts (see Table 28). 
+| Year | Cross Validation RMSE |
+|-------|------------------------------|
+| 2012 | 24.616 |
+| 2013 | 18.203 |
+| 2014 | 23.884 |
+| 2015 | 20.341 |
+| 2016 | 26.535 |
+| 2017 | 15.775 |
+| 2018 | 21.367 |
+| 2019 | 14.100 |
+| 2020 | 24.031 |
+| 2021 | 16.881 |
+| Overall | 20.573 |
+
+<center>*Table 28. Cross-validation RMSE by year.*</center>
+
+
+For hold-out validation, we trained on 2010 to 2016 data and tested on 2017 to 2021, simulating conditions where future data is unavailable during development (see Table 29): 
+| Year | Hold-Out RMSE |
+|-------|----------------------|
+| 2017 | 16.376 |
+| 2018 | 19.758 |
+| 2019 | 16.273 |
+| 2020 | 30.976 |
+| 2021 | 17.991 |
+| Overall | 20.275 |
+
+<center>*Table 29. Hold-out RMSE by year.*</center>
+
+Results indicate consistent prediction accuracy with average RMSE values of approximately 20 cases per county, sufficient for identifying high-risk counties and emerging hotspots. Cross-validation demonstrates strong generalization across years, while hold-out validation confirms accurate performance on unseen future data, validating XGBoost's suitability for forecasting county-level Lyme disease trends. 
+
+###XGBoost Rationale
+We selected XGBoost for its ability to capture nonlinear relationships while avoiding overfitting through regularization. Unlike standard random forests, which treat all trees equally, XGBoost uses gradient boosting to iteratively improve predictions by assigning greater weight to previously mispredicted samples, enhancing county-level forecasting accuracy.
+## Global Application
+To demonstrate broader applicability beyond the U.S., we adapted our LSRL approach to generate subnational risk visualizations for European countries (see Fig. 30). Using reported incidence and geographic data at the NUTS2 administrative level, we created normalized choropleth maps visualizing risk intensity (see Table 30). This demonstrates how our models can serve as a blueprint for global monitoring and inform international public health planning and diagnostic deployment.
+
+<Image
+  src="https://static.igem.wiki/teams/5612/modelinghp/europesubnationalheatmap.webp"
+  caption="Figure 30. Heatmap representing Exposure Risk by European Subnational Region."
+  size="lg"
+/>
+
+| Dataset | Year | Development |
+|----------|-------|------------------|
+| Lyme Disease case incidence per 100,000| 2019 | Reported cases per NUTS 2 region for modeling incidence and risk levels (PubMed, Taylor & Francis, Science Direct) |
+| Forest Cover | 2018 | Observed Forest Cover per Square Kilometer (Eurostat) |
+| Economic Factor | 2020 | Economic Activity my million euros (Eurostat) |
+| Population Density | 2018 | Individuals per km2 (Eurostat) |
+| Vulnerable Ages of Disease(Under 3) | 2018 | Population risk ages (Eurostat) |
+| NUTS2 European Region Coordinates | - | Latitude and Longitude coordinates (Eurostat) |
+
+<center>*Table 30. Hold-out RMSE by year.*</center>
+
+## Future Plans
+We plan to expand model applicability for healthcare providers and researchers by incorporating additional datasets such as wildlife density, healthcare accessibility, and educational attainment levels. Beyond current predictions, we want to scale this approach globally to map risk intensity and forecast cases worldwide, enabling earlier hotspot identification and timely health interventions in regions around the world facing increasing Lyme disease burden.
+
+# References
+<Reference children="Alkhamis, O., Byrd, C., Canoura, J., Bacon, A., Hill, R., & Xiao, Y. (2025a). Exploring the relationship between aptamer binding thermodynamics, affinity, and specificity. Nucleic Acids Research, 53(6), gkaf219. https://doi.org/10.1093/nar/gkaf219"></Reference>
+
+<Reference children="Alkhamis, O., Byrd, C., Canoura, J., Bacon, A., Hill, R., & Xiao, Y. (2025b). Exploring the relationship between aptamer binding thermodynamics, affinity, and specificity. Nucleic Acids Research, 53(6), gkaf219. https://doi.org/10.1093/nar/gkaf219"></Reference>
+
+<Reference children="Fredriksson, S., Gullberg, M., Jarvius, J., Olsson, C., Pietras, K., Gústafsdóttir, S. M., Ostman, A., & Landegren, U. (2002). Protein detection using proximity-dependent DNA ligation assays. Nature Biotechnology, 20(5), 473–477. https://doi.org/10.1038/nbt0502-473"></Reference>
+
+<Reference children="Guérin, M., Vandevenne, M., Matagne, A., Aucher, W., Verdon, J., Paoli, E., Ducrotoy, J., Octave, S., Avalle, B., Maffucci, I., & Padiolleau-Lefèvre, S. (2025). Selection and characterization of DNA aptamers targeting the surface Borrelia protein CspZ with high-throughput cross-over SELEX. Communications Biology, 8(1), 1–13. https://doi.org/10.1038/s42003-025-08034-7"></Reference>
+
+<Reference children="T4 DNA polymerase. (n.d.). Retrieved October 7, 2025, from https://www.takarabio.com/products/cloning/modifying-enzymes/dna-polymerases/t4-dna-polymerase"></Reference>
+<Reference children="Bhoyar, L., Mehar, P., & Chavali, K. (2024). An overview of DNA degradation and its implications in forensic caseworks. Egyptian Journal of Forensic Sciences, 14(1), 15. https://doi.org/10.1186/s41935-024-00389-y"></Reference>
+
+<Reference children="Juma, K. M., Takita, T., Ito, K., Yamagata, M., Akagi, S., Arikawa, E., Kojima, K., Biyani, M., Fujiwara, S., Nakura, Y., Yanagihara, I., & Yasukawa, K. (2021). Optimization of reaction condition of recombinase polymerase amplification to detect SARS-CoV-2 DNA and RNA using a statistical method. Biochemical and Biophysical Research Communications, 567, 195–200. https://doi.org/10.1016/j.bbrc.2021.06.023"></Reference>
+
+<Reference children="Lyo-ready enzymes and reagents for recombinase polymerase amplification (RPA) 100 reactions. (n.d.). Retrieved October 7, 2025, from https://www.thermofisher.com/order/catalog/product/A72127"></Reference>
+<Reference children="National Institutes of Health. (2025). Supplemental Information [PDF]. NIH.gov. https://pmc.ncbi.nlm.nih.gov/articles/instance/6679935/bin/NIHMS1040849-supplement-Supplemental_Information.pdf"></Reference>
+
+<Reference children="Nalefski, E. A., Patel, N., Leung, P. J. Y., Islam, Z., Kooistra, R. M., Parikh, I., Marion, E., Knott, G. J., Doudna, J. A., Le Ny, A.-L. M., & Madan, D. (2021). Kinetic analysis of Cas12a and Cas13a RNA-guided nucleases for development of improved CRISPR-based diagnostics. iScience, 24(9), 102996. https://doi.org/10.1016/j.isci.2021.102996"></Reference>
+<Reference children="Centers for Disease Control and Prevention. (2024, May 14). Lyme disease surveillance and data. *Lyme Disease.* https://www.cdc.gov/lyme/data-research/facts-stats/index.html"></Reference>
+
+<Reference children="Centers for Disease Control and Prevention. (2024, May 20). Lyme Disease Case Map. *Lyme Disease.* https://www.cdc.gov/lyme/data-research/facts-stats/lyme-disease-case-map.html"></Reference>
+
+<Reference children="Datahub.io. (n.d.). NUTS RG 60M 2024 4326 LEVL 2. https://r2.datahub.io/clt98mkvt000ql70811z8xj6l/main/raw/data/NUTS_RG_60M_2024_4326_LEVL_2.geojson"></Reference>
+
+<Reference children="Eurostat. (2025, April 2). Population density by NUTS 2 region. *European Commission.* https://ec.europa.eu/eurostat/databrowser/view/TGS00024/default/table"></Reference>
+
+<Reference children="Eurostat. (2025, July 25). LUCAS - Land use and Land cover survey. *European Commission.* https://ec.europa.eu/eurostat/web/lucas/database"></Reference>
+
+<Reference children="Eurostat. (2025, September 8). Income of households by NUTS 2 regions [Data set]. *European Commission.* https://ec.europa.eu/eurostat/databrowser/view/NAMA_10R_2HHINC/default/table?lang=EN"></Reference>
+
+<Reference children="Eurostat. (2025, September 30). Population on 1 January by age, sex and NUTS 2 region [Data set]. *European Commission.* https://ec.europa.eu/eurostat/databrowser/view/demo_r_d2jan/default/table?lang=en"></Reference>
+
+<Reference children="Kugeler, K. J., Schwartz, A. M., Delorey, M. J., Mead, P. S., & Hinckley, A. F. (2021, February 27). Estimating the frequency of Lyme disease diagnoses, United States, 2010–2018. *Emerging Infectious Diseases.* https://pmc.ncbi.nlm.nih.gov/articles/PMC7853543/"></Reference>
+
+<Reference children="National Center for Biotechnology Information. (2022, June 2). Supplementary data. *U.S. National Library of Medicine.* https://pmc.ncbi.nlm.nih.gov/articles/instance/10122223/bin/Supp_Data.pdf"></Reference>
+
+<Reference children="National Centers for Environmental Information. (2025, October 7). Climate at a glance. *National Oceanic and Atmospheric Administration.* https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/county/mapping/110/tavg/202307/3/value"></Reference>
+
+<Reference children="ScienceDirect. (2022, September 24). Incidence of Lyme neuroborreliosis in Denmark: Exploring observed trends using public surveillance data, 2015–2019. https://www.sciencedirect.com/science/article/pii/S1877959X22001418#fig0003"></Reference>
+
+<Reference children="Taylor & Francis Online. (2025, April 12). Surveillance of Lyme neuroborreliosis and Lyme borreliosis: Estimates of disease burden in Southern Sweden 2009–2022. https://www.tandfonline.com/doi/10.1080/23744235.2025.2542515?url_ver=Z39.88-2003&rfr_id=ori:rid:crossref.org&rfr_dat=cr_pub%20%200pubmed#d1e496"></Reference>
+
+<Reference children="U.S. Bureau of Economic Analysis. (2024, November 14). Personal income by county, metro, and other areas. *U.S. Department of Commerce.* https://www.bea.gov/data/income-saving/personal-income-county-metro-and-other-areas"></Reference>
+
+<Reference children="U.S. Census Bureau. (2025, June 23). County population by characteristics: 2020–2029. https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-detail.html"></Reference>
+
+<Reference children="U.S. Census Bureau. (2025, May 28). County population totals: 2020–2029. https://www.census.gov/data/tables/time-series/demo/popest/2020s-counties-total.html"></Reference>
+
+<Reference children="U.S. Census Bureau. (2025, September 10). Gazetteer files. https://www.census.gov/geographies/reference-files/time-series/geo/gazetteer-files.html"></Reference>
+
+
+

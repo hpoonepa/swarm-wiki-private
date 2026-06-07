@@ -1,0 +1,121 @@
+---
+layout: ../layouts/ContentLayout.astro
+title: Implementation
+header: https://static.igem.wiki/teams/5612/headerpics/implementation.webp
+description: 'Future Plans for Implementing the Project'
+icon: "Plane"
+color: "green"
+---
+
+import TwoColPara from "../components/md_components/TwoColPara";
+import Wip from "../components/md_components/Wip";
+import Image from "../components/md_components/Image";
+import Reference from "../components/md_components/Reference";
+import PDFAccordian from "../components/md_components/PDFAccordian";
+import ImageCarousel from "../components/md_components/ImageCarousel"
+
+# Implementation
+## Product Design
+
+Lambert iGEM’s final diagnostic will be stored in a one-pot chamber, with each reaction being separated by a layer of solidified paraffin wax (see Fig. 1). The layers of wax are formed by combining paraffin oil with solid paraffin in a specific ratio. Adjusting this ratio allows us to control the melting point: increasing the amount of oil lowers the melting point, while decreasing it raises the melting point. After each reaction runs, the following wax barrier is melted, rehydrating the subsequent reagents to initiate the sequential reaction.  
+
+Previous research shows standardized melting points for paraffin wax, demonstrating success for detection systems similar to LANCET (Zeng et al., 2025). As paraffin wax is composed of hydrocarbons, it effectively prevents potential aerosol contamination and cross-reactivity with reagents (Aronson, 2016). However, there is lack of research surrounding the degradation temperatures of the reagents and how the melted wax will interact with the ongoing reactions. As of now, we are working on preliminary experimentation to explore the feasibility, though this is in the exploratory phase.
+
+Our one-pot system will allow users to simply add a prick blood to the tube and place it on our coded heating pad for three hours [(see Hardware).](/lambert-ga/hardware/) Once the process is complete, an LFA will be placed in the tube, providing the patient with a user-friendly visual output.
+
+<Image
+  src="https://static.igem.wiki/teams/5612/hardware/dehydrated-pdl-facebook-post.webp"
+  caption="Figure 1. Wax layer diagram."
+  size="md"
+/>
+
+
+## Practical Use
+
+We plan to introduce LANCET to medical facilities by providing a live demonstration of each step in our assay. By showing staff the actions they will need to take, we hope to equip them with the knowledge necessary to perform the reaction and confidently explain the process to patients (see Fig. 2).
+
+LANCET will be performed by a healthcare professional, in a clinical setting. The process is as follows:
+1. 30 μL of blood will be drawn by a lancet and collected by a capillary tube.
+2. The system will be heated to 37°C.
+3. The blood sample is added to the tube, activating the proximity-dependent ligation (PDL) reagents [(see PDL).](/lambert-ga/diagnostics-pdl/)
+4. Following a 70-minute incubation period, the one-pot tube is heated to 45 °C for 10-15 seconds. This melts the first layer of wax separating the PDL and recombinase polymerase amplification (RPA) reagents and activates the lyophilized RPA reagents [(see RPA).](/lambert-ga/diagnostics-rpa/)
+5. The system will be cooled to 37°C.
+6. Following a 25-minute incubation period, the one-pot system is heated to 55 °C for 10-15 seconds. This melts the second layer of wax that separates the RPA and Cas12a reagents, activating the lyophilized Cas12a reagents [(see Cas12a).](/lambert-ga/diagnostics-cas12/)
+7. The system will be cooled to 37°C.
+8. Following a 30-minute incubation period, a lateral flow assay (LFA) is placed in the one-pot system [(see LFA Design).](/lambert-ga/diagnostics-cas12/#lateral-flow-assay-lfa-design)
+9. Following a 10 minute incubation period at room temperature, the test is completed. A line at the test line on the LFA indicates a positive result.
+
+<Image
+  src="https://static.igem.wiki/teams/5612/implementation/frame-22.webp"
+  caption="Figure 2. Potential workflow for users."
+  size="md"
+/>
+
+
+### Biosecurity
+
+Additionally, we mapped out regulatory practices in the event that LANCET gets deployed to the general public, and the product expands past hospital usage [(see Entrepreneurship).](/lambert-ga/hp-entre/) The diagnostic assay itself poses no risks to human life and is not hazardous for general use; however, our therapeutic can be potentially harmful if used unethically.  If the sgRNAs used for CRISPRi are changed to target the human genome, our system could potentially impair bodily functions, the severity determined by the gene altered.
+
+## Deployment
+
+We envision this diagnostic being deployed in hospitals as a first step to test and validate its use before reaching consumers. To determine the hospitals currently facing the largest caseloads of Lyme disease, we developed a heat map identifying future hotspots [(see HP Modeling).](/lambert-ga/model#hp) Our diagnostic kit will be sent to hospitals located in these hotspots to maximize the usage of our diagnostic (see Fig. 3).
+
+<Image
+  src="https://static.igem.wiki/teams/5612/modelinghp/choropleth2025.webp"
+  caption="Figure 3. Heat map graphic for Lyme disease hotspots in 2025."
+  size="md"
+/>
+
+
+When implementing our diagnostic, we plan to gather feedback from practicing healthcare professionals who use tools like LANCET on a daily basis. Because hospitals often face factors such as time constraints and patient complaints, this type of feedback would provide us with greater insight into what to expect when commercializing LANCET. Not only will this approach help us improve our diagnostic kit, but it also creates a continuous feedback loop to refine LANCET for both consumers and hospitals in the future.
+
+### Regulations
+
+If LANCET were to be deployed to the market, it would require compliance with Food and Drug Administration (FDA) regulations to be legal in the United States following pilot testing in hospitals (Center for Devices and Radiological Health, 2022). As a Class II device, LANCET would be considered a moderate-risk diagnostic tool that requires FDA 510(k) clearance and special controls, similar to an HIV antibody screening test. The 510(k) process determines whether a device can be legally marketed by demonstrating that it is as safe and effective as an existing FDA-approved product. Submissions for a 510(k) are conducted electronically through a system called electronic Submission Template And Resource (eSTAR), where submissions are put through the following steps:
+
+**(1) Acknowledgement of Receipt**
+- This step verifies that the user paid the fee for submitting a 510 (k) and ensures that a valid copy was submitted.
+
+**(2) Format and Submission Acceptance Review**
+- Additional form requirements that may not have been done before are sent back for completion if needed. 
+- Once 510 (k) submission requirements are met, they are then reviewed for acceptance using a checklist in the FDA’s guidance policies. There are three possible results of this review:
+    - 510(k) was accepted for substantive review
+    - 510(k) was not accepted
+    - 510(k) is under substantive review because the initial FDA review was not completed within 15 calendar days
+
+**(3) Substantive Review**
+- a) Interactive Review Continuation
+    - An interactive review means that the product has progressed to the next stage. 
+    - This interactive review stage is focused on ensuring the submitter and lead reviewer communicate with each other to ensure safety and deployment as fast as possible. 
+
+- b) Additional Information
+    - An additional information request is sent to the submitter, when further information is needed before the product can proceed. 
+
+**(4) Decision Letter**
+- A product is either cleared as substantially equivalent, where the product is cleared to market (SE), or not. 
+
+## Accessibility
+| Reaction       | Cost/reaction in US Dollars |
+|----------------|-----------------------------|
+| PDL            | $3.99                       |
+| RPA       | $2.82                       |
+| Cas12a         | $0.81                       |
+| One-pot        | $0.11                       |
+| LFA            | $5.00                       |
+| Lancet    | $0.44                       |
+| Capillary Tube | $0.11                       |
+| **Total:**     | **$13.28**                  |
+<center>*Table 1. Cost analysis of individual diagnostic reactions.*</center>
+
+The total cost of the diagnostic is \$13.28 USD, however, this number correlates to small-scale laboratory-based experimentation with retail pricing for all reagents and components (see Table 1). When purchased in bulk for future larger-scale production, we estimate the final manufacturing price per kit to be under \$10.00 USD. Our heating mechanism costs \$48.58 USD, however, facilities with existing equipment will not require this component and for those that do, it would be a one-time purchase [(see Heating Pad).](/lambert-ga/hardware/#heating-pad) In comparison, the leading method of Lyme disease detection, antibody tests, are priced at \$100.00 USD (QUEST). At a fraction of that price, LANCET will be available to regions with a high prevalence of Lyme, particularly where income and external factors affect hospitals’ ability to diagnose the disease effectively [(see Inclusive Education).](/lambert-ga/education#inclusive-education).
+
+# References
+
+<Reference children="Aronson, J. (2016).  Meyler’s Side Effects of Drugs. https://doi.org/10.1016/b978-0-444-53717-1.01224-5  " ></Reference>
+
+<Reference children="Center for Devices and Radiological Health. (2022). 510(k) Submission Process. U.S. Food And Drug Administration. https://www.fda.gov/medical-devices/premarket-notification-510k/510k-submission-process " ></Reference>
+
+<Reference children="Lyme disease test: Lyme Disease Blood Test: Quest®. (n.d.). Quest®.  https://www.questhealth.com/product/lyme-disease-test-with-confirmation-6646M.html?srsltid=AfmBOoqqHOKl5reypdy-C2ikAZ3dhm46xovxDhkQvkDgtTJpkRYclfe_ " ></Reference>
+
+<Reference children="Zeng, X., Jiang, Q., Yang, F., Wu, Q., Lyu, T., Zhang, Q., Wang, J., Li, F., & Xu, D. (2025, March 31). Establishment and optimization of a system for the detection of Candida albicans based on enzymatic recombinase amplification and CRISPR/Cas12a system. Microbiology Spectrum, 13(5), e00268-25. https://doi.org/10.1128/spectrum.00268-25" ></Reference>
+

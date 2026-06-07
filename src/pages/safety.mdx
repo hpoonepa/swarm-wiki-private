@@ -1,0 +1,78 @@
+---
+layout: ../layouts/ContentLayout.astro
+title: Safety
+header: https://static.igem.wiki/teams/5612/headerpics/safety.webp
+description: 'A Comprehensive Guide on Protecting Ourselves'
+icon: "Plane"
+color: "green"
+---
+
+import TwoColPara from "../components/md_components/TwoColPara";
+import Wip from "../components/md_components/Wip";
+import Image from "../components/md_components/Image";
+import Reference from "../components/md_components/Reference";
+import PDFAccordian from "../components/md_components/PDFAccordian";
+import ImageCarousel from "../components/md_components/ImageCarousel"
+
+# Laboratory Safety
+
+Safety is a fundamental aspect of our experimentation, spanning from our wetlab to hardware applications. This page serves as a comprehensive guide outlining the safety measures we implemented to establish a secure laboratory environment. 
+
+## Team Precautions (Ta et al., 2019):
+- Wash your hands when entering and leaving the lab.
+- Protect your eyes, mucous membranes, open cuts, and wounds from biohazard materials.
+- Do not eat or drink in the lab.
+- Always wear gloves and splash-proof goggles.
+- Keep long or loose hair tied back.
+- Before starting work, disinfect all surfaces with 70% ethanol.
+- Soak disposable tips, glassware, and tubes in a 10% bleach solution for 20 minutes before disposing of them in regular waste.
+- Dispose of growth plates in a biohazard container that will be autoclaved.
+- Check that all equipment is in good condition, with no chips, torn cords, or cracks.
+- Report any problems to an instructor immediately.
+- When pipetting, avoid touching the tip to the side of the container.
+- Don’t place tube caps upside down; use masking tape to secure the bottom of the cabinet.
+- After working, clean your area with 70% ethanol.
+- Ensure all glassware and lab equipment are cleaned before leaving.
+- Keep walkways clear by placing backpacks and stools to the side.
+- Always be aware of the proper disposal procedures for lab materials.
+
+# Project Safety 
+## Wetlab:
+Throughout our wetlab procedures, we wore personal protective equipment (PPE) including gloves, safety glasses, and lab coats at all times. All used tubes and waste were properly disposed of and workspaces were promptly cleaned with 70% ethanol. 
+
+### Proximity-dependent ligation (PDL): 
+We began experimentation with a commercially available, purified CspZ protein which is safe to handle under BSL-1 conditions. Because we began experimentation directly with the purified protein, we did not use the Borrelia bacteria or any pathogenic materials. All of the DNA constructs we used were ordered from IDT, and no live cells were used at any stage of PDL experimentation.
+
+### Recombinase polymerase amplification (RPA):
+RPA experimentation was performed with the commercial TwistDx kit. We carefully designed primers to avoid any pathogenic sequences and ordered from IDT. 
+
+### CRISPR-Cas12a:
+For all Cas12a experiments, we used synthetic DNA fragments ordered from IDT. A Cas12a enzyme provided by a commercial kit from Signal Chem was handled under BSL-1 safety protocols and crRNAs were designed to avoid any pathogenicity. 
+
+### CRISPRi:
+Plated plasmids for dCas9 and GFP were provided by Dr. Vincent Noireaux. The Borrelia bacteria itself or genes directly from the bacteria were never used at any point of experimentation. All DNA/RNA and isolated gene fragments were ordered as linear constructs using IDT. Additionally, our target genes, dedA and arcA, are unique to the Borrelia bacteria and not found in humans. The CRISPRi system was tested in commercial cell-free TXTL systems instead of bacterial cells, avoiding the use of live cells. 
+
+### Cell Free:
+Our in-house lysates were prepared from E. coli strains that are non-pathogenic and approved for educational use. Since the cell-free system only contains extracts and not intact cells, there is no risk of growth or infection.
+
+## Drylab: 
+### Software: 
+In developing CASPER, our integrated tool for designing RPA primers and CRISPR-Cas12a crRNAs, we used data from peer-reviewed research sources that were cleaned to remove any bias. Before experimental use of the designed sequences, we contacted researchers to help validate our software and requested their help in testing sequences for their own applications. For ranking, we utilized existing known groups of primers and crRNAs that have previously been verified for safety.
+
+### Electronic Devices:
+Our heating pad was designed and prototyped with strict adherence to MIT makerspace (EHS) safety protocols when handling electronic components. For example, Arduino microcontrollers and similar devices are always placed on antistatic surfaces during use. When utilizing power supplies or AC adapters, we ensure the devices are inspected for any damage beforehand and keep liquids, food, and flammable materials at a safe distance. During soldering tasks, team members wear safety goggles, use insulated gloves for both heat and electricity, and work in a well-ventilated, isolated space. We also prioritize eye protection and proper thermal management when using drills. After completing work on any electronic device, we ensure it is completely powered down and disconnected, including removing batteries when applicable.
+
+### 3D Printer: 
+We developed one-pot prototypes and educational material using 3D printers, which can present safety hazards due to components like the plastic-melting nozzle, capable of reaching temperatures up to 220°C. Additionally, leaving the 3D printer unattended poses a fire risk because of these high temperatures.
+Precautionary Measures:
+- Built-in crash detection and heat overload software in the printers
+- A team member or the PI is always present during printing to respond in case of an emergency.
+
+## Human Practices and Education: 
+Additionally, participants of our educational initiatives and their guardians provided consent for photo and video release. We gave proper safety instructions and procedures during each of our programs to ensure the safety of participants.
+
+
+# References
+
+<Reference children = "Ta, L., Gosa, L., & Nathanson, D. A.  (2019).  Biosafety and Biohazards: Understanding Biosafety Levels and Meeting Safety Requirements of a Biobank. Methods in molecular biology. https://doi.org/10.1007/978-1-4939-8935-5_19"></Reference>
+<Reference children = "EHS-0076. (n.d.). Shop and makerspace safety. https://ehs.mit.edu/wp-content/uploads/EHS_0076.pdf "></Reference>
