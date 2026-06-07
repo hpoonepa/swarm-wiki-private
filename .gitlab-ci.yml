@@ -1,26 +1,20 @@
+# Use a lightweight Node image
 image: node:22
 
+# Define cache and cleanup to avoid disk overuse
+cache:
+  paths:
+    - node_modules/
+
 pages:
-  stage: build
-  cache:
-    - key:
-        files:
-          - yarn.lock
-      paths:
-        - .yarn-cache/
   before_script:
-    - echo 'yarn-offline-mirror ".yarn-cache/"' >> .yarnrc
-    - echo 'yarn-offline-mirror-pruning true' >> .yarnrc
-    - yarn install --frozen-lockfile
+    - npm cache clean --force
+    - rm -rf /root/.cache || true
   script:
-    - yarn build
-    - cp -a dist/. public/
-    - echo '/* /index.html 200' > public/_redirects
+    - npm ci
+    - npm run build
   artifacts:
     paths:
       - public
   rules:
-    - if: $CI_COMMIT_BRANCH != $CI_DEFAULT_BRANCH
-      when: never # No runners will run on branches other than main
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-      when: always
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH

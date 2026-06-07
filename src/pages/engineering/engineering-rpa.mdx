@@ -1,0 +1,459 @@
+---
+title: RPA
+colors: ["#FFFFFF", "#FFFFFF",  "#FFFFFF",  "#FFFFFF"]
+---
+
+import TwoColPara from "../../components/md_components/TwoColPara";
+import Wip from "../../components/md_components/Wip";
+import Image from "../../components/md_components/Image";
+import Reference from "../../components/md_components/Reference";
+import PDFAccordian from "../../components/md_components/PDFAccordian";
+import ImageCarousel from "../../components/md_components/ImageCarousel"
+
+
+# Iteration 1
+
+## Design
+To enhance the sensitivity of our diagnostic, we utilized RPA, an isothermal amplification method capable of rapidly generating dsDNA copies that is well-suited for point-of-care diagnostics (Lobato & O’Sullivan, 2018; see Recombinase Polymerase Amplification). Because the dsDNA products initially formed by PDL are produced at a very low concentration, RPA amplifies the sequence to create a sufficient number for visualization on gel electrophoresis or for downstream quantification in our overall assay. 
+
+To validate the feasibility of using RPA within our diagnostic, we first tested the commercial TwistAmp® Exo and Basic kits using a positive control provided by TwistDx (TwistDx, 2025b). Therefore, the goal of this first iteration was to ensure that the RPA kits could successfully amplify a known target before applying RPA to experimental constructs. The functionality of the kits was assessed with 1.5% agarose gel electrophoresis with TBE (Tris-Borate-EDTA) buffer and fluorescent output on a plate reader, and controls included negative reactions with no template DNA to reduce the possibility of non-specific amplification. 
+
+## Build
+We purchased the TwistAmp® Basic and Exo kits and the positive control oligo mix and template DNA from TwistDx (TwistDx, 2025a; TwistDx, 2025b). Positive control reactions were performed according to the instructions by TwistDx as shown below, and we ran triplicates to confirm reproducibility (see Table 1). 
+
+| Reagent | Stock Concentration | Volume | Final Concentration |
+|-----------|--------------------------|-----------|--------------------------|
+| Positive control primer/probe mix |-| 8 µL | - |
+| Primer free rehydration buffer | - | 29.5 µL | - |
+| Positive control DNA template (diluted to 5x) | - | 10 µL | 1x |
+| Resuspend each pellet in a 47.5 ul rehydration solution containing primers/probe and template DNA. Mix by pipetting up and down until the entire pellet has been resuspended. |
+| MgOAc | - | 2.5 µL | - |
+| Pipette 5 µL on a 384-well plate |
+| Plate Reader Settings |
+| Plate Type | 384 well plates |
+| Read | Fluorescence Endpoint, Full Plate |
+| Set Temperature | Setpoint 27°C, Preheat before moving to next step |
+| Actual Temperature | 28.1°C |
+| Excitation | 485/20 |
+| Emission | 528/20 |
+| Gain | 83|
+| Optics | Top |
+| Read Height | 1mm |
+| Runtime | 16:00:00 (HH:MM:SS), Interval 0:10:00, 97 Reads |
+| Shake | Medium, 0:10 (MM:SS) |
+
+<center>*Table 1. Table detailing the protocol for the RPA positive control reaction.*</center>
+## Test
+Gel electrophoresis results of RPA positive control experimentation revealed a clear band for positive control samples at the expected ~150 base pairs, while negative controls showed no bands (TwistDx, 2025a; see Fig. 1). 
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/unnamed-10.webp"
+  caption="Figure 1. Gel electrophoresis results of RPA positive control reaction, showing band for positive control samples at the expected length of ~150 bp."
+  size="lg"
+/>
+Additionally, the positive control showed a significant increase in fluorescence under the plate reader, confirming that the kit functioned as expected (see Fig. 2). 
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpapositivecontrolgraph.webp"
+  caption="Figure 2. Fluorescent output of TwistAmp® Exo kit quantified using plate reader; results indicate a significant difference in RFU between positive and negative controls."
+  size="lg"
+/>
+
+##  Learn
+The RPA positive control produced clear bands at the expected 150 bp and exhibited a significant fluorescence increase, confirming that our reagents were functioning as intended. These results validated the amplification efficacy of the commercial RPA system and established a foundation for applying RPA on dsDNA templates generated from the PDL reaction.
+ 
+
+##  References
+<Reference>
+  Lobato, I. M., & O’Sullivan, C. K. (2018). "Recombinase polymerase amplification: Basics, applications and recent advances." *TrAC Trends in Analytical Chemistry*, 98, 19–35. https://doi.org/10.1016/j.trac.2017.10.015
+</Reference>
+
+<Reference>
+  TwistDx. (2025a). *TwistAmp ® DNA Amplification Kits Assay Design Manual* (Part number: INASDM, Revision 1). https://www.globalpointofcare.abbott/content/dam/ardx/globalpointofcare/lp/2025/twistdx/support/docs/manuals/INASDM%20v1.0%20TwistAmp%20DNA%20Amplification%20Kits%20-%20Assay%20Design%20Manual%20INASDM.pdf
+</Reference>
+
+<Reference>
+  TwistDx. (2025b). "Versatile Isothermal DNA/RNA Amplification by TwistDx." *Globalpointofcare.abbott.* https://www.globalpointofcare.abbott/us/en/lp/twistdx.html
+</Reference>
+# Iteration 1.2 – RPA Target Construct Experimentation
+##  Design
+Once we confirmed that our commercial RPA kits functioned as expected, we tested RPA on a synthetic target DNA construct that simulated the PDL product (see Fig. 1). To do this, we purchased a dsDNA RPA target construct ([BBa_25SSHRPA](https://registry.igem.org/parts/bba-25sshrpa)) which contained binding sites for all current and future primer sets. This allowed us to isolate the RPA process and first evaluate whether we could reliably amplify the target construct without confounding variability from PDL and actual protein samples. 
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpatargetconstruct.webp"
+  caption="Figure 1. Sequence map of the RPA target construct assembled in Benchling (Lambert iGEM, 2025)."
+  size="lg"
+/>
+For our experimentation with LANCET-specific RPA, we began with manually designed RPA primer sequences developed using the TwistDx® Design Manual (TwistDx, 2025). The guidelines for RPA primer design are:
+
+**Length:** 30-36 nucleotides
+**GC content:** 20-70%
+**Tm (Melting temperature):** 50-100 ºC
+**Maximum length of a mononucleotide repeat:** 5 nucleotides
+
+
+The sequences and properties for RPA primer pair 1.1 are as follows (see Figs. 2-3):
+**PDL-RPA forward primer 1.1 ([BBa_250TF2EO](https://registry.igem.org/parts/bba-250tf2eo)):** GGTTGGTCTGGTTGGCCCGTGTGTCATTAC
+30 bp, 57% GC, Tm 66ºC (Lambert iGEM, 2025)
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpanupack.webp"
+  caption="Figure 2. NUPACK predictions for the minimum free energy (MFE) secondary structure of PDL-RPA forward primer 1.1, showing predominant linearity with low probability for hairpins."
+  size="lg"
+/>
+**PDL-RPA reverse primer 1.1 ([BBa_25X1JFV4](https://registry.igem.org/parts/bba-25x1jfv4)):** ACAAACCCAACCCATCCCATCCCGCCACCA
+30 bp, 60% GC, Tm 67ºC (Lambert iGEM, 2025)
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpanupacksecondary.webp"
+  caption="Figure 3. NUPACK predictions for the MFE secondary structure of PDL-RPA reverse primer 1.1, showing predominant linearity."
+  size="lg"
+/>
+By using the NUPACK software, we screened the primer pair for secondary structures and dimer formation. We found that the MFE structures for the primers were mostly linear with few interfering secondary structures, which is critical for RPA, as the process is isothermal and does not allow for DNA denaturation (see Figs. 2-3). We also intentionally positioned our primers on both aptamer constructs to facilitate amplification only in the presence of fully ligated products, rather than single aptamers (see Fig. 4). 
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpaamplicon1-1.webp"
+  caption="Figure 4. Sequence map of the RPA amplicon resulting from primer set 1.1 assembled in Benchling (Lambert iGEM, 2025)."
+  size="lg"
+/>
+To ensure maximum efficacy of our RPA assay, we designed our target construct to contain all RPA amplicons. Amplicons were developed with key parameters from TwistDx® DNA Amplification Kit Assay Design Manual in mind (TwistDx, 2025): 
+**Length:** 100-200 nucleotides
+**GC content:** 40-60%
+**Minimize number of repetitive, palindromic sequences**
+
+The properties for RPA amplicon 1.1 are as follows (see Fig. 5):
+196 bp, 47% GC (Lambert iGEM, 2025)
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/repetitivesequences.webp"
+  caption="Figure 5. Repetitive sequences were minimized in the amplicon, specifically the linker regions, to improve amplification speed by reducing the product-to-noise ratio."
+  size="lg"
+/>
+
+##  Build
+We purchased the designed primer and target DNA sequences from IDT to perform RPA. By following the protocol below, our goal was to amplify the output of the PDL reaction to generate a detectable amount of dsDNA product (see Table 1). 
+
+
+| RPA Reaction | Reagent | Volume |
+|------------------|---------------------------------------------------------------------------|-------------|
+|                  | 2X Phusion Plus PCR Master Mix (ThermoFisher Scientific, 2025) | 25 µL|
+|                  | GC Enhancer | 10 µL |
+|                  | Forward primer (50 µM) | 0.5 µL |
+|                  | Backward primer (50 µM) | 0.5 µL |
+|                  | PDL product | 14 µL (maximum volume available for input with Phusion High-Fidelity PCR Master Mix) |
+<center>*Table 1. Table detailing the initial protocol for concentrations and volumes of reagents utilized in the PDL-RPA reaction.*</center>
+
+##  Test
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/unnamed-12.webp"
+  caption="Figure 6. Gel electrophoresis results of RPA on target construct with primer set 1.1, showing no bands present for experimental and control samples."
+  size="lg"
+/>
+
+##  Learn
+No visible bands were observed for either the experimental or control samples, indicating that RPA primer set 1.1 failed to produce a detectable level amplification. This outcome suggested that the primer design was likely suboptimal for use in our assay. Based on these findings, we concluded that further troubleshooting was necessary to improve RPA performance and ensure reliable amplification of PDL products.
+
+<Reference>
+  Lambert iGEM. (2025). "RPA Amplicon 1.1." *Benchling.com.* https://benchling.com/s-lean028/f/lib_VUPH2qOl-rpa/seq_QVgA6Alz-rpa-amplicon-1-1/edit
+</Reference>
+
+<Reference>
+  TwistDx. (2025). *TwistAmp ® DNA Amplification Kits Assay Design Manual* (Part number: INASDM, Revision 1). https://www.globalpointofcare.abbott/content/dam/ardx/globalpointofcare/lp/2025/twistdx/support/docs/manuals/INASDM%20v1.0%20TwistAmp%20DNA%20Amplification%20Kits%20-%20Assay%20Design%20Manual%20INASDM.pdf
+</Reference>
+
+# Iteration 1.3 – Redesigning RPA Primers 
+
+##  Design
+Following unsuccessful amplification using primer set 1.1, our objective for this iteration was to redesign RPA primers to improve amplification efficiency. To achieve this, we used the EZassay software to design multiple new primer candidates. From the software’s set of possible primer combinations, we filtered the results to meet specific requirements of our assay which EZassay’s algorithm did not account for. 
+
+We excluded amplicons that were too short for our assay (\<100 base pairs) or those that did not encompass both aptamer constructs, which could lead to a false positive result (see Iteration 1.2 – RPA Target Construct Experimentation). Our goal in this iteration was to redesign primers that exhibit greater amplification efficiency within the RPA process. 
+
+The sequences and properties for RPA primer pairs 1.2-1.4 are as follows (see Figs. 1-5):
+**PDL-RPA forward primer 1.2 & 1.3 ([BBa_25VUQNNR](https://registry.igem.org/parts/bba-25vuqnnr)):** CGTGTGTCATTACGGGTTGGATAAGATAGTA
+31 bp, 42% GC, Tm 60ºC (Lambert iGEM, 2025a)
+
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpaforward1-21-3.webp"
+  caption="Figure 1. NUPACK predictions for the MFE secondary structure of PDL-RPA forward primer 1.2, showing predominant linearity with relatively low probability for hairpins."
+  size="lg"
+/>
+**PDL-RPA reverse primer 1.2 ([BBa_25RMXLR4](https://registry.igem.org/parts/bba-25rmxlr4)):** ACCACCACCAAGTGAATTGAATAAGCTGGTA
+31 bp, 42% GC, Tm 60ºC (Lambert iGEM, 2025a)
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpareverse1-2.webp"
+  caption="Figure 2. NUPACK predictions for the MFE secondary structure of PDL-RPA reverse primer 1.2, showing predominant linearity with relatively low probability for hairpins."
+  size="lg"
+/>
+**PDL-RPA reverse primer 1.3 ([BBa_25NVR9HK](https://registry.igem.org/parts/bba-25nvr9hk)):** ATAAGCTGGTATAAACACACAACCAAACAAC
+31 bp, 35% GC, Tm 58ºC (Lambert iGEM, 2025b)
+
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpareverse1-3.webp"
+  caption="Figure 3. NUPACK predictions for the MFE secondary structure of PDL-RPA reverse primer 1.3, showing predominant linearity with moderate probability for hairpins."
+  size="lg"
+/>
+**PDL-RPA forward primer 1.4 ([BBa_25PUGKNO](https://registry.igem.org/parts/bba-25pugkno)):** GGTTGGCCCGTGTGTCATTACGGGTTGGATA
+31 bp, 42% GC, Tm 60ºC (Lambert iGEM, 2025c)
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpaforwardprimer1-4.webp"
+  caption="Figure 4. NUPACK predictions for the MFE secondary structure of PDL-RPA forward primer 1.4, showing predominant linearity with relatively low probability for hairpins."
+  size="lg"
+/>
+
+**PDL-RPA reverse primer 1.4 ([BBa_257J0EPT](https://registry.igem.org/parts/bba-257j0ept)):** 
+CCAAGTGAATTGAATAAGCTGGTATAAACAC
+31 bp, 35% GC, Tm 58ºC (Lambert iGEM, 2025c)
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpareverse1-4.webp"
+  caption="Figure 5. NUPACK predictions for the MFE secondary structure of PDL-RPA reverse primer 1.4, showing predominant linearity with moderate probability for hairpins."
+  size="lg"
+/>
+All of our new primer pairs were screened for secondary structures and dimer formation using predictions from NUPACK, which shows that primer sequences are mostly linear (see Figs. 1-5).
+
+The properties for RPA amplicons 1.2-1.4 are as follows (see Fig. 6):
+153 bp, 42% GC (Lambert iGEM, 2025a)
+133 bp, 42% GC (Lambert iGEM, 2025b)
+154 bp, 44% GC (Lambert iGEM, 2025c)
+
+##  Build
+The redesigned primers were synthesized by IDT and used in RPA under the same conditions as the previous iteration. Each primer set was tested separately with the synthetic dsDNA template, and negative controls (no template) were included to validate specificity. 
+
+##  Test
+Experimentally, RPA primer sets 1.2 and 1.4 demonstrated greater efficacy, producing gel bands within the expected base pair length around ~100-150 base pairs for each amplicon and showing significantly greater expression than the negative control (see Fig. 6). 
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/unnamed-13.webp"
+  caption="Figure 6. Gel electrophoresis of RPA with sets 1.2–1.4, demonstrating bands at 153 (a), 133 (b), and 154 (c) bp for primers 1.2-1.4, respectively."
+  size="lg"
+/>
+
+ImageJ analysis of standardized integrated density of fluorescent DNA bands was also performed to quantify assay performance across tested time points (see Fig. 7). 
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpareactiongraphtarget.webp"
+  caption="Figure 7. Comparative ImageJ analysis of RPA target construct reaction on agarose gel electrophoresis with primer sets 1.2-1.4, demonstrating relative efficiency of RPA primers."
+  size="lg"
+/>
+
+##  Learn
+Bands were observed for RPA primer sets 1.2, 1.3, and 1.4 at approximately 153 bp, 133 bp, and 154 bp, in experimental samples, while no amplification was detected in the negative controls. These results demonstrate that RPA successfully amplified dsDNA construct with high specificity. From these findings, we will continue experimentation to validate RPA integration in LANCET’s diagnostic system.
+
+
+##  References
+<Reference>
+  Lambert iGEM. (2025a). "RPA Amplicon 1.2." *Benchling.com.* https://benchling.com/s-lean028/f/lib_VUPH2qOl-rpa/seq_wWMgSOtNjJ-rpa-amplicon-1-2/edit
+</Reference>
+
+<Reference>
+  Lambert iGEM. (2025b). "RPA Amplicon 1.3." *Benchling.com.* https://benchling.com/s-lean028/f/lib_VUPH2qOl-rpa/seq_AUHNQOAJPu-rpa-amplicon-1-3/edit
+</Reference>
+
+<Reference>
+  Lambert iGEM. (2025c). "RPA Amplicon 1.4." *Benchling.com.* https://benchling.com/s-lean028/f/lib_VUPH2qOl-rpa/seq_32onVARiqE-rpa-amplicon-1-4/edit
+</Reference>
+
+# Iteration 1.4 – Conjugating RPA with PDL
+
+##  Design
+After confirming that RPA could effectively amplify a synthetic dsDNA construct, our next goal was to validate whether RPA could be directly integrated with the proximity-dependent ligation (PDL) step in the LANCET diagnostic workflow. This iteration aimed to test the compatibility of the two reactions and ensure that the dsDNA product generated by PDL could serve as a functional template for RPA amplification. By combining both reactions sequentially, we sought to demonstrate a continuous molecular pipeline from protein detection through PDL to DNA amplification through RPA. A successful outcome would show clear amplification bands at approximately 133 base pairs, corresponding to the expected size of the RPA product derived from the PDL sequence.
+
+
+##  Build
+
+We performed PDL using the optimized protocol established in Cycle 1, including incubation with anti-CspZ aptamers, bridge hybridization, and T4 DNA ligation. The dsDNA output from PDL served directly as the template for RPA using primer set 1.3, which had previously shown the highest amplification efficiency. Reactions were conducted using the TwistAmp® Basic kit, with negative controls including reactions lacking aptamers, ligase, or protein to confirm assay specificity (see something say something). All reactions were run in triplicates to ensure reproducibility.
+
+
+##  Test
+
+Experimentally, PDL-RPA product conjugations reported gel bands at the expected length of 133 base pairs for each amplicon, while negative controls showed no bands (see Fig. 8)
+
+
+
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/unnamed-14.webp"
+  caption="Figure 8. Gel electrophoresis of post-PDL RPA products, demonstrating bands at expected lengths for experimental samples and empty lanes for control samples, validating the success of RPA."
+  size="lg"
+/>
+
+##  Learn
+Bands were observed at the expected 133 bp in experimental samples, while no amplification was detected in negative controls, confirming that RPA could successfully amplify dsDNA products generated by PDL. These results demonstrated the compatibility and functional integration of RPA with PDL, validating a critical step in establishing LANCET as a cohesive diagnostic workflow capable of detecting CspZ protein and amplifying the resulting DNA signal for downstream detection.
+
+# Iteration 1.5 – Testing Protein Concentration Over Time
+
+##  Design
+
+To evaluate LANCET’s ability to function across various stages of Lyme disease, we designed experiments to test how different concentrations of the target protein CspZ—corresponding to 2, 25, 50, 75, 100, 150, 200, 250, and 300 days post-infection (pi)—affect amplification efficiency. Our goal was to confirm that the integrated PDL-RPA system maintains robust activity throughout the infection timeline, outperforming PCR-based amplification methods (see CspZ Protein Concentration).
+
+Following the optimized protocol for PDL finalized in iteration 1.7, we also sought to evaluate how expected protein concentrations over multiple time points of simulated infection affected PDL efficacy. The goal was to determine the range of time for which our assay could reliably generate detectable dsDNA products and be compatible with downstream amplification.
+
+##  Build
+We prepared PDL reactions using expected CspZ concentrations corresponding to 2, 25, 50, 75, 100, and 150 days post-infection (pi) as shown below, while keeping other reagent concentrations consistent (see Table 1; see CspZ Protein Concentration). 
+
+| Time (days pi) | CspZ concentration (molecules/µL) |
+|----------------|----------------------------------|
+| 2 | 2.00 × 10e6 |
+| 25 | 5.89 × 10e5 |
+| 50 | 1.53 × 10e5 |
+| 75 | 4.49 × 10e4 |
+| 100 | 1.19 × 10e4 |
+| 150 | 1.60 × 10e3 |
+
+<center>*Table 1. Table of simulated CspZ protein concentrations at various time points pi across multiple stages of Lyme.*</center>
+
+All final reactions, including controls, were repeated in triplicates to ensure that results were reproducible and statistically significant. 
+
+##  Test
+
+Distinct fluorescent bands were observed at the expected 133 bp length for samples up to 100 days pi, indicating that the assay remained viable across this range (Fig. 1).
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/screenshot-2025-10-08-001757.webp"
+  caption="Figure 1. Gel electrophoresis results of post-PDL RPA reaction with protein concentrations at 2 (a), 25 (a), 50 (a), 75 (b), 100 (b), 150 (b), 200 (c), 250 (d), and 300 (d) days pi, qualitatively validating that assay remains viable until at least 100 days pi."
+  size="lg"
+/>
+
+Quantitative ImageJ analysis extended this functionality to at least 150 days pi, exceeding PCR’s amplification limit (Fig. 2). Signal intensity peaked at 2 days pi and declined gradually over time, while all negative controls produced minimal background signal, confirming high assay specificity and low risk of false positives. 
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/wow.webp"
+  caption="Figure 2. ImageJ analysis of PDL-RPA on agarose gel electrophoresis with protein concentrations from 2-300 days pi, quantitatively validating assay viability for at least 150 days pi."
+  size="lg"
+/>
+
+
+To further characterize amplification kinetics, we developed a deterministic ODE model simulating exponential increases in RPA product concentration over time (Fig. 3). Normalizing experimental data to ladder standards allowed us to convert integrated densities into DNA copy numbers, which were slightly lower than predicted by the model, suggesting modest inefficiencies in experimental amplification (Fig. 4). 
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/unnamed-15.webp"
+  caption="Figure 3. ODE model of exponentially increasing dsDNA RPA product created by correlating the expected concentration of PDL product to RPA product over time."
+  size="lg"
+/>
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/14.webp"
+  caption="Figure 4. Comparison of experimental and theoretical RPA amplification on PDL products over time; higher values from the ODE model as compared with observed values shows that experimental samples are lacking in amplification efficiency."
+  size="lg"
+/>
+
+Statistical validation using a two-way ANOVA revealed a significant interaction between amplification method and time (p < 0.001), confirming that differences between PCR and RPA were not due to random variation (Table 2). A Tukey HSD post-hoc test showed that all PCR samples clustered together at low intensities (a), while RPA samples formed distinct, statistically separate groups across time points—RPA:2 (b), RPA:25 & 50 (c), RPA:75 & 100 (d), and RPA:150 (e) (Fig. 5). Additionally, RPA produced approximately tenfold higher signal intensities than PCR for post-PDL samples (Fig. 6).
+
+| Factor  | Df  | Sum Sq | Mean Sq | F value | Pr(>F)    |
+|----------------|-----|--------|---------|---------|-----------|
+| Method         | 1   | 7.890  | 7.890   | 5456.1  | &lt;2e-16    |
+| Time           | 5   | 4.355  | 0.871   | 602.4   | &lt;2e-16    |
+| Method:Time    | 5   | 2.671  | 0.534   | 369.5   | &lt;2e-16   |
+| Residuals      | 24  | 0.035  | 0.001   |         |           |
+
+<center>*Table 2. Results of two-way interaction ANOVA on experimental results for amplification of PDL product at protein concentration over time run with PCR and RPA.*</center>
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/more-graphs.webp"
+  caption="Figure 5. Faceted plot of signal intensity by method and time with Tukey HSD group comparisons; all PCR groups (a), RPA:2 (b), RPA:25 and RPA:50 (c), RPA:75 and RPA:100 (d), and RPA:150 (e)."
+  size="lg"
+/>
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/more-graphs-2.webp"
+  caption="Figure 6. ImageJ analysis comparing post-PDL PCR reaction and post-PDL RPA reaction, quantitatively showing a significantly greater amplification activity by RPA."
+  size="lg"
+/>
+##  Learn
+Our results demonstrate that RPA amplification within the PDL workflow remains functional for at least 150 days pi and provides significantly higher amplification efficiency and sensitivity compared to PCR. The strong correlation between our experimental data and ODE model supports RPA’s reliability, even if amplification yields are slightly lower than theoretical predictions. Collectively, these findings confirm RPA’s superior performance for point-of-care diagnostics and validate its integration into LANCET as a robust and scalable amplification system capable of detecting Lyme biomarkers across diverse infection stages.
+
+# Iteration 1.6 – Experimentally Validating RPA Primer Sequences from CASPER
+
+##  Design
+To test the predictive efficacy of our in-house software CASPER, we selected primer set 1.5, which CASPER ranked as optimal for RPA amplification of PDL-generated dsDNA. The goal of this iteration was to experimentally validate whether CASPER-generated primers outperform our previous primer set 1.3 in terms of amplification efficiency and durability over time, using protein concentrations corresponding to 2–300 days post-infection (pi). Successful validation would confirm CASPER’s utility for designing high-performing primers for the LANCET workflow.
+
+##  Build
+Post-PDL RPA reactions were conducted using primer set 1.5 under the same optimized conditions as prior iterations. Negative controls included reactions lacking aptamer, ligase, or protein. Gel electrophoresis was used to visualize amplification, and ImageJ software quantified integrated density for each time point. Data were compared against previous experiments with primer set 1.3 and theoretical predictions from our deterministic RPA ODE model.
+
+##  Test
+
+Fluorescent bands at the expected 193 bp length were observed in samples with protein concentrations up to 250 days pi (Fig. 1). ImageJ analysis showed that primer set 1.5 outperformed primer set 1.3 across several time points and maintained detectable signal longer than primer set 1.3 (Fig. 2). Comparison to the ODE model demonstrated close alignment between predicted and observed amplification, indicating accurate primer performance (Fig. 3). Statistical validation using two-way ANOVA confirmed a significant interaction between primer sequence and time (p < 0.001), while a Tukey HSD post-hoc test further demonstrated that primer set 1.5 consistently produced higher amplification across time points than primer set 1.3 (Fig. 4; Table 1).
+
+
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpacasper.webp"
+  caption="Figure 1. Gel electrophoresis results of post-PDL RPA reaction with protein concentrations at 2 (a), 25 (a), 50 (a), 75 (b), 100 (b), 150 (b), 200 (c), 250 (c), and 300 (c) days pi, qualitatively validating that PDL-RPA with primer set 1.5 remains viable until at least 250 days pi."
+  size="lg"
+/>
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/more-graphs-3.webp"
+  caption="Figure 2. Comparative ImageJ analysis of PDL-RPA reaction on gel electrophoresis with primer sets 1.3 and 1.5, quantitatively validating viability of primer set 1.5 for at least 250 days pi and demonstrating greater amplification efficiency using CASPER-generated sequences."
+  size="lg"
+/>
+
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/more-graphs-4.webp"
+  caption="Figure 3. Comparison of experimental and theoretical RPA amplification on PDL products over time; alignment between predicted values from the ODE model with observed values validates results from our experimentation."
+  size="lg"
+/>
+
+
+| Factor        | Df  | Sum Sq | Mean Sq | F value | Pr(>F)    |
+|---------------|-----|--------|---------|---------|-----------|
+| Primer        | 1   | 0.259  | 0.259   | 132.765 | 1.24e-13  |
+| Time          | 8   | 25.624 | 3.203   | 1644.791| &lt;2e-16    |
+| Primer:Time   | 8   | 0.113  | 0.014   | 7.227   | 1.12e-5   |
+| Residuals     | 36  | 0.070  | 0.002   |         |           |
+
+<center>*Table 1. Results of two-way interaction ANOVA on experimental results for amplification of PDL product at protein concentration over time run with primer sets 1.3 and 1.5.*</center>
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/more-graphs-5.webp"
+  caption="Figure 4. Faceted plot of signal intensity by primer and time with Tukey HSD group comparisons (see Iteration 1.6 – Experimentally Validating RPA Primer Sequences from CASPER)."
+  size="lg"
+/>
+
+
+##  Learn
+Experimental results confirmed that CASPER-generated primer set 1.5 provides higher amplification efficiency and longer functional viability than primer set 1.3, validating the predictive capability of our software. Alignment with the ODE model indicates that these primers closely follow expected amplification dynamics. Statistical analysis demonstrated that primer choice significantly influences amplification outcomes over time, supporting the integration of CASPER-designed primers into the LANCET diagnostic workflow to maximize DNA detection and overall assay sensitivity.
+
+# Iteration 1.7 – Experimentation With Simulated Blood Serum
+
+##  Design
+To evaluate the robustness of LANCET under even more physiologically relevant conditions, we tested post-PDL RPA amplification using simulated blood serum spiked with CspZ protein. Primer set 1.5, previously validated for superior amplification efficiency, was used for all reactions. The simulated blood serum mimicked the pH and buffer composition of human serum without using actual blood products, allowing safe laboratory testing. Protein concentrations corresponding to predicted values over 2–300 days post-infection (pi) were tested to examine assay viability across the progression of Lyme disease.
+
+##  Build
+Post-PDL RPA reactions were conducted using the same optimized RPA conditions as prior iterations, substituting standard reaction buffer with simulated blood serum. Negative controls excluded aptamers, ligase, or protein. Gel electrophoresis visualized amplification, and ImageJ quantified the standardized integrated density of each band to assess amplification efficiency relative to standard in vitro conditions.
+
+##  Test
+Distinct 193 bp bands were observed in samples up to 200 days pi, demonstrating successful amplification in simulated blood serum (Fig. 1). ImageJ analysis revealed that amplification efficiency was slightly reduced between 100–200 days pi compared to standard conditions, but remained robust at all other time points and viable through 250 days pi (Fig. 2). One-way ANOVA confirmed no statistically significant difference in signal intensity between in vitro and simulated blood conditions (p = 0.432), supporting the assay’s functional reliability across conditions (Table 1).
+
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpabloodserumtest.webp"
+  caption="Figure 1. Gel electrophoresis results of post-PDL RPA reaction with simulated blood serum with protein concentrations at 2 (a), 25 (a), 50 (a), 75 (b), 100 (b), 150 (b), 200 (c), 250 (c), and 300 (c) days pi, qualitatively validating that PDL-RPA with primer set 1.5 in simulated blood remains viable until at least 200 days pi."
+  size="lg"
+/>
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/rpaimagejbloodserum.webp"
+  caption="Figure 2. ImageJ analysis of PDL-RPA on gel electrophoresis with primer set 1.5 using spiked simulated blood serum samples, quantitatively validating assay viability for at least 250 days pi."
+  size="lg"
+/>
+
+
+
+| Factor    | Df  | Sum Sq  | Mean Sq  | F value | Pr(>F) |
+|-------------|-----|---------|----------|---------|--------|
+| Condition   | 1   | 0.323   | 0.3227   | 0.628   | 0.432  |
+| Residuals   | 52  | 26.716  | 0.5138   |         |        |
+
+<center>*Table 1. Results of one-way ANOVA on experimental results for amplification of PDL product at protein concentration over time run in vitro compared with simulated blood.*</center>
+
+
+
+
+
+##  Learn
+These experiments confirmed that the PDL-RPA assay using CASPER-generated primer set 1.5 remains functionally viable in simulated blood serum, maintaining strong amplification efficiency without significant loss of signal. This validates the robustness of LANCET under physiologically relevant conditions, supporting its potential applicability as a rapid, point-of-care diagnostic even in complex biological matrices.
+
+
+
+
