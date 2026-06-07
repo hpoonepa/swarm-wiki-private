@@ -1,0 +1,20 @@
+/* Ensure the active thumbnail has the correct border */
+.carousel .thumb.selected {
+    border: 2px solid white; /* White outline for the active thumbnail */
+  }
+  
+  /* Override default border if necessary */
+  .carousel .thumb {
+    border: 2px solid transparent; /* Remove default border */
+  }
+  
+  .carousel .thumbs-wrapper {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .carousel .thumb img {
+    width: 80px; /* Adjust size if needed */
+    height: auto;
+  }
+  

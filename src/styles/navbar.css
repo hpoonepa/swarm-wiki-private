@@ -1,0 +1,12 @@
+/* Use local fontsource Inter fonts only - no external imports for iGEM */
+
+:root {
+  --navbar-green: #154E07;
+  --navbar-green-light: #3C5F33;
+  --navbar-green-hover: #637F5C;
+}
+
+.navbar-inter {
+  font-family: 'Inter Variable', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+}
