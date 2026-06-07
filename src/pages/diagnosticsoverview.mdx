@@ -1,0 +1,105 @@
+---
+layout: ../layouts/ContentLayout.astro
+title: Diagnostics Overview
+header: https://static.igem.wiki/teams/5612/headerpics/diagnostics.webp
+description: 'Diagnostic Approach to Detect Lyme Using PDL-RPA-Cas12a'
+icon: "Plane"
+color: "green"
+tabLabels: ["Overview", "PDL", "RPA", "Cas12a"]
+tabLinks: ["diagnosticsoverview", "diagnostics-pdl", "diagnostics-rpa", "diagnostics-cas12"]
+---
+
+import TwoColPara from "../components/md_components/TwoColPara";
+import Wip from "../components/md_components/Wip";
+import Image from "../components/md_components/Image";
+import Reference from "../components/md_components/Reference";
+import PDFAccordian from "../components/md_components/PDFAccordian";
+import ImageCarousel from "../components/md_components/ImageCarousel"
+
+# Diagnostic Overview
+
+Lyme disease is a vector-borne disease transferred to human hosts from *Ixodes* ticks containing *Borrelia burgdorferi*, the causative bacterial agent for Lyme. These spirochete bacteria disseminate rapidly into joint and cardiac tissue, delaying early detection by several weeks (Caine & Coburn, 2015; [see Project Description](/lambert-ga/description)). 
+
+LANCET takes a cutting edge approach to creating an early, point of care diagnostic using  proximity-dependent ligation (PDL) against a *Borrelia* surface protein to generate target DNA that is amplified through Recombinase Polymerase Amplification (RPA). The amplified product is then detected using CRISPR-Cas12a, which cleaves nearby reporter molecules, and is visualized on a lateral flow assay (LFA) for rapid Lyme detection. 
+
+This diagnostic was experimentally validated in vitro at physiological concentrations expected to be present from day 2 up to day 250 post infection versus the current testing which can not detect Lyme disease until at least 2 weeks post infection (CDC, 2024). These two weeks mark a significant improvement in the ability of practitioners to treat Lyme as early as possible. This will help prevent the missed diagnosis that can potentially lead to years of debilitating symptoms associated with Chronic Lyme Disease.
+
+## Proximity-Dependent Ligation
+
+LANCET begins by utilizing a PDL assay to detect CspZ, an outer surface protein with characteristics that make it optimal for our diagnostic [(see CspZ Protein Concentration).](https://2026.igem.wiki/lambert-ga/diagnostics-pdl#cspz-protein-concentration) PDL uses single stranded DNA (ssDNA) protein-binding aptamers to create a double stranded DNA (dsDNA) product that then serves as a template for downstream steps of the diagnostic (Fredriksson et al. 2002).
+
+As the aptamers come into contact with CspZ, they undergo a protein-DNA binding reaction (see Fig. 1a), after which a single stranded oligomer bridge sequence brings the two aptamer constructs in close proximity (see Fig. 1b). T4 DNA ligase and T4 DNA polymerase then act on the partial DNA duplex to induce synthesis of the dsDNA sequence (see Fig. 1c & 1d). 
+
+<ImageCarousel client:load
+  images={[
+     "https://static.igem.wiki/teams/5612/diagoverview/1a.webp",
+    "https://static.igem.wiki/teams/5612/diagoverview/1b.webp",
+    "https://static.igem.wiki/teams/5612/diagoverview/1c.webp", 
+    "https://static.igem.wiki/teams/5612/diagoverview/1d.webp" 
+  ]}
+  caption="Figure 1. Aptamers bind to CspZ (a); bridge sequence binds to aptamers (b); ligase connects the aptamer-bridge complex (c); DNA polymerase synthesizes dsDNA sequence (d)."
+/>
+
+## Recombinase Polymerase Amplification
+
+Following the dsDNA sequence output produced by PDL, our next step is amplification of the PDL product [(see RPA Methodology)](https://2026.igem.wiki/lambert-ga/diagnostics-rpa#rpa-methodology). RPA is an isothermal amplification technique utilizing recombinase-primer complexes to target the dsDNA generated from PDL.
+
+As the complex binds to the complementary sites in the target DNA, the recombinase helps the primers invade the DNA strands and initiate amplification (see Fig. 2a). Single-stranded binding proteins (SSBPs) stabilize the displaced strand of DNA, allowing DNA polymerase to build the nucleotides from the primers to conduct amplification (see Fig. 2b). Short DNA fragments amplified from the target sequence, amplicons, are the resulting output of RPA. 
+
+<Image
+  src="https://static.igem.wiki/teams/5612/diagoverview/img-0228.avif"
+  caption="Figure 2a. SSBPs stabilize DNA"
+  size="lg"
+/>
+<Image
+  src="https://static.igem.wiki/teams/5612/diagoverview/img-0229.avif"
+  caption="Figure 2b. DNA Polymerase builds nucleotides"
+  size="lg"
+/>
+To validate the successful amplification of our dsDNA product from PDL, the RPA output was then analyzed using gel electrophoresis. Distinct bands were observed at the expected range of 133 base pairs, confirming the activity of our RPA assay by the presence of amplified DNA (see Fig. 3). 
+
+<Image
+  src="https://static.igem.wiki/teams/5612/rpa/gel.webp"
+  caption="Figure 3. Gel electrophoresis of RPA products following PDL; experimental lanes show distinct bands at the expected size, while negative control lanes remain empty."
+  size="lg"
+/>
+
+## Cas12a DETECTR
+
+The amplified DNA from RPA was subsequently converted to produce a quantifiable output using the CRISPR-Cas12a DETECTR system. Our DETECTR assay consists of three main components: the Cas12a enzyme, a CRISPR RNA (crRNA), and a ssDNA reporter probe. When the Cas12a endonuclease binds to the crRNA, it forms a complex capable of recognizing and binding to sequences of interest (see Fig. 4a). 
+
+The crRNA guide is designed to be complementary to the target DNA product from RPA and induces a sticky cut (see Fig. 4b). Guide RNA binding also initiates a conformational change to the endonuclease, activating the collateral cleavage ability of Cas12a. This allows the Cas12a enzyme to indiscriminately cleave nearby ssDNA reporters, which can then be quantified via fluorescence or visualized using a LFA (see Fig. 4c). 
+
+<ImageCarousel client:load
+  images={[
+     "https://static.igem.wiki/teams/5612/diagoverview/cas12-4a.webp",
+    "https://static.igem.wiki/teams/5612/diagoverview/cas12-4b.webp",
+    "https://static.igem.wiki/teams/5612/diagoverview/cas12-4c.webp"
+  ]}
+  caption="Figure 4. Cas12a-crRNA complex formation (a); Cas12a-endonuclease induced sticky cut on target DNA (b); structurally active Cas12a performing collateral cleavage activity (c)."
+/>
+
+Our Cas12a reaction produced a strong fluorescence signal that closely paralleled the positive control reaction, demonstrating effective collateral cleavage and downstream recognition of the post-PDL RPA amplicon (see Fig. 5). Alternatively, the negative controls demonstrated little to no fluorescence. These results show that the PDL-RPA-Cas12a system can successfully work together in conjugation, further validating the efficacy and specificity of LANCET. 
+
+<Image
+  src="https://static.igem.wiki/teams/5612/diagoverview/pdlrpacas122.webp"
+  caption="Figure 5. Experimental results of Cas12a after PDL and RPA, showing strong fluorescence for the Cas12a reaction in comparison to the positive control, while all negative controls remain at baseline."
+  size="lg"
+/>
+
+We also visualized our Cas12a results on an LFA strip. An LFA is point-of-care test often used in disease diagnostics, due to its rapid analysis and simple visual output. In contrast to expensive laboratory equipment like fluorescence plate readers, LANCET utilizes the properties of the LFA for user-friendly point-of-care testing. 
+
+When we put our PDL-RPA-Cas12a experimental reaction onto the LFA strip, we can see a line on the LFA that shows a line at the test line, indicating that the fluorophore-biotin complex was cleaved (see Fig. 6). The fluorophores were accurately detected and visualized on the test trip, further indicating a positive Lyme result. Alternatively, the second test trip shows a negative control, where the fluorophore-biotin complex was not cleaved, showing an output at the control line, indicating a negative result. 
+
+<Image
+  src="https://static.igem.wiki/teams/5612/diagoverview/lfacontrolexp.webp"
+  caption="Figure 6. Experimental reaction LFA (top) and negative control reaction LFA (bottom) showing different results at the test line and control line."
+  size="lg"
+/>
+
+# References
+
+<Reference children="Caine, J. A., & Coburn, J. (2015). A Short-Term Borrelia burgdorferi Infection Model Identifies Tissue Tropisms and Bloodstream Survival Conferred by Adhesion Proteins. Infection and Immunity, 83(8), 3184–3194. https://doi.org/10.1128/iai.00349-1 (https://doi.org/10.1128/iai.00349-15)5"></Reference>
+<Reference children="CDC. (2024, June 21). Testing and Diagnosis for Lyme disease. Lyme Disease. https://cdc.gov/lyme/diagnosis-testing/index.html"></Reference>
+<Reference children="Fredriksson, S., Gullberg, M., Jarvius, J., Olsson, C., Pietras, K., Gústafsdóttir, S. M., Östman, A., & Landegren, U. (2002). Protein detection using proximity-dependent DNA ligation assays. Nature Biotechnology, 20(5), 473–477. https://doi.org/10.1038/nbt0502-473"></Reference>
+

@@ -1,0 +1,91 @@
+---
+import Nav from "../components/Nav";
+import Footer from "../components/Footer";
+import TOC from "../components/toc";
+import "@fontsource-variable/inter";
+import "../styles/global.css";
+
+export interface Props {
+  title: string;
+  description?: string;
+  header?: string;
+  icon?: string;
+  color?: "blue" | "magenta" | "green" | "pink" | string;
+  isDark?: boolean;
+  headings?: any[];
+  noTOC?: boolean;
+}
+
+const { 
+  title, 
+  description = "Short page description goes here",
+  header = "https://static.igem.wiki/teams/5096/header/contribution.webp",
+  icon = "Plane",
+  color = "green",
+  isDark = false,
+  headings = [],
+  noTOC = false
+} = Astro.props;
+
+const h2Headings = headings.filter((heading: any) => heading.depth === 2);
+---
+
+<!doctype html>
+<html lang="en" class:list={["font-sans", { dark: isDark }]}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="https://static.igem.wiki/teams/5612/mainlayout/fabicon.webp" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{"Lambert-GA | " + title}</title>
+    {description && <meta name="description" content={description} />}
+  </head>
+  <body class:list={[{ "bg-[#FFFCF3] text-neutral-900": !isDark }]}>
+    <div class:list={["font-sans w-full", `accent-${color}-9`]}>
+      
+
+      <!-- Light theme header -->
+      {!isDark && (
+        <div>
+          <div class="fixed z-50 bg-[#FFFCF3]">
+            <div class="flex items-center justify-between">
+              <Nav client:only="react" />
+            </div>
+          </div>
+          <header 
+            class="relative w-full h-[70vh] bg-center bg-no-repeat"
+            style={`background-image: linear-gradient( #00000020, #00000020), url(${header}); background-size: cover;`}
+          >
+            <div class="pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,black_10%,transparent_35%,transparent_65%,black_95%)]"></div>
+            <div class="relative z-10 flex flex-col justify-center items-center h-full space-y-6 px-4">
+              <h1 class="font-inter font-bold text-4xl md:text-6xl lg:text-7xl text-center text-[#FFFFFF]">{title}</h1>
+              <p class="font-inter rounded-full py-2 px-4 text-center shadow-lg text-[#FFFFFF] bg-[#502F00]">{description}</p>
+            </div>
+          </header>
+        </div>
+      )}
+
+      <main class:list={["w-full", { "bg-[#FFFCF3]": !isDark }]}>
+        
+          <div class="content-wrapper">
+              <slot />
+            </div>
+          </div>
+
+        <div id="toc-stop" class="h-[1px]"></div>
+      </main>
+    </div>
+    
+    <Footer />
+  </body>
+  
+  <style is:global>
+
+    .content-wrapper {
+      margin: 50px auto;
+      max-width: 80vw;
+      display: flex;
+      justify-content: center;
+    }
+  </style>
+</html>
