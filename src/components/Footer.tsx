@@ -51,7 +51,7 @@ const SponsorsStrip = () => (
 );
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const currentYear = 2026;
 
   return (
     <footer className="relative w-full bottom-0 left-0">
@@ -107,12 +107,12 @@ const Footer = () => {
           <p>
             Repository:{" "}
             <a
-              href="https://gitlab.igem.org/2025/lambert-ga"
+              href="https://gitlab.igem.org/2026/lambert-ga"
               className="underline hover:text-white"
               target="_blank"
               rel="noreferrer"
             >
-              https://gitlab.igem.org/2025/lambert-ga
+              https://gitlab.igem.org/2026/lambert-ga
             </a>
           </p>
         </div>

@@ -27,7 +27,7 @@ The overall goal of this cycle was to develop and validate a platform for CspZ p
 
 ### Design
 
-To develop our diagnostic, our idea this year was to utilize protein-binding aptamers that would be brought in close proximity by a bridging sequence then ligated into a double stranded DNA (dsDNA) product (see Proximity-Dependent Ligation). We developed our ssDNA constructs using anti-CspZ aptamer sequences specific to *Borrelia burgdorferi*, the causative agent of Lyme. (see [Aptamer Design](https://2025.igem.wiki/lambert-ga/diagnostics-pdl/#PDL-Design)). The goal of our first iteration was to test the feasibility of the PDL reaction in vitro with isolated protein samples. Building off of insights from previous literature, we also modified the protocol to include an extension step with T4 DNA polymerase following ligation to ensure better downstream compatibility in our overall assay (see [Proximity-Dependent Ligation](https://2025.igem.wiki/lambert-ga/diagnostics-pdl); see [Experimental Modifications](https://2025.igem.wiki/lambert-ga/diagnostics-pdl/#experimental-modifications)).
+To develop our diagnostic, our idea this year was to utilize protein-binding aptamers that would be brought in close proximity by a bridging sequence then ligated into a double stranded DNA (dsDNA) product (see Proximity-Dependent Ligation). We developed our ssDNA constructs using anti-CspZ aptamer sequences specific to *Borrelia burgdorferi*, the causative agent of Lyme. (see [Aptamer Design](https://2026.igem.wiki/lambert-ga/diagnostics-pdl/#PDL-Design)). The goal of our first iteration was to test the feasibility of the PDL reaction in vitro with isolated protein samples. Building off of insights from previous literature, we also modified the protocol to include an extension step with T4 DNA polymerase following ligation to ensure better downstream compatibility in our overall assay (see [Proximity-Dependent Ligation](https://2026.igem.wiki/lambert-ga/diagnostics-pdl); see [Experimental Modifications](https://2026.igem.wiki/lambert-ga/diagnostics-pdl/#experimental-modifications)).
 
 As a result, we decided to apply the redesigned PDL protocol:
 Aptamer protein binding
@@ -35,7 +35,7 @@ DNA-DNA hybridization
 Ligation of aptamers using T4 DNA ligase
 Duplexing of ssDNA product via T4 DNA polymerase
 
-Negative controls included samples with no aptamers and no ligase (see [Validating PDL](https://2025.igem.wiki/lambert-ga/diagnostics-pdl/#validating-pdl-with-pcr)). Diagnostic efficacy of PDL was analyzed using 1.5% gel electrophoresis with TBE (Tris-Borate-EDTA) buffer, and a successful result was expected to show bands at 232 base pairs, corresponding to the full length of the PDL product (see Fig. 1).
+Negative controls included samples with no aptamers and no ligase (see [Validating PDL](https://2026.igem.wiki/lambert-ga/diagnostics-pdl/#validating-pdl-with-pcr)). Diagnostic efficacy of PDL was analyzed using 1.5% gel electrophoresis with TBE (Tris-Borate-EDTA) buffer, and a successful result was expected to show bands at 232 base pairs, corresponding to the full length of the PDL product (see Fig. 1).
 <Image
   src="https://static.igem.wiki/teams/5612/engineeringsuccess/pdl/pdl1-1fig1.webp"
   caption="Figure 1. Sequence map of the full 232 bp PDL product assembled in Benchling."
@@ -61,7 +61,7 @@ When developing our ssDNA aptamers constructs, we took advice from Dr. Mark Styc
 
 ### Build
 
-We purchased these aptamer and bridge ssDNA constructs from Integrated DNA Technologies (IDT), hydrated them in nuclease free water, and diluted to our desired stock concentrations (see [PDL Lab Notebook](https://2025.igem.wiki/lambert-ga/notebook/)). Additionally, we ordered T4 DNA ligase (M0202S) and T4 DNA polymerase (M0203S) from New England Biolabs and commercial CspZ protein from Rockland Immunochemicals, Inc. We carried out the PDL assay according to our initial protocol as below (see Table 1).
+We purchased these aptamer and bridge ssDNA constructs from Integrated DNA Technologies (IDT), hydrated them in nuclease free water, and diluted to our desired stock concentrations (see [PDL Lab Notebook](https://2026.igem.wiki/lambert-ga/notebook/)). Additionally, we ordered T4 DNA ligase (M0202S) and T4 DNA polymerase (M0203S) from New England Biolabs and commercial CspZ protein from Rockland Immunochemicals, Inc. We carried out the PDL assay according to our initial protocol as below (see Table 1).
 
 | Reagent | Stock Concentration | Volume | Final Concentration |
 |---|---|---|---|
@@ -247,7 +247,7 @@ Both of our new primer pairs were screened for secondary structures and dimer fo
 
 ### Build
 
-We purchased the designed primer sequences from IDT and performed post-PDL PCR according to the protocol in previous iterations, with annealing temperature of 62°C and 63°C for primer sets 1.2 & 1.3, respectively (see Figs. 5-6; see [Iteration 2 – Validating PDL with PCR](https://2025.igem.wiki/lambert-ga/engineering/#iteration-2-validating-pdl-with-pcr).
+We purchased the designed primer sequences from IDT and performed post-PDL PCR according to the protocol in previous iterations, with annealing temperature of 62°C and 63°C for primer sets 1.2 & 1.3, respectively (see Figs. 5-6; see [Iteration 2 – Validating PDL with PCR](https://2026.igem.wiki/lambert-ga/engineering/#iteration-2-validating-pdl-with-pcr).
 <Image
   src="https://static.igem.wiki/teams/5612/engineeringsuccess/pdl/pdl13/pdl1-4fig5.webp"
   caption="Figure 5. Determination of annealing temperature for PDL-PCR primer set 1.2 using NEB Tm calculator (New England Biolabs, n.d.)."
@@ -284,7 +284,7 @@ The results in this iteration demonstrated that the limited success we observed 
 
 ### Design
 
-After repeatedly failing to properly generate and amplify the dsDNA PDL product, we hypothesized that the concentration of CspZ protein was not optimal for aptamer binding and ligation. Initially, we used a high protein concentration of 10 ng/µL, which is equivalent to 8.88 × 10¹⁰ molecules/µL for the 67.8 kDa commercial protein (see [Adjusting Protein Concentration](https://2025.igem.wiki/lambert-ga/diagnostics-pdl/#adjusting-protein-concentration)). However, after finding that this value exceeded the 2.00 × 10⁶ CspZ molecules/µL predicted by our computational model, we speculated that the excess of protein may have saturated the reaction and interfered with aptamer reactivity (see Fig. 1; see [CspZ Protein Concentration](https://2025.igem.wiki/lambert-ga/diagnostics-pdl#CspZ_Protein_Concentration)). To address this issue and ensure our assay better reflected physiological conditions, we repeated the PDL reaction using a protein concentration that is consistent with in vivo levels reported in literature.
+After repeatedly failing to properly generate and amplify the dsDNA PDL product, we hypothesized that the concentration of CspZ protein was not optimal for aptamer binding and ligation. Initially, we used a high protein concentration of 10 ng/µL, which is equivalent to 8.88 × 10¹⁰ molecules/µL for the 67.8 kDa commercial protein (see [Adjusting Protein Concentration](https://2026.igem.wiki/lambert-ga/diagnostics-pdl/#adjusting-protein-concentration)). However, after finding that this value exceeded the 2.00 × 10⁶ CspZ molecules/µL predicted by our computational model, we speculated that the excess of protein may have saturated the reaction and interfered with aptamer reactivity (see Fig. 1; see [CspZ Protein Concentration](https://2026.igem.wiki/lambert-ga/diagnostics-pdl#CspZ_Protein_Concentration)). To address this issue and ensure our assay better reflected physiological conditions, we repeated the PDL reaction using a protein concentration that is consistent with in vivo levels reported in literature.
 <Image
   src="https://static.igem.wiki/teams/5612/engineeringsuccess/pdl/it1-5-simulatedcspzovertime.avif"
   caption="Figure 1. Estimated CspZ concentration in the bloodstream up to 300 days post-infection using Mass Action reaction kinetic laws."
