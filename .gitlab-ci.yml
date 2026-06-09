@@ -7,6 +7,14 @@ cache:
     - node_modules/
 
 pages:
+  # iGEM's shared runners occasionally drop mid-job ("Job failed (system failure)").
+  # Auto-retry ONLY on runner/infrastructure failures — never on real build errors.
+  retry:
+    max: 2
+    when:
+      - runner_system_failure
+      - stuck_or_timeout_failure
+      - scheduler_failure
   before_script:
     - npm cache clean --force
     - rm -rf /root/.cache || true
