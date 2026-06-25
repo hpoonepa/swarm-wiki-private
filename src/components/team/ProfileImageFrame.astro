@@ -1,0 +1,39 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  shape?: "hex" | "circle";
+  frameSrc: string;
+}
+
+const { src, alt, shape = "circle", frameSrc } = Astro.props;
+
+const wrapperClasses = [
+  "relative w-full aspect-square isolate",
+  shape === "circle" ? "[--photo-inset:28%]" : "[--photo-inset:16%]",
+];
+
+const photoShapeClass =
+  shape === "circle"
+    ? "rounded-full"
+    : "[clip-path:polygon(50%_0%,94%_22%,94%_78%,50%_100%,6%_78%,6%_22%)]";
+---
+
+<div class:list={wrapperClasses}>
+  <img
+    src={src}
+    alt={alt}
+    class:list={[
+      "absolute inset-[var(--photo-inset)] z-[1] w-[calc(100%-(var(--photo-inset)*2))] h-[calc(100%-(var(--photo-inset)*2))] object-cover bg-white pointer-events-none select-none",
+      photoShapeClass,
+    ]}
+    loading="lazy"
+  />
+  <img
+    src={frameSrc}
+    alt=""
+    aria-hidden="true"
+    class="absolute inset-0 z-[2] h-full w-full object-contain pointer-events-none select-none"
+    loading="lazy"
+  />
+</div>

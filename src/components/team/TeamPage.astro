@@ -1,0 +1,58 @@
+---
+import HiveSection from "./HiveSection.astro";
+import AdvisorsSection from "./AdvisorsSection.astro";
+
+const HIVE_BACKGROUND_URL = "https://static.igem.wiki/teams/6185/wiki/teampage/membersbush.svg";
+const ADVISORS_BACKGROUND_URL = "https://static.igem.wiki/teams/6185/wiki/teampage/advisorsblob.svg";
+const HIVE_FRAME_URL = "https://static.igem.wiki/teams/6185/wiki/teampage/memberframe.svg";
+const ADVISOR_GOLD_FRAME_URL = "https://static.igem.wiki/teams/6185/wiki/teampage/goldflower.svg";
+const ADVISOR_PURPLE_FRAME_URL = "https://static.igem.wiki/teams/6185/wiki/teampage/purpleflower.svg";
+const ADVISOR_BLUE_FRAME_URL = "https://static.igem.wiki/teams/6185/wiki/teampage/blueflower.svg";
+
+const PLACEHOLDER_PHOTO_URL =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Crect width='400' height='400' fill='%23ffffff'/%3E%3C/svg%3E";
+
+const hiveMembers = [
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+  { name: "Peter Parker", role: "Wetlab Lead", photo: PLACEHOLDER_PHOTO_URL },
+];
+
+const advisors = [
+  { name: "Peter Parker", role: "Advisor", photo: PLACEHOLDER_PHOTO_URL, frame: "gold" },
+  { name: "Peter Parker", role: "Advisor", photo: PLACEHOLDER_PHOTO_URL, frame: "purple" },
+  { name: "Peter Parker", role: "Advisor", photo: PLACEHOLDER_PHOTO_URL, frame: "blue" },
+] as const;
+
+const advisorFrameMap = {
+  gold: ADVISOR_GOLD_FRAME_URL,
+  purple: ADVISOR_PURPLE_FRAME_URL,
+  blue: ADVISOR_BLUE_FRAME_URL,
+};
+---
+
+<main class="w-screen min-h-screen overflow-hidden bg-[#eafcff] pt-[clamp(5.5rem,10vw,7rem)] pb-[clamp(4rem,7vw,6rem)]">
+  <HiveSection
+    members={hiveMembers}
+    backgroundSrc={HIVE_BACKGROUND_URL}
+    frameSrc={HIVE_FRAME_URL}
+  />
+  <AdvisorsSection
+    advisors={[...advisors]}
+    backgroundSrc={ADVISORS_BACKGROUND_URL}
+    frameMap={advisorFrameMap}
+  />
+</main>

@@ -1,0 +1,44 @@
+---
+import HiveMemberCard from "./HiveMemberCard.astro";
+
+interface HiveMember {
+  name: string;
+  role: string;
+  photo: string;
+}
+
+interface Props {
+  members: HiveMember[];
+  backgroundSrc: string;
+  frameSrc: string;
+}
+
+const { members, backgroundSrc, frameSrc } = Astro.props;
+---
+
+<section
+  class="relative isolate mx-auto w-screen min-h-[clamp(56rem,92vw,94rem)] px-[clamp(1.25rem,7vw,8rem)] pt-[clamp(5.25rem,9vw,8.5rem)] pb-[clamp(5rem,7vw,7.5rem)] max-[720px]:min-h-0 max-[720px]:px-[1.1rem] max-[720px]:pt-[5.6rem] max-[720px]:pb-[4.6rem]"
+  aria-labelledby="hive-title"
+>
+  <img
+    src={backgroundSrc}
+    alt=""
+    aria-hidden="true"
+    class="absolute inset-0 z-0 h-full w-full object-fill pointer-events-none select-none"
+  />
+
+  <div class="relative z-[1] grid justify-items-center gap-[clamp(1.2rem,3vw,1.9rem)]">
+    <h2 id="hive-title" class="m-0 text-white text-[clamp(2.5rem,7vw,4.8rem)] font-[850] leading-[0.95] tracking-normal">Our Hive</h2>
+    <div class="mt-[-0.35rem] h-[clamp(1.4rem,3vw,2rem)] w-[min(20rem,42vw)] rounded-full bg-[#146a3b]" aria-hidden="true"></div>
+    <div class="grid w-[min(86vw,78rem)] grid-cols-4 gap-x-[clamp(1.5rem,5vw,5rem)] gap-y-[clamp(1.6rem,3.8vw,3.8rem)] max-[720px]:w-[min(92vw,31rem)] max-[720px]:grid-cols-2 max-[720px]:gap-x-4 max-[720px]:gap-y-[1.35rem]">
+      {members.map((member) => (
+        <HiveMemberCard
+          name={member.name}
+          role={member.role}
+          photo={member.photo}
+          frameSrc={frameSrc}
+        />
+      ))}
+    </div>
+  </div>
+</section>

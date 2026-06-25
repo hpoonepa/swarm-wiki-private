@@ -13,29 +13,21 @@ import {
 import { ScrollArea } from "../components/ui/scroll-area";
 
 export default function Component() {
-  // Calculate the number of columns for the grid (should match grid-cols-4 for lg, grid-cols-3 for md, grid-cols-2 for base)
-  // We'll use 4 columns for simplicity (desktop)
-  const columns = 4;
-  const lastRowStart = Math.floor(studentMembers.length / columns) * columns;
-
+  // Render a tighter grid without the artificial large bottom margin.
   return (
-    <section className="pt-0 pb-4 lg:pt-0 lg:pb-8">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {studentMembers.map((member, idx) => {
-            // Add extra margin to the last card in the second to last row
-            const isSecondToLastRow = idx >= lastRowStart - columns && idx < lastRowStart;
-            const isLastInSecondToLastRow = isSecondToLastRow && (idx + 1) % columns === 0;
-            return (
-                <div key={member.name} className={isLastInSecondToLastRow ? "mb-[175px]" : ""}>
-                <MemberCard member={member} />
-              </div>
-            );
-          })}
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {advisors.map((member) => (
+    <section className="pt-8 pb-12 lg:pt-12 lg:pb-12 w-full">
+      <div className="w-full mx-0 px-0">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 justify-items-center">
+          {studentMembers.map((member) => (
             <MemberCard key={member.name} member={member} />
+          ))}
+        </div>
+
+        <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+          {advisors.map((member) => (
+            <div key={member.name} className="flex justify-center">
+              <MemberCard member={member} />
+            </div>
           ))}
         </div>
       </div>
@@ -53,46 +45,60 @@ interface Member {
 const MemberCard = ({ member }: { member: Member }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  // Hexagon clip-path
+  const hex =
+    "polygon(25% 6.7%, 75% 6.7%, 100% 50%, 75% 93.3%, 25% 93.3%, 0% 50%)";
+
   return (
     <>
-      <Card className="overflow-hidden p-0 h-[262px]">
-        <CardContent className="p-0 h-[262px]">
-          <Button
-            variant="ghost"
-            className="w-full h-[262px] p-0 hover:bg-transparent"
-            onClick={() => setIsOpen(true)}
-          >
-            <div className="relative w-full h-[262px]">
-              <img
-                src={member.imgSrc}
-                alt={member.name}
-                className="object-cover w-full h-full"
-              />
-              <div className="absolute bottom-0 left-0 right-0 bg-[#FFFCF3] p-2 text-left">
-                <h3 className="text-lg font-semibold">{member.name}</h3>
-                <p className="text-sm text-muted-foreground">{member.role}</p>
+      <div className="flex flex-col items-center">
+        <Button
+          variant="ghost"
+          className="p-0 hover:bg-transparent"
+          onClick={() => setIsOpen(true)}
+        >
+          <div className="relative" style={{ width: 140 }}>
+            <div
+              style={{ clipPath: hex }}
+              className="bg-[#F6C046] w-full h-[140px] flex items-center justify-center"
+            >
+              <div
+                style={{ clipPath: hex }}
+                className="bg-white w-[90%] h-[90%] overflow-hidden flex items-center justify-center"
+              >
+                <img
+                  src={member.imgSrc}
+                  alt={member.name}
+                  style={{ clipPath: hex }}
+                  className="object-cover w-full h-full"
+                />
               </div>
             </div>
-          </Button>
-        </CardContent>
-      </Card>
+          </div>
+        </Button>
+
+        <div className="text-center mt-3">
+          <h3 className="text-sm font-semibold">{member.name}</h3>
+          <p className="text-xs text-muted-foreground">{member.role}</p>
+        </div>
+      </div>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="sm:max-w-[700px] p-0 overflow-hidden">
-          <div className="flex">
-            <div className="w-1/2 h-[500px]">
+          <div className="flex flex-col md:flex-row">
+            <div className="w-full md:w-1/2 h-[350px]">
               <img
                 src={member.imgSrc}
                 alt={member.name}
                 className="object-cover w-full h-full"
               />
             </div>
-            <div className="w-1/2 p-6 bg-[#FFFCF3]">
+            <div className="w-full md:w-1/2 p-6 bg-[#FFFCF3]">
               <DialogHeader>
                 <DialogTitle>{member.name}</DialogTitle>
                 <DialogDescription>{member.role}</DialogDescription>
               </DialogHeader>
-              <ScrollArea className="h-[380px] w-full pr-4 mt-4">
+              <ScrollArea className="h-[280px] w-full pr-4 mt-4">
                 <p>{member.description}</p>
               </ScrollArea>
             </div>
