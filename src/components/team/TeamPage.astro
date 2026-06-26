@@ -1,15 +1,141 @@
 ---
-// Team page = 1:1 embed of the reference design (static/teampage/hive.svg,
-// the full 1440x4345 "Our Hive" artboard). The site renders its own fixed nav
-// on top; this export contains no nav of its own, so it drops in cleanly.
+// Team page = 1:1 embed of the reference (static/teampage/hive.svg). On top of
+// the flat artboard we overlay 16 invisible click-zones positioned over each
+// hive card (coordinates detected from the artboard). Clicking one opens a
+// centered modal that is a 1:1 of the member-card design (membercard.svg) with
+// the member's name + role drawn into the Name/Role slots.
 const HIVE_SVG_URL = "/lambert-ga/teampage/hive.svg";
+const CARD_SVG_URL = "/lambert-ga/teampage/membercard.svg";
+
+const members = [
+  { name: "Harsha Poonepalle", role: "Captain" },
+  { name: "Arjun Gulati", role: "Hardware Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+  { name: "Peter Parker", role: "Wetlab Lead" },
+];
+
+// Click-zones over each hive card, as % of the 1440x4345 artboard: {l,t,w,h}.
+const zones = [
+  { l: 1.66, t: 24.08, w: 18.06, h: 7.59 },
+  { l: 24.03, t: 24.08, w: 17.92, h: 7.59 },
+  { l: 46.25, t: 24.08, w: 18.06, h: 7.59 },
+  { l: 68.75, t: 24.08, w: 18.06, h: 7.59 },
+  { l: 12.92, t: 31.67, w: 17.92, h: 7.64 },
+  { l: 35.14, t: 31.67, w: 18.06, h: 7.64 },
+  { l: 57.5, t: 31.67, w: 17.92, h: 7.64 },
+  { l: 79.99, t: 31.67, w: 17.92, h: 7.64 },
+  { l: 2.36, t: 39.22, w: 17.92, h: 7.59 },
+  { l: 24.58, t: 39.22, w: 18.06, h: 7.59 },
+  { l: 46.94, t: 39.22, w: 17.92, h: 7.59 },
+  { l: 69.44, t: 39.22, w: 17.92, h: 7.59 },
+  { l: 13.47, t: 46.68, w: 18.06, h: 7.59 },
+  { l: 35.83, t: 46.68, w: 17.92, h: 7.59 },
+  { l: 58.05, t: 46.68, w: 18.06, h: 7.59 },
+  { l: 80.55, t: 46.68, w: 18.06, h: 7.59 },
+];
 ---
 
 <main class="w-screen overflow-hidden bg-[#EFFCFF]">
-  <img
-    src={HIVE_SVG_URL}
-    alt="Our Hive — the SWARM team"
-    class="block w-full select-none"
-    style="aspect-ratio:1440/4345;"
-  />
+  <div class="relative mx-auto w-full" style="aspect-ratio:1440/4345;">
+    <img
+      src={HIVE_SVG_URL}
+      alt="Our Hive — the SWARM team"
+      class="absolute inset-0 h-full w-full select-none"
+    />
+    {members.map((m, i) => (
+      <button
+        type="button"
+        data-member
+        data-name={m.name}
+        data-role={m.role}
+        aria-label={`${m.name}, ${m.role}`}
+        class="absolute cursor-pointer rounded-[14%] outline-none transition-colors duration-150 hover:bg-white/10 focus-visible:ring-4 focus-visible:ring-white/70"
+        style={`left:${zones[i].l}%;top:${zones[i].t}%;width:${zones[i].w}%;height:${zones[i].h}%;`}
+      ></button>
+    ))}
+  </div>
 </main>
+
+<!-- Member card modal -->
+<div
+  id="member-modal"
+  class="fixed inset-0 z-[100] hidden items-center justify-center p-4"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="m-name"
+>
+  <div data-close class="absolute inset-0 bg-black/55 backdrop-blur-[2px]"></div>
+  <div
+    class="relative animate-[mcin_.18s_ease-out]"
+    style="--cardh:min(90vh, calc(94vw * 1058 / 738)); height:var(--cardh); aspect-ratio:738/1058;"
+  >
+    <img src={CARD_SVG_URL} alt="" aria-hidden="true" class="absolute inset-0 h-full w-full select-none" />
+    <div class="absolute inset-x-0 text-center" style="top:36.5%;">
+      <div
+        id="m-name"
+        style="color:#582903;font-family:Georgia,'Times New Roman',serif;font-weight:800;line-height:1;font-size:calc(var(--cardh)*0.054);"
+      ></div>
+      <div
+        id="m-role"
+        style="color:#E48D36;font-family:Georgia,'Times New Roman',serif;font-weight:700;line-height:1;font-size:calc(var(--cardh)*0.022);margin-top:calc(var(--cardh)*0.012);"
+      ></div>
+    </div>
+    <button
+      type="button"
+      data-close
+      aria-label="Close"
+      class="absolute right-[3%] top-[2%] grid h-[5%] w-[5%] place-items-center rounded-full text-[#582903] hover:bg-black/10"
+      style="font-size:calc(var(--cardh)*0.03);line-height:1;"
+    >✕</button>
+  </div>
+</div>
+
+<style>
+  @keyframes mcin { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+</style>
+
+<script is:inline>
+  (function () {
+    const modal = document.getElementById("member-modal");
+    if (!modal) return;
+    const nameEl = document.getElementById("m-name");
+    const roleEl = document.getElementById("m-role");
+
+    function open(name, role) {
+      nameEl.textContent = name;
+      roleEl.textContent = role;
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+      document.body.style.overflow = "hidden";
+    }
+    function close() {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+      document.body.style.overflow = "";
+    }
+
+    document.querySelectorAll("[data-member]").forEach((btn) => {
+      btn.addEventListener("click", () =>
+        open(btn.getAttribute("data-name"), btn.getAttribute("data-role"))
+      );
+    });
+    modal.querySelectorAll("[data-close]").forEach((el) =>
+      el.addEventListener("click", close)
+    );
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") close();
+    });
+  })();
+</script>
