@@ -3,10 +3,11 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "dev": "npm run build:home && astro dev",
+    "build": "npm run build:home && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "build:home": "node scripts/build-home.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.3",
@@ -59,7 +60,10 @@
     "windy-radix-palette": "2.0.0-beta.7"
   },
   "devDependencies": {
-    "astro": "^5.13.7"
+    "astro": "^5.13.7",
+    "esbuild": "0.28.2",
+    "motion": "13.4.1",
+    "three": "0.186.0"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.22.5"

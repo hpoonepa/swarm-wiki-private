@@ -1,9 +1,16 @@
 ---
-import HomePage from "../components";
-import HomeLayout from "../layouts/HomeLayout.astro";
-import "../styles/global.css";
+// Home page: the new SWARM home lives as static files in static/home/ (served at /lambert-ga/home/).
 ---
-
-<HomeLayout title="Lambert-GA">
-  <HomePage client:only="react" />
-</HomeLayout>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="refresh" content="0; url=/lambert-ga/home/" />
+    <link rel="icon" type="image/svg+xml" href="https://static.igem.wiki/teams/5612/mainlayout/fabicon.webp" />
+    <title>Lambert-GA</title>
+  </head>
+  <body>
+    <a href="/lambert-ga/home/">Go to the Lambert-GA home page</a>
+  </body>
+</html>

@@ -22,3 +22,13 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Local assistant configuration and working notes
+.claude/
+.codex/
+.agents/
+.cursor/
+CLAUDE.md
+AGENTS.md
+LOCAL-CHANGES.md
+.agent-logs/
