@@ -6,8 +6,8 @@
   const host = document.getElementById('dwv');
   if (!host || !window.THREE) return;
   const T = THREE, BASE = host.dataset.src || 'assets/protein/';
-  // data-embed: a corner of the virus peeking into a page section. It loads the first time the section adds .on,
-  // pops in again on each visit, renders only while shown, and has no ground shadow.
+  // Embedded models follow the section's scroll-driven transform. Their internal
+  // scale stays constant so moving the model to the centre does not restart a pop.
   const embed = 'embed' in host.dataset;
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -80,13 +80,19 @@
   });
   material.extensions = { derivatives: true };
 
-  let mesh = null, born = null, loading = false, offAt = 0;
+  let mesh = null, born = null, loading = false;
+  let active = !embed || host.classList.contains('on');
+  async function asset(name, type) {
+    const response = await fetch(BASE + name);
+    if (!response.ok) throw new Error(`DWV asset ${name}: ${response.status}`);
+    return response[type]();
+  }
   function load() {
   if (loading) return; loading = true;
   Promise.all([
-    fetch(BASE + 'dwv-protomer.json').then(r => r.json()),
-    fetch(BASE + 'dwv-protomer.bin').then(r => r.arrayBuffer()),
-    fetch(BASE + 'symmetry.json').then(r => r.json()),
+    asset('dwv-protomer.json', 'json'),
+    asset('dwv-protomer.bin', 'arrayBuffer'),
+    asset('symmetry.json', 'json'),
   ]).then(([meta, bin, sym]) => {
     const vcount = meta.chains.reduce((n, c) => Math.max(n, c.vertexStart + c.vertexCount), 0);
     const q = new Int16Array(bin, meta.bytes.positions[0], vcount * 3);
@@ -134,19 +140,32 @@
     spin.rotation.set(.35, -.5, .12);
     born = performance.now();
     host.classList.add('ready');
+    host.dataset.ready = 'true';
     host.dataset.radiusAngstrom = r.toFixed(1);
+    host.dispatchEvent(new CustomEvent('dwv-ready', { bubbles: true }));
     kick();
-  }).catch(() => host.classList.add('no-data'));
+  }).catch(() => {
+    host.classList.add('no-data');
+    host.dataset.ready = 'false';
+    host.dispatchEvent(new CustomEvent('dwv-error', { bubbles: true }));
+  });
   }
-  if (!embed) load();
-  else new MutationObserver(() => {
-    if (host.classList.contains('on')) { if (!loading) load(); else if (mesh && born !== null && performance.now() - offAt > 400) born = performance.now(); kick(); }
-    else offAt = performance.now();
+  if (active || 'preload' in host.dataset) load();
+  if (embed) new MutationObserver(() => {
+    const next = host.classList.contains('on');
+    if (next === active) return;
+    active = next;
+    if (active) { load(); kick(); }
+    else { cancelAnimationFrame(raf); raf = 0; dragging = false; }
   }).observe(host, { attributes: true, attributeFilter: ['class'] });
 
   // drag to turn; otherwise it turns slowly by itself
   let dragging = false, lx = 0, ly = 0, vx = 0, vy = 0;
-  host.addEventListener('pointerdown', e => { dragging = true; lx = e.clientX; ly = e.clientY; host.setPointerCapture(e.pointerId); });
+  host.addEventListener('pointerdown', e => {
+    if (!active || !mesh) return;
+    dragging = true; lx = e.clientX; ly = e.clientY;
+    vx = 0; vy = 0; host.setPointerCapture(e.pointerId);
+  });
   host.addEventListener('pointermove', e => {
     if (!dragging) return;
     vx = (e.clientX - lx) * .008; vy = (e.clientY - ly) * .008; lx = e.clientX; ly = e.clientY;
@@ -154,7 +173,9 @@
   });
   const end = () => { dragging = false; };
   host.addEventListener('pointerup', end); host.addEventListener('pointercancel', end);
+  host.addEventListener('lostpointercapture', end);
   host.addEventListener('keydown', e => {
+    if (!active || !mesh) return;
     const k = { ArrowLeft: [0, -.15], ArrowRight: [0, .15], ArrowUp: [-.15, 0], ArrowDown: [.15, 0] }[e.key];
     if (k) { e.preventDefault(); spin.rotation.x += k[0]; spin.rotation.y += k[1]; kick(); }
   });
@@ -163,28 +184,39 @@
   let raf = 0, last = performance.now(), visible = true;
   function frame(now) {
     raf = 0;
+    if (!visible || !active || document.hidden) return;
     const dt = Math.min(.05, (now - last) / 1000); last = now;
     if (mesh) {
-      const t = (now - born) / 1000, s = reduced.matches ? 1 : spring(t);
+      const t = (now - born) / 1000, s = embed || reduced.matches ? 1 : spring(t);
       float.scale.setScalar(Math.max(.001, s)); shadow.scale.set(.8 * s, .1 * s, 1);
-      if (!dragging) {
-        if (!reduced.matches) spin.rotation.y += dt * .18 + vx * .9; vx *= .9; vy *= .9;
-        spin.rotation.x += vy * .9;
+      if (!dragging && !reduced.matches) {
+        const damping = Math.exp(-dt * 9);
+        spin.rotation.y += dt * .18 + vx * dt * 45;
+        spin.rotation.x += vy * dt * 45;
+        vx *= damping; vy *= damping;
       }
-      float.position.y = reduced.matches ? 0 : Math.sin(t * .9) * .035;
+      float.position.y = embed || reduced.matches ? 0 : Math.sin(t * .9) * .035;
     }
     renderer.render(scene, camera);
-    const live = !embed || host.classList.contains('on') || now - offAt < 700;
-    if (visible && live && !document.hidden && (!reduced.matches || dragging)) raf = requestAnimationFrame(frame);
+    if (mesh && (!reduced.matches || dragging)) raf = requestAnimationFrame(frame);
   }
-  function kick() { if (!raf) { last = performance.now(); raf = requestAnimationFrame(frame); } }
+  function kick() { if (!raf && visible && active && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(frame); } }
   function resize() {
     const w = host.clientWidth, h = host.clientHeight;
+    if (!w || !h) return;
     renderer.setSize(w, h, false); camera.aspect = w / h;
     camera.position.z = 4.6 * Math.max(1, 1 / camera.aspect); camera.updateProjectionMatrix(); kick();
   }
   new ResizeObserver(resize).observe(host);
-  new IntersectionObserver(([e]) => { visible = e.isIntersecting; if (visible) kick(); }).observe(host);
-  document.addEventListener('visibilitychange', kick);
+  new IntersectionObserver(([e]) => {
+    visible = e.isIntersecting;
+    if (visible) kick();
+    else { cancelAnimationFrame(raf); raf = 0; }
+  }).observe(host);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
+    else kick();
+  });
+  reduced.addEventListener('change', () => { vx = 0; vy = 0; kick(); });
   resize();
 })();

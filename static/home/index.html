@@ -13,27 +13,10 @@
     font-family: 'Inter', sans-serif; }
   button, input, select, textarea { font-family: inherit; }
 
-  /* hero: the SWARM thin band art (Food/SWARM thin band 1.svg), logo included */
-  /* full first screen; the band sits centred and the food stays below the fold */
-  .hero { width: 100%; height: 100vh; height: 100svh; min-height: calc(100vw * 732 / 1440); overflow: hidden; position: relative; z-index: 2;
-    display: flex; align-items: center; }
+  /* hero: the art portion of Frame 8.svg (everything above the white curve) */
+  .hero { width: 100%; aspect-ratio: 1440 / 1066; overflow: hidden; position: relative; z-index: 2;
+    clip-path: ellipse(108% 100% at 50% 0%); }   /* curved bottom edge: sides rise ~12%, centre reaches the bottom */
   .hero img { width: 100%; height: auto; display: block; }
-  /* loading reveal: the band waits under a solid green cover cut to its exact outline, then a bee flies across on a wandering path and the cover parts behind it (zip.js) */
-  .hero .band { position: relative; width: 100%; }
-  /* the band is also put into the page as live SVG (Safari/WebKit won't run the wing and edge animations inside an <img>) */
-  .hero .band-live { position: absolute; inset: 0; }
-  .hero .band-live svg { display: block; width: 100%; height: 100%; overflow: visible; }
-  .zip { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
-  .zip canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-  /* the slider is a bee (Downloads/wiki shapes): yellow capsule body #FFE629 132x100 rx50, two #D6FBFF round wings */
-  .zip .pull { position: absolute; left: 0; top: 0; width: 3.4%; min-width: 26px; aspect-ratio: 132 / 100; will-change: transform; transform: translate3d(-200%, 0, 0); }
-  .zip .pull b { position: absolute; inset: 0; background: #FFE629; border-radius: 37.9% / 50%; box-shadow: 0 3px 8px rgba(14, 43, 37, .3); }
-  .zip .pull i { position: absolute; left: 4%; width: 75.8%; aspect-ratio: 1; border-radius: 50%; background: #D6FBFF;
-    animation: zwing .09s ease-in-out infinite alternate; }
-  .zip .pull i.wa { bottom: 62%; transform-origin: 50% 100%; }
-  .zip .pull i.wb { top: 62%; transform-origin: 50% 0%; }
-  @keyframes zwing { from { transform: scale(1, .88); } to { transform: scale(1, 1.04); } }
-  .zip.gone { opacity: 0; transition: opacity .4s ease; }
 
   /* statement: one sentence at a time, cross-fading in the same spot as you scroll */
   #statement { position: relative; height: 340vh; z-index: 2; pointer-events: none; }
@@ -92,7 +75,7 @@
   .menu-panel a:hover, .menu-panel a:focus-visible { background: rgba(255,255,255,.08); }
   .menu-scrim { position: fixed; inset: 0; z-index: 54; background: rgba(14,43,37,.35); opacity: 0; pointer-events: none; transition: opacity .3s; }
   .menu-open .menu-scrim { opacity: 1; pointer-events: auto; }
-  /* ---------- loading logo: only lives during the loading screen (the hero art has its own logo) ---------- */
+  /* ---------- hero logo: its own image, placed where it sits in the hero art (hero units x179.9 y92.4 w672.7 of 1440) ---------- */
   #heroLogo { position: absolute; z-index: 3; left: calc(179.9 / 1440 * 100%); top: calc(92.4 / 1440 * 100vw); width: calc(672.7 / 1440 * 100%);
     transform-origin: 0 0; pointer-events: none; }
   #heroLogo img { display: block; width: 100%; height: auto; }
@@ -102,7 +85,6 @@
                                        mask-image: linear-gradient(to top, #000 var(--p, 0%), transparent calc(var(--p, 0%) + 3%)); }
   #heroLogo.flying { position: fixed; z-index: 101; }
   #heroLogo.travel { transition: transform 1.15s cubic-bezier(.65, 0, .25, 1), filter .9s ease; }
-  #heroLogo.leaving { opacity: 0; transition: opacity .7s ease; }
 
   /* ---------- loading screen ---------- */
   html.loading, html.loading body { overflow: hidden; }
@@ -220,7 +202,7 @@
 
   .after { height: 40vh; }
 </style>
-<link rel="stylesheet" href="story.css?v=a710c7b1913c">
+<link rel="stylesheet" href="story.css?v=4dec483a9b0d">
 </head>
 <body>
 <div id="heroLogo"><img src="assets/logo.webp" alt="SWARM" width="1202" height="1354"></div>
@@ -268,40 +250,29 @@
   }
   function finish() {
     done = true; window.scrollTo(0, 0);
-    // the hero art carries its own logo now, so the loading logo fades out with the green instead of flying into place
+    // fly: stay fixed above the green, animate from the centred pose to the hero pose (same box, transform only)
     logo.classList.add('flying');
     document.documentElement.classList.remove('loading');      // unmask (fully filled anyway) and unlock scroll
-    logo.getBoundingClientRect();
+    logo.style.filter = 'drop-shadow(0 0 18px rgba(252, 196, 47, .35))';
+    logo.getBoundingClientRect();                               // commit the centred start pose
     requestAnimationFrame(function () {
-      logo.classList.add('leaving');
-      L.classList.add('fade');
-      setTimeout(function () { if (window.unzipHero) window.unzipHero(); }, 450);   // green lifts, then the band unzips
+      logo.classList.add('travel');
+      logo.style.transform = 'translate(0px,0px) scale(1)';
+      logo.style.filter = 'drop-shadow(0 0 0 rgba(252, 196, 47, 0))';
+      setTimeout(function () { L.classList.add('fade'); }, 500);  // green melts once the logo is most of the way there
     });
-    setTimeout(function () { logo.remove(); L.remove(); window.dispatchEvent(new Event('swarm-ready')); }, 900);
+    setTimeout(function () {                                    // landed: hand back to the hero, which scrolls with the page
+      logo.classList.remove('travel', 'flying');
+      logo.style.left = logo.style.top = logo.style.width = logo.style.transform = logo.style.filter = '';
+      setTimeout(function () { L.remove(); window.dispatchEvent(new Event('swarm-ready')); }, 700);
+    }, 1250);
   }
   requestAnimationFrame(tick);
 })();
 </script>
 <header class="hero" id="top">
-    <div class="band">
-      <img src="hero-band.svg?v=7" alt="SWARM logo over a band of jungle" width="1440" height="732">
-      <div class="zip" id="zip" aria-hidden="true"><canvas></canvas><div class="pull"><i class="wa"></i><i class="wb"></i><b></b></div></div>
-    </div>
+    <img src="frame8-hero.svg?v=5" alt="SWARM jungle hero with a honey bee on a red flower" width="1440" height="3137">
   </header>
-  <script>
-  /* swap the band image for the same SVG inline, so its wing flap and edge wave animate in every browser */
-  (function () {
-    var img = document.querySelector('.hero .band img');
-    fetch(img.getAttribute('src')).then(function (r) { return r.ok ? r.text() : Promise.reject(); }).then(function (t) {
-      var live = document.createElement('div');
-      live.className = 'band-live'; live.setAttribute('role', 'img'); live.setAttribute('aria-label', img.alt);
-      live.innerHTML = t;
-      img.parentNode.insertBefore(live, img.nextSibling);
-      img.style.visibility = 'hidden';                             // kept for layout and for the reveal's outline
-    }).catch(function () {});                                     // if it fails, the plain image stays
-  })();
-  </script>
-  <script src="zip.js?v=9"></script>
 
 
   <section id="statement" aria-label="Why bees matter">
@@ -319,10 +290,10 @@
     </div>
   </section>
 
-  <section id="honeycomb-earth" class="scroll-story" aria-label="From Earth to a flower, a honey bee, and the virus" data-region="world">
+  <section id="honeycomb-earth" class="scroll-story" aria-label="From Earth to the hive, inside a honey bee, and inside a Varroa mite" data-region="world">
     <div class="stage geo-stage">
       <div class="map-view"><canvas id="globe" role="img" aria-label="An illustrated Earth turns toward the United States, marking how many honey bee colonies each major beekeeping state lost each winter from 2016 to 2026, then points to Atlanta, Georgia"></canvas><span class="globe-location" aria-hidden="true">Atlanta, Georgia</span>
-        <div class="loss-bubble" role="note" aria-hidden="true"><p class="lb-stat">55.6<span>%</span></p><p>of managed honey bee colonies in the U.S. were lost from April 2024 to April 2025, across all causes.</p><p class="lb-key"><i class="k-dot"></i>Circles: colonies lost each January–March, by state. Bigger means more lost.</p><p class="lb-src">USDA NASS Honey Bee Colonies, 20 states reported every year</p></div></div>
+      </div>
       <div class="loss-years" aria-hidden="true"><b class="ly-year">2016</b><span class="ly-total"></span><div class="ly-bar"><i class="ly-track"></i><i class="ly-fill"></i></div></div>
       <div class="geo-copy">
         <article class="geo-panel is-active" data-region-panel="world">
@@ -340,16 +311,40 @@
         </article>
       </div>
 
-      <div class="why-virus" id="dwv" data-embed aria-hidden="true"></div>
-      <div class="pollinator-scene" aria-hidden="true">
-        <div class="flower-composition">
-          <img class="journey-flower" src="assets/journey/flower.svg" alt="" width="850" height="770">
-          <img class="journey-bee" src="assets/journey/bee.svg" alt="" width="366" height="314">
+      <div class="why-virus" id="dwv" data-embed data-preload aria-hidden="true"></div>
+      <div class="dwv-story" aria-hidden="true" inert>
+        <div class="dwv-heading">
+          <h2>Deformed wing virus</h2>
+          <p>A major contributor to colony losses.</p>
+        </div>
+        <div class="bee-comparison" id="bee-comparison" aria-label="Comparison of healthy wing development and wings affected by deformed wing virus">
+          <figure class="bee-comparison__healthy">
+            <img src="assets/journey/bee.svg" alt="The team's bee illustration with full-length wings" width="366" height="314">
+            <figcaption><h3>Before</h3><p>Healthy wing development</p></figcaption>
+          </figure>
+          <figure class="bee-comparison__affected">
+            <img src="assets/journey/bee-deformed.svg" alt="The same bee artwork with shortened, crumpled wings to illustrate severe DWV symptoms" width="366" height="314">
+            <figcaption><h3>After</h3><p>Wings damaged by DWV</p></figcaption>
+          </figure>
+          <p class="bee-comparison__explanation">DWV can disrupt a bee’s development. In severe cases, bees emerge with crumpled wings and cannot fly.</p>
         </div>
       </div>
-      <div class="journey-copy journey-copy--flower" id="flower" aria-hidden="true" inert>
-        <h2>Pollination</h2>
-        <p>Each trip between flowers carries pollen to the next plant. Healthy bees keep that work going, from our gardens to the crops we eat.</p>
+      <div class="pollinator-scene" aria-hidden="true">
+        <div class="hive-composition">
+          <div class="hive-ground"></div>
+          <img class="journey-hive" src="assets/journey/hive.png" alt="" width="600" height="588">
+          <img class="journey-bee" src="assets/journey/bee.svg" alt="" width="366" height="314">
+          <img class="journey-mite" src="assets/journey/varroa.svg" alt="" width="1536" height="1421">
+          <span class="hive-mite-label">Varroa mite</span>
+        </div>
+      </div>
+      <div class="journey-copy journey-copy--hive" id="hive" aria-hidden="true" inert>
+        <h2><span class="swarm-introducing">Introducing</span>SWARM<span class="swarm-period">.</span></h2>
+        <p>A two-part approach to stop DWV.</p>
+        <dl class="swarm-approaches">
+          <div><dt>Minibinders</dt><dd>Designed to bind the virus’s protein shell.</dd></div>
+          <div><dt>RNA interference</dt><dd>Targets genes in the mite that spreads DWV, aiming to disrupt its feeding.</dd></div>
+        </dl>
       </div>
       <div class="journey-copy journey-copy--bee" id="bee" aria-hidden="true" inert>
         <h2>Deformed wing virus</h2>
@@ -383,23 +378,18 @@
 
   </div>
 
-    </div>
-  </section>
+      <div id="rna-intro" class="journey-copy journey-copy--mite" aria-hidden="true" inert>
+        <h2>The mite carries it.</h2>
+        <p>Blocking the virus is one part of the work. Our second approach focuses on <em>Varroa</em>, the mite that feeds on bees and spreads DWV.</p>
+      </div>
+      <div class="journey-copy journey-copy--rna" aria-hidden="true" inert>
+        <h2>RNA interference</h2>
+        <p>We’re designing short RNA guides to help a mite’s cells break down a chosen RNA message.</p>
+        <p>With fewer copies of that message, the cell can make less of the protein. Our aim is to disrupt mite feeding.</p>
+      </div>
 
-  <section id="rna-intro" class="rna-intro" aria-labelledby="rna-intro-title">
-    <div class="rna-intro__copy">
-      <h2 id="rna-intro-title">RNA interference</h2>
-      <p>We’re designing short RNA guides for <em>Varroa</em> mites, which feed on bees and spread DWV. The aim is to reduce the proteins they need for feeding.</p>
-      <p>A guide helps the cell find and break down a matching RNA message. With fewer copies of that message, the cell can make less of the protein.</p>
-    </div>
-    <figure class="rna-intro__art">
-      <img src="assets/rna/sirna.svg" alt="A short double-stranded RNA fragment from the team’s RNAi artwork" width="336" height="142">
-      <figcaption>siRNA</figcaption>
-    </figure>
-  </section>
-
-  <section id="rnai" class="scroll-story mechanism-story" aria-labelledby="rnai-title">
-    <div class="stage mechanism-stage rna-layout">
+  <div id="rnai" class="journey-rna" aria-labelledby="rnai-title" aria-hidden="true" inert>
+    <div class="mechanism-stage rna-layout">
       <div class="mechanism-copy mechanism-copy--headline">
         <h2 id="rnai-title">How RNAi works</h2>
         <p class="rna-context">Inside a <em>Varroa</em> mite cell</p>
@@ -422,6 +412,8 @@
     <button class="rna-control" type="button" data-rna-next aria-label="Next step"><span aria-hidden="true">→</span></button>
   </div>
 </div>
+    </div>
+  </div>
     </div>
   </section>
 
@@ -477,44 +469,19 @@
     </div>
   </section>
 
-  <div class="bee-flight" aria-hidden="true">
-    <svg class="bee-flight__trail" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="honey-color" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#cc861a"/><stop offset=".45" stop-color="#efb529"/><stop offset="1" stop-color="#d99112"/></linearGradient>
-        <mask id="flight-reveal" maskUnits="userSpaceOnUse"><path class="bee-flight__reveal" fill="none" stroke="white" stroke-width="12"/></mask>
-      </defs>
-      <g class="bee-flight__track"><g mask="url(#flight-reveal)">
-        <path class="bee-flight__shadow" data-honey-stroke/>
-        <path class="bee-flight__line" data-honey-stroke/>
-        <path class="bee-flight__shine" data-honey-stroke/>
-      </g></g>
-    </svg>
-    <div class="bee-flight__bee"><div class="bee-flight__art"><img src="assets/journey/bee.svg" alt="" width="366" height="314"></div></div>
+  <div class="honey-progress">
+    <div class="honey-progress__track" role="progressbar" aria-label="Homepage progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="honey-progress__fill"></div></div>
+    <div class="honey-progress__drop" aria-hidden="true">
+      <svg viewBox="0 0 24 38" fill="none"><defs><linearGradient id="honey-drip-color" x1="2" y1="19" x2="22" y2="19" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe17a"/><stop offset=".48" stop-color="#f8bf32"/><stop offset="1" stop-color="#eaa218"/></linearGradient></defs><path d="M12 1C12 12 2 19 2 27a10 10 0 0 0 20 0C22 19 12 12 12 1Z" fill="url(#honey-drip-color)" stroke="#d89b20" stroke-width="1.2"/><path d="M7 23c-2 4-1 7 1 9" stroke="#fff4c6" stroke-width="2.5" stroke-linecap="round"/></svg>
+    </div>
   </div>
 
   <button class="to-top" type="button">Back to top ↑</button>
-  <button class="menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu-panel"><span></span><span></span><span></span></button>
-  <div class="menu-scrim"></div>
-  <nav class="menu-panel" id="menu-panel" aria-label="Sections">
-    <ol>
-      <li><a href="#top" data-go="top">Home</a></li>
-      <li><a href="#statement" data-go="statement">Why bees matter</a></li>
-      <li><a href="#honeycomb-earth" data-go="earth">Worldwide</a></li>
-      <li><a href="#honeycomb-earth" data-go="usa">United States</a></li>
-      <li><a href="#atlanta" data-go="atlanta">Atlanta</a></li>
-      <li><a href="#flower" data-go="flower">Pollination</a></li>
-      <li><a href="#bee" data-go="bee">The bee</a></li>
-      <li><a href="#minibinders" data-go="minibinders">Minibinders</a></li>
-      <li><a href="#rna-intro" data-go="rna-intro">Why RNAi?</a></li>
-      <li><a href="#rnai" data-go="rnai">RNAi mechanism</a></li>
-      <li><a href="#together" data-go="together">Together</a></li>
-      <li><a href="#explore" data-go="explore">Explore SWARM</a></li>
-    </ol>
-  </nav>
+  <swarm-nav story></swarm-nav>
   <!-- iGEM requirement: license notice + repository link on every page (same wording as src/components/Footer.tsx) -->
   <footer class="wiki-footer">
     <details class="home-references">
-      <summary>References</summary>
+      <summary>References &amp; artwork</summary>
       <ul>
         <li><a href="https://www.fao.org/pollination/about/" target="_blank" rel="noreferrer">FAO — crop pollination</a></li>
         <li><a href="https://wire.auburn.edu/content/agriculture/2025/06/2506-beekeepers-survey.php" target="_blank" rel="noreferrer">U.S. Beekeeping Survey, April 2024–April 2025 — managed colony losses</a></li>
@@ -525,47 +492,31 @@
         <li><a href="https://www.nobelprize.org/uploads/2018/06/advanced-medicineprize2006.pdf" target="_blank" rel="noreferrer">The RNAi pathway — Nobel Committee scientific background</a></li>
         <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12236051/" target="_blank" rel="noreferrer">Varroa salivary genes as targets for RNAi</a></li>
         <li><a href="https://pubmed.ncbi.nlm.nih.gov/42102981/" target="_blank" rel="noreferrer">Varroa salivary proteins, feeding and fertility</a></li>
+        <li><a href="https://www.nature.com/articles/s41598-025-31753-0" target="_blank" rel="noreferrer">DWV and honey bee colony losses</a></li>
+        <li><a href="https://www.ars.usda.gov/pacific-west-area/tucson-az/carl-hayden-bee-research-center/research/varroa/varroosis/" target="_blank" rel="noreferrer">USDA ARS — Varroa, DWV and deformed wings</a></li>
+        <li>Bee comparison adapted from the team’s supplied bee artwork; only the wings differ.</li>
         <li><a href="assets/evidence/binding-summary.csv" download>SWARM binding result — Adaptyv Bio round 2 summary (CSV)</a></li>
         <li><a href="assets/evidence/rnai-design-summary.csv" download>SWARM RNA guide design panel — v10 summary (CSV)</a></li>
+        <li><a href="https://commons.wikimedia.org/wiki/File:DeseretBeehive.png" target="_blank" rel="noreferrer">Hive illustration — SheriffGaming (2017)</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">CC BY-SA 4.0</a>; original artwork.</li>
+        <li><a href="https://www.phylopic.org/images/a41de4cd-eb7e-43ef-8a81-395a57f3876c/varroa-destructor" target="_blank" rel="noreferrer">Varroa silhouette — Lubna Maherally / PhyloPic</a>, <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noreferrer">CC0</a>; displayed in brown.</li>
       </ul>
     </details>
     <p>© 2026 - Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC Attribution 4.0 International</a>.</p>
     <p>Repository: <a href="https://gitlab.igem.org/2026/lambert-ga" target="_blank" rel="noreferrer">https://gitlab.igem.org/2026/lambert-ga</a></p>
   </footer>
-  <script>
-  /* Earth section scroll: the section is 180vh longer than the story needs. That extra stretch is a hold on the
-     United States step (story progress .16) while the reader scrolls through the colony-loss years. Everything that
-     reads the section's progress (globe.js, journey.js, menu.js) goes through here, so the rest of the story is unchanged. */
-  (function () {
-    var HOLD_AT = .16, clamp = function (v) { return Math.max(0, Math.min(1, v)); };
-    function parts() {
-      var s = document.getElementById('honeycomb-earth'), total = Math.max(1, s.offsetHeight - innerHeight);
-      var hold = Math.min(total * .5, innerHeight * 1.8);
-      return { s: s, total: total, hold: hold, base: total - hold };
-    }
-    window.earthScroll = function () {                       // -> { p: story progress, years: 0..1 through the years }
-      var q = parts(), sc = Math.max(0, Math.min(q.total, -q.s.getBoundingClientRect().top)), a = HOLD_AT * q.base;
-      if (sc < a) return { p: clamp(sc / q.base), years: 0 };
-      if (sc < a + q.hold) return { p: HOLD_AT, years: (sc - a) / q.hold };
-      return { p: clamp((sc - q.hold) / q.base), years: 1 };
-    };
-    window.earthRaw = function (p) {                         // story progress -> fraction of the section's scroll
-      var q = parts();
-      return (p <= HOLD_AT ? p * q.base : p * q.base + q.hold) / q.total;
-    };
-  })();
-  </script>
   <script src="vendor/three.min.js"></script>
   <script src="assets/landmask.js"></script>
   <script src="assets/landmask-hi.js"></script>
-  <script src="colony-loss.js?v=1"></script>
-  <script src="globe.js?v=ea6d5e3142ee"></script>
-  <script src="dwv-virus.js?v=5"></script>
+  <script src="earth-scroll.js?v=6dbda1a86ebc"></script>
+  <script src="colony-loss.js?v=845977d85632"></script>
+  <script src="globe.js?v=cbbea770ca82"></script>
+  <script src="dwv-virus.js?v=29bb8a0b764c"></script>
   <script src="statement.js?v=smooth1"></script>
   <script src="food.js?v=4"></script>
-  <script src="menu.js?v=1ef0185f8d2d"></script>
+  <script type="module" src="navbar.js?v=7153fea5e1c6"></script>
+  <script src="menu.js?v=fddd95dc1464"></script>
   <script src="ux.js?v=story1"></script>
-  <script src="flight.js?v=4097fe77c414"></script>
-  <script type="module" src="mechanisms.js?v=59c562baa97b"></script>
+  <script src="flight.js?v=fc3dd79530e2"></script>
+  <script type="module" src="mechanisms.js?v=e33fb7752eab"></script>
 </body>
 </html>

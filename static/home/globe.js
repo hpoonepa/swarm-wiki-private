@@ -222,9 +222,6 @@
       }
     }
   }
-  const bubble = viewport.querySelector('.loss-bubble');
-  const whyVirus = section.querySelector('.why-virus');
-  const usEast = surfacePoint(37.5, -76), usAnchor = new T.Vector3();   // the bubble's tail points here (Virginia coast)
   let mobile = innerWidth <= 760;
 
   // Original entrance: a spring pop with a brief squash and a cast shadow.
@@ -264,8 +261,7 @@
     }
     const toUSA = ease((p-.045)/.13);
     const toAtlanta = ease((p-.18)/.12);
-    // No zoom: the camera keeps its distance the whole way. For the United States the earth slides to the middle
-    // of the screen and turns to face it; for Atlanta it slides back to the right, beside the headline.
+    // Keep the globe centered after it turns toward the US, including the Why view.
     const latitude=mix(mix(7,38,toUSA),atlanta.lat,toAtlanta);
     const longitude=mix(mix(19,-98,toUSA),atlanta.lon,toAtlanta);
     world.rotation.x=latitude*radians;
@@ -274,29 +270,19 @@
     spin.rotation.y=-Math.PI/2-longitude*radians+(idleTurn-entranceTurn)*(1-toUSA);
     world.position.y=mix(world.position.y,0,toUSA);
     camera.position.z=worldDistance;
-    const centred=toUSA*(1-toAtlanta);
-    camera.setViewOffset(width,height,mobile?0:-width*.20*(1-centred),mobile?-height*.20:height*.01,width,height);
-    // the colony-loss outline and its bubble belong to the United States step only
+    const centred=toUSA;
+    camera.setViewOffset(width,height,mobile?0:-width*.20*(1-centred),mobile?-height*.20*(1-centred):height*.01,width,height);
+    // The colony-loss outline belongs to the United States step only.
     const usOn=ease((p-.1)/.04)*(1-ease((p-.215)/.03));
     uniforms.uUsAmt.value=usOn;
     paintYears(usOn);
     const markerAlpha=ease((p-.24)/.05)*(1-ease((p-.335)/.055));
-    whyVirus?.classList.toggle('on', phase===2 && p<.34);              // a corner of the virus peeks in beside "Why?"
     pinMaterial.opacity=markerAlpha;ringMaterial.opacity=markerAlpha*.9;
     renderer.render(scene, camera);
     pin.getWorldPosition(projected).project(camera);
     placeLabel.style.left=`${(projected.x*.5+.5)*width}px`;
     placeLabel.style.top=`${(-projected.y*.5+.5)*height}px`;
     placeLabel.style.opacity=markerAlpha*(1-ease((p-.31)/.035));
-    // bubble: pops in beside the outlined states, pointing at their east coast
-    usAnchor.copy(usEast).applyMatrix4(spin.matrixWorld).project(camera);
-    const bx=(usAnchor.x*.5+.5)*width, by=(-usAnchor.y*.5+.5)*height;
-    bubble.style.left=`${Math.max(12,Math.min(width-bubble.offsetWidth-12, bx+(mobile?-bubble.offsetWidth/2:22)))}px`;
-    bubble.style.top=`${mobile?by+40:by}px`;
-    bubble.style.opacity=usOn.toFixed(3);
-    bubble.style.transform=`translateY(${mobile?0:-50}%) scale(${(.9+.1*usOn).toFixed(3)})`;
-    bubble.style.visibility=usOn<.02?'hidden':'visible';
-    bubble.setAttribute('aria-hidden',String(usOn<.5));
     section.dataset.focusLat=latitude.toFixed(3);
     section.dataset.focusLon=longitude.toFixed(3);
     section.dataset.cameraDistance=camera.position.z.toFixed(3);

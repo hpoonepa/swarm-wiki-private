@@ -1,11 +1,10 @@
-import { initRnaPlayer } from './vendor/rna-player.js?v=9c9d009b4819';
-import { initJourney, binderProgress } from './journey.js?v=5ee9d83f138f';
+import { initRnaPlayer } from './vendor/rna-player.js?v=4f936f4baf33';
+import { initJourney, binderProgress, rnaProgress, rnaScroll } from './journey.js?v=fce65d063f0a';
 
 initJourney();
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const clamp = n => Math.max(0, Math.min(1, n));
-const fraction = section => clamp(-section.getBoundingClientRect().top / Math.max(1, section.offsetHeight - innerHeight));
 const mini = document.getElementById('minibinders');
 const journey = document.getElementById('honeycomb-earth');
 const host = document.getElementById('capsid-host');
@@ -34,7 +33,7 @@ host.addEventListener('anchors', e => {
   }
 });
 let scene = null, loading = false;
-let previousRNA = -1, displayedRNA = fraction(rna), frame = 0, last = performance.now();
+let previousRNA = -1, displayedRNA = rnaProgress(), frame = 0, last = performance.now();
 const inView = new Set();
 
 async function loadProtein() {
@@ -76,12 +75,12 @@ function paintMini(p = displayedMini) {
 // scrolling resumes control and the next-step button seeks the same scroll timeline.
 player.addEventListener('rna-seek', e => {
   e.preventDefault();
-  const top = rna.getBoundingClientRect().top + scrollY + (rna.offsetHeight - innerHeight) * e.detail.progress;
+  const top = rnaScroll(e.detail.progress);
   scrollTo({ top, behavior: e.detail.instant || reduced.matches ? 'auto' : 'smooth' });
 });
 player.addEventListener('rna-playhead', e => {
   displayedRNA = previousRNA = e.detail.progress;
-  const top = rna.getBoundingClientRect().top + scrollY + (rna.offsetHeight - innerHeight) * e.detail.progress;
+  const top = rnaScroll(e.detail.progress);
   scrollTo({top, behavior: 'instant'});
 });
 // A real scroll gesture takes over from playback at its current position.
@@ -100,7 +99,7 @@ function tick(now) {
     paintMini();settlingMini=displayedMini!==goal;
   }
   if (inView.has(rna) && !rnaPlayer.isPlaying()) {
-    const goal = fraction(rna);
+    const goal = rnaProgress();
     displayedRNA = reduced.matches ? goal : displayedRNA + (goal - displayedRNA) * (1 - Math.exp(-dt * 7));
     if (Math.abs(goal - displayedRNA) < .0001) displayedRNA = goal;
     if (displayedRNA !== previousRNA) {

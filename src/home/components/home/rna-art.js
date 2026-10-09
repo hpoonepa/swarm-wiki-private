@@ -159,9 +159,9 @@ export function createRnaScene(cv) {
 
   // ---------------------------------------------------------------- WebGL scene (three.js)
   THREE.ColorManagement.enabled = false;                // hex colours go to the screen untouched
-  const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
   renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
-  renderer.setClearColor(C.paper);
+  renderer.setClearColor(C.paper, 0);
   const scene = new THREE.Scene();
   const root = new THREE.Group(); root.scale.y = -1; scene.add(root);   // world is y-down, like the guide
   const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, -10, 10);
@@ -267,7 +267,8 @@ export function createRnaScene(cv) {
 
   let cw = 1, ch = 1;
   function resize() {
-    const r = cv.getBoundingClientRect(); cw = Math.max(1, r.width); ch = Math.max(1, r.height);
+    // Camera transitions scale the parent; retain full-resolution backing pixels.
+    cw = Math.max(1, cv.clientWidth); ch = Math.max(1, cv.clientHeight);
     renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1)); renderer.setSize(cw, ch, false);
   }
 
