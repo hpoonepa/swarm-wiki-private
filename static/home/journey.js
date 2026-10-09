@@ -7,6 +7,7 @@ const mix = (a, b, t) => a + (b - a) * t;
 export const BINDER_START = .76;
 export const journeyProgress = () => {
   const root = document.getElementById('honeycomb-earth');
+  if (window.earthScroll) return window.earthScroll().p;          // holds still while the colony-loss years scroll by
   return clamp(-root.getBoundingClientRect().top / Math.max(1, root.offsetHeight - innerHeight));
 };
 export const binderProgress = () => clamp((journeyProgress() - BINDER_START) / (1 - BINDER_START));

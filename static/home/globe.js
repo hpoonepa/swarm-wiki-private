@@ -59,7 +59,28 @@
     return tex;
   }
   const noiseTex = bakeNoise(768, 384);
-  const uniforms = { uMask: { value: maskTex }, uNoise: { value: noiseTex } };
+
+  /* ---------- the United States, for the colony-loss highlight ----------
+     A rough border polygon drawn into an equirectangular texture (same lat/lon layout as the land mask). It only
+     needs to be right along the land borders: coasts overshoot into the sea and the shader trims them with the
+     globe's own coastline, so the outline hugs exactly the coast that is drawn. */
+  function bakeUSA(W, H) {
+    const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+    const g = cv.getContext('2d'); g.fillStyle = '#fff'; g.filter = 'blur(1.2px)';
+    const shape = pts => { g.beginPath(); pts.forEach(([lon, lat], i) => { const x = (lon + 180) / 360 * W, y = (90 - lat) / 180 * H; i ? g.lineTo(x, y) : g.moveTo(x, y); }); g.closePath(); g.fill(); };
+    shape([[-131, 48.2], [-123.2, 48.2], [-123.2, 49], [-95.2, 49], [-95.2, 49.4], [-89.6, 48], [-84.8, 46.5], [-82.4, 45.3], [-82.1, 43], [-83.1, 42],
+      [-79.1, 42.6], [-79.1, 43.3], [-76.5, 44], [-75, 44.9], [-71.5, 45], [-70.7, 45.4], [-69.2, 47.4], [-67.8, 47.1], [-67.8, 45.7],
+      [-66.6, 44.6], [-66, 40], [-74, 30], [-79.8, 27], [-79.9, 25], [-81, 24.2], [-83, 24.2], [-90, 25], [-97.1, 25.8],
+      [-99.5, 27.5], [-101.4, 29.8], [-103, 29], [-104.5, 29.6], [-106.5, 31.8], [-108.2, 31.8], [-108.2, 31.33], [-111.1, 31.33],
+      [-114.8, 32.5], [-117.1, 32.55], [-125, 32], [-131, 40]]);                                          // contiguous states
+    shape([[-141, 72.5], [-141, 60.3], [-137.5, 58.9], [-135, 59.6], [-133, 57], [-130, 55.9], [-130, 54.6], [-135, 53],
+      [-165, 50.5], [-180, 50.5], [-180, 72.5]]);                                                         // Alaska
+    shape([[-161, 23], [-154, 23], [-154, 18.5], [-161, 18.5]]);                                         // Hawaiʻi
+    const tex = new T.CanvasTexture(cv);
+    tex.flipY = false; tex.wrapS = T.RepeatWrapping; tex.magFilter = tex.minFilter = T.LinearFilter; tex.generateMipmaps = false;
+    return tex;
+  }
+  const uniforms = { uMask: { value: maskTex }, uNoise: { value: noiseTex }, uUS: { value: bakeUSA(2048, 1024) }, uUsAmt: { value: 0 } };
   for (const k in PAL) PAL[k].forEach((v, i) => uniforms[`u_${k}${i}`] = { value: v });
   const decl = Object.keys(PAL).map(k => [0, 1, 2, 3, 4].map(i => `uniform vec3 u_${k}${i};`).join('\n')).join('\n');
   const earthMat = new T.ShaderMaterial({
@@ -70,7 +91,7 @@
         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
     fragmentShader: `
       precision highp float;
-      uniform sampler2D uMask; uniform sampler2D uNoise; ${decl}
+      uniform sampler2D uMask; uniform sampler2D uNoise; uniform sampler2D uUS; uniform float uUsAmt; ${decl}
       varying vec3 vObj; varying vec3 vN;
       float h3(vec3 p) { p = fract(p * .3183099 + .1); p *= 17.0; return fract(p.x * p.y * p.z * (p.x + p.y + p.z)); }
       float vnoise(vec3 x) { vec3 i = floor(x), f = fract(x); f = f * f * (3.0 - 2.0 * f);
@@ -101,6 +122,12 @@
         vec3 icc = shade(u_ice0, u_ice1, u_ice2, u_ice3, u_ice4, d, hl);
         vec3 c = mix(sea, mix(grn, mav, mauve), land);
         c = mix(c, icc, ice);
+        // colony loss: the United States washed in the site orange, with a bright honey outline along its edge
+        float us = min(texture2D(uUS, uv).r, smoothstep(.3, .7, coast));
+        float inside = smoothstep(.45, .55, us);
+        c = mix(c, mix(c, vec3(.898, .463, .141), .36), inside * uUsAmt);   // light wash, so the loss circles read on top
+        float edge = abs(us - .5) / max(fwidth(us), 1e-4);
+        c = mix(c, vec3(.988, .768, .184), (1.0 - smoothstep(1.1, 2.6, edge)) * uUsAmt);
         gl_FragColor = vec4(c, 1.0);
       }`,
   });
@@ -113,7 +140,7 @@
   const clamp = v => Math.max(0, Math.min(1, v));
   const ease = v => { const x = clamp(v); return x * x * (3 - 2 * x); };
   const mix = (a, b, t) => a + (b - a) * t;
-  const progress = () => clamp(-section.getBoundingClientRect().top / Math.max(1, section.offsetHeight - innerHeight));
+  const progress = () => window.earthScroll ? window.earthScroll().p : clamp(-section.getBoundingClientRect().top / Math.max(1, section.offsetHeight - innerHeight));
   let renderer;
   try { renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true }); }
   catch (_) { canvas.setAttribute('aria-label', 'Globe unavailable on this device'); return; }
@@ -144,6 +171,61 @@
   ring.quaternion.copy(pin.quaternion);spin.add(ring);
   const placeLabel = viewport.querySelector('.globe-location');
   const projected = new T.Vector3();
+  /* ---------- where colonies were lost, year by year ----------
+     One circle per state on the globe, its area proportional to the colonies that state lost in January-March of the
+     year shown (USDA NASS, colony-loss.js). A small bar at the top right plays through the years while the United
+     States step is on screen; circles ease between years so nothing jumps. */
+  const LOSS = window.COLONY_LOSS;
+  const CENTRES = { California: [37.2, -119.5], Florida: [28.6, -82.4], Georgia: [32.7, -83.4], Idaho: [44.4, -114.6],
+    Iowa: [42.07, -93.5], Louisiana: [31, -92], Michigan: [44.3, -85.4], Minnesota: [46.3, -94.3], Mississippi: [32.7, -89.7],
+    Montana: [47, -109.6], 'New York': [42.9, -75.5], 'North Carolina': [35.55, -79.4], 'North Dakota': [47.45, -100.47],
+    Ohio: [40.29, -82.79], Oregon: [43.9, -120.6], Pennsylvania: [40.9, -77.8], 'South Dakota': [44.4, -100.2],
+    Texas: [31.5, -99.3], Washington: [47.4, -120.5], Wisconsin: [44.6, -89.9] };
+  const lossDots = [];
+  if (LOSS) {
+    const peak = Math.max(...Object.entries(LOSS.states).filter(([s]) => CENTRES[s]).flatMap(([, v]) => v.lost));
+    const dotMat = new T.MeshBasicMaterial({ color: 0x8e1b2e, transparent: true, opacity: 0, depthWrite: false });
+    const rimMat = new T.MeshBasicMaterial({ color: 0xfff3d6, transparent: true, opacity: 0, depthWrite: false });
+    const disc = new T.CircleGeometry(1, 48), rim = new T.RingGeometry(1, 1.16, 48);
+    for (const [name, [la, lo]] of Object.entries(CENTRES)) {
+      const v = LOSS.states[name]; if (!v) continue;
+      const n = surfacePoint(la, lo), g = new T.Group();
+      g.add(new T.Mesh(rim, rimMat)); g.add(new T.Mesh(disc, dotMat));
+      g.position.copy(n).multiplyScalar(1.004); g.quaternion.setFromUnitVectors(new T.Vector3(0, 0, 1), n);
+      spin.add(g); lossDots.push({ g, r: v.lost.map(x => .068 * Math.sqrt(x / peak)) });
+    }
+    lossDots.mats = [dotMat, rimMat];
+  }
+  const yearsBar = section.querySelector('.loss-years');
+  if (yearsBar) document.body.appendChild(yearsBar);              // top level, so it sits above the site-wide bee flight line
+  const yearLabel = yearsBar && yearsBar.querySelector('.ly-year'), yearTotal = yearsBar && yearsBar.querySelector('.ly-total');
+  // the years follow the scroll: the section holds on the United States step while the reader scrolls through
+  // 2016 -> 2026 (window.earthScroll in index.html); yearsShown eases toward it like the rest of the globe
+  const yearsGoal = () => window.earthScroll ? window.earthScroll().years : 0;
+  let yearsShown = yearsGoal(), shownYear = -1;
+  function paintYears(usOn) {
+    if (!LOSS || !lossDots.length) return;
+    const N = LOSS.years.length;
+    const yf = yearsShown * (N - 1);
+    const a = Math.floor(yf), b = Math.min(N - 1, a + 1), f = yf - a;
+    for (const d of lossDots) { const s = Math.max(.004, mix(d.r[a], d.r[b], f)); d.g.scale.set(s, s, s); }
+    lossDots.mats[0].opacity = .92 * usOn; lossDots.mats[1].opacity = .85 * usOn;
+    const shown = Math.round(yf);
+    if (yearsBar) {
+      yearsBar.style.opacity = usOn.toFixed(3);
+      yearsBar.style.visibility = usOn < .02 ? 'hidden' : 'visible';
+      yearsBar.style.setProperty('--t', (yf / (N - 1)).toFixed(4));          // fill grows from a pill-sized stub to the full track
+      if (shown !== shownYear) {
+        shownYear = shown;
+        yearLabel.textContent = LOSS.years[shown];
+        yearTotal.textContent = LOSS.states['United States'].lost[shown].toLocaleString('en-US') + ' colonies lost nationwide';
+      }
+    }
+  }
+  const bubble = viewport.querySelector('.loss-bubble');
+  const whyVirus = section.querySelector('.why-virus');
+  const usEast = surfacePoint(37.5, -76), usAnchor = new T.Vector3();   // the bubble's tail points here (Virginia coast)
+  let mobile = innerWidth <= 760;
 
   // Original entrance: a spring pop with a brief squash and a cast shadow.
   const shadowMaterial = new T.MeshBasicMaterial({ color: 0x344c82, transparent: true, opacity: .12, depthWrite: false });
@@ -182,9 +264,8 @@
     }
     const toUSA = ease((p-.045)/.13);
     const toAtlanta = ease((p-.18)/.12);
-    const descend = ease((p-.30)/.115);
-    // Rotate the actual requested surface point toward +Z (the camera), with
-    // north up. USA and Atlanta remain centered as the camera gets closer.
+    // No zoom: the camera keeps its distance the whole way. For the United States the earth slides to the middle
+    // of the screen and turns to face it; for Atlanta it slides back to the right, beside the headline.
     const latitude=mix(mix(7,38,toUSA),atlanta.lat,toAtlanta);
     const longitude=mix(mix(19,-98,toUSA),atlanta.lon,toAtlanta);
     world.rotation.x=latitude*radians;
@@ -192,17 +273,30 @@
     const entranceTurn=(popAt===null?1.6:1.6*Math.exp(-3.2*pt))*(1-toUSA);
     spin.rotation.y=-Math.PI/2-longitude*radians+(idleTurn-entranceTurn)*(1-toUSA);
     world.position.y=mix(world.position.y,0,toUSA);
-    const usaDistance=mix(worldDistance,1+(worldDistance-1)*.585,toUSA);
-    const atlantaDistance=mix(usaDistance,1+(worldDistance-1)*.272,toAtlanta);
-    camera.position.z=reduced.matches?usaDistance:mix(atlantaDistance,1+(worldDistance-1)*.061,descend);
-    shadowMaterial.opacity*=1-ease((p-.14)/.14);
-    const markerAlpha=ease((p-.17)/.07)*(1-ease((p-.335)/.055));
+    camera.position.z=worldDistance;
+    const centred=toUSA*(1-toAtlanta);
+    camera.setViewOffset(width,height,mobile?0:-width*.20*(1-centred),mobile?-height*.20:height*.01,width,height);
+    // the colony-loss outline and its bubble belong to the United States step only
+    const usOn=ease((p-.1)/.04)*(1-ease((p-.215)/.03));
+    uniforms.uUsAmt.value=usOn;
+    paintYears(usOn);
+    const markerAlpha=ease((p-.24)/.05)*(1-ease((p-.335)/.055));
+    whyVirus?.classList.toggle('on', phase===2 && p<.34);              // a corner of the virus peeks in beside "Why?"
     pinMaterial.opacity=markerAlpha;ringMaterial.opacity=markerAlpha*.9;
     renderer.render(scene, camera);
     pin.getWorldPosition(projected).project(camera);
     placeLabel.style.left=`${(projected.x*.5+.5)*width}px`;
     placeLabel.style.top=`${(-projected.y*.5+.5)*height}px`;
     placeLabel.style.opacity=markerAlpha*(1-ease((p-.31)/.035));
+    // bubble: pops in beside the outlined states, pointing at their east coast
+    usAnchor.copy(usEast).applyMatrix4(spin.matrixWorld).project(camera);
+    const bx=(usAnchor.x*.5+.5)*width, by=(-usAnchor.y*.5+.5)*height;
+    bubble.style.left=`${Math.max(12,Math.min(width-bubble.offsetWidth-12, bx+(mobile?-bubble.offsetWidth/2:22)))}px`;
+    bubble.style.top=`${mobile?by+40:by}px`;
+    bubble.style.opacity=usOn.toFixed(3);
+    bubble.style.transform=`translateY(${mobile?0:-50}%) scale(${(.9+.1*usOn).toFixed(3)})`;
+    bubble.style.visibility=usOn<.02?'hidden':'visible';
+    bubble.setAttribute('aria-hidden',String(usOn<.5));
     section.dataset.focusLat=latitude.toFixed(3);
     section.dataset.focusLon=longitude.toFixed(3);
     section.dataset.cameraDistance=camera.position.z.toFixed(3);
@@ -211,24 +305,25 @@
   function tick(now) {
     raf = 0;
     if (!visible || document.hidden) return;
-    const goal = progress(), dt = Math.min(.05, (now - last) / 1000); last = now;
+    const goal = progress(), yGoal = yearsGoal(), dt = Math.min(.05, (now - last) / 1000); last = now;
     if (reduced.matches) {
-      shown = goal;
+      shown = goal; yearsShown = yGoal;
       paint(goal < .115 ? 0 : goal < .235 ? .175 : .30, now);
       return;
     }
     shown += (goal - shown) * (1 - Math.exp(-dt * 10));
     if (Math.abs(goal - shown) < .0001) shown = goal;
+    yearsShown += (yGoal - yearsShown) * (1 - Math.exp(-dt * 8));
+    if (Math.abs(yGoal - yearsShown) < .0005) yearsShown = yGoal;
     paint(shown, now, dt);
-    if ((popAt !== null && goal < .09) || shown !== goal || (popAt !== null && now-popAt<1700)) raf = requestAnimationFrame(tick);
+    if ((popAt !== null && goal < .09) || shown !== goal || yearsShown !== yGoal || (popAt !== null && now-popAt<1700)) raf = requestAnimationFrame(tick);
   }
   function kick() { if (!raf && visible && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(tick); } }
   function resize() {
     width = viewport.clientWidth; height = viewport.clientHeight;
     camera.aspect = width / height; camera.updateProjectionMatrix();
-    // Render into the whole stage, keeping the geographic focal point at the
-    // flower's origin. Close zooms therefore have no rectangular canvas edge.
-    const mobile=innerWidth<=760;
+    // Render into the whole stage; paint() sets the view offset each frame (earth on the right, or centred for the USA).
+    mobile=innerWidth<=760;
     camera.setViewOffset(width,height,mobile?0:-width*.20,mobile?-height*.20:height*.01,width,height);
     worldDistance = Math.max(5.6, 1 + 3.6 / camera.aspect);
     renderer.setSize(width, height, false);

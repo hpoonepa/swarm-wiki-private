@@ -19,11 +19,12 @@
       else if (!e.shiftKey && document.activeElement === links[links.length - 1]) { e.preventDefault(); btn.focus(); }
     }
   });
+  const E = p => window.earthRaw ? window.earthRaw(p) : p;          // story progress -> scroll fraction (earth section has a hold for the years)
   const at = (id, p = 0) => { const el = document.getElementById(id); return el.getBoundingClientRect().top + scrollY + (el.offsetHeight - innerHeight) * p; };
   const destinations = {
-    top: () => 0, statement: () => at('statement', .12), earth: () => at('honeycomb-earth', .04),
-    usa: () => at('honeycomb-earth', .175), atlanta: () => at('honeycomb-earth', .29), flower: () => at('honeycomb-earth', .45),
-    bee: () => at('honeycomb-earth', .585), minibinders: () => at('honeycomb-earth', .775), 'rna-intro': () => at('rna-intro'), rnai: () => at('rnai', .02),
+    top: () => 0, statement: () => at('statement', .12), earth: () => at('honeycomb-earth', E(.04)),
+    usa: () => at('honeycomb-earth', E(.16)), atlanta: () => at('honeycomb-earth', E(.29)), flower: () => at('honeycomb-earth', E(.45)),
+    bee: () => at('honeycomb-earth', E(.585)), minibinders: () => at('honeycomb-earth', E(.775)), 'rna-intro': () => at('rna-intro'), rnai: () => at('rnai', .02),
     together: () => at('together', .55), explore: () => at('explore')
   };
   function followHash() {

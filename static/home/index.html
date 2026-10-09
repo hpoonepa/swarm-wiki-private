@@ -13,10 +13,27 @@
     font-family: 'Inter', sans-serif; }
   button, input, select, textarea { font-family: inherit; }
 
-  /* hero: the art portion of Frame 8.svg (everything above the white curve) */
-  .hero { width: 100%; aspect-ratio: 1440 / 1066; overflow: hidden; position: relative; z-index: 2;
-    clip-path: ellipse(108% 100% at 50% 0%); }   /* curved bottom edge: sides rise ~12%, centre reaches the bottom */
+  /* hero: the SWARM thin band art (Food/SWARM thin band 1.svg), logo included */
+  /* full first screen; the band sits centred and the food stays below the fold */
+  .hero { width: 100%; height: 100vh; height: 100svh; min-height: calc(100vw * 732 / 1440); overflow: hidden; position: relative; z-index: 2;
+    display: flex; align-items: center; }
   .hero img { width: 100%; height: auto; display: block; }
+  /* loading reveal: the band waits under a solid green cover cut to its exact outline, then a bee flies across on a wandering path and the cover parts behind it (zip.js) */
+  .hero .band { position: relative; width: 100%; }
+  /* the band is also put into the page as live SVG (Safari/WebKit won't run the wing and edge animations inside an <img>) */
+  .hero .band-live { position: absolute; inset: 0; }
+  .hero .band-live svg { display: block; width: 100%; height: 100%; overflow: visible; }
+  .zip { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+  .zip canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  /* the slider is a bee (Downloads/wiki shapes): yellow capsule body #FFE629 132x100 rx50, two #D6FBFF round wings */
+  .zip .pull { position: absolute; left: 0; top: 0; width: 3.4%; min-width: 26px; aspect-ratio: 132 / 100; will-change: transform; transform: translate3d(-200%, 0, 0); }
+  .zip .pull b { position: absolute; inset: 0; background: #FFE629; border-radius: 37.9% / 50%; box-shadow: 0 3px 8px rgba(14, 43, 37, .3); }
+  .zip .pull i { position: absolute; left: 4%; width: 75.8%; aspect-ratio: 1; border-radius: 50%; background: #D6FBFF;
+    animation: zwing .09s ease-in-out infinite alternate; }
+  .zip .pull i.wa { bottom: 62%; transform-origin: 50% 100%; }
+  .zip .pull i.wb { top: 62%; transform-origin: 50% 0%; }
+  @keyframes zwing { from { transform: scale(1, .88); } to { transform: scale(1, 1.04); } }
+  .zip.gone { opacity: 0; transition: opacity .4s ease; }
 
   /* statement: one sentence at a time, cross-fading in the same spot as you scroll */
   #statement { position: relative; height: 340vh; z-index: 2; pointer-events: none; }
@@ -75,7 +92,7 @@
   .menu-panel a:hover, .menu-panel a:focus-visible { background: rgba(255,255,255,.08); }
   .menu-scrim { position: fixed; inset: 0; z-index: 54; background: rgba(14,43,37,.35); opacity: 0; pointer-events: none; transition: opacity .3s; }
   .menu-open .menu-scrim { opacity: 1; pointer-events: auto; }
-  /* ---------- hero logo: its own image, placed where it sits in the hero art (hero units x179.9 y92.4 w672.7 of 1440) ---------- */
+  /* ---------- loading logo: only lives during the loading screen (the hero art has its own logo) ---------- */
   #heroLogo { position: absolute; z-index: 3; left: calc(179.9 / 1440 * 100%); top: calc(92.4 / 1440 * 100vw); width: calc(672.7 / 1440 * 100%);
     transform-origin: 0 0; pointer-events: none; }
   #heroLogo img { display: block; width: 100%; height: auto; }
@@ -85,6 +102,7 @@
                                        mask-image: linear-gradient(to top, #000 var(--p, 0%), transparent calc(var(--p, 0%) + 3%)); }
   #heroLogo.flying { position: fixed; z-index: 101; }
   #heroLogo.travel { transition: transform 1.15s cubic-bezier(.65, 0, .25, 1), filter .9s ease; }
+  #heroLogo.leaving { opacity: 0; transition: opacity .7s ease; }
 
   /* ---------- loading screen ---------- */
   html.loading, html.loading body { overflow: hidden; }
@@ -202,7 +220,7 @@
 
   .after { height: 40vh; }
 </style>
-<link rel="stylesheet" href="story.css?v=64c3b8e5fb8c">
+<link rel="stylesheet" href="story.css?v=a710c7b1913c">
 </head>
 <body>
 <div id="heroLogo"><img src="assets/logo.webp" alt="SWARM" width="1202" height="1354"></div>
@@ -250,29 +268,40 @@
   }
   function finish() {
     done = true; window.scrollTo(0, 0);
-    // fly: stay fixed above the green, animate from the centred pose to the hero pose (same box, transform only)
+    // the hero art carries its own logo now, so the loading logo fades out with the green instead of flying into place
     logo.classList.add('flying');
     document.documentElement.classList.remove('loading');      // unmask (fully filled anyway) and unlock scroll
-    logo.style.filter = 'drop-shadow(0 0 18px rgba(252, 196, 47, .35))';
-    logo.getBoundingClientRect();                               // commit the centred start pose
+    logo.getBoundingClientRect();
     requestAnimationFrame(function () {
-      logo.classList.add('travel');
-      logo.style.transform = 'translate(0px,0px) scale(1)';
-      logo.style.filter = 'drop-shadow(0 0 0 rgba(252, 196, 47, 0))';
-      setTimeout(function () { L.classList.add('fade'); }, 500);  // green melts once the logo is most of the way there
+      logo.classList.add('leaving');
+      L.classList.add('fade');
+      setTimeout(function () { if (window.unzipHero) window.unzipHero(); }, 450);   // green lifts, then the band unzips
     });
-    setTimeout(function () {                                    // landed: hand back to the hero, which scrolls with the page
-      logo.classList.remove('travel', 'flying');
-      logo.style.left = logo.style.top = logo.style.width = logo.style.transform = logo.style.filter = '';
-      setTimeout(function () { L.remove(); window.dispatchEvent(new Event('swarm-ready')); }, 700);
-    }, 1250);
+    setTimeout(function () { logo.remove(); L.remove(); window.dispatchEvent(new Event('swarm-ready')); }, 900);
   }
   requestAnimationFrame(tick);
 })();
 </script>
 <header class="hero" id="top">
-    <img src="frame8-hero.svg?v=5" alt="SWARM jungle hero with a honey bee on a red flower" width="1440" height="3137">
+    <div class="band">
+      <img src="hero-band.svg?v=7" alt="SWARM logo over a band of jungle" width="1440" height="732">
+      <div class="zip" id="zip" aria-hidden="true"><canvas></canvas><div class="pull"><i class="wa"></i><i class="wb"></i><b></b></div></div>
+    </div>
   </header>
+  <script>
+  /* swap the band image for the same SVG inline, so its wing flap and edge wave animate in every browser */
+  (function () {
+    var img = document.querySelector('.hero .band img');
+    fetch(img.getAttribute('src')).then(function (r) { return r.ok ? r.text() : Promise.reject(); }).then(function (t) {
+      var live = document.createElement('div');
+      live.className = 'band-live'; live.setAttribute('role', 'img'); live.setAttribute('aria-label', img.alt);
+      live.innerHTML = t;
+      img.parentNode.insertBefore(live, img.nextSibling);
+      img.style.visibility = 'hidden';                             // kept for layout and for the reveal's outline
+    }).catch(function () {});                                     // if it fails, the plain image stays
+  })();
+  </script>
+  <script src="zip.js?v=9"></script>
 
 
   <section id="statement" aria-label="Why bees matter">
@@ -292,7 +321,9 @@
 
   <section id="honeycomb-earth" class="scroll-story" aria-label="From Earth to a flower, a honey bee, and the virus" data-region="world">
     <div class="stage geo-stage">
-      <div class="map-view"><canvas id="globe" role="img" aria-label="An illustrated Earth turns toward the United States, then zooms into Atlanta, Georgia"></canvas><span class="globe-location" aria-hidden="true">Atlanta, Georgia</span></div>
+      <div class="map-view"><canvas id="globe" role="img" aria-label="An illustrated Earth turns toward the United States, marking how many honey bee colonies each major beekeeping state lost each winter from 2016 to 2026, then points to Atlanta, Georgia"></canvas><span class="globe-location" aria-hidden="true">Atlanta, Georgia</span>
+        <div class="loss-bubble" role="note" aria-hidden="true"><p class="lb-stat">55.6<span>%</span></p><p>of managed honey bee colonies in the U.S. were lost from April 2024 to April 2025, across all causes.</p><p class="lb-key"><i class="k-dot"></i>Circles: colonies lost each January–March, by state. Bigger means more lost.</p><p class="lb-src">USDA NASS Honey Bee Colonies, 20 states reported every year</p></div></div>
+      <div class="loss-years" aria-hidden="true"><b class="ly-year">2016</b><span class="ly-total"></span><div class="ly-bar"><i class="ly-track"></i><i class="ly-fill"></i></div></div>
       <div class="geo-copy">
         <article class="geo-panel is-active" data-region-panel="world">
           <h2>Worldwide</h2>
@@ -305,10 +336,11 @@
           <p class="stat-description">estimated U.S. colony loss in 2024–25, across all causes.</p>
         </article>
         <article class="geo-panel geo-panel--headline" data-region-panel="atlanta" aria-hidden="true" inert>
-          <h2>Atlanta,<br>Georgia.</h2>
+          <h2>Why?</h2>
         </article>
       </div>
 
+      <div class="why-virus" id="dwv" data-embed aria-hidden="true"></div>
       <div class="pollinator-scene" aria-hidden="true">
         <div class="flower-composition">
           <img class="journey-flower" src="assets/journey/flower.svg" alt="" width="850" height="770">
@@ -500,15 +532,40 @@
     <p>© 2026 - Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC Attribution 4.0 International</a>.</p>
     <p>Repository: <a href="https://gitlab.igem.org/2026/lambert-ga" target="_blank" rel="noreferrer">https://gitlab.igem.org/2026/lambert-ga</a></p>
   </footer>
+  <script>
+  /* Earth section scroll: the section is 180vh longer than the story needs. That extra stretch is a hold on the
+     United States step (story progress .16) while the reader scrolls through the colony-loss years. Everything that
+     reads the section's progress (globe.js, journey.js, menu.js) goes through here, so the rest of the story is unchanged. */
+  (function () {
+    var HOLD_AT = .16, clamp = function (v) { return Math.max(0, Math.min(1, v)); };
+    function parts() {
+      var s = document.getElementById('honeycomb-earth'), total = Math.max(1, s.offsetHeight - innerHeight);
+      var hold = Math.min(total * .5, innerHeight * 1.8);
+      return { s: s, total: total, hold: hold, base: total - hold };
+    }
+    window.earthScroll = function () {                       // -> { p: story progress, years: 0..1 through the years }
+      var q = parts(), sc = Math.max(0, Math.min(q.total, -q.s.getBoundingClientRect().top)), a = HOLD_AT * q.base;
+      if (sc < a) return { p: clamp(sc / q.base), years: 0 };
+      if (sc < a + q.hold) return { p: HOLD_AT, years: (sc - a) / q.hold };
+      return { p: clamp((sc - q.hold) / q.base), years: 1 };
+    };
+    window.earthRaw = function (p) {                         // story progress -> fraction of the section's scroll
+      var q = parts();
+      return (p <= HOLD_AT ? p * q.base : p * q.base + q.hold) / q.total;
+    };
+  })();
+  </script>
   <script src="vendor/three.min.js"></script>
   <script src="assets/landmask.js"></script>
   <script src="assets/landmask-hi.js"></script>
-  <script src="globe.js?v=d5310914a1b3"></script>
+  <script src="colony-loss.js?v=1"></script>
+  <script src="globe.js?v=ea6d5e3142ee"></script>
+  <script src="dwv-virus.js?v=5"></script>
   <script src="statement.js?v=smooth1"></script>
   <script src="food.js?v=4"></script>
-  <script src="menu.js?v=ccabd493e88d"></script>
+  <script src="menu.js?v=1ef0185f8d2d"></script>
   <script src="ux.js?v=story1"></script>
   <script src="flight.js?v=4097fe77c414"></script>
-  <script type="module" src="mechanisms.js?v=0310d9e2a342"></script>
+  <script type="module" src="mechanisms.js?v=59c562baa97b"></script>
 </body>
 </html>

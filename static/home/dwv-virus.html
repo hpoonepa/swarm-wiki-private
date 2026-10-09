@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deformed wing virus</title>
+<style>
+  @font-face { font-family: 'Inter'; src: url('assets/fonts/inter.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+  :root { --cream: #FFFBFA; --teal: #153F36; --orange: #E57624; --honey: #FCC42F; }
+  html, body { margin: 0; height: 100%; background: #fff; color: var(--teal); font-family: 'Inter', sans-serif; }
+  .wrap { min-height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); align-items: center; gap: 2vw; padding: 0 6vw; box-sizing: border-box; }
+  .copy h1 { margin: 0 0 18px; font-size: clamp(38px, 5vw, 80px); line-height: 1.02; letter-spacing: -.045em; font-weight: 850; }
+  .copy h1 span { color: var(--orange); }
+  .copy p { margin: 0 0 22px; max-width: 470px; font-size: clamp(17px, 1.35vw, 21px); line-height: 1.4; letter-spacing: -.015em; font-weight: 600; }
+  .key { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; font-size: 15px; font-weight: 650; }
+  .key li { display: flex; align-items: center; gap: 10px; }
+  .key i { width: 16px; height: 16px; border-radius: 50%; flex: none; }
+  .src { margin-top: 26px; font-size: 12.5px; font-weight: 600; color: #6b8379; line-height: 1.45; max-width: 470px; }
+  .src a { color: inherit; }
+  #dwv { position: relative; height: min(88vh, 860px); cursor: grab; outline: none; touch-action: none; }
+  #dwv:active { cursor: grabbing; }
+  #dwv:focus-visible { outline: 3px solid var(--honey); outline-offset: 4px; border-radius: 24px; }
+  #dwv canvas { display: block; width: 100%; height: 100%; }
+  .hint { position: absolute; left: 50%; bottom: 4%; transform: translateX(-50%); font-size: 13px; font-weight: 650; color: #6b8379; opacity: 0; transition: opacity .6s .8s; pointer-events: none; }
+  #dwv.ready .hint { opacity: 1; }
+  @media (max-width: 760px) {
+    .wrap { grid-template-columns: 1fr; padding: 40px 7vw 20px; }
+    #dwv { height: 70vh; order: -1; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="copy">
+    <h1>Deformed wing <span>virus</span></h1>
+    <p>A tiny shell of protein about 30 nanometres across, built from 60 identical units of three proteins. Inside it carries the virus's RNA.</p>
+    <ul class="key">
+      <li><i style="background:#2E48A3"></i>VP1</li>
+      <li><i style="background:#37803E"></i>VP2</li>
+      <li><i style="background:#A52A2A"></i>VP3</li>
+      <li><i style="background:#9F278C"></i>P domain, a bump of VP3 on the surface</li>
+    </ul>
+    <p class="src">Real structure: capsid from <a href="https://www.rcsb.org/structure/5L8Q" target="_blank" rel="noreferrer">PDB 5L8Q</a>, repeated by its 60-fold icosahedral symmetry. Škubník et al., 2017, <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5373406" target="_blank" rel="noreferrer">PNAS 114:3210</a>. Colours follow that paper (VP1 blue, VP2 green, VP3 red, P domain magenta); a real virus is far smaller than a wavelength of light, so it has no colour of its own.</p>
+  </section>
+  <div id="dwv" tabindex="0" role="img" aria-label="A 3D model of the deformed wing virus capsid: a rounded twenty-sided protein shell with magenta P-domain bumps grouped around its corners. Drag or use the arrow keys to turn it.">
+    <span class="hint">Drag to turn</span>
+  </div>
+</main>
+<script src="vendor/three.min.js"></script>
+<script src="dwv-virus.js?v=4"></script>
+</body>
+</html>
