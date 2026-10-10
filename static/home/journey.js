@@ -18,7 +18,7 @@ export function initJourney() {
   const section = root(), stage = section.querySelector('.geo-stage');
   const map = section.querySelector('.map-view'), stats = section.querySelector('.geo-copy');
   const garden = section.querySelector('.pollinator-scene'), composition = section.querySelector('.hive-composition');
-  const bee = section.querySelector('.journey-bee'), mite = section.querySelector('.journey-mite');
+  const artwork = section.querySelector('.journey-art');
   const hiveCopy = section.querySelector('.journey-copy--hive'), beeCopy = section.querySelector('.journey-copy--bee');
   const miteCopy = section.querySelector('.journey-copy--mite'), rnaCopy = section.querySelector('.journey-copy--rna');
   const protein = document.getElementById('minibinders'), proteinView = protein.querySelector('.protein-view');
@@ -94,9 +94,6 @@ export function initJourney() {
     const artAlpha = Math.max(firstHive,returnHive);
     garden.style.opacity = artAlpha.toFixed(4);
     garden.style.visibility = artAlpha < .002 ? 'hidden' : 'visible';
-    // The bee stays on the entrance board while the camera approaches it.
-    bee.style.transform = 'none';
-    composition.style.setProperty('--mite-label', (1 - between(p, 1.30, 1.345)) * (1 - focus * (1-returning)));
     layer(hiveCopy, between(p, .325, .355) * (1 - between(p, .485, .535)));
     layer(beeCopy, between(p, .55, .59) * (1 - between(p, .66, .705)));
     layer(miteCopy, between(p, 1.195, 1.245) * (1 - between(p, 1.31, 1.35)));
@@ -132,15 +129,16 @@ export function initJourney() {
     height = stage.clientHeight; width = stage.clientWidth;
     cw = composition.offsetWidth; ch = composition.offsetHeight;
     cx = composition.offsetLeft; cy = composition.offsetTop;
-    beeX = bee.offsetLeft + bee.offsetWidth * .60 - cw / 2;
-    beeY = bee.offsetTop + bee.offsetHeight * .51 - ch / 2;
-    miteX = mite.offsetLeft + mite.offsetWidth * .50 - cw / 2;
-    miteY = mite.offsetTop + mite.offsetHeight * .50 - ch / 2;
+    // Focal points stay attached to the organisms in the supplied composition.
+    beeX = cw * (.245 - .5);
+    beeY = ch * (.56 - .5);
+    miteX = cw * (.795 - .5);
+    miteY = ch * (.49 - .5);
     paint(shown,shownDisease); kick();
   }
   new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) { shown = journeyProgress(); shownDisease=window.earthScroll().disease; kick(); } }).observe(stage);
   new ResizeObserver(resize).observe(stage);
-  for (const image of [bee, mite]) image.addEventListener('load', resize);
+  artwork.addEventListener('load', resize);
   addEventListener('scroll', kick, { passive: true });
   document.addEventListener('visibilitychange', kick);
   reduced.addEventListener('change', () => { shown = journeyProgress(); resize(); });
