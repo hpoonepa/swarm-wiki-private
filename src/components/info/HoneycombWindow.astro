@@ -4,7 +4,6 @@ import './honeycomb.css';
 export type HoneycombCorner = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
 interface Props { title: string; summary?: string; corner?: HoneycombCorner }
 const { title, summary, corner = 'top-right' } = Astro.props;
-const hasFigure = Astro.slots.has('figure');
 
 const ART_W = 720;
 const ART_H = 900;
@@ -59,7 +58,7 @@ for (let r = 0; ; r++) {
   }
 }
 ---
-<header class:list={['honeycomb-window', { 'honeycomb-window--figure': hasFigure }]} data-honeycomb-window>
+<header class="honeycomb-window" data-honeycomb-window>
   <div class="honeycomb-window__comb" data-corner={corner} aria-hidden="true">
     <svg viewBox={`0 0 ${ART_W} ${ART_H}`} preserveAspectRatio="xMaxYMin meet" focusable="false">
       <defs>
@@ -79,11 +78,7 @@ for (let r = 0; ; r++) {
   <div class="honeycomb-window__text">
     <div class="honeycomb-window__inner">
       <h1 class="display-l honeycomb-window__title">{title}</h1>
-      {!hasFigure && summary && <div class="honeycomb-window__cell"><div class="honeycomb-window__cell-inner"><p class="honeycomb-window__summary">{summary}</p></div></div>}
+      {summary && <div class="honeycomb-window__cell"><div class="honeycomb-window__cell-inner"><p class="honeycomb-window__summary">{summary}</p></div></div>}
     </div>
   </div>
-  {hasFigure && <div class="honeycomb-window__figure"><slot name="figure" /></div>}
-  {hasFigure && summary && <div class="honeycomb-window__text"><div class="honeycomb-window__inner honeycomb-window__inner--after">
-    <div class="honeycomb-window__cell"><div class="honeycomb-window__cell-inner"><p class="honeycomb-window__summary">{summary}</p></div></div>
-  </div></div>}
 </header>

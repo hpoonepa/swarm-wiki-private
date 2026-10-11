@@ -94,23 +94,6 @@
   text-wrap: pretty;
 }
 
-/* ---- With a figure (the hardware page) ---- */
-.honeycomb-window--figure { --hc-comb-w: 40%; }
-.honeycomb-window--figure .honeycomb-window__comb {
-  -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent 78%);
-  mask-image: linear-gradient(to bottom, #000 45%, transparent 78%);
-}
-.honeycomb-window__figure {
-  position: relative;
-  z-index: 1;
-  margin-top: 0;
-}
-.honeycomb-window__figure .vapor-heading > p { display: none; }
-.honeycomb-window__inner--after {
-  max-width: min(60rem, 100%);
-  margin-top: clamp(2rem, 4vw, 3rem);
-}
-
 @media (max-width: 760px) {
   .honeycomb-window { --hc-comb-w: 44%; --hc-chamfer: 20px; }
   .honeycomb-window__comb { opacity: 0.8; }
