@@ -5,6 +5,7 @@ import Footer from '../components/Footer';
 import FooterNav from '../components/footernav';
 import TabReact from '../components/md_components/TabReact';
 import CanopyWindow from '../components/info/CanopyWindow.astro';
+import HoneycombWindow, { type HoneycombCorner } from '../components/info/HoneycombWindow.astro';
 import SideMap from '../components/info/SideMap.astro';
 import SectionSheet from '../components/info/SectionSheet.astro';
 import { readingPage } from '../components/info/pages';
@@ -13,12 +14,14 @@ import '../styles/global.css';
 import '../components/info/reading.css';
 
 interface Props {
-  frontmatter: { title: string; description?: string; noTOC?: boolean; tabLabels?: string[]; tabLinks?: string[]; color?: string };
+  frontmatter: { title: string; description?: string; noTOC?: boolean; tabLabels?: string[]; tabLinks?: string[]; color?: string; hero?: 'honeycomb' | 'canopy'; honeycombCorner?: HoneycombCorner };
   headings?: MarkdownHeading[];
 }
 const { frontmatter, headings = [] } = Astro.props;
 const slug = Astro.url.pathname.split('/').filter(Boolean).pop() ?? '';
 const page = readingPage(slug);
+// Content pages open on the honeycomb window; a page can ask for the canopy art with `hero: canopy` in its frontmatter.
+const hero = frontmatter.hero ?? 'honeycomb';
 const topDepth = headings.some(heading => heading.depth === 1) ? 1 : 2;
 const sections: Section[] = frontmatter.noTOC ? [] : headings
   .filter(heading => heading.depth === topDepth || heading.depth === topDepth + 1)
@@ -38,7 +41,9 @@ const glance = sections.filter(section => section.depth === 2);
     <a class="info-skip" href="#article">Skip to content</a>
     <Nav client:load />
     <main class:list={[{ 'plain-page': sections.length === 0 }]}>
-      <slot name="hero"><CanopyWindow title={frontmatter.title} summary={frontmatter.description} group={page.group} focal={page.focal} /></slot>
+      <slot name="hero">{hero === 'honeycomb'
+        ? <HoneycombWindow title={frontmatter.title} summary={frontmatter.description} group={page.group} corner={frontmatter.honeycombCorner} />
+        : <CanopyWindow title={frontmatter.title} summary={frontmatter.description} group={page.group} focal={page.focal} />}</slot>
       <div class="sheet" data-surface="sheet">
         {frontmatter.tabLabels && frontmatter.tabLinks && <div class="info-tabs"><TabReact labels={frontmatter.tabLabels} links={frontmatter.tabLinks} focus={slug} color={frontmatter.color ?? 'green'} /></div>}
         <div class:list={['longform', { 'longform--no-map': sections.length === 0 }]}>
