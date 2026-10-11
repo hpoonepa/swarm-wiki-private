@@ -2,7 +2,7 @@
 (() => {
   const style = document.createElement('style');
   style.textContent = `
-.story-cursor { position: fixed; top: 0; left: 0; width: 23px; height: 27px; z-index: 999; pointer-events: none; visibility: hidden; color: var(--cursor-edge,#fff); }
+.story-cursor { position: fixed; top: 0; left: 0; width: 23px; height: 27px; z-index: 999; pointer-events: none; visibility: hidden; color: var(--cursor-edge,#fff); will-change: transform; }
 .story-cursor[data-visible="true"] { visibility: visible; }
 .story-cursor span { position: absolute; left: -14px; top: -12px; width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(circle,var(--cursor-glow,#766b8d) 0%,transparent 68%); opacity: .29; transition: opacity .16s,transform .16s; }
 .story-cursor svg { position: relative; width: 100%; height: 100%; filter: drop-shadow(0 1px 1px #29213724); transition: transform .12s; }
@@ -13,7 +13,7 @@
 `;
   document.head.append(style);
   const fine = matchMedia('(hover: hover) and (pointer: fine)');
-  const home = !!document.querySelector('swarm-nav[story]');
+  const home = !!document.querySelector('.hero');
   const cursor = document.createElement('div');
   cursor.className = 'story-cursor';
   cursor.setAttribute('aria-hidden', 'true');
@@ -36,27 +36,34 @@
   function paint() {
     frame = 0;
     const target = document.elementFromPoint(x, y);
-    // Keep familiar native cursors for editing, grabbing and embedded documents.
-    if (!fine.matches || !inside || document.hidden || !target || target.closest('input,textarea,select,[contenteditable="true"],iframe,[role="slider"],#capsid-host') || document.documentElement.classList.contains('honey-scrubbing')) {
+    if (!fine.matches || !inside || document.hidden || !target || target.closest('input,textarea,select,[contenteditable="true"],iframe') || document.documentElement.classList.contains('honey-scrubbing')) {
       hide(); return;
     }
-    const theme = target.closest('#rnai') ? 'rna' : target.closest('#minibinders') ? 'gut' : target.closest('.hero,swarm-nav') ? 'forest' : target.closest('#together') ? 'flower' : home ? 'paper' : 'sheet';
+    const nav = target.closest('swarm-nav');
+    const theme = target.closest('#rnai') ? 'rna' : target.closest('#minibinders') ? 'gut' : nav ? (nav.hasAttribute('data-dark') ? 'forest' : 'sheet') : target.closest('.hero') ? 'forest' : target.closest('#together') ? 'flower' : home ? 'paper' : 'sheet';
     if (cursor.dataset.theme !== theme) {
       cursor.dataset.theme = theme;
       cursor.style.setProperty('--cursor-glow', palettes[theme][0]);
       cursor.style.setProperty('--cursor-edge', palettes[theme][1]);
     }
     cursor.dataset.link = String(!!target.closest('a,button,summary,swarm-nav'));
-    cursor.style.transform = `translate3d(${x - 3}px,${y - 4}px,0)`;
-    cursor.dataset.visible = 'true';
-    document.documentElement.classList.add('has-story-cursor');
-    document.querySelector('swarm-nav')?.setAttribute('data-cursor-active', '');
+    place();
+    if (cursor.dataset.visible !== 'true') {
+      cursor.dataset.visible = 'true';
+      document.documentElement.classList.add('has-story-cursor');
+      document.querySelector('swarm-nav')?.setAttribute('data-cursor-active', '');
+    }
   }
+  function place() { cursor.style.transform = `translate3d(${x - 3}px,${y - 4}px,0)`; }
   function kick() { if (!frame) frame = requestAnimationFrame(paint); }
-  addEventListener('pointermove', event => {
+  function move(event) {
     if (event.pointerType === 'touch') { inside = false; hide(); return; }
-    x = event.clientX; y = event.clientY; inside = true; kick();
-  }, {passive: true});
+    x = event.clientX; y = event.clientY; inside = true;
+    if (cursor.dataset.visible === 'true') place();
+    kick();
+  }
+  addEventListener('pointermove', move, {passive: true});
+  if ('onpointerrawupdate' in window) addEventListener('pointerrawupdate', move, {passive: true});
   addEventListener('scroll', kick, {passive: true});
   addEventListener('resize', kick);
   addEventListener('pointerdown', () => { cursor.dataset.pressed = 'true'; });

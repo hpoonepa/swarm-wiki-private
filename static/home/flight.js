@@ -19,7 +19,7 @@
     layer.dataset.visible = String(visible);
     layer.inert = !visible;
     if (!visible && document.activeElement === control) {
-      const nav = document.querySelector('swarm-nav[story]')?.shadowRoot;
+      const nav = document.querySelector('swarm-nav')?.shadowRoot;
       nav?.querySelector(innerWidth <= 1100 ? '.mobile-toggle' : '.bar summary')?.focus({preventScroll:true});
     }
   }

@@ -1,5 +1,4 @@
 (function () {
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const at = (id, p = 0) => { const el = document.getElementById(id); return el.getBoundingClientRect().top + scrollY + (id === 'honeycomb-earth' ? window.earthOffset(p) : (el.offsetHeight - innerHeight) * p); };
   const destinations = {
     top: () => 0, statement: () => at('statement', .12), earth: () => at('honeycomb-earth', .04),
@@ -14,10 +13,4 @@
   }
   addEventListener('swarm-ready', followHash);
   addEventListener('hashchange', followHash);
-  document.addEventListener('swarm-navigate', event => {
-    const destination = destinations[event.detail];
-    if (!destination) return;
-    history.replaceState(null, '', '#' + event.detail);
-    scrollTo({ top: destination(), behavior: reduce.matches ? 'auto' : 'smooth' });
-  });
 })();

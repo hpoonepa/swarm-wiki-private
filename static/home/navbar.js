@@ -1,5 +1,5 @@
 /* Shared navigation for the static SWARM story and the wiki's React layouts. */
-import { groups, story, sections } from './nav-data.js?v=9b2fffc0f87e';
+import { groups, sections } from './nav-data.js?v=1e2dce10ddde';
 import { mapStyles, mountMap } from './navmap.js?v=132fb84151a1';
 const styles = `
   :host { position: fixed; inset: 0; z-index: 70; font-family: 'Inter', 'Inter Variable', sans-serif; color: #1a322a; pointer-events: none; }
@@ -40,13 +40,7 @@ const styles = `
   .subgroup[open] > summary::after { content: '−'; }
   .subgroup > div { margin: 2px 0 5px 14px; padding-left: 7px; border-left: 1px solid #1a322a24; }
   .subgroup a { padding-block: 9px; }
-  .story-group { margin-left: 4px; border-left: 1px solid #1a322a24; padding-left: 5px; }
-  :host([data-dark]) :is(.subgroup > div, .story-group) { border-color: #ffffff24; }
-  .story-group > summary { gap: 7px; padding-inline: 12px; }
-  .story-group svg { width: 15px; height: 15px; }
-  .story-group .dropdown { width: 400px; }
-  .story-links { display: grid; grid-template-columns: 1fr 1fr; }
-  .story-links a { font-size: 12px; }
+  :host([data-dark]) .subgroup > div { border-color: #ffffff24; }
   .mobile-toggle { display: none; pointer-events: auto; align-items: center; gap: 10px; border-radius: 999px; min-height: 50px; padding: 0 18px; font-size: 13px; font-weight: 650; }
   .mobile-toggle svg { width: 18px; height: 18px; }
   .honey-toggle { position: absolute; top: 10px; right: 10px; z-index: 3; width: 72px; height: 78px; padding: 0; background: transparent; pointer-events: auto; border-radius: 12px; filter: drop-shadow(0 2px 2px #94611225); transition: transform .5s cubic-bezier(.7, 0, .84, 0), filter .4s; }
@@ -65,9 +59,6 @@ const styles = `
     .group > summary, .solo { min-height: 48px; justify-content: space-between; font-size: 15px; border-radius: 13px; }
     .dropdown { position: static; min-width: 0; width: auto !important; margin: 4px 0 10px; padding: 4px 8px 4px 13px; border: 0; border-radius: 0; background: transparent; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
     .dropdown a { padding-block: 11px; }
-    .story-group { margin: 6px 0 0; padding: 6px 0 0; border-left: 0; border-top: 1px solid #ffffff24; }
-    .story-group > summary { justify-content: flex-start; }
-    .story-group > summary::after { margin-left: auto; }
   }
   @media (max-width: 760px) { .bar { padding-right: 62px; } .honey-toggle { top: 8px; right: 6px; width: 56px; height: 62px; } }
   @media (prefers-reduced-motion: reduce) { *, *::after { transition: none !important; } }
@@ -87,7 +78,6 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
         <button class="mobile-toggle glass" aria-expanded="false" aria-controls="wiki-links"><span>Menu</span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
         <nav class="glass" id="wiki-links" aria-label="Main"><div class="items">
         ${groups.map(([title,items])=>`<details class="group"><summary>${title}</summary><div class="dropdown glass">${links(items)}</div></details>`).join('')}
-        ${this.hasAttribute('story')?`<details class="group story-group"><summary aria-label="Story sections"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 4h9M5 8h9M5 12h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M1.5 4h.1M1.5 8h.1M1.5 12h.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Story</summary><div class="dropdown glass story-links">${story.map(([title,key])=>`<a href="#${key}" data-go="${key}">${title}</a>`).join('')}</div></details>`:''}
         </div></nav></div>
         <button class="honey-toggle" aria-label="Open the project map" aria-expanded="false" aria-haspopup="dialog" title="Project map"><svg viewBox="0 0 48 52" aria-hidden="true"><path d="m24 2 10 6v12l-10 6-10-6V8Z" fill="#ffd75c" stroke="#c58a1c" stroke-width="1.6"/><path d="m14 20 10 6v12l-10 6-10-6V26Z" fill="#fbc438" stroke="#c58a1c" stroke-width="1.6"/><path d="m34 20 10 6v12l-10 6-10-6V26Z" fill="#f4b324" stroke="#c58a1c" stroke-width="1.6"/><path d="m24 8 5 3v6l-5 3-5-3v-6Zm-10 18 5 3v6l-5 3-5-3v-6Zm20 0 5 3v6l-5 3-5-3v-6Z" fill="none" stroke="#fff1b3" stroke-width="1.4"/></svg></button>`;
       const nav=root.querySelector('#wiki-links'), toggle=root.querySelector('.mobile-toggle'), bar=root.querySelector('.bar'), honeyToggle=root.querySelector('.honey-toggle');
@@ -113,12 +103,7 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
         else{close();toggle.focus();}
         event.stopPropagation();
       });
-      root.addEventListener('click',event=>{
-        const link=event.target.closest('a');
-        if(!link)return;
-        if(link.dataset.go){event.preventDefault();this.dispatchEvent(new CustomEvent('swarm-navigate',{detail:link.dataset.go,bubbles:true,composed:true}));}
-        close();
-      });
+      root.addEventListener('click',event=>{if(event.target.closest('a'))close();});
       this.dismiss=event=>{if(!event.composedPath().includes(this))close();};
       document.addEventListener('pointerdown',this.dismiss);
       this.dismissFocus=event=>{if(!event.composedPath().includes(this))close();};
