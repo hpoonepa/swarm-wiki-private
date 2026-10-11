@@ -5,8 +5,9 @@ import VaporExplorer from '../components/hardware/VaporExplorer.astro';
 const { frontmatter, headings } = Astro.props;
 ---
 <InformationLayout frontmatter={frontmatter} headings={headings}>
-  <HoneycombWindow slot="hero" title={frontmatter.title} summary={frontmatter.description} corner={frontmatter.honeycombCorner}>
-    <VaporExplorer slot="figure" />
-  </HoneycombWindow>
+  <Fragment slot="hero">
+    <HoneycombWindow title={frontmatter.title} summary={frontmatter.description} corner={frontmatter.honeycombCorner} />
+    <VaporExplorer />
+  </Fragment>
   <slot />
 </InformationLayout>
