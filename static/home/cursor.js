@@ -1,6 +1,19 @@
 /* A small, section-colored glow follows the pointer without trailing behind it. */
 (() => {
+  const style = document.createElement('style');
+  style.textContent = `
+.story-cursor { position: fixed; top: 0; left: 0; width: 23px; height: 27px; z-index: 999; pointer-events: none; visibility: hidden; color: var(--cursor-edge,#fff); }
+.story-cursor[data-visible="true"] { visibility: visible; }
+.story-cursor span { position: absolute; left: -14px; top: -12px; width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(circle,var(--cursor-glow,#766b8d) 0%,transparent 68%); opacity: .29; transition: opacity .16s,transform .16s; }
+.story-cursor svg { position: relative; width: 100%; height: 100%; filter: drop-shadow(0 1px 1px #29213724); transition: transform .12s; }
+.story-cursor[data-link="true"] span { opacity: .42; transform: scale(.85); }
+.story-cursor[data-pressed="true"] svg { transform: scale(.87); transform-origin: 3px 4px; }
+@media (hover:hover) and (pointer:fine) { html.has-story-cursor, html.has-story-cursor * { cursor: none !important; } }
+@media (prefers-reduced-motion:reduce) { .story-cursor span,.story-cursor svg { transition: none; } }
+`;
+  document.head.append(style);
   const fine = matchMedia('(hover: hover) and (pointer: fine)');
+  const home = !!document.querySelector('swarm-nav[story]');
   const cursor = document.createElement('div');
   cursor.className = 'story-cursor';
   cursor.setAttribute('aria-hidden', 'true');
@@ -12,7 +25,8 @@
     gut: ['#a96c26', '#fff9e6'],
     rna: ['#ffb2bd', '#fff4ed'],
     forest: ['#ffe78a', '#fff7d8'],
-    flower: ['#b87553', '#fffaf0']
+    flower: ['#b87553', '#fffaf0'],
+    sheet: ['#ffe78a', '#1a322a']
   };
   function hide() {
     cursor.dataset.visible = 'false';
@@ -26,7 +40,7 @@
     if (!fine.matches || !inside || document.hidden || !target || target.closest('input,textarea,select,[contenteditable="true"],iframe,[role="slider"],#capsid-host') || document.documentElement.classList.contains('honey-scrubbing')) {
       hide(); return;
     }
-    const theme = target.closest('#rnai') ? 'rna' : target.closest('#minibinders') ? 'gut' : target.closest('.hero,swarm-nav') ? 'forest' : target.closest('#together') ? 'flower' : 'paper';
+    const theme = target.closest('#rnai') ? 'rna' : target.closest('#minibinders') ? 'gut' : target.closest('.hero,swarm-nav') ? 'forest' : target.closest('#together') ? 'flower' : home ? 'paper' : 'sheet';
     if (cursor.dataset.theme !== theme) {
       cursor.dataset.theme = theme;
       cursor.style.setProperty('--cursor-glow', palettes[theme][0]);

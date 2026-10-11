@@ -534,14 +534,6 @@ html.loading .honey-progress { visibility: hidden; }
 @media (prefers-reduced-motion:reduce) { .cell-field > *, .gut-wall { animation: none; } }
 
 /* The white outline stays crisp while the halo picks up the scene's color. */
-.story-cursor { position: fixed; top: 0; left: 0; width: 23px; height: 27px; z-index: 999; pointer-events: none; visibility: hidden; color: var(--cursor-edge,#fff); }
-.story-cursor[data-visible="true"] { visibility: visible; }
-.story-cursor span { position: absolute; left: -14px; top: -12px; width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(circle,var(--cursor-glow,#766b8d) 0%,transparent 68%); opacity: .29; transition: opacity .16s,transform .16s; }
-.story-cursor svg { position: relative; width: 100%; height: 100%; filter: drop-shadow(0 1px 1px #29213724); transition: transform .12s; }
-.story-cursor[data-link="true"] span { opacity: .42; transform: scale(.85); }
-.story-cursor[data-pressed="true"] svg { transform: scale(.87); transform-origin: 3px 4px; }
-@media (hover:hover) and (pointer:fine) { html.has-story-cursor, html.has-story-cursor * { cursor: none !important; } }
-@media (prefers-reduced-motion:reduce) { .story-cursor span,.story-cursor svg { transition: none; } }
 
 /* SWARM introduction: "Introducing" alone, the logo grows in beside it, then the hive pops up. */
 .journey-copy--hive h2 { transform-origin: 50% 50%; will-change: transform; }

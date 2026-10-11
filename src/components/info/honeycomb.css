@@ -1,153 +1,113 @@
-/* Honeycomb window (HoneycombWindow.astro): the page header. The title block sits at the left gutter
-   straight under the nav, the summary in one large honeycomb cell beneath it, and a comb of honey cells
-   falls down the right side of the page from the top corner. The page is one white layer: the header
-   has no band of its own and the comb floats on it as a second layer, overhanging into the sheet.
-   Colours, type sizes, radii and the ease come from reading-tokens.css. */
+.honeycomb-window {
+  --hc-comb-w: 46%;
+  --hc-chamfer: clamp(28px, 4vw, 56px);
+  position: relative;
+  padding-block: calc(var(--nav-h) + clamp(2rem, 5vw, 3.5rem)) clamp(2.5rem, 5vw, 4rem);
+  color: var(--ink);
+}
 
-  .honeycomb-window {
-    /* The comb's share of the page width, and the chamfer of the summary cell's six sides. */
-    --hc-comb-w: 46%;
-    --hc-chamfer: clamp(28px, 4vw, 56px);
-    position: relative;
-    padding-block: calc(var(--nav-h) + clamp(2rem, 5vw, 3.5rem)) clamp(2.5rem, 5vw, 4rem);
-    color: var(--ink);
-  }
+/* ---- The comb ---- */
+.honeycomb-window__comb {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  width: var(--hc-comb-w);
+  aspect-ratio: 720 / 900;
+  pointer-events: none;
+}
+.honeycomb-window__comb svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 2px 3px rgb(26 50 42 / 0.08)) drop-shadow(0 22px 40px rgb(26 50 42 / 0.16));
+}
 
-  /* ---- The comb ---- */
-  /* It starts in the page's top corner, under the floating nav, and hangs down the page's edge past
-     the header: it sits above the sheet (z-index 1) and lets pointer events through to it. */
-  .honeycomb-window__comb {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 2;
-    width: var(--hc-comb-w);
-    aspect-ratio: 720 / 900;
-    pointer-events: none;
-  }
-  .honeycomb-window__comb svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    /* The second layer: a soft shadow on the page below the cells. */
-    filter: drop-shadow(0 2px 3px rgb(26 50 42 / 0.08)) drop-shadow(0 22px 40px rgb(26 50 42 / 0.16));
-  }
+.honeycomb-window__comb[data-corner='top-left'] { right: auto; left: 0; transform: scaleX(-1); }
+.honeycomb-window__comb[data-corner='bottom-right'] { top: auto; bottom: 0; transform: scaleY(-1); }
+.honeycomb-window__comb[data-corner='bottom-left'] { top: auto; right: auto; bottom: 0; left: 0; transform: scale(-1, -1); }
 
-  /* The artboard is laid out for a top-right seed; the other corners are mirrors of it. */
-  .honeycomb-window__comb[data-corner='top-left'] { right: auto; left: 0; transform: scaleX(-1); }
-  .honeycomb-window__comb[data-corner='bottom-right'] { top: auto; bottom: 0; transform: scaleY(-1); }
-  .honeycomb-window__comb[data-corner='bottom-left'] { top: auto; right: auto; bottom: 0; left: 0; transform: scale(-1, -1); }
+.hc-stop-honey { stop-color: var(--honey); }
+.hc-stop-deep { stop-color: var(--honey-deep); }
+.hc-stop-orange { stop-color: var(--orange); }
+.hc-cell { fill: url(#hc-gold); }
+.hc-cell--wall { fill: none; stroke: url(#hc-gold); stroke-width: 2.5; stroke-linejoin: round; }
 
-  /* Honey: full at the seed, deepening to orange and thinning out at the comb's reach. */
-  .hc-stop-honey { stop-color: var(--honey); }
-  .hc-stop-deep { stop-color: var(--honey-deep); }
-  .hc-stop-orange { stop-color: var(--orange); }
-  .hc-cell { fill: url(#hc-gold); }
-  .hc-cell--wall { fill: none; stroke: url(#hc-gold); stroke-width: 2.5; stroke-linejoin: round; }
+.hc-cluster {
+  transform-box: view-box;
+  animation: hc-unfold 1.6s var(--ease-out) both;
+}
+.hc-cell {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hc-pop 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  animation-delay: var(--hc-delay, 0s);
+}
+@keyframes hc-unfold {
+  from { transform: scale(0.2); }
+  to { transform: scale(1); }
+}
+@keyframes hc-pop {
+  from { opacity: 0; transform: scale(0.25); }
+  to { opacity: 1; transform: scale(1); }
+}
 
-  /* The unfold: the whole comb scales up from the seed cell while each cell pops in, ring by ring from
-     the seed and row by row downwards (--hc-delay, set per cell). Transform and opacity only; one shot. */
-  .hc-cluster {
-    transform-box: view-box;
-    animation: hc-unfold 1.6s var(--ease-out) both;
-  }
-  .hc-cell {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: hc-pop 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) both;
-    animation-delay: var(--hc-delay, 0s);
-  }
-  @keyframes hc-unfold {
-    from { transform: scale(0.2); }
-    to { transform: scale(1); }
-  }
-  @keyframes hc-pop {
-    from { opacity: 0; transform: scale(0.25); }
-    to { opacity: 1; transform: scale(1); }
-  }
+/* ---- The title block ---- */
+.honeycomb-window__text {
+  position: relative;
+  z-index: 1;
+  width: min(78rem, 100% - 2 * var(--gutter));
+  margin-inline: auto;
+}
+.honeycomb-window__inner {
+  display: grid;
+  justify-items: start;
+  gap: 0.5rem;
+  max-width: min(44rem, 100% - var(--hc-comb-w));
+  font-size: var(--fs-body);
+}
+.honeycomb-window__title { margin: 0; max-width: 100%; }
 
-  /* ---- The title block ---- */
-  .honeycomb-window__text {
-    position: relative;
-    z-index: 1;
-    width: min(78rem, 100% - 2 * var(--gutter));
-    margin-inline: auto;
-  }
-  .honeycomb-window__inner {
-    display: grid;
-    justify-items: start;
-    gap: 0.5rem;
-    max-width: min(44rem, 100% - var(--hc-comb-w));
-    font-size: var(--fs-body);
-  }
-  .honeycomb-window__eyebrow { margin: 0; color: var(--moss); }
-  .honeycomb-window__title { margin: 0; max-width: 100%; }
+/* ---- The summary cell ---- */
+.honeycomb-window__cell {
+  --hc-shape: polygon(
+    var(--hc-chamfer) 0, calc(100% - var(--hc-chamfer)) 0, 100% 50%,
+    calc(100% - var(--hc-chamfer)) 100%, var(--hc-chamfer) 100%, 0 50%
+  );
+  width: 100%;
+  margin-top: clamp(1.25rem, 3vw, 2rem);
+  padding: 2px;
+  background: var(--honey-deep);
+  clip-path: var(--hc-shape);
+}
+.honeycomb-window__cell-inner {
+  padding: clamp(1.25rem, 2.5vw, 1.75rem) calc(var(--hc-chamfer) + 0.75rem);
+  background: color-mix(in oklch, var(--honey) 16%, var(--sheet));
+  clip-path: var(--hc-shape);
+}
+.honeycomb-window__summary {
+  margin: 0;
+  font-size: var(--fs-body-l);
+  letter-spacing: -0.005em;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
 
-  /* ---- The summary cell ---- */
-  /* One honeycomb cell, stretched: six sides, a honey tint and a gold wall. The wall is the outer box
-     showing through, both boxes clipped to the same six-sided shape. */
-  .honeycomb-window__cell {
-    --hc-shape: polygon(
-      var(--hc-chamfer) 0, calc(100% - var(--hc-chamfer)) 0, 100% 50%,
-      calc(100% - var(--hc-chamfer)) 100%, var(--hc-chamfer) 100%, 0 50%
-    );
-    width: 100%;
-    margin-top: clamp(1.25rem, 3vw, 2rem);
-    padding: 2px;
-    background: var(--honey-deep);
-    clip-path: var(--hc-shape);
-  }
-  .honeycomb-window__cell-inner {
-    padding: clamp(1.25rem, 2.5vw, 1.75rem) calc(var(--hc-chamfer) + 0.75rem);
-    background: color-mix(in oklch, var(--honey) 16%, var(--sheet));
-    clip-path: var(--hc-shape);
-  }
-  .honeycomb-window__summary {
-    margin: 0;
-    font-size: var(--fs-body-l);
-    letter-spacing: -0.005em;
-    line-height: 1.5;
-    text-wrap: pretty;
-  }
+@media (max-width: 760px) {
+  .honeycomb-window { --hc-comb-w: 44%; --hc-chamfer: 20px; }
+  .honeycomb-window__comb { opacity: 0.8; }
+  .honeycomb-window__inner { max-width: 100%; }
+  .honeycomb-window__cell-inner { padding-inline: calc(var(--hc-chamfer) + 0.5rem); }
+}
 
-  /* ---- With a figure (the hardware page) ---- */
-  /* The figure sits full width between the title and the summary cell, as McGill 2025's Model page
-     does; the comb is narrower and dissolves before it reaches far into the figure. */
-  .honeycomb-window--figure { --hc-comb-w: 40%; }
-  .honeycomb-window--figure .honeycomb-window__comb {
-    -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent 78%);
-    mask-image: linear-gradient(to bottom, #000 45%, transparent 78%);
-  }
-  .honeycomb-window__figure {
-    position: relative;
-    z-index: 1;
-    /* No gap of its own: the explorer's stage carries the nav clearance it needs when it sticks. */
-    margin-top: 0;
-  }
-  /* The explorer's own "SWARM / Hardware" line repeats the header's eyebrow and title; its name stays. */
-  .honeycomb-window__figure .vapor-heading > p { display: none; }
-  .honeycomb-window__inner--after {
-    max-width: min(60rem, 100%);
-    margin-top: clamp(2rem, 4vw, 3rem);
-  }
-
-  /* Phones: a smaller, quieter comb in the corner; the title block takes the full width beneath it. */
-  @media (max-width: 760px) {
-    .honeycomb-window { --hc-comb-w: 44%; --hc-chamfer: 20px; }
-    .honeycomb-window__comb { opacity: 0.8; }
-    .honeycomb-window__inner { max-width: 100%; }
-    .honeycomb-window__cell-inner { padding-inline: calc(var(--hc-chamfer) + 0.5rem); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    /* The comb is simply there, complete. */
-    .hc-cluster, .hc-cell { animation: none; }
-  }
-  @media (forced-colors: active) {
-    .hc-cell { fill: CanvasText; }
-    .hc-cell--wall { stroke: CanvasText; }
-    .honeycomb-window__comb svg { filter: none; }
-    .honeycomb-window__cell { background: CanvasText; }
-    .honeycomb-window__cell-inner { background: Canvas; }
-  }
+@media (prefers-reduced-motion: reduce) {
+  .hc-cluster, .hc-cell { animation: none; }
+}
+@media (forced-colors: active) {
+  .hc-cell { fill: CanvasText; }
+  .hc-cell--wall { stroke: CanvasText; }
+  .honeycomb-window__comb svg { filter: none; }
+  .honeycomb-window__cell { background: CanvasText; }
+  .honeycomb-window__cell-inner { background: Canvas; }
+}

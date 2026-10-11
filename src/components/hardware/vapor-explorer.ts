@@ -2,6 +2,14 @@ import { WebPFrames } from './webp-frames';
 type Point = [number, number];
 const keyframes = [0,12,24,36,48,60,72,84,96,108,120,132,143];
 const lastFrame = 143;
+const knots: [number, number][] = [[0, 0], [0.15, 0], [0.33, 72], [0.64, 98], [0.88, 143], [1, 143]];
+function frameAt(s: number): number {
+  for (let i = 1; i < knots.length; i++) {
+    const [a, fa] = knots[i - 1], [b, fb] = knots[i];
+    if (s <= b) return fa + (fb - fa) * (s - a) / (b - a);
+  }
+  return lastFrame;
+}
 const anchors: Record<string, Point[]> = {
   chamber: [[67,18],[71,19],[69,20],[51,18],[69,17],[75,21],[70,25],[58,27],[44,24],[42,17],[45,19],[57,19],[67,18]],
   cup: [[51,27],[54,28],[54,32],[50,38],[48,23],[44,17],[42,14],[40,13],[42,13],[42,39],[44,31],[47,27],[51,27]],
@@ -14,8 +22,9 @@ const anchors: Record<string, Point[]> = {
 export function initVaporExplorer(root: HTMLElement) {
   const canvas = root.querySelector<HTMLCanvasElement>('[data-vapor-canvas]')!;
   const status = root.querySelector<HTMLElement>('[data-vapor-status]')!;
-  const phase = root.querySelector<HTMLElement>('[data-vapor-phase]')!;
   const workspace = root.querySelector<HTMLElement>('.vapor-workspace')!;
+  const stage = root.querySelector<HTMLElement>('[data-vapor-stage]')!;
+  const track = root.querySelector<HTMLElement>('[data-vapor-track]')!;
   const hotspots = [...root.querySelectorAll<HTMLButtonElement>('[data-part]')];
   const details = [...root.querySelectorAll<HTMLElement>('[data-vapor-detail]')];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -79,8 +88,6 @@ export function initVaporExplorer(root: HTMLElement) {
   }
   function seek(frame:number) {
     wanted = Math.round(clamp(frame));
-    root.style.setProperty('--journey',String(wanted/lastFrame));
-    phase.textContent=wanted < 18 || wanted > 130 ? 'VAPOR-X' : wanted < 44 ? 'Opening the assembly' : wanted < 98 ? 'Exploded view' : 'Coming together';
     renderFrame();
   }
   function tick(time:number) {
@@ -90,9 +97,9 @@ export function initVaporExplorer(root: HTMLElement) {
     if (!manual && !reduced.matches && ready && !document.hidden) {
       const rect=root.getBoundingClientRect();
       if(rect.bottom < 0 || rect.top > innerHeight) return;
-      const stageHeight=root.querySelector<HTMLElement>('.vapor-stage')!.offsetHeight;
-      const p=clamp((-rect.top/Math.max(1,root.offsetHeight-stageHeight)-.06)/.86,0,1);
-      const target=p*lastFrame;
+      const pin=parseFloat(getComputedStyle(stage).top)||0;
+      const s=clamp((pin-track.getBoundingClientRect().top)/Math.max(1,track.offsetHeight-stage.offsetHeight),0,1);
+      const target=frameAt(s);
       smoothFrame+=(target-smoothFrame)*(1-Math.exp(-dt/75));
       if(Math.abs(target-smoothFrame)<.08) smoothFrame=target;
       seek(smoothFrame);
