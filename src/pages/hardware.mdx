@@ -1,147 +1,48 @@
 ---
-layout: ../layouts/ContentLayout.astro
+layout: ../layouts/HardwareLayout.astro
 title: Hardware
-header: https://static.igem.wiki/teams/5612/projectdesc/unnamed-1.avif
-description: 'One-Pot System Hardware'
+description: 'Hardware writeup placeholder.'
 icon: "Plane"
 color: "green"
 ---
 
-import TwoColPara from "../components/md_components/TwoColPara";
-import Wip from "../components/md_components/Wip";
-import Image from "../components/md_components/Image";
-import Reference from "../components/md_components/Reference";
-import PDFAccordian from "../components/md_components/PDFAccordian";
-import ImageCarousel from "../components/md_components/ImageCarousel"
-
-
 # Overview
-LANCET will be housed in a one-pot system with each reaction separated by layers of solidified paraffin at a set wax-to-oil ratio. When a drop of blood is added to the tube, the lyophilized reagents of the reaction are activated. After each reaction runs, the following wax barrier is melted, rehydrating the next reagents to initiate the sequential reaction.
-To address the technical issues faced during our experimentation, Lambert iGEM developed specialized hardware to meet mechanical and thermal requirements. Because our system requires two layers of wax, we printed a three-module tube, allowing for easily replicable barriers. In order to achieve the required temperature control to melt these layers, we developed a low-cost heating system circuit made of an electric heating pad, an Arduino Uno, and a temperature sensor.
 
-# Heating Pad
-## Materials
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
-| Part                                | Quantity | Cost    |
-|-----------------------------------|---------|--------|
-| ELEGOO Uno R3 (implemented with Arduino Uno) | 1 | $16.99 |
-| SparkFun Electronics Heating Pad | 1 | $4.75 |
-| DS18B20 Temperature Sensor Probe | 1 | $2.50 |
-| 30A 60V N-Channel Power Mosfet | 1 | $0.70 |
-| 10KΩ Resistor | 2 | ~$0.20 |
-| 4.7KΩ Resistor | 1 | ~$0.10 |
-| SHNITPWR Universal Power Supply 3-24V | 1 | $16.55 |
-| Push Button | 1 | ~$0.05  |
-| Male-Male Jumper Wires | 23 | $1.14 |
-| Alligator Clips | 5 | $5.00 |
-| 15 mL Conical Tube | 2         | ~$0.60   |
-| **Total:** | | **$48.58** |
+Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-<center>*Table 1. Cost analysis of heating pad components.*</center>
+# Chamber and sample support
 
-Lambert iGEM utilized cost-effective materials to develop a frugal heating pad costing \$48.58 designed for LANCET’s one-pot system (see Table 1).
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.
 
-## Design
-<Image
-  src="https://static.igem.wiki/teams/5612/hardware/screenshot-2025-10-06-at-11-23-37-pm.webp"
-  caption="Figure 1. Schematic of heating pad circuit."
-  size="md"
-/>
+Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.
 
-To effectively control the progression of temperatures at which each reaction is performed, Lambert iGEM designed a user-friendly, automatic heating element that cycles between the temperatures required to perform each step of the one-pot system (see Fig. 1). The main components of the circuit are a waterproof DS18B20 temperature sensor probe, a SparkFun Electronics heating pad, an N-Channel power MOSFET (metal-oxide-semiconductor field-effect transistor), a push button, and an adjustable 5V-24V power supply, all of which are controlled by an Arduino Uno board. The DS18B20 probe connects to the 5V supply pin and a GND pin on the Arduino Uno, and sends temperature readings in degrees Celsius to the board through the D7 pin. The heating pad obtains power from the adjustable power supply, and through experimentation, we found that the device works most optimally at a voltage of about 10 volts.
+# Controls and enclosure
 
-We used an N-channel MOSFET to control the current flow. The MOSFET module consists of three pins: the gate pin, the source pin, and the drain pin. The source pin is connected to the ground terminal of the heating pad, while the drain pin is connected to the ground terminal of the Arduino Uno. These terminals must be connected for the circuit to be closed and for current to flow through the heating pad. The gate pin on the MOSFET module is connected to the D9 PWM (pulse width modulation) pin on the Arduino Uno board. When the Arduino Uno is not sending current through the D9 pin, the circuit is open and current is not flowing between the source and the drain pins. However, when the Arduino Uno sends a signal through the D9 pin, current is conducted between the source and the drain pins, completing the circuit and allowing electricity to flow through the heating pad, increasing its temperature.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-<Image
-  src="https://static.igem.wiki/teams/5612/hardware/screenshot-2025-10-07-at-12-17-56-am.webp"
-  caption="Figure 2. Conical tube setup in heating pad."
-  size="md"
-/>
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
-In order to hold the tubes while heating, we created a physical setup made of the lower portions of two 15 mL conical tubes, each cut at the 9 mL mark, wrapped within the heating pad. Due to water’s high specific heat capacity and its ability to retain heat for an extended duration, we decided to fill these tubes with water and measure the water temperature using the waterproof DS18B20 probe. The temperature sensor is placed in one of the tubes of water and the user must simply place the system into the remaining free conical tube within the heating device (see Fig. 2). When the push button on the device is pressed, the temperature cycle is initiated. 
+# Design checks
 
-## Software
-To program the Arduino Uno board, we used Arduino IDE, a user-friendly, versatile application based on the C++ programming language. The Arduino IDE application allows programmers to install external libraries; we implemented the OneWire and DallasTemperature libraries into our program to obtain data from the DS18B20 Temperature sensor.
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 
-Our heating pad is coded to cycle through specific temperatures for predetermined periods of time in order to facilitate the one-pot reaction. The program defines an array of five temperatures corresponding to each step of the one-pot system, along with an array of times in milliseconds for each temperature. The program continuously monitors the temperature, obtaining a signal from the DS18B20 sensor every second. When the measured temperature is below the target temperature, the heating pad activates in order to heat the water and the one-pot system. When the temperature reading from the probe is above the target temperature, the heating pad turns off, allowing the water to cool. This cycle is repeated to maintain the temperature of the water at the target temperature for that specific step of the one-pot system.
+| Area | Placeholder details |
+| --- | --- |
+| Chamber | Lorem ipsum dolor sit amet, consectetur adipiscing elit. |
+| Sample support | Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. |
+| Controls | Ut enim ad minim veniam, quis nostrud exercitation ullamco. |
+| Enclosure | Duis aute irure dolor in reprehenderit in voluptate velit esse. |
 
-The code can be downloaded from our GitLab
-[here](https://gitlab.igem.org/2025/software-tools/lambert-ga/-/tree/main/Other/HeatingPad?ref_type=heads).
+Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
+# Files and related work
 
-# One Pot
-## Design
-When designing the one-pot system for LANCET, our primary goal was to create thin, uniform layers of wax between each reaction to allow rapid melting at its designated temperature. During initial testing, we found that the wax did not harden sufficiently at the required ratio: instead of forming layers, it quickly collapsed to the bottom of the tube. To address this, we designed a microcentrifuge tube with three separate compartments, allowing the wax to be set individually between each section. We built upon a microcentrifuge tube CAD design, “Laboratory Sample Tube Dimension Model 1.5mL” by Bobby Dyer, altering it to separate into three sections (Dyer, 2016). Each section was designed in Autodesk Fusion to friction-fit together with 0.1 mm tolerances, and 3D-printed with clear Polycarbonate (PC) filament (See Fig. 3). Known for its tolerance to warping and high heat, PC allows us to autoclave our tube before use, ensuring sterility (Kodali et al., 2021). Since PC has strong adhesive capabilities, the wax is able to securely bond to the tube wall, preventing slipping. This design enables the sections to lock securely together while still allowing for easy assembly and disassembly. 
+<a href="https://static.igem.wiki/teams/6185/wiki/homepage/vapor-exploded.webp" download="VaporX_exploded.webp">Download the VAPOR-X assembly animation</a>
 
-The CAD model can be downloaded from our GitLab 
-[here](https://gitlab.igem.org/2025/software-tools/lambert-ga/-/tree/main/Other/onepot-system?ref_type=heads).
-
-<Image
-  src="https://static.igem.wiki/teams/5612/hardware/screenshot-2025-10-06-at-11-21-51-pm.webp"
-  caption="Figure 3. CAD model of custom split microcentrifuge tube."
-  size="xl"
-/>
----
-# Testing
-We tested three different ratios of paraffin oil to paraffin wax: 10:6, 10:7, and 10:8. Our goal was to find a ratio with the lowest melting point possible in order to prevent the degradation of our reagents. We initially tested a 10:6 oil-to-wax ratio, but its amorphous consistency meant it mixed with any liquid added to the tube. By adjusting the ratio to 10:7, we were able to produce a stable first layer with a melting point of 45 °C. This ratio remained completely solid at 37-39°C for over 180 minutes, longer than the incubation time of our wetlab reactions. For the second layer, our requirement was a melting point high enough to prevent premature melting at 45° C. A 10:8 oil-to-wax ratio yielded positive results and met our criteria with a melting point of 50°C. 
-
-<Image
-  src="https://static.igem.wiki/teams/5612/hardware/screenshot-2025-10-07-at-1-05-25-pm.webp"
-  caption="Figure 4. Molten wax pipetted on top of the water layer."
-  size="md"
-/>
-
-We began testing by preparing batches of 10:7 and 10:8 wax, maintaining them at temperatures slightly above their melting points, as overheating could alter the oil-to-wax ratio and shift the melting point. To form barriers between reaction regions, we sealed the base of each wax section with polytetrafluoroethylene (PTFE) tape. PTFE was selected for its hydrophobicity and thermal stability, ensuring negligible water uptake and durability at elevated temperatures (RS Components Ltd, 2023). After sealing, we put heated water onto the tape and pipetted molten wax over the surface of the water (see Fig. 4). Once set on the surface of the water, the density difference naturally separates the substances, evenly distributing and adhering a layer of wax to the tube walls. This section-by-section sealing with water enables a uniform wax spread and stable disks between each layer. 
-
-Pipette tips were preheated to prevent any wax from solidifying in the tips while pipetting. This process produced ~20–25 µL disks that retained the target melting point and proper shape.
-
-<Image
-  src="https://static.igem.wiki/teams/5612/hardware/screenshot-2025-10-07-at-3-43-26-pm.webp"
-  caption="Figure 5. Three colored waters placed above each wax layer prior to heating."
-  size="md"
-/>
-
-To test the effectiveness of this system, we set three different colored solutions above each layer of wax (see Fig. 5). 
-
-The heating pad was coded to cycle through the following temperatures: 
-- 70 minutes at 37˚C
-- 1 minute at 46˚C
-- 25 minutes at 37˚C
-- 1 minute at 51˚C
-- 30 minutes at 37˚C
-
-This cycle simulates the temperature changes that would occur when running the diagnostic.
-
-<Image
-  src="https://static.igem.wiki/teams/5612/hardware/screenshot-2025-10-07-at-3-45-32-pm.webp"
-  caption="Figure 6. Colored water mixed together after being heated first to 46˚C (Left) and then to 51˚C (Right)."
-  size="xl"
-/>
-
-Each layer melted only at the desired temperature, demonstrated by the sequential mixing of the colors (see Fig. 6). The lack of unintended melting and cross-contamination validates the use of wax as a release mechanism. 
-
-
-# Dehydration
-In order to increase shelf life, all our wetlab reagents will be dehydrated before they are stored in the tube. The exact time before reagents are degraded can be estimated using the water-by-weight principle. While commercial lyophilizers can lower the residual water content to under 1% by weight, they cost upwards of $1000 USD. As this technology is inaccessible to high schoolers, we collaborated with the Bhamla Lab at Georgia Tech. They provided us with a prototype of the Evapinator, a frugal dehydrator that operates by removing water vapor and decreasing the rate of condensation (see Figure 7). As the Evapinator removes \>95% of water content from reagents, it achieves a water-by-weight ratio of 1-5%. Based on available research and water-by-weight predictions, we can estimate that our diagnostic has a shelf life of 3 months at 25˚C, and 12-24 months at -20˚C (Bruno, 2017; Lillis et al., 2016; Spencer et al., 2025). 
-Since the Evapinator is currently in the preliminary testing stage, we are collaborating with the lab to optimize it for our reagents. 
-Once these modifications have been completed, we will systematically test the dried reagents of each reaction to confirm the effectiveness after dehydration.
-
-<Image
-  src="https://static.igem.wiki/teams/5612/hardware/img-8048.webp"
-  caption="Figure 7. Photo of Evapinator prototype (Anderson et al., 2024)."
-  size="lg"
-/>
---- 
-# Future Plans
-Our next step is to validate the Evapinator, ensuring that the reagents are successfully dehydrated. Following this, we aim to test the lyophilized reagents within the one-pot wax system to confirm the compatibility. As our one-pot system is highly experimental, there is limited information on how the wax and dehydration will interact with the various reagents. Through further testing, we hope to fully optimize our system while documenting information on the effects of paraffin wax on our reactions.
-
-# References
-<Reference children = "Anderson, C., Poorna, R., Georgia Institute of Technlogy, & Bhamla, S. (2024). Evapinator: A low-cost point-of-care blowdown evaporator for biofluid diagnostics [Journal-article]. https://prosquared.org/2024-LSS-Papers/2024-LSS-Anderson-Poorna-paper.pdf"></Reference>
-<Reference children = "Bobby Dyer, Laboratory Sample Tube Dimension Model 1.5mL | 3D CAD Model Library | GrabCAD. (n.d.). https://grabcad.com/library/laboratory-sample-tube-dimension-model-1-5ml-1"></Reference>
-<Reference children = "Bruno, J. G. (2016). Long shelf life of a lyophilized DNA aptamer beacon assay. Journal of Fluorescence, 27(2), 439–441. https://doi.org/10.1007/s10895-016-2014-x"> </Reference>
-<Reference children = "Kodali, D., Umerah, C. O., Idrees, M. O., Jeelani, S., & Rangari, V. K. (2021). Fabrication and characterization of polycarbonate-silica filaments for 3D printing applications. Journal of Composite Materials, 55(30), 4575–4584. https://doi.org/10.1177/00219983211044748"> </Reference>
-<Reference children = "Lillis, L., Siverson, J., Lee, A., Cantera, J., Parker, M., Piepenburg, O., Lehman, D. A., & Boyle, D. S. (2016). Factors influencing Recombinase polymerase amplification (RPA) assay outcomes at point of care. Molecular and Cellular Probes, 30(2), 74–78.https://doi.org/10.1016/j.mcp.2016.01.009"> </Reference>
-<Reference children = "RS Components Ltd. (2023). A complete guide to PTFE tape. RS. https://uk.rs-online.com/web/content/discovery/ideas-and-advice/ptfe-tapes-guide"></Reference>
-<Reference children = "Spencer, N., Jacobi, A., & Roberts, N. (2025, August 22). CRISPR reagent stability in storage and with freeze-thaws | IDT. IDT. https://sg.idtdna.com/page/support-and-education/decoded-plus/stability-of-crispr-reagents-under-different-freezing-storage-and-thawing-conditions/ "> </Reference>
-
-
+<div className="hardware-next">
+  <a href="/lambert-ga/description/">SWARM project description ↗</a>
+  <a href="/lambert-ga/engineering/">Engineering ↗</a>
+  <a href="/lambert-ga/safety/">Safety ↗</a>
+</div>

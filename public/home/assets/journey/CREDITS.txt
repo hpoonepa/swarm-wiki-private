@@ -1,0 +1,22 @@
+hive.png — DeseretBeehive by SheriffGaming (25 January 2017)
+Source: https://commons.wikimedia.org/wiki/File:DeseretBeehive.png
+License: Creative Commons Attribution-ShareAlike 4.0 International
+https://creativecommons.org/licenses/by-sa/4.0/
+Original file; displayed at different scales. This artwork retains its own license.
+
+varroa.svg — Varroa destructor silhouette by Lubna Maherally
+Source: https://www.phylopic.org/images/a41de4cd-eb7e-43ef-8a81-395a57f3876c/varroa-destructor
+License: CC0 1.0 Universal Public Domain Dedication
+https://creativecommons.org/publicdomain/zero/1.0/
+Original vector; the page applies a brown CSS color treatment.
+
+bee.svg and flower.svg — supplied SWARM homepage artwork.
+
+bee-deformed.svg — adapted from the supplied SWARM bee.svg.
+Only the two wings have been shortened and folded for the DWV comparison; the original body, face and legs are preserved.
+
+varroa-macro.jpg — Varroa destructor macro photograph, USGS Bee Inventory and Monitoring Lab, 6 September 2019.
+Source: https://commons.wikimedia.org/wiki/File:Varroa_destructor,_1_2019-09-06-19.12.07_ZS_PMax_UDR_(48697155713)_(white_background).jpg
+Public domain, United States government work. Original photograph; displayed at different scales and rotated.
+swarm-wordmark.png — supplied SWARM logo. Original image, displayed without alteration.
+bee-honeycomb-mite.png — supplied bee, honeycomb, and mite composition. Original image; camera zooms into the bee and mite within the artwork.

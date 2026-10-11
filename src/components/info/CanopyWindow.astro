@@ -1,0 +1,42 @@
+---
+import './canopy.css';
+interface Props { title: string; summary?: string; group: string; focal: { x: number; y: number } }
+const { title, summary, group, focal } = Astro.props;
+const layers = ['back', 'canopy-mid', 'vines-mid', 'props', 'bees', 'vines-front'];
+const style = `--fx:${focal.x / 2521};--fy:${focal.y / 2017};--zoom:1.35;--pfx:${focal.x / 2521};--pfy:${focal.y / 2017};--pzoom:1.35`;
+---
+<header class="canopy-window" data-canopy-window>
+  <div class="canopy canopy-window__art" style={style} aria-hidden="true">
+    {layers.map(layer => <img class="canopy__layer" data-layer={layer} src={`https://static.igem.wiki/teams/6185/wiki/homepage/layer-${layer}.svg`} width="2521" height="2017" alt="" decoding="async" />)}
+  </div>
+  <div class="canopy-window__text">
+    <div class="canopy-window__inner">
+      <p class="eyebrow canopy-window__eyebrow">{group}</p>
+      <h1 class="display-l canopy-window__title">{title}</h1>
+      {summary && <p class="canopy-window__summary">{summary}</p>}
+    </div>
+  </div>
+</header>
+<script>
+  import { bindScene } from './motion/scroll';
+  import { onReducedMotionChange, prefersReducedMotion } from './motion/reduced';
+  const depths: Record<string, number> = { back: 8, 'canopy-mid': 16, 'vines-mid': 24, props: 31, bees: 39, 'vines-front': 47 };
+  for (const header of document.querySelectorAll<HTMLElement>('[data-canopy-window]')) {
+    const layers = [...header.querySelectorAll<HTMLElement>('.canopy__layer')];
+    let stops: (() => void)[] = [];
+    let scale = 0;
+    const bind = () => {
+      const nextScale = (layers[0]?.getBoundingClientRect().width ?? 0) / 2521;
+      if (!prefersReducedMotion() && stops.length && Math.abs(nextScale - scale) < .0001) return;
+      stops.forEach(stop => stop()); stops = []; scale = nextScale;
+      if (prefersReducedMotion() || !scale) return;
+      stops = layers.map(layer => bindScene({
+        target: layer, subject: header, rangeStart: 'exit 0%', rangeEnd: 'exit 100%',
+        keyframes: [{ transform: 'translateY(0)' }, { transform: `translateY(-${Math.min(24, depths[layer.dataset.layer!] * scale)}px)` }],
+      }));
+    };
+    new ResizeObserver(bind).observe(header);
+    onReducedMotionChange(bind);
+    bind();
+  }
+</script>

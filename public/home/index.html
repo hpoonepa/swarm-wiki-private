@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en" class="loading">
+<head>
+<link rel="preload" href="https://static.igem.wiki/teams/6185/wiki/homepage/inter.woff2" as="font" type="font/woff2" crossorigin>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lambert-GA</title>
+<link rel="icon" type="image/webp" href="https://static.igem.wiki/teams/5612/mainlayout/fabicon.webp">
+<style>
+  @font-face { font-family: 'Inter'; src: url('https://static.igem.wiki/teams/6185/wiki/homepage/inter.woff2') format('woff2'); font-weight: 100 900; font-style: normal; font-display: swap; }
+  :root{ --cream:#FFFBFA; --ink:#0E2B25; --teal:#153F36; --orange:#E57624; --honey:#FCC42F; --maroon:#461021; }
+  html, body { margin: 0; padding: 0; background: #fff; color: var(--teal);
+    font-family: 'Inter', sans-serif; }
+  button, input, select, textarea { font-family: inherit; }
+
+  /* hero: the art portion of Frame 8.svg (everything above the white curve) */
+  .hero { width: 100%; aspect-ratio: 1440 / 1066; overflow: hidden; position: relative; z-index: 2;
+    clip-path: ellipse(108% 100% at 50% 0%); }   /* curved bottom edge: sides rise ~12%, centre reaches the bottom */
+  .hero img { width: 100%; height: auto; display: block; }
+
+  /* statement: one sentence at a time, cross-fading in the same spot as you scroll */
+  #statement { position: relative; height: 340vh; z-index: 2; pointer-events: none; }
+  #statement .pin { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; overflow: hidden; }
+  #statement .line { position: absolute; left: 7vw; max-width: min(62vw, 980px); margin: 0;
+    font-size: clamp(38px, 5.6vw, 92px); line-height: 1.02; letter-spacing: -.035em; font-weight: 850; color: var(--teal);
+    opacity: 0; will-change: opacity, transform, filter; }
+  #statement .pin { transition: opacity .35s ease-out; }
+  #statement.cleared .pin { opacity: 0; }   /* the globe's pop sweeps away whatever is left of the sentence */
+  #statement .line .dot { color: var(--orange); }
+  #statement .art { position: absolute; right: 5vw; top: 50%; margin-top: calc(min(40vw, 560px) * -.45); width: min(40vw, 560px); height: auto;
+    opacity: 0; will-change: opacity, transform, filter; overflow: visible; }
+  /* sentence 1: bread, strawberry, corn as one still-life cluster on the right.
+     Everything is sized from one unit so the arrangement keeps its proportions on any window shape. */
+  #statement .art.food { position: absolute; inset: 0; width: auto; height: auto; margin: 0; pointer-events: none; overflow: hidden; }
+  /* the user's Figma arrangement (Documents/Food exports): shared right edge, one scale; box = 724 x 1150 Figma units */
+  .food .cluster { position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+    height: min(96vh, calc(46vw * 1150 / 724)); aspect-ratio: 724 / 1150; }
+  .food img { position: absolute; display: block; height: auto; transform-origin: 100% 50%; will-change: transform, opacity; backface-visibility: hidden; }   /* pivot on the cut edge so it never shows */
+  .food .f-bread { right: 0; left: auto; top: -3.391%; width: 83.978%; }
+  .food .f-berry { right: 0; left: auto; top: 2.957%; width: 64.365%; }
+  .food .f-corn { right: 0; left: auto; top: 32.783%; width: 100.000%; }
+  .food .f-bread { transform: translate(var(--mx, 0px), var(--my, 0px)) translate3d(calc((1 - var(--vb, 1)) * 34vw), calc((1 - var(--vb, 1)) * -3vw), 0) rotate(calc((1 - var(--vb, 1)) * 8deg)) rotate(var(--hr, 0deg)) scale(var(--hs, 1)); }
+  .food .f-berry { transform: translate(var(--mx, 0px), var(--my, 0px)) translate3d(calc((1 - var(--vs, 1)) * 32vw), calc((1 - var(--vs, 1)) * 4vw), 0) rotate(calc((1 - var(--vs, 1)) * 10deg)) rotate(var(--hr, 0deg)) scale(var(--hs, 1)); }
+  .food .f-corn  { transform: translate(var(--mx, 0px), var(--my, 0px)) translate3d(calc((1 - var(--vc, 1)) * 34vw), calc((1 - var(--vc, 1)) * 6vw), 0) rotate(calc((1 - var(--vc, 1)) * 12deg)) rotate(var(--hr, 0deg)) scale(var(--hs, 1)); }
+  #statement .line { max-width: min(44vw, 720px); font-size: clamp(34px, min(4.4vw, 7vh), 76px); }
+  @media (max-width: 720px) {
+    .food .cluster { top: 2vh; transform: none; height: min(58vh, calc(62vw * 1150 / 724)); }
+    #statement .line { max-width: none; font-size: clamp(28px, 8.4vw, 56px); }
+  }
+  /* sentence 2: blueberry bunch in the top-right corner, flies in from the right */
+  #statement .f-blue { position: absolute; right: calc(min(1vw, 1.6vh) * -20); top: calc(min(1vw, 1.6vh) * -24);
+    width: calc(min(1vw, 1.6vh) * 69); height: auto; pointer-events: none; visibility: hidden;
+    transform: translate(var(--mx, 0px), var(--my, 0px)) translate3d(calc((1 - var(--vbl, 0)) * 40vw), calc((1 - var(--vbl, 0)) * -6vw), 0) rotate(calc((1 - var(--vbl, 0)) * 25deg)) rotate(var(--hr, 0deg)) scale(var(--hs, 1)); transform-origin: 100% 0%; }
+  @media (max-width: 720px) { #statement .f-blue { width: 80vw; top: -22vw; right: -24vw; } }
+  /* ---------- menu: fixed top-left, hidden on the title screen ---------- */
+  .menu-btn { position: fixed; top: 22px; left: 22px; z-index: 60; width: 56px; height: 62px; border-radius: 0; border: 0; padding: 0;
+    background: #fff; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); cursor: pointer; display: grid; place-items: center;
+    opacity: 0; transform: scale(.6); pointer-events: none; transition: opacity .3s, transform .45s cubic-bezier(.34, 1.6, .5, 1), background .2s; }
+  .menu-btn.show { opacity: 1; transform: none; pointer-events: auto; }
+  .menu-btn::before { content: ""; position: absolute; inset: 3px 3px; background: #153F36; clip-path: inherit; transition: background .2s; }
+  .menu-btn:hover::before { background: #1F5A4C; }
+  .menu-btn span { z-index: 1; }
+  .menu-btn span { position: absolute; left: 16px; width: 24px; height: 3px; border-radius: 3px; background: #fff; transition: transform .3s, opacity .2s; }
+  .menu-btn span:nth-child(1) { top: 21.5px; } .menu-btn span:nth-child(2) { top: 29px; } .menu-btn span:nth-child(3) { top: 36.5px; }
+  .menu-open .menu-btn span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+  .menu-open .menu-btn span:nth-child(2) { opacity: 0; }
+  .menu-open .menu-btn span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
+  .menu-panel { position: fixed; inset: 0 auto 0 0; z-index: 55; width: min(360px, 86vw); background: #153F36; color: #fff;
+    padding: 104px 34px 34px; transform: translateX(-102%); transition: transform .45s cubic-bezier(.2, .8, .2, 1); }
+  .menu-open .menu-panel { transform: none; }
+  .menu-panel .kicker { color: #FCC42F; }
+  .menu-panel ol { list-style: none; margin: 18px 0 0; padding: 0; display: grid; gap: 6px; counter-reset: m; }
+  .menu-panel a { display: flex; gap: 14px; align-items: baseline; padding: 12px 14px; border-radius: 14px; color: #fff; text-decoration: none;
+    font-size: 20px; font-weight: 800; letter-spacing: -.01em; transition: background .2s; }
+  .menu-panel a:hover, .menu-panel a:focus-visible { background: rgba(255,255,255,.08); }
+  .menu-scrim { position: fixed; inset: 0; z-index: 54; background: rgba(14,43,37,.35); opacity: 0; pointer-events: none; transition: opacity .3s; }
+  .menu-open .menu-scrim { opacity: 1; pointer-events: auto; }
+  /* ---------- hero logo: its own image, placed where it sits in the hero art (hero units x179.9 y92.4 w672.7 of 1440) ---------- */
+  #heroLogo { position: absolute; z-index: 3; left: calc(179.9 / 1440 * 100%); top: calc(92.4 / 1440 * 100vw); width: calc(672.7 / 1440 * 100%);
+    transform-origin: 0 0; pointer-events: none; }
+  #heroLogo img { display: block; width: 100%; height: auto; }
+  /* while loading the same logo sits centred above the green screen and fills with honey */
+  html.loading #heroLogo { position: fixed; z-index: 101; filter: drop-shadow(0 0 18px rgba(252, 196, 47, .35)); }
+  html.loading #heroLogo img { -webkit-mask-image: linear-gradient(to top, #000 var(--p, 0%), transparent calc(var(--p, 0%) + 3%));
+                                       mask-image: linear-gradient(to top, #000 var(--p, 0%), transparent calc(var(--p, 0%) + 3%)); }
+  #heroLogo.flying { position: fixed; z-index: 101; }
+  #heroLogo.travel { transition: transform 1.15s cubic-bezier(.65, 0, .25, 1), filter .9s ease; }
+
+  /* ---------- loading screen ---------- */
+  html.loading, html.loading body { overflow: hidden; }
+  #loader { position: fixed; inset: 0; z-index: 100; background: rgba(21, 63, 54, 1); transition: background-color .8s ease; }
+  #loader.fade { background-color: rgba(21, 63, 54, 0); }
+  #loader .ghost { position: absolute; display: block; height: auto; filter: brightness(0) invert(1); opacity: .07; transition: opacity .4s; }
+  #loader.fade .ghost { opacity: 0; }
+  @media (prefers-reduced-motion: reduce) { #loader, #heroLogo { transition-duration: .2s !important; } }
+  /* ---------- usability layer ---------- */
+  :focus-visible { outline: 3px solid #FCC42F; outline-offset: 3px; border-radius: 6px; }
+  .progress { position: fixed; left: 0; top: 0; height: 4px; width: 100%; z-index: 70; background: #FCC42F; transform-origin: 0 50%; transform: scaleX(0); pointer-events: none; }
+  .scroll-cue { position: absolute; left: 50%; bottom: 12%; z-index: 4; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: #fff; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,.4);
+    background: none; border: 0; cursor: pointer; transition: opacity .4s; }
+  .scroll-cue svg { animation: cueBob 1.6s ease-in-out infinite; }
+  @keyframes cueBob { 50% { transform: translateY(6px); } }
+  .scroll-cue.gone { opacity: 0; pointer-events: none; }
+  .to-top { position: fixed; right: 22px; bottom: 22px; z-index: 60; height: 48px; padding: 0 20px; border: 0; border-radius: 999px; background: #153F36; color: #fff;
+    font-size: 14px; font-weight: 800; cursor: pointer; box-shadow: 0 0 0 3px #fff; opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity .3s, transform .3s; }
+  .to-top.show { opacity: 1; transform: none; pointer-events: auto; }
+  .menu-panel a.current { background: rgba(255,255,255,.12); }
+  @media (prefers-reduced-motion: reduce) { .scroll-cue svg { animation: none; } }
+  /* ---------- quiet bee touches ---------- */
+  ::selection { background: rgba(252, 196, 47, .45); color: inherit; }
+  /* ---------- required wiki footer ---------- */
+  .wiki-footer { position: relative; z-index: 2; background: #153F36; color: rgba(255, 255, 255, .85); text-align: center;
+    padding: 18px 20px 20px; font-size: 12px; font-weight: 600; line-height: 1.7; }
+  .wiki-footer p { margin: 0; }
+  .wiki-footer a { color: #fff; text-decoration: underline; }
+  .pwing { transform-box: fill-box; transform-origin: 50% 100%; animation: pflap .12s ease-in-out infinite alternate; }
+  .pw2 { animation-delay: -.06s; }
+  @keyframes pflap { to { transform: scaleY(.55); } }
+  .glow { transform-box: fill-box; transform-origin: center; animation: glow 2.4s ease-in-out infinite; }
+  @keyframes glow { 50% { transform: scale(1.08); fill-opacity: .4; } }
+  .spark { transform-box: fill-box; transform-origin: center; animation: spark 1.8s ease-in-out infinite; }
+  .s2 { animation-delay: -.6s; } .s3 { animation-delay: -1.2s; }
+  @keyframes spark { 50% { transform: scale(.55) rotate(45deg); } }
+  .art2 { --w: 0; }
+  .art2 .crop { transform-box: view-box; }
+  .art2 .c1 { transform-origin: 100px 410px; transform: rotate(calc(var(--w) * -18deg)) scaleY(calc(1 - var(--w) * .14)); }
+  .art2 .c2 { transform-origin: 260px 410px; transform: rotate(calc(var(--w) * 15deg)) scaleY(calc(1 - var(--w) * .12)); }
+  .art2 .c3 { transform-origin: 420px 410px; transform: rotate(calc(var(--w) * -12deg)) scaleY(calc(1 - var(--w) * .16)); }
+  .art2 .c4 { transform-origin: 588px 410px; animation: sway 3s ease-in-out infinite; }
+  @keyframes sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2.5deg); } }
+  .art2 .leaf    { fill: color-mix(in srgb, #6FA83A calc((1 - var(--w)) * 100%), #A2916A); }
+  .art2 .berry   { fill: color-mix(in srgb, #4B63B0 calc((1 - var(--w)) * 100%), #8C8378); stroke-width: 3; }
+  .art2 .blossom { fill: color-mix(in srgb, #F7CFD4 calc((1 - var(--w)) * 100%), #C9BBA6); stroke-width: 2.5; }
+  .art2 .squash  { fill: color-mix(in srgb, #E57624 calc((1 - var(--w)) * 100%), #A89478); }
+  .art2 .grain   { fill: #E8B94A; stroke-width: 2.5; }
+  .art2 .lab     { fill-opacity: calc(1 - var(--w) * .6); }
+  @media (max-width: 720px) {
+    #statement .pin { align-items: flex-end; padding-bottom: 10vh; }
+    #statement .line { max-width: none; }
+    #statement .art { right: 0; left: 0; margin: 0 auto; top: 7vh; width: min(80vw, 420px); }
+  }
+  @media (prefers-reduced-motion: reduce) { .pwing, .glow, .spark, .art2 .c4 { animation: none; } }
+  #statement .line em { font-style: normal; color: var(--orange); }
+  @media (max-width: 720px) { #statement .line { left: 20px; right: 20px; max-width: none; font-size: clamp(28px, 8.4vw, 56px); } }
+
+
+  /* ---------- info cards: pop in after the globe, tilt toward the cursor ---------- */
+  .cards { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+  .card { position: absolute; width: clamp(200px, 17vw, 250px); pointer-events: auto; perspective: 900px;
+    transform: scale(0) rotate(var(--r0, -6deg)); opacity: 0;
+    transition: transform .75s cubic-bezier(.34, 1.7, .5, 1), opacity .25s; }
+  .card:nth-child(1) { left: 7vw;  top: 15vh;    --r0: -8deg; --d: .18s; }
+  .card:nth-child(2) { left: 9vw;  bottom: 15vh; --r0: 7deg;  --d: .30s; }
+  .card:nth-child(3) { right: 7vw; top: 15vh;    --r0: 8deg;  --d: .24s; }
+  .card:nth-child(4) { right: 9vw; bottom: 15vh; --r0: -7deg; --d: .36s; }
+  .popped .card { transform: none; opacity: 1; transition-delay: var(--d); }
+  /* zooming to Atlanta: cards fly outward and fade */
+  .card:nth-child(1) { --fx: -60px; --fy: -40px; } .card:nth-child(2) { --fx: -60px; --fy: 40px; }
+  .card:nth-child(3) { --fx: 60px;  --fy: -40px; } .card:nth-child(4) { --fx: 60px;  --fy: 40px; }
+  .popped.zooming .card { opacity: 0; transform: translate(var(--fx), var(--fy)) scale(.85); pointer-events: none;
+    transition: transform .5s cubic-bezier(.5, 0, .75, 0), opacity .35s; transition-delay: 0s; }
+
+  /* Atlanta info card, same construction as the corner cards */
+  .atl { position: absolute; right: 7vw; top: 50%; width: clamp(280px, 30vw, 420px); z-index: 3; perspective: 900px;
+    transform: translateY(-50%) translateX(40px) scale(.9); opacity: 0; pointer-events: none;
+    transition: transform .6s cubic-bezier(.34, 1.6, .5, 1), opacity .3s; }
+  .at-atl .atl { transform: translateY(-50%); opacity: 1; pointer-events: auto; transition-delay: .15s; }
+  .atl .back { --off: 0px; }
+  .at-atl .atl .back { --off: 18px; transition-delay: .5s; }
+  .atl .face { padding: 26px 28px 28px; }
+  .atl h3 { font-size: clamp(26px, 2.6vw, 38px); }
+  .atl ul { margin: 14px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; }
+  .atl li { display: grid; grid-template-columns: 26px 1fr; gap: 10px; align-items: start; font-size: 15px; line-height: 1.45; color: #4E605B; }
+  .atl li::before { content: ""; width: 18px; height: 20px; margin-top: 1px; background: #7E9D61;
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+  .atl .coords { margin-top: 16px; font-size: 12px; font-weight: 700; letter-spacing: .12em; color: #8A9A95; }
+  @media (max-width: 900px) { .atl { right: 20px; left: 20px; width: auto; top: auto; bottom: 5vh; transform: translateY(40px) scale(.95); }
+    .at-atl .atl { transform: none; } }
+  .tilt { position: relative; transform-style: preserve-3d; cursor: pointer;
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(var(--lift, 0px)) scale(var(--press, 1));
+    transition: transform .35s cubic-bezier(.2, .9, .3, 1.3); }
+  .back, .face { border-radius: 26px; }
+  .back { position: absolute; inset: 0; background: #D9E0F1;
+    transform: translate(var(--off, 0px), var(--off, 0px)); transition: transform .5s cubic-bezier(.3, 1.6, .5, 1); }
+  .popped .back { --off: 10px; transition-delay: calc(var(--d) + .35s); }
+  .popped .card:hover .back { --off: 16px; transition-delay: 0s; }
+  .face { position: relative; background: #F6F7FC; padding: 18px 20px 20px; }
+  .face .num { position: absolute; top: 18px; right: 20px; font-size: 12px; font-weight: 900; color: #fff;
+    background: #344C82; border-radius: 999px; padding: 3px 9px; }
+  .face .kicker { display: block; padding-right: 52px; line-height: 1.5; }
+  .face h3 { margin: 8px 0 0; font-size: clamp(16px, 1.25vw, 19px); line-height: 1.15; letter-spacing: -.015em; font-weight: 850; color: var(--teal); }
+  .face p { margin: 6px 0 0; font-size: 13.5px; line-height: 1.45; color: #4E605B; }
+  .card:hover .tilt { --lift: -6px; }
+  .card:active .tilt { --press: .96; }
+  @media (max-width: 900px) {
+    .cards { top: auto; bottom: 0; height: auto; display: flex; gap: 22px; overflow-x: auto; padding: 0 20px 40px; scroll-snap-type: x mandatory; }
+    .card { position: relative; inset: auto !important; flex: 0 0 min(78vw, 300px); scroll-snap-align: start; }
+    .hint { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .card, .tilt, .back { transition-duration: .01s !important; } }
+
+  .after { height: 40vh; }
+</style>
+<link rel="stylesheet" href="story.css?v=8b975060b71c">
+</head>
+<body>
+<div id="heroLogo"><img src="https://static.igem.wiki/teams/6185/wiki/homepage/logo.webp" alt="SWARM" width="1202" height="1354"></div>
+<div id="loader" role="status" aria-label="Loading"><img class="ghost" id="ldGhost" src="https://static.igem.wiki/teams/6185/wiki/homepage/logo-loader.avif" alt=""></div>
+<script>
+/* loading screen: the hero's own logo waits in the centre, fills with honey as the page loads, then travels up into the hero */
+(function () {
+  var L = document.getElementById('loader'), logo = document.getElementById('heroLogo'), ghost = document.getElementById('ldGhost');
+  var shown = 0, target = 0, loaded = false, t0 = performance.now(), MIN = 1700, done = false;
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+  window.scrollTo(0, 0);
+  function home() {                           // the logo's resting spot in the hero (page coordinates at scroll 0)
+    var W = document.documentElement.clientWidth;
+    return { x: W * 179.9 / 1440, y: W * 92.4 / 1440, w: W * 672.7 / 1440 };
+  }
+  function centre() {                         // its size and spot on the loading screen
+    var W = document.documentElement.clientWidth, H = window.innerHeight, w = Math.min(260, W * .46), h = w * 758.9 / 672.7;
+    return { x: (W - w) / 2, y: (H - h) / 2, w: w, h: h };
+  }
+  function place() {
+    if (done) return;
+    var a = home(), c = centre();
+    logo.style.left = a.x + 'px'; logo.style.top = a.y + 'px'; logo.style.width = a.w + 'px';
+    logo.style.transform = 'translate(' + (c.x - a.x).toFixed(1) + 'px,' + (c.y - a.y).toFixed(1) + 'px) scale(' + (c.w / a.w).toFixed(4) + ')';
+    ghost.style.left = c.x + 'px'; ghost.style.top = c.y + 'px'; ghost.style.width = c.w + 'px';
+  }
+  place(); window.addEventListener('resize', place);
+  function count() {
+    var els = [].slice.call(document.images).concat([].slice.call(document.scripts).filter(function (s) { return s.src; }));
+    var n = 0; els.forEach(function (e) { if (e.complete || e.dataset.ok) n++; });
+    target = els.length ? n / els.length : 0;
+  }
+  document.addEventListener('load', function (e) { if (e.target && e.target.dataset) e.target.dataset.ok = 1; count(); }, true);
+  var iv = setInterval(count, 150);
+  window.addEventListener('load', function () { clearInterval(iv); (document.fonts ? document.fonts.ready : Promise.resolve()).then(function () { loaded = true; }); });
+  setTimeout(function () { loaded = true; }, 12000);            // never trap anyone behind the loader
+  function tick() {
+    var el = performance.now() - t0, cap = Math.min(1, el / MIN);
+    var goal = Math.min(cap, loaded ? 1 : Math.max(target * .92, .9 * (1 - Math.exp(-el / 2500))));
+    shown += (goal - shown) * .08;
+    if (loaded && cap >= 1 && 1 - shown < .004) shown = 1;
+    logo.style.setProperty('--p', (shown * 103 - 3).toFixed(2) + '%');
+    if (shown >= 1) return setTimeout(finish, 350);
+    requestAnimationFrame(tick);
+  }
+  function finish() {
+    done = true; window.scrollTo(0, 0);
+    // fly: stay fixed above the green, animate from the centred pose to the hero pose (same box, transform only)
+    logo.classList.add('flying');
+    document.documentElement.classList.remove('loading');      // unmask (fully filled anyway) and unlock scroll
+    logo.style.filter = 'drop-shadow(0 0 18px rgba(252, 196, 47, .35))';
+    logo.getBoundingClientRect();                               // commit the centred start pose
+    requestAnimationFrame(function () {
+      logo.classList.add('travel');
+      logo.style.transform = 'translate(0px,0px) scale(1)';
+      logo.style.filter = 'drop-shadow(0 0 0 rgba(252, 196, 47, 0))';
+      setTimeout(function () { L.classList.add('fade'); }, 500);  // green melts once the logo is most of the way there
+    });
+    setTimeout(function () {                                    // landed: hand back to the hero, which scrolls with the page
+      logo.classList.remove('travel', 'flying');
+      logo.style.left = logo.style.top = logo.style.width = logo.style.transform = logo.style.filter = '';
+      setTimeout(function () { L.remove(); window.dispatchEvent(new Event('swarm-ready')); }, 700);
+    }, 1250);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
+<header class="hero" id="top">
+    <img src="https://static.igem.wiki/teams/6185/wiki/homepage/frame8-hero.svg?v=5" alt="SWARM jungle hero with a honey bee on a red flower" width="1440" height="3137">
+  </header>
+
+
+  <section id="statement" aria-label="Why bees matter">
+    <div class="pin">
+      <div class="art art1 food" aria-hidden="true">
+        <div class="cluster">
+          <img class="f-bread" src="https://static.igem.wiki/teams/6185/wiki/homepage/bread.svg" alt="">
+          <img class="f-berry" src="https://static.igem.wiki/teams/6185/wiki/homepage/strawberry.svg" alt="">
+          <img class="f-corn" src="https://static.igem.wiki/teams/6185/wiki/homepage/corn.svg" alt="">
+        </div>
+      </div>
+      <p class="line">Bees help pollinate the crops that <em>feed us</em><span class="dot">.</span></p>
+      <img class="f-blue" src="https://static.igem.wiki/teams/6185/wiki/homepage/blueberry.svg?v=edited1" alt="" aria-hidden="true">
+      <p class="line">Protecting honey bees means understanding <em>what threatens them</em><span class="dot">.</span></p>
+    </div>
+  </section>
+
+  <section id="honeycomb-earth" class="scroll-story" aria-label="From Earth to the hive, inside a honey bee, and inside a Varroa mite" data-region="world">
+    <div class="stage geo-stage">
+      <div class="map-view"><canvas id="globe" role="img" aria-label="An illustrated Earth turns toward the United States, marking how many honey bee colonies each major beekeeping state lost each winter from 2016 to 2026, then points to Atlanta, Georgia"></canvas><span class="globe-location" aria-hidden="true">Atlanta, Georgia</span>
+      </div>
+      <div class="loss-years" aria-hidden="true"><b class="ly-year">2016</b><span class="ly-total"></span><div class="ly-bar"><i class="ly-track"></i><i class="ly-fill"></i></div></div>
+      <div class="geo-copy">
+        <article class="geo-panel is-active" data-region-panel="world">
+          <h2>Worldwide</h2>
+          <p class="stat">75<span>%</span></p>
+          <p class="stat-description">of global food crop types depend on pollinators.</p>
+        </article>
+        <article class="geo-panel" data-region-panel="usa" aria-hidden="true" inert>
+          <h2>United States</h2>
+          <p class="stat">55.6<span>%</span></p>
+          <p class="stat-description">estimated U.S. colony loss in 2024–25, across all causes.</p>
+        </article>
+        <article class="geo-panel geo-panel--headline" data-region-panel="atlanta" aria-hidden="true" inert>
+          <h2>Why?</h2>
+        </article>
+      </div>
+
+      <div class="why-virus" id="dwv" data-embed data-preload aria-hidden="true"></div>
+      <div class="dwv-story" aria-hidden="true" inert>
+        <div class="dwv-heading">
+          <h2>Deformed wing virus</h2>
+          <p>A major contributor to colony losses.</p>
+        </div>
+        <div class="bee-comparison" id="bee-comparison" aria-label="Comparison of healthy wing development and wings affected by deformed wing virus">
+          <figure class="bee-comparison__healthy">
+            <img src="https://static.igem.wiki/teams/6185/wiki/homepage/bee.svg" alt="The team's bee illustration with full-length wings" width="366" height="314">
+            <figcaption><h3>Before</h3><p>Healthy wing development</p></figcaption>
+          </figure>
+          <figure class="bee-comparison__affected">
+            <img src="https://static.igem.wiki/teams/6185/wiki/homepage/bee-deformed.svg" alt="The same bee artwork with shortened, crumpled wings to illustrate severe DWV symptoms" width="366" height="314">
+            <figcaption><h3>After</h3><p>Wings damaged by DWV</p></figcaption>
+          </figure>
+          <p class="bee-comparison__explanation">DWV can disrupt a bee’s development. In severe cases, bees emerge with crumpled wings and cannot fly.</p>
+        </div>
+      </div>
+      <div class="pollinator-scene" aria-hidden="true">
+        <div class="hive-composition">
+          <img class="journey-art" src="https://static.igem.wiki/teams/6185/wiki/homepage/bee-honeycomb-mite.avif" alt="" width="1536" height="1024">
+        </div>
+      </div>
+      <div class="journey-copy journey-copy--hive" id="hive" aria-hidden="true" inert>
+        <h2><span class="swarm-introducing">Introducing</span><img class="swarm-wordmark" src="https://static.igem.wiki/teams/6185/wiki/homepage/swarm-wordmark.avif" alt="SWARM" width="866" height="813"></h2>
+        <p class="swarm-subtitle">Minibinders for the virus. RNAi for the mite.</p>
+      </div>
+      <div class="journey-copy journey-copy--bee journey-approach" id="bee" aria-hidden="true" inert>
+        <h2><span>1.</span> Minibinders</h2>
+      </div>
+  <div id="minibinders" class="journey-protein" aria-hidden="true" inert aria-labelledby="minibinder-title">
+      <div class="cell-field cell-field--protein" data-cell-field aria-hidden="true">
+        <svg class="gut-lining" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <pattern id="gut-paper-grain" width="149" height="113" patternUnits="userSpaceOnUse">
+              <circle cx="13" cy="21" r=".8"/><circle cx="79" cy="8" r=".65"/><circle cx="122" cy="67" r=".9"/>
+              <path d="m43 84 1.5-.5m62-43 1 .6M8 103l1-.8M138 29l1.7.2" fill="none" stroke="currentColor" stroke-width=".7"/>
+            </pattern>
+          </defs>
+          <rect width="1440" height="900" fill="url(#gut-paper-grain)" class="gut-grain"/>
+          <g class="gut-wall gut-wall--top">
+            <path d="M-20-20H1460V39C1359 69 1305 24 1182 45S1005 66 897 35S708 15 586 47S390 69 272 40S95 64-20 38Z" fill="#eac171"/>
+            <path d="M-20-20H1460V16C1347 46 1291 8 1176 24S1005 40 899 13S708-9 585 25S388 45 274 20S89 42-20 15Z" fill="#d6a24c"/>
+            <path d="M-20 43C95 68 153 13 272 43S466 78 586 51S788 8 897 39S1066 70 1182 49S1359 73 1460 43" fill="none" stroke="#ba833c" stroke-width="2" opacity=".6"/>
+            <g stroke="#b17d37" stroke-width="1.5" fill="none" opacity=".45">
+              <path d="M92-5 103 40M231-8l-6 39M389-7l8 62M541-6l14 52M699-4l-9 26M845-5l7 32M1007-4l-3 54M1158-5l9 48M1325-3l-7 41"/>
+            </g>
+          </g>
+          <g class="gut-wall gut-wall--bottom">
+            <path d="M-30 902V815C31 776 104 836 175 816S267 770 343 805S440 848 518 821S631 799 705 826S824 798 903 795S1018 850 1090 815S1210 792 1276 809S1402 767 1470 795V922Z" fill="#f1d493"/>
+            <path d="M-30 922V842C42 809 103 861 175 841S268 797 343 831S447 870 518 848S636 825 705 851S824 824 903 824S1013 872 1090 843S1207 819 1276 836S1401 796 1470 824V922Z" fill="#dfb45f"/>
+            <path d="M-30 815C31 776 104 836 175 816S267 770 343 805S440 848 518 821S631 799 705 826S824 798 903 795S1018 850 1090 815S1210 792 1276 809S1402 767 1470 795" fill="none" stroke="#ba8439" stroke-width="2.5"/>
+            <g fill="none" stroke="#ad7935" stroke-width="2" opacity=".6">
+              <path d="M84 813C67 842 95 865 87 914M190 811C211 847 181 875 195 914M319 795C302 840 337 871 321 916M440 833C425 859 449 881 436 915M566 810C588 843 560 875 577 915M693 822C676 850 708 882 699 914M816 810C834 843 807 881 823 915M943 801C924 843 950 874 939 914M1071 824C1088 856 1064 881 1078 915M1183 799C1168 838 1196 881 1186 914M1306 811C1328 847 1294 880 1316 915M1423 785C1403 831 1428 876 1417 915"/>
+            </g>
+            <g fill="#bc873c" opacity=".42">
+              <ellipse cx="35" cy="861" rx="20" ry="12" transform="rotate(17 35 861)"/>
+              <ellipse cx="139" cy="881" rx="15" ry="22" transform="rotate(-22 139 881)"/>
+              <ellipse cx="255" cy="851" rx="23" ry="14" transform="rotate(-14 255 851)"/>
+              <ellipse cx="379" cy="879" rx="16" ry="21" transform="rotate(20 379 879)"/>
+              <ellipse cx="506" cy="887" rx="22" ry="13" transform="rotate(-12 506 887)"/>
+              <ellipse cx="634" cy="865" rx="20" ry="14" transform="rotate(31 634 865)"/>
+              <ellipse cx="754" cy="876" rx="16" ry="23" transform="rotate(-17 754 876)"/>
+              <ellipse cx="881" cy="853" rx="24" ry="13" transform="rotate(8 881 853)"/>
+              <ellipse cx="1004" cy="889" rx="19" ry="16" transform="rotate(-27 1004 889)"/>
+              <ellipse cx="1134" cy="863" rx="19" ry="12" transform="rotate(25 1134 863)"/>
+              <ellipse cx="1253" cy="880" rx="16" ry="22" transform="rotate(-13 1253 880)"/>
+              <ellipse cx="1366" cy="850" rx="22" ry="14" transform="rotate(18 1366 850)"/>
+            </g>
+            <g fill="none" stroke="#b68439" stroke-width="2.5" stroke-linecap="round" opacity=".5">
+              <path d="M19 801l-3 -12 M47 804l1 -17 M76 813l3 -14 M106 819l-1 -10 M139 822l-3 -16 M177 815l1 -12 M207 803l3 -17 M235 796l-1 -14 M264 792l-3 -10 M295 793l1 -16 M325 799l3 -12 M358 812l-1 -17 M388 824l-3 -14 M420 834l1 -10 M455 837l3 -16 M489 832l-1 -12 M525 819l-3 -17 M561 812l1 -14 M594 813l3 -10 M629 817l-1 -16 M665 821l-3 -12 M702 829l1 -17 M737 831l3 -14 M774 824l-1 -10 M807 813l-3 -16 M843 803l1 -12 M878 797l3 -17 M912 797l-1 -14 M946 806l-3 -10 M979 820l1 -16 M1011 832l3 -12 M1046 834l-1 -17 M1080 820l-3 -14 M1114 807l1 -10 M1149 800l3 -16 M1184 799l-1 -12 M1218 802l-3 -17 M1253 809l1 -14 M1287 810l3 -10 M1321 802l-1 -16 M1355 793l-3 -12 M1390 785l1 -17 M1423 785l3 -14"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="mechanism-copy mechanism-copy--headline">
+        <h2 id="minibinder-title">1. Minibinders</h2>
+        <p class="mini-explanation" data-mini-explanation>Minibinders are small proteins made to attach to a specific target. Ours binds the P domain, a part of DWV’s outer shell.</p>
+        <div class="mini-result" data-mini-result hidden>
+          <p class="mini-result__value">~550 <span>nM</span></p>
+          <p class="mini-result__detail">Best replicate apparent K<sub>d</sub><br>~604 nM overall · BLI assay</p>
+          <a href="assets/evidence/binding-summary.csv" download>View the binding data</a>
+        </div>
+      </div>
+      <div class="protein-view">
+        <div class="gut-cell" aria-hidden="true">
+          <svg viewBox="0 0 400 650" xmlns="http://www.w3.org/2000/svg">
+            <path d="M184-40C87 85 114 172 153 278C194 394 84 480 172 690H440V-40Z" fill="#e7b854"/>
+            <path d="M184-40C87 85 114 172 153 278C194 394 84 480 172 690" fill="none" stroke="#ad762c" stroke-width="15"/>
+            <path d="M202-40C105 85 132 172 171 278C212 394 102 480 190 690" fill="none" stroke="#f8d986" stroke-width="5"/>
+            <ellipse cx="313" cy="326" rx="65" ry="88" fill="#cd963d" transform="rotate(-17 313 326)"/>
+            <ellipse cx="319" cy="329" rx="25" ry="32" fill="#a36c29"/>
+            <path d="M234 145Q277 110 315 145M257 499Q315 453 370 487" fill="none" stroke="#f2cc70" stroke-width="17" stroke-linecap="round"/>
+          </svg>
+          <span>Bee gut cell</span>
+        </div>
+        <div id="capsid-host" tabindex="0" role="img" aria-describedby="capsid-controls" aria-label="DWV capsid structure, with illustrative minibinders approaching and binding to its surface">
+          <span class="protein-label protein-label--site" aria-hidden="true">P domain</span>
+          <span class="protein-label protein-label--binder" aria-hidden="true">Minibinder</span>
+          <p class="model-fallback" role="status">Loading the DWV structure…</p>
+        </div>
+        <p id="capsid-controls" class="sr-only">Drag to rotate. Use the arrow keys to turn the model.</p>
+      </div>
+
+  </div>
+
+      <div id="mite" class="journey-copy journey-copy--mite journey-approach" aria-hidden="true" inert>
+        <h2><span>2.</span> RNAi</h2>
+      </div>
+
+  <div id="rnai" class="journey-rna" data-theme="dark" aria-labelledby="rnai-title" aria-hidden="true" inert>
+    <div class="cell-field cell-field--rna" data-cell-field aria-hidden="true"></div>
+    <div id="rna-intro" class="rna-discovery" aria-hidden="true" inert>
+      <div class="rna-discovery__copy">
+        <h2>2. RNAi</h2>
+        <p>Cells use messenger RNA as instructions for making proteins. RNA interference, or RNAi, breaks down a matching message so less of that protein is made.</p>
+        <p>We’re targeting three genes used by <em>Varroa</em> mites’ salivary glands. We want to reduce the proteins that help mites feed on bees.</p>
+      </div>
+        <div class="rna-targets">
+          <h3>Three salivary gene targets</h3>
+          <dl>
+            <div><dt>Vd-CHIsal</dt><dd>Salivary chitinase</dd></div>
+            <div><dt>Vd-CHIBIN</dt><dd>Chitin-binding protein</dd></div>
+            <div><dt>AV422</dt><dd>Salivary protein linked to feeding</dd></div>
+          </dl>
+        </div>
+    </div>
+    <div class="mechanism-stage rna-layout">
+      <div class="mechanism-copy mechanism-copy--headline">
+        <h2 id="rnai-title">How RNAi works</h2>
+        <p class="rna-context">An RNA guide helps the cell find and break down a matching message.</p>
+      </div>
+      <div class="rna-player" data-rna-player data-step="0">
+  <div class="rna-stage" role="img" aria-label="RNA interference inside a Varroa mite cell: Dicer processes dsRNA, RISC assembles, and a guide directs cleavage of matching mite messenger RNA.">
+    <canvas class="rna-canvas" aria-hidden="true"></canvas>
+  </div>
+  <div class="rna-player__copy" aria-live="polite" aria-atomic="true">
+    <p data-rna-copy="0">The process starts with double-stranded RNA that matches the target gene. Dicer, an enzyme in the cell, cuts it into shorter pieces.</p>
+    <p data-rna-copy="1" hidden>These pieces are called siRNAs. Each one can provide a guide for finding the target message. We designed six candidates for our three mite genes.</p>
+    <p data-rna-copy="2" hidden>Argonaute, shown in pink, joins other proteins to form RISC. Argonaute does the cutting once the right message is found.</p>
+    <p data-rna-copy="3" hidden>RISC picks up an siRNA. Its sequence determines which messenger RNA the complex can recognize.</p>
+    <p data-rna-copy="4" hidden>The two strands separate. One is released; the other stays with Argonaute as the guide.</p>
+    <p data-rna-copy="5" hidden>The guide pairs with a matching sequence in the mite’s messenger RNA.</p>
+    <p data-rna-copy="6" hidden>Argonaute cuts the message, and the cell breaks it down. With fewer copies left to read, the cell can make less of the protein.</p>
+  </div>
+  <div class="rna-player__controls">
+    <button class="rna-control" type="button" data-rna-play aria-label="Play sequence" aria-pressed="false"><span aria-hidden="true" data-rna-play-icon>▷</span></button>
+    <button class="rna-control" type="button" data-rna-next aria-label="Next step"><span aria-hidden="true">→</span></button>
+  </div>
+</div>
+    </div>
+  </div>
+    </div>
+  </section>
+
+  <section id="together" class="together-story" aria-labelledby="together-title">
+    <div class="stage together-stage">
+      <div class="together-copy">
+        <h2 id="together-title">Protecting bees<br>from <span>DWV.</span></h2>
+        <p>SWARM is designed to target the virus inside the bee and the <em>Varroa</em> mite that spreads it. Our goal is to limit new infections and help bees already exposed to DWV.</p>
+        <a class="together-safety" href="../safety/">How we assess safety <span aria-hidden="true">↗</span></a>
+        <nav class="together-links" aria-label="Explore our approach">
+          <a href="../description/">Our project <span aria-hidden="true">↗</span></a>
+          <a href="#minibinders">Minibinders <span aria-hidden="true">↗</span></a>
+          <a href="#rna-intro">RNAi <span aria-hidden="true">↗</span></a>
+        </nav>
+      </div>
+      <div class="together-garden" aria-hidden="true">
+        <img class="together-flower" src="https://static.igem.wiki/teams/6185/wiki/homepage/flower.svg" alt="" width="850" height="770">
+        <img class="together-bee" src="https://static.igem.wiki/teams/6185/wiki/homepage/bee.svg" alt="" width="366" height="314">
+      </div>
+    </div>
+  </section>
+
+  <section id="explore" class="project-explore" aria-labelledby="explore-title">
+    <div class="explore-heading"><h2 id="explore-title">Building SWARM.</h2></div>
+    <p class="explore-context">A treatment also has to work in a hive. Alongside the molecular designs, we’re developing protein-storage and feeding hardware, modeling delivery and binding, and learning from beekeepers and researchers.</p>
+    <div class="project-grid">
+      <a class="project-card project-card--project" href="../description/" data-wiki-page="description">
+        <div class="project-card__copy"><span class="project-card__eyebrow">Start here</span><h3>Our project</h3><p>How DWV and Varroa connect, and why SWARM addresses both.</p></div>
+        <img class="project-card__flower" src="https://static.igem.wiki/teams/6185/wiki/homepage/flower.svg" alt="" width="850" height="770" loading="lazy">
+        <span class="project-card__arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="project-card project-card--engineering" href="../engineering/" data-wiki-page="engineering">
+        <div class="project-card__copy"><span class="project-card__eyebrow">Design &amp; test</span><h3>Engineering</h3><p>Protein design, binding tests, RNA guide screening, and what we changed.</p></div>
+        <img class="project-card__rna" src="https://static.igem.wiki/teams/6185/wiki/homepage/dsrna.svg" alt="" loading="lazy">
+        <span class="project-card__arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="project-card project-card--people" href="../human-practices/" data-wiki-page="human-practices">
+        <div class="project-card__copy"><span class="project-card__eyebrow">Beyond the lab</span><h3>Human practices</h3><p>How conversations with researchers and beekeepers shape our targets and delivery plans.</p></div>
+        <img class="project-card__bee" src="https://static.igem.wiki/teams/6185/wiki/homepage/bee.svg" alt="" width="366" height="314" loading="lazy">
+        <span class="project-card__arrow" aria-hidden="true">↗</span>
+      </a>
+      <a class="project-card project-card--team" href="../team/" data-wiki-page="team">
+        <div class="project-card__copy"><span class="project-card__eyebrow">Lambert-GA · 2026</span><h3>Meet the team</h3><p>The people building SWARM.</p></div>
+        <span class="project-card__wordmark" aria-hidden="true">SWARM</span>
+        <span class="project-card__arrow" aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <div class="honey-progress" inert>
+    <div class="honey-progress__control" role="slider" tabindex="0" aria-label="Homepage scroll position" aria-orientation="vertical" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="0% through the homepage" title="Drag the honey to move through the homepage"></div>
+    <div class="honey-progress__track" aria-hidden="true"><div class="honey-progress__fill"></div></div>
+    <div class="honey-progress__drop" aria-hidden="true">
+      <svg viewBox="0 0 24 38" fill="none"><defs><linearGradient id="honey-drip-color" x1="2" y1="19" x2="22" y2="19" gradientUnits="userSpaceOnUse"><stop stop-color="#ffe17a"/><stop offset=".48" stop-color="#f8bf32"/><stop offset="1" stop-color="#eaa218"/></linearGradient></defs><path d="M12 1C12 12 2 19 2 27a10 10 0 0 0 20 0C22 19 12 12 12 1Z" fill="url(#honey-drip-color)" stroke="#d89b20" stroke-width="1.2"/><path d="M7 23c-2 4-1 7 1 9" stroke="#fff4c6" stroke-width="2.5" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+
+  <button class="to-top" type="button">Back to top ↑</button>
+  <swarm-nav story></swarm-nav>
+  <!-- iGEM requirement: license notice + repository link on every page (same wording as src/components/Footer.tsx) -->
+  <footer class="wiki-footer">
+    <details class="home-references">
+      <summary>References &amp; artwork</summary>
+      <ul>
+        <li><a href="https://www.fao.org/pollination/about/" target="_blank" rel="noreferrer">FAO: crop pollination</a></li>
+        <li><a href="https://wire.auburn.edu/content/agriculture/2025/06/2506-beekeepers-survey.php" target="_blank" rel="noreferrer">U.S. Beekeeping Survey, April 2024–April 2025: managed colony losses</a></li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5373406/" target="_blank" rel="noreferrer">DWV structure and the proposed role of the P domain</a></li>
+        <li><a href="https://www.rcsb.org/structure/5L8Q" target="_blank" rel="noreferrer">Protein Data Bank: DWV capsid, 5L8Q</a></li>
+        <li><a href="https://pubmed.ncbi.nlm.nih.gov/20003360/" target="_blank" rel="noreferrer">DWV in honey bee tissues</a></li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3534371/" target="_blank" rel="noreferrer">RNA interference in Varroa</a></li>
+        <li><a href="https://www.nobelprize.org/uploads/2018/06/advanced-medicineprize2006.pdf" target="_blank" rel="noreferrer">The RNAi pathway: Nobel Committee scientific background</a></li>
+        <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12236051/" target="_blank" rel="noreferrer">Varroa salivary genes as targets for RNAi</a></li>
+        <li><a href="https://pubmed.ncbi.nlm.nih.gov/42102981/" target="_blank" rel="noreferrer">Varroa salivary proteins, feeding and fertility</a></li>
+        <li><a href="https://www.nature.com/articles/s41598-025-31753-0" target="_blank" rel="noreferrer">DWV and honey bee colony losses</a></li>
+        <li><a href="https://www.ars.usda.gov/pacific-west-area/tucson-az/carl-hayden-bee-research-center/research/varroa/varroosis/" target="_blank" rel="noreferrer">USDA ARS: Varroa, DWV and deformed wings</a></li>
+        <li>Bee comparison adapted from the team’s supplied bee artwork; only the wings differ.</li>
+        <li><a href="assets/evidence/binding-summary.csv" download>SWARM binding result: Adaptyv Bio round 2 summary (CSV)</a></li>
+        <li><a href="assets/evidence/rnai-design-summary.csv" download>SWARM RNA guide design panel: v10 summary (CSV)</a></li>
+        <li>SWARM logo and bee, honeycomb, and mite composition supplied by the team.</li>
+      </ul>
+    </details>
+    <p>© 2026 - Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC Attribution 4.0 International</a>.</p>
+    <p>Repository: <a href="https://gitlab.igem.org/2026/lambert-ga" target="_blank" rel="noreferrer">https://gitlab.igem.org/2026/lambert-ga</a></p>
+  </footer>
+  <script src="vendor/three.min.js"></script>
+  <script src="assets/landmask.js"></script>
+  <script src="assets/landmask-hi.js"></script>
+  <script src="earth-scroll.js?v=6dbda1a86ebc"></script>
+  <script src="colony-loss.js?v=845977d85632"></script>
+  <script src="globe.js?v=cbbea770ca82"></script>
+  <script src="dwv-virus.js?v=29bb8a0b764c"></script>
+  <script src="statement.js?v=smooth1"></script>
+  <script src="food.js?v=4"></script>
+  <script type="module" src="navbar.js?v=23bb511af627"></script>
+  <script src="menu.js?v=513c1f0340b8"></script>
+  <script src="ux.js?v=story1"></script>
+  <script src="cursor.js?v=b8ab9b037e0c" defer></script>
+  <script src="flight.js?v=c05448bf20a6"></script>
+  <script type="module" src="mechanisms.js?v=c1c26c514d91"></script>
+</body>
+</html>

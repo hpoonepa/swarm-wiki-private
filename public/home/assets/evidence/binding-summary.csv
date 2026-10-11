@@ -1,0 +1,4 @@
+name,scope,replicate,binding,method,kd_app,fit_quality
+l79_s469532_mpnn9,overall,,true,BLI,6.036332007942429e-7,Medium
+l79_s469532_mpnn9,replicate,1,true,BLI,5.459605797779456e-7,Medium
+l79_s469532_mpnn9,replicate,2,true,BLI,6.657159451349552e-7,Medium

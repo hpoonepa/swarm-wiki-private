@@ -1,13 +1,14 @@
 // RNAi artwork and timeline adapted from the team's supplied RNAi animation.
 export function createRnaScene(cv) {
   const THREE = window.THREE;
+  const dark = cv.closest('[data-theme="dark"]') !== null;
 
   // ---------------------------------------------------------------- colours & shapes (from the team's part SVGs)
   const C = {
     dicer: '#7deaa3', ago: '#f87b8c', comp: '#9ed2ee',
-    back: '#095b8a', rung: '#05deba',              // dsRNA / siRNA
-    tBack: '#2b1ec2', tRung: '#52a3fe',            // target mRNA
-    ink: '#1e1e24', paper: '#ffffff',
+    back: dark ? '#70ced8' : '#095b8a', rung: '#05deba', // dsRNA / siRNA
+    tBack: dark ? '#b9b2ff' : '#2b1ec2', tRung: '#52a3fe', // target mRNA
+    ink: dark ? '#fff1e6' : '#1e1e24', paper: '#ffffff',
   };
   const DICER = 'M394.64 21.37C432.11 16.48 472.29 34.56 493.97 65.55C499.59 73.58 504.82 83.16 506.53 92.91C509.65 110.81 502.67 131.52 488.52 143.03C479.22 150.59 467.29 150.68 456.31 147.25C440.08 142.19 425.61 133.08 408.52 130.73C393.85 128.72 379.13 132.35 365.77 138.27C351.01 144.8 334.96 154.22 318.96 145.51C307.31 139.16 300.89 124.26 300.62 111.5C300.45 103.71 302.46 95.75 304.78 88.37C318.4 45.23 352.01 26.92 394.64 21.37Z';
   const AGO = 'M271.59 524.34C276.61 523.68 281.86 523.68 286.85 524.55C316.25 529.68 327.53 558.55 326.63 585.5C325.24 626.72 301.31 668.63 267.69 692.17C250.92 703.92 229.21 711.49 208.98 704.48C181.26 694.88 174.81 659.75 178.7 634.43C183.81 601.2 200.48 569.66 225.88 547.4C238.81 536.06 254.23 526.61 271.59 524.34Z';
@@ -251,7 +252,7 @@ export function createRnaScene(cv) {
     const c2 = o.cnv.getContext('2d'), font = `600 ${o.size * PX}px Caveat, "Comic Sans MS", cursive`;
     c2.font = font; const w = Math.ceil(c2.measureText(o.txt).width) + 12 * PX, h = Math.ceil(o.size * PX * 1.5);
     o.cnv.width = w; o.cnv.height = h;
-    c2.font = font; c2.fillStyle = C.ink; c2.textAlign = 'center'; c2.textBaseline = 'middle';
+    c2.font = font; c2.fillStyle = ['Ago','RISC'].includes(o.txt) ? '#361b24' : C.ink; c2.textAlign = 'center'; c2.textBaseline = 'middle';
     c2.fillText(o.txt, w / 2, h / 2);
     o.w = w / PX; o.h = h / PX; o.tex.dispose(); o.tex.needsUpdate = true;
   }

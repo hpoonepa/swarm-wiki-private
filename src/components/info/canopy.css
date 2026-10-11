@@ -1,0 +1,28 @@
+
+  /* The canopy box takes its size from the consumer (size containment): give it a width and a height. */
+  .canopy { position: relative; overflow: hidden; container-type: size; background: var(--canopy); isolation: isolate; }
+  /*
+   * Every layer is the whole 2521 × 2017 art, scaled to cover the box (times --zoom) with the focal point
+   * (--fx, --fy as fractions of the art) at the box center, clamped so no art edge ever shows. The overlay (Canopy's
+   * default slot) is the same box, so its children sit on the art.
+   * --layer-k (default 1) lays a layer out k times larger about the focal point: a consumer that zooms the layer up to
+   * scale k (the home push-in) draws it at rest with scale(1 / k), so the zoom ends at scale(1), rasterized at its
+   * largest. The custom properties are left unregistered so the cq units resolve at the layer, against .canopy.
+   */
+  .canopy__layer, .canopy__overlay {
+    --ar: calc(2521 / 2017);
+    --aw: calc(max(100cqw, 100cqh * var(--ar)) * var(--zoom, 1));
+    position: absolute;
+    max-width: none; /* the reset caps svg at 100%; a zoomed layer is wider than its box */
+    width: calc(var(--aw) * var(--layer-k, 1));
+    height: calc(var(--aw) / var(--ar) * var(--layer-k, 1));
+    left: calc(clamp(calc(100cqw - var(--aw)), calc(50cqw - var(--fx) * var(--aw)), 0px) - var(--fx) * var(--aw) * (var(--layer-k, 1) - 1));
+    top: calc(clamp(calc(100cqh - var(--aw) / var(--ar)), calc(50cqh - var(--fy) * var(--aw) / var(--ar)), 0px)
+      - var(--fy) * var(--aw) / var(--ar) * (var(--layer-k, 1) - 1));
+    transform-origin: calc(var(--fx) * 100%) calc(var(--fy) * 100%);
+    pointer-events: none;
+  }
+  /* Taller than wide (phones): recompose on the portrait focal point and zoom instead of squeezing the landscape crop. */
+  @container (aspect-ratio < 1) {
+    .canopy__layer, .canopy__overlay { --fx: var(--pfx); --fy: var(--pfy); --zoom: var(--pzoom); }
+  }

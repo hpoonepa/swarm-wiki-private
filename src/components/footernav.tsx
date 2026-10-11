@@ -22,10 +22,10 @@ type Props = {
 const DEFAULT_NODES: NavNode[] = [
   { id: "n1", label: "Model",    href: "/lambert-ga/model",             x: -40, y: 150, r: 90, color: "#447700" },
   { id: "n2", label: "Project", href: "/lambert-ga/description",      x: 0,  y: -45,  r: 110, color: "#125C00" },
-  { id: "n3", label: "Therapeutics",  href: "/lambert-ga/therapeutics-overview",    x: 270,  y: -110, r: 120, color: "#2C8117" },
+  { id: "n3", label: "RNAi",  href: "/lambert-ga/therapeutics-overview",    x: 270,  y: -110, r: 120, color: "#2C8117" },
   { id: "n4", label: "Team",  href: "/lambert-ga/team",         x: 500,  y: 60,  r: 90,color: "#2C8117" },
   { id: "n5", label: "Software", href: "/lambert-ga/software", x: 690, y: -70, r: 115,color: "#447700" },
-  { id: "n6", label: "Diagnostics",  href: "/lambert-ga/diagnosticsoverview",           x: 1070, y: -80, r: 120,color: "#125C00" },
+  { id: "n6", label: "Minibinders",  href: "/lambert-ga/diagnosticsoverview",           x: 1070, y: -80, r: 120,color: "#125C00" },
   { id: "n7", label: "Results", href: "/lambert-ga/results",          x: 1200, y: 100, r: 100,color: "#2C8117" },
 ];
 // --------------------

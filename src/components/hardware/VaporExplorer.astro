@@ -1,0 +1,41 @@
+---
+import './hardware.css';
+const parts = [
+  { id: 'chamber', name: 'Sample chamber', side: 'right', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
+  { id: 'cup', name: 'Sample cup', side: 'left', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
+  { id: 'platform', name: 'Raised platform', side: 'left', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
+  { id: 'controls', name: 'Front-panel controls', side: 'left', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
+  { id: 'enclosure', name: 'Main enclosure', side: 'right', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
+  { id: 'board', name: 'Electronics board', side: 'left', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
+  { id: 'unit', name: 'Internal unit', side: 'right', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
+];
+---
+<section class="vapor-story" data-vapor-story aria-label="Explore the VAPOR-X hardware assembly">
+  <div class="vapor-stage">
+    <header class="vapor-heading">
+      <p>SWARM <span>/</span> Hardware</p>
+      <h1>VAPOR<span>-X</span></h1>
+    </header>
+    <div class="vapor-workspace">
+      <div class="vapor-render" data-vapor-render>
+        <img class="vapor-loading-poster" src="https://static.igem.wiki/teams/6185/wiki/homepage/vapor-poster.webp" width="954" height="992" alt="Assembled VAPOR-X hardware" />
+        <canvas data-vapor-canvas data-src="https://static.igem.wiki/teams/6185/wiki/homepage/vapor-exploded.webp" width="1186" height="1233" role="img" aria-label="Scroll to see VAPOR-X separate into its components, rotate, and come back together. Select a numbered part to inspect it."></canvas>
+        <div class="vapor-hotspots" data-vapor-hotspots>
+          {parts.map((part, i) => <button type="button" class="vapor-hotspot" data-part={part.id} aria-label={`Inspect ${part.name.toLowerCase()}`} aria-expanded="false" aria-controls={`vapor-detail-${part.id}`} style={`--x:50%;--y:50%`}><span>{i + 1}</span></button>)}
+        </div>
+      </div>
+      {parts.map((part, i) => <aside class="vapor-detail" data-vapor-detail={part.id} data-side={part.side} id={`vapor-detail-${part.id}`} aria-labelledby={`vapor-name-${part.id}`} hidden>
+        <div class="vapor-detail-top"><span>0{i + 1} / VAPOR-X</span><button type="button" data-vapor-close aria-label={`Close ${part.name.toLowerCase()} details`}>×</button></div>
+        <h2 id={`vapor-name-${part.id}`}>{part.name}</h2>
+        <p>{part.text}</p>
+        <p class="vapor-detail-note">{part.note}</p>
+      </aside>)}
+      <div class="vapor-scene-caption" aria-hidden="true"><span class="vapor-caption-line"></span><span data-vapor-phase>VAPOR-X</span></div>
+      <p class="vapor-instruction" data-vapor-status>Scroll to explore. Click a part for details.</p>
+    </div>
+  </div>
+</section>
+<script>
+  import { initVaporExplorer } from './vapor-explorer';
+  for (const story of document.querySelectorAll<HTMLElement>('[data-vapor-story]')) initVaporExplorer(story);
+</script>

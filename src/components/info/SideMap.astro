@@ -1,0 +1,53 @@
+---
+// The section map (spec §5.2, §19.4). Each h2 and h3 is a row whose marker is a pink bud on a vine; the vine grows with
+// reading progress and a bud blooms once its section has been read (sidemap.ts). The default is the sticky side map
+// with its label and search button; `variant="list"` renders only the list, for the phone section sheet.
+import type { Section } from './sidemap';
+import './layout.css';
+
+interface Props { sections: Section[]; variant?: 'map' | 'list' }
+const { sections, variant = 'map' } = Astro.props;
+const map = variant === 'map';
+const Wrapper = map ? 'nav' : 'div';
+const wrapper = map
+  ? { class: 'side-map', 'aria-labelledby': 'side-map-label', 'data-pagefind-ignore': 'all' }
+  : { class: 'section-sheet__list' };
+// The bud's shapes are defined once per page and each marker draws them with <use> (the markers are repeated in the
+// side map and the sheet): the leaf sepal, and a petal whose five copies are gathered upright into a bud and spread
+// around a honey heart once it blooms (their angles are in layout.css). The shapes are colored through inline styles,
+// which the <use> copies inherit.
+const DEFS = Symbol.for('swarm.bud-defs');
+const locals = Astro.locals as Record<symbol, boolean | undefined>;
+const defs = !locals[DEFS];
+locals[DEFS] = true;
+---
+<Wrapper {...wrapper}>
+  {defs && (
+    <svg class="bud-defs" width="0" height="0" aria-hidden="true" focusable="false">
+      <path id="bud-sepal" style="fill:var(--leaf)" d="M0 1.2C-2.6 1.3-4.3 3.3-4.7 5.8-2.4 5.6-.7 4 0 1.2ZM0 1.2C2.6 1.3 4.3 3.3 4.7 5.8 2.4 5.6.7 4 0 1.2Z" />
+      <g id="bud-petal"><ellipse style="fill:var(--pink)" cy="-4.6" rx="2.7" ry="4.3" /><ellipse style="fill:var(--crimson)" cy="-2" rx="1.5" ry="1.9" /></g>
+    </svg>
+  )}
+  {map && <p class="eyebrow side-map__label" id="side-map-label">On this page</p>}
+  <div class="section-list" data-section-list={map ? 'map' : 'sheet'}>
+    <span class="section-list__track" aria-hidden="true"></span>
+    <span class="section-list__vine" aria-hidden="true"></span>
+    <ol class="section-list__items" role="list">
+      {sections.map((s) => (
+        <li class="section-list__item" data-section={s.id}>
+          <a class="section-list__link" href={`#${s.id}`} data-section-link data-depth={s.depth}>
+            <span class="section-list__marker" aria-hidden="true">
+              <svg class="bud" viewBox="-10 -10 20 20" focusable="false"><use href="#bud-sepal" /><use class="bud__petal" href="#bud-petal" /><use class="bud__petal" href="#bud-petal" /><use class="bud__petal" href="#bud-petal" /><use class="bud__petal" href="#bud-petal" /><use class="bud__petal" href="#bud-petal" /><circle class="bud__heart" r="2" /></svg>
+            </span>
+            <span class="section-list__text">{s.text}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </div>
+
+</Wrapper>
+
+<script>
+  import './sidemap';
+</script>

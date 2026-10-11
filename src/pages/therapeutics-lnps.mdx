@@ -2,67 +2,8 @@
 layout: ../layouts/ContentLayout.astro
 title: Lipid Nanoparticles
 header: https://static.igem.wiki/teams/5612/headerpics/therapeutics.webp
-description: 'Novel Approach to Treat Lyme Using CRISPR-interference and Lipid Nanoparticles'
 icon: "Plane"
 color: "green"
-tabLabels: ["Overview", "CRISPRi", "LNPs"]
+tabLabels: ["RNAi", "CRISPRi", "LNPs"]
 tabLinks: ["therapeutics-overview", "therapeutics-crispri", "therapeutics-lnps"]
 ---
-
-import TwoColPara from "../components/md_components/TwoColPara";
-import Wip from "../components/md_components/Wip";
-import Image from "../components/md_components/Image";
-import Reference from "../components/md_components/Reference";
-import PDFAccordian from "../components/md_components/PDFAccordian";
-import ImageCarousel from "../components/md_components/ImageCarousel"
-
-# LNP Overview
-
-Lambert iGEM chose lipid nanoparticles (LNPs) as a potential non-viral delivery platform for CRISPRi by encapsulating plasmid DNA (pDNA) forms of dCas9 and sgRNA (see Fig. 1). LNPs are spherical membranes composed of a combination of different lipids that can efficiently encapsulate genetic material and enhance cellular uptake, facilitating delivery into target cells (Kim et al., 2024). We chose this system over others such as bacteriophages, primarily due to its low cytotoxicity (Billingsley et al., 2020). It also allows for targeted gene repression in Escherichia coli while protecting pDNA from degradation for proof of concept experimentation (Ottonelli et al., 2024). With successful experimentation ongoing with the CRISPRi system and extensive literature analysis on current LNP technology, our designed system is a promising delivery mechanism for CRISPRi. As we move forward with the project in the future, more experimentation will be done for the system. 
-
-
-<Image
-  src="https://static.igem.wiki/teams/5612/crisprilnp/lnpdiagram.webp"
-  caption="Figure 1. Diagram of Lipid Nanoparticles Encapsulating Plasmid DNA"
-  size="md"
-/>
-
-# LNP Design
-
-## LNP Composition
-The characteristics and abilities of LNPs vary greatly based on the chosen lipids and molar ratio for them. In order to make this LNP optimal for bacterial uptake and encapsulation of the dCas9-sgRNA plasmid, we combined calculations from well 
-tested LNPs and existing protocols. 
-
-Our lipid combination consists of DODMA, DOTAP, cholesterol, DOPE, and DSPE-PEG-Mannose combined at a molar ratio of 30:25:33:10:2 (see Table 1). The nanoparticles will be prepared using rapid manual mixing techniques which yield consistent encapsulation of pDNA with the LNP particle diameter aimed to be 110.9 nanometers, which can be confirmed by Dynamic Light Scattering (DLS)  (Kim et al., 2024) .
-
-| Lipid | DODMA (1,2-dioleyloxy-3-dimethylaminopropane) (Kulkarni et al., 2018)(Kazemian et al., 2022) | DOTAP (1,2-Dioleoyl-3-trimethylammonium-propane) (Kulkarni et al., 2018) | Cholesterol (Hou et al., 2021) | DOPE (1,2-dioleoyl-sn-glycero-3-phosphoethanolamine) (Hou et al., 2021) | DSPE-PEG-Mannose (1,2-distearoyl-sn-glycero-3-phosphoethanolamine-N-(polyethylene glycol)-Mannose) |
-|------|------|------|------|------|------|
-| **Molar ratio** | 30 | 25 | 33 | 10 | 2 |
-| **Function** | Ionizable cationic lipid; electrostatically complexes nucleic acids in LNPs and enables pH-triggered endosomal escape | Cationic lipid, mediates nucleic acid encapsulation in LNPs but with higher cytotoxicity risk | Helper lipid; stabilizes LNP structure and enhances particle integrity and membrane fusion | Helper lipid; facilitates endosomal escape in LNPs and membrane fusion | PEGylated lipid with targeting ligand; extends LNP circulation time and directs uptake via mannose receptors |
-
-*Table 1. Table of Lipid Nanoparticle Formulation Components and Molar Ratios*
-
-## Validation
-To validate the quality and consistency of the LNPs, Dynamic Light Scattering (DLS) would be used as an analytical technique, which measures the size and distribution of particles by analyzing how they scatter light (Rodriguez-Loya et al., 2023). 
-
-The functional effectiveness of our systems in vivo would be validated by measuring the amount of cell death in *E. coli* using a bacterial viability assay. Since the gene rpsL is essential for the survival of *E. coli*, repressing the gene is expected to cause cell death. By comparing the survival and growth rates of treated and untreated populations, we could confirm the successful delivery of CRISPRi into *E. coli*.
-
-### LNP Protocol
-Based on existing literature on LNPs for bacteria and CRISPR systems, we compiled a protocol that would be utilized to test our system’s LNPs in the future with more time and resources to do so (Patel et al., 2025)(Gregersen et al., 2024) (Kim et al., 2024). 
-
-<PDFAccordian client:load
-  name="LANCET LNP Protocol"
-  src="https://static.igem.wiki/teams/5612/crisprilnp/lambert-igem-lancet-lnp-protocol.pdf"
-/>
-
-
-# References
-<Reference children="Billingsley, M. M., Singh, N., Ravikumar, P., Zhang, R., June, C. H., & Mitchell, M. J. (2020). Ionizable lipid nanoparticle-mediated mRNA delivery for human CAR T cell engineering. Nano Letters, 20(3), 1578–1589. https://doi.org/10.1021/acs.nanolett.9b04246"></Reference>
-<Reference children="Gregersen, C. H., Mearraoui, R., Søgaard, P. P., Clergeaud, G., Petersson, K., Urquhart, A. J., & Simonsen, J. B. (2024). Lipid nanoparticles containing labile PEG-lipids transfect primary human skin cells more efficiently in the presence of apoE. European Journal of Pharmaceutics and Biopharmaceutics, 197, 114219. https://doi.org/10.1016/j.ejpb.2024.114219"></Reference>
-<Reference children="Hou, X., Zaks, T., Langer, R., & Dong, Y. (2021). Lipid nanoparticles for mRNA delivery. Nature Reviews Materials, 6(12), 1078–1094. https://doi.org/10.1038/s41578-021-00358-0"></Reference>
-<Reference children="Kazemian, P., Yu, S.-Y., Thomson, S. B., Birkenshaw, A., Leavitt, B. R., & Ross, C. J. D. (2022). Lipid-nanoparticle-based delivery of CRISPR/Cas9 genome-editing components. Molecular Pharmaceutics, 19(6), 1669–1686. https://doi.org/10.1021/acs.molpharmaceut.1c00916"></Reference>
-<Reference children="Kim, B., Seo, H. W., Lee, K., Yong, D., Park, Y. K., Lee, Y., Lee, S., Kim, D., Kim, D., & Ryu, C. (2024). Lipid nanoparticle–mediated CRISPR-Cas13a delivery for the control of bacterial infection. Advanced Healthcare Materials. https://doi.org/10.1002/adhm.202403281"></Reference>
-<Reference children="Kulkarni, J. A., Witzigmann, D., Thomson, S. B., Chen, S., Leavitt, B. R., Cullis, P. R., & van der Meel, R. (2021). The current landscape of nucleic acid therapeutics. Nature Nanotechnology, 13(7), 622–631. https://www.nature.com/articles/s41565-021-00898-0"></Reference>
-<Reference children="Ottonelli, I., Adani, E., Bighinati, A., Cuoghi, S., Tosi, G., Vandelli, M. A., Ruozi, B., Marigo, V., & Duskey, J. (2024). Strategies for improved pDNA loading and protection using cationic and neutral LNPs with industrial scalability potential using microfluidic technology. International Journal of Nanomedicine, 19, 4235–4251. https://doi.org/10.2147/ijn.s457302"></Reference>
-<Reference children="Patel, M. N., Tiwari, S., Wang, Y., O’Neill, S., Wu, J., Omo-Lamai, S., Espy, C., Chase, L. S., Majumder, A., Hoffman, E., Shah, A., Sárközy, A., Katzen, J., Pardi, N., & Brenner, J. S. (2025). Safer non-viral DNA delivery using lipid nanoparticles loaded with endogenous anti-inflammatory lipids. Nature Biotechnology. https://doi.org/10.1038/s41587-025-02556-5"></Reference>
-<Reference children="Rodriguez-Loya, J., Lerma, M., & Gardea-Torresdey, J. L. (2023). Dynamic light scattering and its application to control nanoparticle aggregation in colloidal systems: A review. Micromachines, 15(1), 24. https://doi.org/10.3390/mi15010024"></Reference>

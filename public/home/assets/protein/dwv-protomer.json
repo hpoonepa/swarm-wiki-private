@@ -1,0 +1,64 @@
+{
+  "format": "swarm-mesh-v1",
+  "source": "PDB 5L8Q",
+  "units": "angstrom",
+  "placeholder": false,
+  "quant": {
+    "scale": [
+      0.0018808432,
+      0.0013395864,
+      0.0015645511
+    ],
+    "offset": [
+      93.4028,
+      -8.5195,
+      92.7782
+    ]
+  },
+  "chains": [
+    {
+      "name": "VP1",
+      "vertexStart": 0,
+      "vertexCount": 3000,
+      "indexStart": 0,
+      "indexCount": 18000
+    },
+    {
+      "name": "VP2",
+      "vertexStart": 3000,
+      "vertexCount": 3001,
+      "indexStart": 18000,
+      "indexCount": 17994
+    },
+    {
+      "name": "VP3",
+      "vertexStart": 6001,
+      "vertexCount": 3000,
+      "indexStart": 35994,
+      "indexCount": 18000
+    }
+  ],
+  "regions": {
+    "0": "body",
+    "1": "p-domain"
+  },
+  "bytes": {
+    "positions": [
+      0,
+      54006
+    ],
+    "normals": [
+      54008,
+      18002
+    ],
+    "regions": [
+      72012,
+      9001
+    ],
+    "indices": [
+      81016,
+      215976
+    ]
+  },
+  "indexType": "uint32"
+}
