@@ -55,14 +55,7 @@ const Footer = () => {
 
   return (
     <footer className="relative w-full bottom-0 left-0">
-      <div
-        className="bg-cover"
-        style={{
-          minHeight: "400px",
-          backgroundImage:
-            "url('https://static.igem.wiki/teams/5612/footer/accccttuuuallll-actual-grass-dirt-thing.webp')",
-        }}
-      >
+      <div className="bg-[#153f36]" style={{ minHeight: "400px" }}>
         {/* Changed py-8 to pt-24 pb-8 to push content down */}
         <div className="w-full max-w-4xl scale-[60%] md:scale-100 mx-auto flex flex-col md:flex-row justify-between items-start md:items-center px-6 md:pt-24 md:pb-8 text-white">
           <div className="flex flex-col scale-100 md:scale-125 w-full md:w-1/2">

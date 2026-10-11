@@ -2,12 +2,10 @@
 import InformationLayout from './InformationLayout.astro';
 import HoneycombWindow from '../components/info/HoneycombWindow.astro';
 import VaporExplorer from '../components/hardware/VaporExplorer.astro';
-import { readingPage } from '../components/info/pages';
 const { frontmatter, headings } = Astro.props;
-const page = readingPage('hardware');
 ---
 <InformationLayout frontmatter={frontmatter} headings={headings}>
-  <HoneycombWindow slot="hero" title={frontmatter.title} summary={frontmatter.description} group={page.group} corner={frontmatter.honeycombCorner}>
+  <HoneycombWindow slot="hero" title={frontmatter.title} summary={frontmatter.description} corner={frontmatter.honeycombCorner}>
     <VaporExplorer slot="figure" />
   </HoneycombWindow>
   <slot />

@@ -1,10 +1,10 @@
 /* Shared navigation for the static SWARM story and the wiki's React layouts. */
 const groups = [
   ['Team', [['Team', 'team'], ['Attributions', 'attributions']]],
-  ['Project', [['Description', 'description'], ['Contribution', 'contribution'], ['Engineering', 'engineering'], ['Implementation', 'implementation']]],
-  ['Wetlab', [['Minibinders', [['Overview', 'diagnosticsoverview'], ['PDL', 'diagnostics-pdl'], ['RPA', 'diagnostics-rpa'], ['CRISPR-Cas12a', 'diagnostics-cas12']]], ['RNAi', [['Overview', 'therapeutics-overview'], ['CRISPRi', 'therapeutics-crispri'], ['LNPs', 'therapeutics-lnps']]], ['Parts library', 'parts-library'], ['Experiments', 'experiments'], ['Notebook', 'notebook'], ['Results', 'results']]],
-  ['Drylab', [['Software', 'software'], ['Model', 'model'], ['Hardware', 'hardware']]],
-  ['Human Practices', [['Integrated human practices', 'human-practices'], ['Education', 'education'], ['Entrepreneurship', 'hp-entre'], ['Sustainable Development', 'hp-sustainability'], ['Safety', 'safety']]],
+  ['Project', [['Description', 'description'], ['Contribution', 'contribution'], ['Engineering success', 'engineering'], ['Implementation', 'implementation']]],
+  ['Wetlab', [['Minibinder', [['Overview', 'minibinder'], ['Plasmid design', 'minibinder-design'], ['Experimentation', 'minibinder-experimentation'], ['Positive control', 'minibinder-positive-control']]], ['RNAi', [['Overview', 'rnai'], ['Design', 'rnai-design'], ['Experimentation', 'rnai-experimentation']]], ['Parts roster', 'parts'], ['Notebook', [['Minibinder', 'notebook'], ['RNAi', 'notebook-rnai']]], ['Results', 'results'], ['Experiments', 'experiments'], ['Safety', 'safety']]],
+  ['Drylab', [['Modeling', [['Overview', 'model'], ['RNAi model', 'model-rnai'], ['Minibinder model', 'model-minibinder'], ['Epidemiological model', 'model-epidemiological'], ['Instructional', 'model-instructional']]], ['Software', 'software'], ['Hardware', 'hardware']]],
+  ['Human Practices', [['Education', 'education'], ['Integrated human practices', 'human-practices'], ['Inclusivity', 'inclusivity'], ['Sustainability', 'sustainability'], ['Entrepreneurship', 'entrepreneurship']]],
 ];
 const story = [['Home', 'top'], ['Why bees matter', 'statement'], ['Worldwide', 'earth'], ['United States', 'usa'], ['Why colony loss?', 'atlanta'], ['Deformed wing virus', 'dwv'], ['What happens to the bee', 'bee-comparison'], ['Introducing SWARM', 'hive'], ['The bee', 'bee'], ['Minibinders', 'minibinders'], ['Why RNAi?', 'rna-intro'], ['RNAi mechanism', 'rnai'], ['Together', 'together'], ['Explore SWARM', 'explore']];
 const styles = `
@@ -16,6 +16,9 @@ const styles = `
   button { border: 0; }
   :is(a, button, summary):focus-visible { outline: 2px solid #fcc42f; outline-offset: 4px; }
   .bar { display: flex; align-items: flex-start; justify-content: flex-end; gap: 24px; }
+  .brand { pointer-events: auto; display: flex; align-items: center; height: 54px; margin-right: auto; border-radius: 12px; }
+  .brand img { display: block; height: 58px; width: auto; filter: drop-shadow(0 2px 4px rgba(10, 36, 28, .18)); }
+  .brand:hover img { transform: scale(1.04); transition: transform .16s; }
   .glass { background: rgba(21, 63, 54, .84); border: 1px solid rgba(255, 248, 224, .22); box-shadow: 0 8px 28px rgba(10, 36, 28, .10), inset 0 1px 0 rgba(255,255,255,.06); backdrop-filter: blur(20px) saturate(140%); -webkit-backdrop-filter: blur(20px) saturate(140%); }
   nav { pointer-events: auto; border-radius: 999px; padding: 7px; }
   .items { display: flex; align-items: center; gap: 2px; }
@@ -45,6 +48,7 @@ const styles = `
   .mobile-toggle svg { width: 18px; height: 18px; }
   @media (max-width: 1100px) {
     :host { top: 16px; width: calc(100% - 32px); }
+    .brand { height: 50px; } .brand img { height: 48px; }
     .mobile-toggle { display: flex; }
     nav { display: none; position: absolute; top: 64px; right: 0; width: min(380px,100%); max-height: calc(100dvh - 98px); overflow-y: auto; border-radius: 24px; padding: 12px; background: rgba(21,63,54,.95); }
     nav.expanded { display: block; }
@@ -80,7 +84,6 @@ const styles = `
   .honey-panel .subgroup > summary { display: flex; }
   .honey-panel .subgroup > summary::after { color: #a46b13; }
   .honey-panel .subgroup > div { border-color: #e7d49e; }
-  .honey-panel .honey-awards { font-size: 15px; font-weight: 650; padding: 13px 5px; border-top: 1px solid #eee6cc; border-radius: 0; }
   @media(max-width:1100px) { :host([story]) .bar { top: 16px; width: calc(100% - 32px); padding-right: 72px; } }
   @media(max-width:760px) { .honey-toggle { top: 8px; right: 6px; width: 56px; height: 62px; } .honey-panel { top: 78px; right: 70px; width: calc(100vw - 84px); padding: 16px; max-height: calc(100dvh - 94px); } }
   @media (prefers-reduced-motion: reduce) { *, *::after { transition: none !important; } }
@@ -94,10 +97,10 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
         ? `<details class="subgroup"><summary>${title}</summary><div>${links(destination)}</div></details>`
         : `<a href="/lambert-ga/${destination}/"${location.pathname.replace(/\/$/,'')===`/lambert-ga/${destination}`?' aria-current="page"':''}>${title}</a>`).join('');
       root.innerHTML=`<style>${styles}</style><div class="bar">
+        <a class="brand" href="/lambert-ga/home/" aria-label="SWARM home"><img src="https://static.igem.wiki/teams/6185/wiki/homepage/logo.webp" alt="SWARM" width="1202" height="1354" decoding="async"></a>
         <button class="mobile-toggle glass" aria-expanded="false" aria-controls="wiki-links"><span>Menu</span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
         <nav class="glass" id="wiki-links" aria-label="Main"><div class="items">
         ${groups.map(([title,items])=>`<details class="group"><summary>${title}</summary><div class="dropdown glass">${links(items)}</div></details>`).join('')}
-        <a class="solo" href="/lambert-ga/awards/">Awards</a>
         ${this.hasAttribute('story')?`<details class="group story-group"><summary aria-label="Story sections"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 4h9M5 8h9M5 12h9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M1.5 4h.1M1.5 8h.1M1.5 12h.1" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Story</summary><div class="dropdown glass story-links">${story.map(([title,key])=>`<a href="#${key}" data-go="${key}">${title}</a>`).join('')}</div></details>`:''}
         </div></nav></div>
         ${this.hasAttribute('story')?`<button class="honey-toggle" aria-label="Open honeycomb navigation" aria-expanded="false" aria-controls="honey-pages" title="Explore the wiki"><svg viewBox="0 0 48 52" aria-hidden="true"><path d="m24 2 10 6v12l-10 6-10-6V8Z" fill="#ffd75c" stroke="#c58a1c" stroke-width="1.6"/><path d="m14 20 10 6v12l-10 6-10-6V26Z" fill="#fbc438" stroke="#c58a1c" stroke-width="1.6"/><path d="m34 20 10 6v12l-10 6-10-6V26Z" fill="#f4b324" stroke="#c58a1c" stroke-width="1.6"/><path d="m24 8 5 3v6l-5 3-5-3v-6Zm-10 18 5 3v6l-5 3-5-3v-6Zm20 0 5 3v6l-5 3-5-3v-6Z" fill="none" stroke="#fff1b3" stroke-width="1.4"/></svg></button>
@@ -105,7 +108,6 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
           <div class="honey-panel__heading"><a href="/lambert-ga/home/">SWARM</a><button class="honey-close" aria-label="Close navigation">×</button></div>
           <nav aria-label="Wiki pages">
             ${groups.map(([title,items])=>`<details class="honey-group"><summary>${title}</summary><div>${links(items)}</div></details>`).join('')}
-            <a class="honey-awards" href="/lambert-ga/awards/">Awards</a>
             <details class="honey-group"><summary>On this page</summary><div class="story-links">${story.map(([title,key])=>`<a href="#${key}" data-go="${key}">${title}</a>`).join('')}</div></details>
           </nav>
         </div>`:''}`;
