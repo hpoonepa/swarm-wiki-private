@@ -8,16 +8,25 @@
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const REST = [[2.25, 1.95, 2.45], [2.0, 1.75, 2.2], [1.75, 1.45, 1.95]];   // back, middle, front leg (radians, 0 = forward)
   const LEN = [[44, 50, 30], [46, 54, 31], [50, 56, 32]];
-  const legs = [...bee.querySelectorAll('.bee-legs path')].map((path, i) => ({
-    path, hip: path.dataset.hip.split(',').map(Number), angle: REST[i].slice(), spin: [0, 0, 0], rest: REST[i], len: LEN[i]
-  }));
+  // near-side legs, then the far-side ones (drawn behind the body, angled a little further forward)
+  const legs = [...bee.querySelectorAll('.bee-legs')].flatMap(group => [...group.children].map((path, i) => ({ path, i }))).map(({ path, i }) => {
+    const far = path.parentNode.classList.contains('bee-legs--far');
+    const rest = REST[i].map(a => a - (far ? .34 : 0));
+    // each segment is its own stroke so the leg tapers from the hip to the foot
+    const widths = far ? [13, 10, 7.5] : [15, 12, 8.5];
+    const parts = widths.map((w, j) => { const s = j ? path.cloneNode() : path; s.setAttribute('stroke-width', w); if (j) path.parentNode.insertBefore(s, path.nextSibling); return s; });
+    return { path, parts, hip: path.dataset.hip.split(',').map(Number), angle: rest.slice(), spin: [0, 0, 0], rest, len: LEN[i] };
+  });
   let frame = 0, last = 0, t = 0, prevX = null, prevY = 0, vx = 0, vy = 0;
 
   function draw() {
     for (const leg of legs) {
-      let [x, y] = leg.hip, d = `M${x} ${y}`;
-      leg.angle.forEach((a, j) => { x += Math.cos(a) * leg.len[j]; y += Math.sin(a) * leg.len[j]; d += ` L${x.toFixed(1)} ${y.toFixed(1)}`; });
-      leg.path.setAttribute('d', d);
+      let [x, y] = leg.hip;
+      leg.angle.forEach((a, j) => {
+        const nx = x + Math.cos(a) * leg.len[j], ny = y + Math.sin(a) * leg.len[j];
+        leg.parts[j].setAttribute('d', `M${x.toFixed(1)} ${y.toFixed(1)} L${nx.toFixed(1)} ${ny.toFixed(1)}`);
+        x = nx; y = ny;
+      });
     }
   }
 

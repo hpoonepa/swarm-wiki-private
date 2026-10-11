@@ -39,6 +39,7 @@ export function initJourney() {
     return { path, hx, hy, pts, reach, side: hx > 343 ? 1 : -1 };
   });
   let shownSev = -1, shownStage = -1;
+  let virusBase = 0;
   function shrivel(sev) {
     if (Math.abs(sev - shownSev) < .0005) return;
     shownSev = sev;
@@ -56,10 +57,14 @@ export function initJourney() {
     }
     comparison.style.setProperty('--sev', sev.toFixed(4));
     const stage = sev < .3 ? 0 : sev < .72 ? 1 : 2;
-    if (stage !== shownStage) { shownStage = stage; stageTitle.textContent = stageText[stage]; }
+    if (stage !== shownStage) {
+      shownStage = stage; stageTitle.textContent = stageText[stage];
+      if (!reduced.matches) stageTitle.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.2,.7,.2,1)' });
+    }
   }
   let width = 1, height = 1, cw = 1, ch = 1, cx = 0, cy = 0, beeX = 0, beeY = 0, miteX = 0, miteY = 0;
-  const introBee = section.querySelector('.intro-bee');
+  const introBee = section.querySelector('.intro-bee'), introScene = section.querySelector('.intro-scene');
+  let beeAnchorX = 0, beeAnchorY = 0;
   const introHive = section.querySelector('.intro-hive'), introTitle = hiveCopy.querySelector('h2');
   let titleMid = 0;
   let shown = journeyProgress(), shownDisease = window.earthScroll().disease, shownIntro = window.earthScroll().intro, frame = 0, previous = performance.now(), visible = false;
@@ -107,7 +112,7 @@ export function initJourney() {
     const vx = mix(mix(-base*.12,width*.5,rise), width*(mobile?.8:.72), aside);
     const vy = mix(mix(height+base*.12,height*(mobile?.49:.53),riseY), height*(mobile?.6:.53), aside);
     const size = mix(mix(base,centerSize,rise), sideSize, aside);
-    virus.style.width = virus.style.height = `${base}px`;
+    if (base !== virusBase) { virusBase = base; virus.style.width = virus.style.height = `${base}px`; }   // resize only when it actually changes
     virus.style.transform = `translate3d(${vx-base/2}px,${vy-base/2}px,0) scale(${size/base})`;
     virus.style.opacity = virusAlpha.toFixed(4);
     layer(disease, between(d,.33,.46)*(1-depart));
@@ -131,9 +136,8 @@ export function initJourney() {
     const tx = mix(focusX, targetX, focusAmount) - focusX * zoom;
     const ty = mix(focusY, targetY, focusAmount) - focusY * zoom + height * .015 * (1-arrive);
     composition.style.transform = `translate(-50%,-50%) translate3d(${tx}px,${ty}px,0) scale(${zoom})`;
-    const firstHive = between(p, .33, .365) * (1 - between(p, .725, .76));
     const returnHive = between(p, 1.085, 1.135) * (1 - between(p, 1.50, 1.53));
-    const artAlpha = Math.max(firstHive,returnHive);
+    const artAlpha = returnHive;                                             // the first visit now zooms into the team's bee instead
     garden.style.opacity = artAlpha.toFixed(4);
     garden.style.visibility = artAlpha < .002 ? 'hidden' : 'visible';
     garden.style.setProperty('--subject-focus', Math.max(beeFocus, towardMite).toFixed(4));
@@ -141,8 +145,14 @@ export function initJourney() {
     // grows in beside it, then the hive pops up from below and lifts the title to the top.
     const word = between(i, 0, .1), logo = between(i, .2, .45), lift = between(i, .55, .85);
     const popT = clamp((i - .55) / .32), pop = smooth(popT);
-    const leave = between(p, .33, .365);
-    layer(hiveCopy, word * (1 - between(p, .47, .515)));
+    // After the pause the camera pushes in on the bee: the hive and title fall away and the
+    // bee ends on the focal point, where the Minibinders scene opens out of it.
+    const zoomIn = between(p, .345, .61), sceneOut = between(p, .725, .76), leave = between(p, .36, .5);
+    const beeZ = reduced.matches ? 1 : Math.exp(Math.log(mobile ? 3.2 : 4.2) * zoomIn + Math.log(1.25) * enter);
+    const beeTX = mix(beeAnchorX, width * (mobile ? .5 : .7), zoomIn) - beeAnchorX * beeZ;
+    const beeTY = mix(beeAnchorY, height * (mobile ? .71 : .48), zoomIn) - beeAnchorY * beeZ;
+    introScene.style.transform = reduced.matches ? 'none' : `translate3d(${beeTX.toFixed(1)}px,${beeTY.toFixed(1)}px,0) scale(${beeZ.toFixed(4)})`;
+    layer(hiveCopy, word * (1 - between(p, .335, .38)));
     hiveCopy.style.setProperty('--logo', logo.toFixed(4));
     introTitle.style.transform = reduced.matches ? 'none' : `translate3d(0,${((height / 2 - titleMid) * (1 - lift)).toFixed(1)}px,0) scale(${mix(mix(mobile ? 1.9 : 2.3, mobile ? 1.12 : 1.6, logo), 1, lift).toFixed(4)})`;
     introHive.style.setProperty('--rise', pop.toFixed(4));
@@ -150,8 +160,8 @@ export function initJourney() {
     introHive.style.visibility = popT < .001 || leave > .999 ? 'hidden' : 'visible';
     const fly = between(i, .8, .97);
     introBee.style.setProperty('--fly', fly.toFixed(4));
-    introBee.style.setProperty('--leave', leave.toFixed(4));
-    introBee.style.visibility = fly < .001 || leave > .999 ? 'hidden' : 'visible';
+    introBee.style.setProperty('--leave', sceneOut.toFixed(4));
+    introBee.style.visibility = fly < .001 || sceneOut > .999 ? 'hidden' : 'visible';
     layer(beeCopy, between(p, .515, .555) * (1 - between(p, .69, .735)));
     layer(miteCopy, between(p, 1.285, 1.325) * (1 - between(p, 1.46, 1.515)));
     const portal = modelIn * (1-modelOut);
@@ -172,10 +182,10 @@ export function initJourney() {
     frame = 0;
     if (!visible || document.hidden) return;
     const goal = journeyProgress(), diseaseGoal = window.earthScroll().disease, introGoal = window.earthScroll().intro, dt = Math.min(.05, (now - previous) / 1000); previous = now;
-    shown = reduced.matches ? goal : shown + (goal - shown) * (1 - Math.exp(-dt * 10));
-    shownDisease = reduced.matches ? diseaseGoal : shownDisease + (diseaseGoal-shownDisease)*(1-Math.exp(-dt*7));
+    shown = reduced.matches ? goal : shown + (goal - shown) * (1 - Math.exp(-dt * 6));
+    shownDisease = reduced.matches ? diseaseGoal : shownDisease + (diseaseGoal-shownDisease)*(1-Math.exp(-dt*4));   // DWV section glides rather than steps
     if (Math.abs(goal - shown) < .0001) shown = goal;
-    shownIntro = reduced.matches ? introGoal : shownIntro + (introGoal-shownIntro)*(1-Math.exp(-dt*7));
+    shownIntro = reduced.matches ? introGoal : shownIntro + (introGoal-shownIntro)*(1-Math.exp(-dt*4.5));
     if (Math.abs(diseaseGoal-shownDisease)<.0001) shownDisease=diseaseGoal;
     if (Math.abs(introGoal-shownIntro)<.0001) shownIntro=introGoal;
     paint(shown,shownDisease,shownIntro);
@@ -192,6 +202,11 @@ export function initJourney() {
     miteX = cw * (.795 - .5);
     miteY = ch * (.49 - .5);
     titleMid = hiveCopy.offsetTop + introTitle.offsetTop + introTitle.offsetHeight / 2;
+    // how far "Introducing" sits from the centre once the logo is beside it
+    const wordmark = introTitle.querySelector('.swarm-wordmark');
+    hiveCopy.style.setProperty('--shift', `${((wordmark.offsetWidth + parseFloat(getComputedStyle(introTitle).columnGap || 0)) / 2).toFixed(1)}px`);
+    beeAnchorX = introBee.offsetLeft + introBee.offsetWidth * .66;   // the bee's thorax, where the zoom lands
+    beeAnchorY = introBee.offsetTop + introBee.offsetHeight * .52;
     paint(shown,shownDisease,shownIntro); kick();
   }
   new IntersectionObserver(([entry]) => {
