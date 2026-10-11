@@ -1,6 +1,7 @@
 /* Full-screen project map: one honeycomb, every page a cell, opened from the corner honeycomb. */
 export const mapStyles = `
-  .map { position: absolute; inset: 0; z-index: 1; display: none; overflow: auto; color: #1a322a; pointer-events: auto; --ease-out: cubic-bezier(.22, 1, .36, 1); --ease-in: cubic-bezier(.7, 0, .84, 0); }
+  :host([data-map-open]) { z-index: 900; }
+  .map { position: absolute; inset: 0; z-index: 1; display: none; overflow: auto; overscroll-behavior: contain; color: #1a322a; pointer-events: auto; --ease-out: cubic-bezier(.22, 1, .36, 1); --ease-in: cubic-bezier(.7, 0, .84, 0); }
   .map.is-open, .map.is-closing { display: block; }
   .map.is-closing { pointer-events: none; }
   .map__veil { position: absolute; inset: 0; background: radial-gradient(90% 70% at 100% 0%, #FFF1C4 0%, #FFFDF6 55%, #FFFFFF 100%); }
@@ -139,15 +140,15 @@ export function mountMap(root, { sections, current, onToggle }) {
     if (isOpen()) return;
     clearTimeout(timer); build();
     map.classList.remove('is-closing'); map.classList.add('is-open');
-    document.documentElement.style.overflow = 'hidden';
+    root.host.removeAttribute('data-dark');
     onToggle(true);
     requestAnimationFrame(() => (map.querySelector('.cell--current') || map.querySelector('.cell--page'))?.focus({ preventScroll: true }));
   };
   const close = () => {
     if (!isOpen()) return;
     map.classList.remove('is-open'); map.classList.add('is-closing');
-    document.documentElement.style.overflow = '';
     onToggle(false);
+    dispatchEvent(new Event('scroll'));
     timer = setTimeout(() => { map.classList.remove('is-closing'); stage.innerHTML = ''; }, 640);
   };
   map.addEventListener('keydown', event => {

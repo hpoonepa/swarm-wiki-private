@@ -1,6 +1,6 @@
 /* Shared navigation for the static SWARM story and the wiki's React layouts. */
 import { groups, story, sections } from './nav-data.js?v=9b2fffc0f87e';
-import { mapStyles, mountMap } from './navmap.js?v=ffa4325d1748';
+import { mapStyles, mountMap } from './navmap.js?v=132fb84151a1';
 const styles = `
   :host { position: fixed; inset: 0; z-index: 70; font-family: 'Inter', 'Inter Variable', sans-serif; color: #1a322a; pointer-events: none; }
   :host([data-dark]) { color: #fff9e9; }
