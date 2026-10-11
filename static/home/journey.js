@@ -27,6 +27,36 @@ export function initJourney() {
   const virus = document.getElementById('dwv'), disease = section.querySelector('.dwv-story');
   const comparison = section.querySelector('.bee-comparison');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  // DWV wings: each outline is sampled once, then shrunk toward its hinge,
+  // curled down and creased as the infection gets more severe.
+  const stageText = ['Healthy wings', 'Wings start to crumple', 'Deformed wings'];
+  const stageTitle = comparison.querySelector('.dwv-bee__stage');
+  const wings = [...comparison.querySelectorAll('.dwv-wing')].map(path => {
+    const [hx, hy] = path.dataset.hinge.split(',').map(Number), total = path.getTotalLength(), n = 180;
+    const pts = Array.from({length: n}, (_, i) => { const q = path.getPointAtLength(total * i / n); return [q.x - hx, q.y - hy]; });
+    const reach = Math.max(...pts.map(([x, y]) => Math.hypot(x, y)));
+    return { path, hx, hy, pts, reach, side: hx > 343 ? 1 : -1 };
+  });
+  let shownSev = -1, shownStage = -1;
+  function shrivel(sev) {
+    if (Math.abs(sev - shownSev) < .0005) return;
+    shownSev = sev;
+    for (const w of wings) {
+      let d = '';
+      w.pts.forEach(([x, y], i) => {
+        const u = i / w.pts.length, r = Math.hypot(x, y) / w.reach;
+        const crease = sev * r * (.13 * Math.sin(u * 6.283 * 4 + 1.3 * w.side) + .07 * Math.sin(u * 6.283 * 9 + .4));
+        const k = (1 - .62 * sev * Math.pow(r, .7)) * (1 + crease);
+        const a = w.side * sev * .55 * r;                                   // the tip curls down toward the body
+        const sx = x * k, sy = y * k * (1 - .25 * sev);
+        d += (i ? 'L' : 'M') + (w.hx + sx * Math.cos(a) - sy * Math.sin(a)).toFixed(1) + ' ' + (w.hy + sx * Math.sin(a) + sy * Math.cos(a)).toFixed(1);
+      });
+      w.path.setAttribute('d', d + 'Z');
+    }
+    comparison.style.setProperty('--sev', sev.toFixed(4));
+    const stage = sev < .3 ? 0 : sev < .72 ? 1 : 2;
+    if (stage !== shownStage) { shownStage = stage; stageTitle.textContent = stageText[stage]; }
+  }
   let width = 1, height = 1, cw = 1, ch = 1, cx = 0, cy = 0, beeX = 0, beeY = 0, miteX = 0, miteY = 0;
   let shown = journeyProgress(), shownDisease = window.earthScroll().disease, frame = 0, previous = performance.now(), visible = false;
   function layer(element, opacity) {
@@ -49,28 +79,34 @@ export function initJourney() {
     section.dataset.journey = sceneName;
     section.dataset.journeyProgress = raw.toFixed(3);
     section.dataset.diseaseProgress = diseaseProgress.toFixed(3);
-    const rise = between(d, .08, .38), compare = between(d, .58, .78), depart = between(p, .295, .325);
-    const globeOut = between(d, .10, .34);
-    map.style.opacity = ((1 - between(p, .355, .415)) * (1-globeOut)).toFixed(4);
-    map.style.visibility = p > .42 || globeOut > .999 ? 'hidden' : 'visible';
-    map.style.transform = reduced.matches ? 'none' : `translate3d(0,${-height*.24*globeOut}px,0) scale(${1-.15*globeOut})`;
-    stats.style.setProperty('--stats-opacity', ((1 - between(p, .315, .365))*(1-between(d,.08,.23))).toFixed(4));
-    stats.inert = p > .355 || d > .23;
+    // Globe to virus reads as one camera pan: the globe glides up out of frame while
+    // the capsid arcs up from its corner; the heading waits until the globe is gone.
+    const riseT = clamp((d-.04)/.38), rise = smooth(riseT), riseY = smooth(Math.min(1, riseT*1.3));
+    const compare = between(d, .46, .58), depart = between(p, .295, .325);
+    const globeOut = between(d, .04, .40), globeFade = between(d, .16, .38);
+    map.style.opacity = ((1 - between(p, .355, .415)) * (1-globeFade)).toFixed(4);
+    map.style.visibility = p > .42 || globeFade > .999 ? 'hidden' : 'visible';
+    map.style.transform = reduced.matches ? 'none' : `translate3d(0,${-height*.8*globeOut}px,0) scale(${1-.3*globeOut})`;
+    stats.style.setProperty('--stats-opacity', ((1 - between(p, .315, .365))*(1-between(d,.02,.10))).toFixed(4));
+    stats.inert = p > .355 || d > .10;
     stats.setAttribute('aria-hidden', String(stats.inert));
-    // The capsid fades at full size and stays gone after the wing comparison.
-    const fadeVirus = between(d,.45,.57);
-    const virusAlpha = between(p,.235,.26)*(1-fadeVirus)*(1-between(p,.295,.31));
+    // The capsid steps aside to the right while the bee shows what it does.
+    const aside = between(d,.44,.58);
+    const virusAlpha = between(p,.235,.238)*(1-between(p,.295,.31));
     virus.classList.toggle('on',p > .235 && p < .31 && virusAlpha > .002);
     const base = Math.min(height*.90, width*.72);
     const centerSize = Math.min(height*.68, width*(mobile?.88:.58));
-    const vx = mix(-base*.12,width*.5,rise);
-    const vy = mix(height+base*.12,height*(mobile?.49:.53),rise);
-    const size = mix(base,centerSize,rise);
+    const sideSize = mobile ? width*.5 : centerSize;                        // same size as in the centre
+    comparison.style.setProperty('--bee', `${Math.round(sideSize*.79)}px`);  // bee wingspan matches the capsid's drawn width
+    const vx = mix(mix(-base*.12,width*.5,rise), width*(mobile?.8:.72), aside);
+    const vy = mix(mix(height+base*.12,height*(mobile?.49:.53),riseY), height*(mobile?.6:.53), aside);
+    const size = mix(mix(base,centerSize,rise), sideSize, aside);
     virus.style.width = virus.style.height = `${base}px`;
     virus.style.transform = `translate3d(${vx-base/2}px,${vy-base/2}px,0) scale(${size/base})`;
     virus.style.opacity = virusAlpha.toFixed(4);
-    layer(disease, between(d,.22,.38)*(1-depart));
+    layer(disease, between(d,.33,.46)*(1-depart));
     comparison.style.opacity = compare.toFixed(4);
+    shrivel(between(d,.6,.95));
     comparison.style.setProperty('--compare',compare.toFixed(4));
     comparison.inert = compare < .02;
     comparison.setAttribute('aria-hidden',String(compare < .02));
@@ -118,7 +154,7 @@ export function initJourney() {
     if (!visible || document.hidden) return;
     const goal = journeyProgress(), diseaseGoal = window.earthScroll().disease, dt = Math.min(.05, (now - previous) / 1000); previous = now;
     shown = reduced.matches ? goal : shown + (goal - shown) * (1 - Math.exp(-dt * 10));
-    shownDisease = reduced.matches ? diseaseGoal : shownDisease + (diseaseGoal-shownDisease)*(1-Math.exp(-dt*10));
+    shownDisease = reduced.matches ? diseaseGoal : shownDisease + (diseaseGoal-shownDisease)*(1-Math.exp(-dt*7));
     if (Math.abs(goal - shown) < .0001) shown = goal;
     if (Math.abs(diseaseGoal-shownDisease)<.0001) shownDisease=diseaseGoal;
     paint(shown,shownDisease);

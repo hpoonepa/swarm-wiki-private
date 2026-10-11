@@ -4,7 +4,7 @@
   function parts() {
     const section = document.getElementById('honeycomb-earth');
     const height = section.querySelector('.geo-stage').clientHeight;
-    return { top: section.getBoundingClientRect().top + scrollY, unit: height * 10, hold: height * 1.8, dwvHold: height * 4 };
+    return { top: section.getBoundingClientRect().top + scrollY, unit: height * 10, hold: height * 1.2, dwvHold: height * 4 };
   }
   window.earthScroll = (position = scrollY) => {
     const {top, unit, hold, dwvHold} = parts();

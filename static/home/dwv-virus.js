@@ -155,7 +155,7 @@
     const next = host.classList.contains('on');
     if (next === active) return;
     active = next;
-    if (active) { load(); kick(); }
+    if (active) { born = performance.now(); if (mesh) { float.scale.setScalar(.001); renderer.render(scene, camera); } load(); kick(); }
     else { cancelAnimationFrame(raf); raf = 0; dragging = false; }
   }).observe(host, { attributes: true, attributeFilter: ['class'] });
 
@@ -181,21 +181,23 @@
   });
 
   const spring = x => 1 - Math.exp(-5.5 * x) * Math.cos(10 * x);    // the globe's pop-in
+  const squash = x => Math.exp(-5 * x) * Math.sin(14 * x);
   let raf = 0, last = performance.now(), visible = true;
   function frame(now) {
     raf = 0;
     if (!visible || !active || document.hidden) return;
     const dt = Math.min(.05, (now - last) / 1000); last = now;
     if (mesh) {
-      const t = (now - born) / 1000, s = embed || reduced.matches ? 1 : spring(t);
-      float.scale.setScalar(Math.max(.001, s)); shadow.scale.set(.8 * s, .1 * s, 1);
+      const t = (now - born) / 1000, s = reduced.matches ? 1 : spring(t);
+      const st = reduced.matches ? 0 : squash(t) * .06;
+      float.scale.set(Math.max(.001, s * (1 + st)), Math.max(.001, s * (1 - st)), Math.max(.001, s)); shadow.scale.set(.8 * s, .1 * s, 1);
       if (!dragging && !reduced.matches) {
         const damping = Math.exp(-dt * 9);
         spin.rotation.y += dt * .18 + vx * dt * 45;
         spin.rotation.x += vy * dt * 45;
         vx *= damping; vy *= damping;
       }
-      float.position.y = embed || reduced.matches ? 0 : Math.sin(t * .9) * .035;
+      float.position.y = reduced.matches ? 0 : embed ? -.35 * (1 - Math.min(1, s)) : Math.sin(t * .9) * .035;
     }
     renderer.render(scene, camera);
     if (mesh && (!reduced.matches || dragging)) raf = requestAnimationFrame(frame);

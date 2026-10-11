@@ -388,21 +388,21 @@ html.loading .honey-progress { visibility: hidden; }
 .why-virus canvas { display: block; width: 100%; height: 100%; }
 .geo-panel[data-region-panel="usa"] { display: none; }
 #honeycomb-earth[data-region="atlanta"] .geo-copy { left: 4.5%; width: 20%; }
-.geo-panel[data-region-panel="atlanta"] h2 { font-size: clamp(34px,4vw,54px); letter-spacing: -.045em; }
+.geo-panel[data-region-panel="atlanta"] h2 { font-size: clamp(34px,4vw,54px); letter-spacing: -.045em; white-space: nowrap; }
 .dwv-story { position: absolute; inset: 0; z-index: 3; opacity: 0; visibility: hidden; pointer-events: none; }
-.dwv-heading { position: absolute; top: 11%; left: 7%; right: 7%; text-align: center; }
+.dwv-heading { position: absolute; top: 5.5%; left: 7%; right: 7%; text-align: center; }
 .dwv-heading h2 { margin: 0; font-size: clamp(38px,4.6vw,70px); font-weight: 800; line-height: 1.08; letter-spacing: -.05em; }
 .dwv-heading p { margin: 16px 0 0; font-size: clamp(17px,1.65vw,24px); line-height: 1.4; color: #50695d; }
-.bee-comparison { position: absolute; inset: 0; opacity: 0; --compare: 0; }
-.bee-comparison figure { position: absolute; top: 34%; width: 31%; margin: 0; text-align: center; }
-.bee-comparison__healthy { left: 7%; transform: translate3d(calc((1 - var(--compare)) * -7vw),0,0); }
-.bee-comparison__affected { right: 7%; transform: translate3d(calc((1 - var(--compare)) * 7vw),0,0); }
-.bee-comparison img { display: block; width: min(100%,39svh); height: auto; margin: 0 auto; }
-.bee-comparison figcaption { margin-top: 18px; }
-.bee-comparison h3 { margin: 0 0 6px; font-size: clamp(22px,2.2vw,32px); letter-spacing: -.04em; line-height: 1.1; }
-.bee-comparison figcaption p { margin: 0; color: #50695d; font-size: clamp(14px,1.35vw,19px); line-height: 1.4; }
-.bee-comparison__affected h3 { color: #9d303a; }
-.bee-comparison__explanation { position: absolute; left: 12%; right: 12%; bottom: 7%; text-align: center; margin: 0; color: #345b51; font-size: clamp(16px,1.5vw,21px); line-height: 1.5; }
+.bee-comparison { position: absolute; inset: 0; opacity: 0; --compare: 0; --sev: 0; }
+.dwv-bee { position: absolute; left: 28%; top: calc(53% - var(--bee, 400px) * .433); width: var(--bee, 400px); margin: 0; text-align: center; transform: translate3d(calc(-50% + (1 - var(--compare)) * -7vw),0,0); }
+.dwv-bee svg { display: block; width: 100%; height: auto; overflow: visible; }
+.dwv-wing { fill: #E1E1E1; fill-opacity: .64; stroke: #8f8579; stroke-opacity: calc(var(--sev) * .7); stroke-width: 3; stroke-linejoin: round; }
+.dwv-bee figcaption { position: absolute; left: 45.4%; top: 100%; width: max(100%, 360px); transform: translateX(-50%); margin-top: 2px; }
+.bee-comparison h3 { margin: 0 0 6px; font-size: clamp(22px,2.2vw,32px); letter-spacing: -.04em; line-height: 1.1; color: color-mix(in srgb, #9d303a calc(var(--sev) * 100%), #153F36); }
+.bee-comparison figcaption p { margin: 0 auto; max-width: 340px; min-height: 2.8em; color: #50695d; font-size: clamp(14px,1.35vw,19px); line-height: 1.4; }
+.dwv-meter { margin: 10px auto 0; width: min(100%, 320px); text-align: left; }
+.dwv-meter i { display: block; height: 12px; border-radius: 6px; background: #ece5dc; overflow: hidden; }
+.dwv-meter b { display: block; height: 100%; width: calc(12px + (100% - 12px) * var(--sev)); border-radius: 6px; background: linear-gradient(90deg, #E57624, #9d303a); }
 @media(max-width:760px) {
   #honeycomb-earth[data-region="atlanta"] .geo-copy { left: 7%; top: 14%; width: 86%; height: auto; }
   .geo-panel[data-region-panel="atlanta"] h2 { font-size: 38px; }
@@ -410,26 +410,18 @@ html.loading .honey-progress { visibility: hidden; }
   .dwv-heading { top: 12%; }
   .dwv-heading h2 { font-size: clamp(29px,7.8vw,44px); }
   .dwv-heading p { font-size: 15px; margin-top: 12px; }
-  .bee-comparison figure { top: 49%; width: 45%; }
-  .bee-comparison__healthy { left: 3%; }
-  .bee-comparison__affected { right: 3%; }
-  .bee-comparison img { width: 100%; }
-  .bee-comparison figcaption { margin-top: 17px; }
+  .dwv-bee { left: 26%; top: calc(60% - var(--bee) * .433); }
+  .dwv-bee figcaption { width: 88vw; left: calc(50% + 24vw); }
   .bee-comparison h3 { font-size: clamp(19px,5.1vw,26px); }
-  .bee-comparison figcaption p { font-size: 13px; max-width: 150px; margin: auto; }
-  .bee-comparison__explanation { left: 8%; right: 8%; bottom: 7%; font-size: 15px; }
+  .bee-comparison figcaption p { font-size: 13px; }
 }
 @media(max-width:760px) and (max-height:700px) {
   .dwv-heading { top: 13%; }
   .dwv-heading h2 { font-size: 28px; }
-  .bee-comparison figure { top: 45%; }
-  .bee-comparison img { width: min(100%,24svh); }
-  .bee-comparison figcaption { margin-top: 8px; }
-  .bee-comparison__explanation { font-size: 13px; bottom: 6%; }
 }
 /* year bar (Downloads/Homepage Rectangle 676-684): big year over a dark green pill track with four tall rounded
    ticks; the lighter fill rides on top and grows with the scroll. --t (0..1) is set by globe.js */
-.loss-years { position: fixed; z-index: 13; top: 18px; right: 26px; width: 290px; padding: 12px 16px 6px; border-radius: 22px; background: #FFFBFA; color: #003206;
+.loss-years { position: fixed; z-index: 13; top: 18px; left: 26px; width: 290px; padding: 12px 16px 6px; border-radius: 22px; background: #FFFBFA; color: #003206;
   opacity: 0; visibility: hidden; pointer-events: none; --t: 0; }
 .loss-years .ly-year { display: block; font-size: 88px; line-height: .9; font-weight: 850; letter-spacing: -.055em; font-variant-numeric: tabular-nums; }
 .loss-years .ly-total { display: block; margin: 8px 0 2px; font-size: 14px; font-weight: 650; letter-spacing: -.01em; color: #3c6b42; font-variant-numeric: tabular-nums; }
@@ -441,7 +433,7 @@ html.loading .honey-progress { visibility: hidden; }
 .geo-stage .map-view { inset: 0; width: 100%; height: 100%; }
 @media (max-width:760px) { .geo-stage .map-view { mask-image: linear-gradient(to bottom,transparent 35%,#000 48%); } }
 
-#honeycomb-earth { height: 2730vh; height: 2730svh; }
+#honeycomb-earth { height: 2670vh; height: 2670svh; }
 
 /* One introduction beside the hive, followed by the camera moving into the bee. */
 .journey-copy--hive { left: 7%; width: 33%; }
