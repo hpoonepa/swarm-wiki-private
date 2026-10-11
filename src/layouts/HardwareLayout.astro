@@ -1,0 +1,9 @@
+---
+import InformationLayout from './InformationLayout.astro';
+import VaporExplorer from '../components/hardware/VaporExplorer.astro';
+const { frontmatter, headings } = Astro.props;
+---
+<InformationLayout frontmatter={frontmatter} headings={headings}>
+  <VaporExplorer slot="hero" />
+  <slot />
+</InformationLayout>

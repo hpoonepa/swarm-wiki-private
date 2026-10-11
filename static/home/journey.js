@@ -5,7 +5,7 @@ const smooth = n => { const t = clamp(n); return t * t * t * (t * (6 * t - 15) +
 const between = (p, a, b) => smooth((p - a) / (b - a));
 const mix = (a, b, t) => a + (b - a) * t;
 export const BINDER_START = .76, BINDER_END = 1.08;
-export const RNA_START = 1.53, RNA_END = 2.05;
+export const RNA_START = 1.85, RNA_END = 2.37;
 const root = () => document.getElementById('honeycomb-earth');
 export const journeyUnit = () => root().querySelector('.geo-stage').clientHeight * 10;
 export const journeyProgress = () => window.earthScroll ? window.earthScroll().p : Math.max(0, -root().getBoundingClientRect().top / journeyUnit());
@@ -20,10 +20,11 @@ export function initJourney() {
   const garden = section.querySelector('.pollinator-scene'), composition = section.querySelector('.hive-composition');
   const artwork = section.querySelector('.journey-art');
   const hiveCopy = section.querySelector('.journey-copy--hive'), beeCopy = section.querySelector('.journey-copy--bee');
-  const miteCopy = section.querySelector('.journey-copy--mite'), rnaCopy = section.querySelector('.journey-copy--rna');
+  const miteCopy = section.querySelector('.journey-copy--mite');
   const protein = document.getElementById('minibinders'), proteinView = protein.querySelector('.protein-view');
   const proteinCopy = protein.querySelector('.mechanism-copy');
   const rna = document.getElementById('rnai');
+  const rnaIntro = document.getElementById('rna-intro'), rnaMechanism = rna.querySelector('.rna-layout');
   const virus = document.getElementById('dwv'), disease = section.querySelector('.dwv-story');
   const comparison = section.querySelector('.bee-comparison');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
@@ -35,17 +36,18 @@ export function initJourney() {
     element.style.visibility = hidden ? 'hidden' : 'visible';
     element.setAttribute('aria-hidden', String(hidden));
     element.inert = hidden;
+    element.dataset.active = String(!hidden);
   }
   function paint(raw, diseaseProgress) {
     let p = raw, d = diseaseProgress;
-    if (reduced.matches) p = raw < .35 ? raw : raw < .49 ? .46 : raw < .69 ? .59 : raw < 1.105 ? .90 : raw < 1.30 ? 1.245 : raw < 1.49 ? 1.38 : 1.56;
+    if (reduced.matches) p = raw < .35 ? raw : raw < .49 ? .46 : raw < .69 ? .59 : raw < 1.105 ? .90 : raw < 1.30 ? 1.245 : raw < 1.49 ? 1.38 : raw < 1.82 ? 1.67 : 1.86;
     if (reduced.matches) d = d < .20 ? 0 : d < .60 ? .44 : .85;
     const mobile = width <= 760;
     const arrive = between(p, .345, .435), focus = between(p, .49, .615), enter = between(p, .655, .75);
     const returning = between(p, 1.13, 1.265), towardMite = between(p, 1.30, 1.43);
     const intoRNA = between(p, 1.455, 1.53);
     const modelIn = between(p, .69, .76), modelOut = between(p, 1.085, 1.17);
-    const sceneName = raw < .35 ? diseaseProgress > .15 ? 'dwv' : 'earth' : raw < .49 ? 'hive' : raw < .69 ? 'bee' : raw < 1.085 ? 'minibinders' : raw < 1.285 ? 'return-hive' : raw < 1.49 ? 'mite' : 'rnai';
+    const sceneName = raw < .35 ? diseaseProgress > .15 ? 'dwv' : 'earth' : raw < .49 ? 'hive' : raw < .69 ? 'bee' : raw < 1.085 ? 'minibinders' : raw < 1.285 ? 'return-hive' : raw < 1.49 ? 'mite' : raw < 1.82 ? 'rna-intro' : 'rnai';
     section.dataset.journey = sceneName;
     section.dataset.journeyProgress = raw.toFixed(3);
     section.dataset.diseaseProgress = diseaseProgress.toFixed(3);
@@ -82,22 +84,22 @@ export function initJourney() {
     // Interpolate the subject's screen position separately from magnification.
     // Its body arrives at the same focal point in both directions, without drifting.
     const beeZoom = Math.exp(Math.log(2.9) * beeFocus + Math.log(1.16) * enter * (1-returning));
-    const zoom = mix(.68, 1, arrive) * beeZoom * Math.exp(Math.log(4.5) * towardMite);
+    const zoom = mix(.94, 1, arrive) * beeZoom * Math.exp(Math.log(4.5) * towardMite);
     const focusX = towardMite > 0 ? miteX : beeX;
     const focusY = towardMite > 0 ? miteY : beeY;
     const focusAmount = towardMite > 0 ? towardMite : beeFocus;
     const tx = mix(focusX, targetX, focusAmount) - focusX * zoom;
-    const ty = mix(focusY, targetY, focusAmount) - focusY * zoom + height * .06 * (1-arrive);
+    const ty = mix(focusY, targetY, focusAmount) - focusY * zoom + height * .015 * (1-arrive);
     composition.style.transform = `translate(-50%,-50%) translate3d(${tx}px,${ty}px,0) scale(${zoom})`;
     const firstHive = between(p, .315, .355) * (1 - between(p, .725, .76));
     const returnHive = between(p, 1.085, 1.135) * (1 - between(p, 1.50, 1.53));
     const artAlpha = Math.max(firstHive,returnHive);
     garden.style.opacity = artAlpha.toFixed(4);
     garden.style.visibility = artAlpha < .002 ? 'hidden' : 'visible';
-    layer(hiveCopy, between(p, .325, .355) * (1 - between(p, .485, .535)));
-    layer(beeCopy, between(p, .55, .59) * (1 - between(p, .66, .705)));
-    layer(miteCopy, between(p, 1.195, 1.245) * (1 - between(p, 1.31, 1.35)));
-    layer(rnaCopy, between(p, 1.355, 1.39) * (1 - between(p, 1.46, 1.50)));
+    garden.style.setProperty('--subject-focus', Math.max(beeFocus, towardMite).toFixed(4));
+    layer(hiveCopy, between(p, .325, .355) * (1 - between(p, .47, .515)));
+    layer(beeCopy, between(p, .515, .555) * (1 - between(p, .69, .735)));
+    layer(miteCopy, between(p, 1.285, 1.325) * (1 - between(p, 1.46, 1.515)));
     const portal = modelIn * (1-modelOut);
     const focalX = mobile ? 50 : 70, focalY = mobile ? 71 : 48;
     const radius = Math.hypot(width, height);
@@ -108,9 +110,8 @@ export function initJourney() {
     protein.style.setProperty('--model-labels', between(p, .75, .79).toFixed(4));
     layer(rna, clamp(intoRNA * 8));
     rna.style.clipPath = reduced.matches ? 'none' : `circle(${radius * intoRNA}px at ${focalX}% ${focalY}%)`;
-    rna.querySelector('.mechanism-copy').style.opacity = between(p, 1.48, 1.53).toFixed(4);
-    rna.querySelector('.rna-player__copy').style.opacity = between(p, 1.49, 1.53).toFixed(4);
-    rna.querySelector('.rna-player__controls').style.opacity = between(p, 1.49, 1.53).toFixed(4);
+    layer(rnaIntro, between(p, 1.54, 1.59) * (1-between(p, 1.77, 1.83)));
+    layer(rnaMechanism, between(p, 1.81, 1.85));
     rna.querySelector('.rna-stage').style.transform = reduced.matches ? 'none' : `translate3d(${width * (mobile ? 0 : .07) * (1-intoRNA)}px,${height * .03 * (1-intoRNA)}px,0) scale(${mix(.88, 1, intoRNA)})`;
   }
   function tick(now) {
@@ -136,7 +137,11 @@ export function initJourney() {
     miteY = ch * (.49 - .5);
     paint(shown,shownDisease); kick();
   }
-  new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; if (visible) { shown = journeyProgress(); shownDisease=window.earthScroll().disease; kick(); } }).observe(stage);
+  new IntersectionObserver(([entry]) => {
+    visible = entry.isIntersecting;
+    if (visible) { shown = journeyProgress(); shownDisease=window.earthScroll().disease; kick(); }
+    else { protein.dataset.active = rna.dataset.active = 'false'; }
+  }).observe(stage);
   new ResizeObserver(resize).observe(stage);
   artwork.addEventListener('load', resize);
   addEventListener('scroll', kick, { passive: true });

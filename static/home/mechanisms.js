@@ -1,5 +1,5 @@
-import { initRnaPlayer } from './vendor/rna-player.js?v=4f936f4baf33';
-import { initJourney, binderProgress, rnaProgress, rnaScroll } from './journey.js?v=d4d96c34b7c6';
+import { initRnaPlayer } from './vendor/rna-player.js?v=faf544f7714b';
+import { initJourney, binderProgress, rnaProgress, rnaScroll } from './journey.js?v=b5805fe6fe2a';
 
 initJourney();
 
@@ -12,16 +12,58 @@ const rna = document.getElementById('rnai');
 const player = rna.querySelector('[data-rna-player]');
 const rnaPlayer = initRnaPlayer(player);
 const modelStories = [
-  ['Targeting DWV', 'DWV wraps its genetic material in a protein shell called a capsid. Our first approach focuses on a part of that shell: the P domain.'],
-  ['Before it enters a cell', 'A virus cannot reproduce on its own. DWV has to enter a bee cell and use the cell’s machinery. We’re investigating whether binding its outer shell can interrupt that step.'],
-  ['Minibinders', 'A minibinder is a small, designed protein that attaches to a chosen target. We design its shape to fit the P domain, then test whether it binds. This lets us target a specific part of the virus.'],
-  ['From design to binding', 'One of our designed proteins bound the isolated DWV P domain in both repeats of an Adaptyv Bio binding assay. That gives us a starting point to improve the binder and investigate its effect on the virus.'],
-  ['Can binding block infection?', 'Our aim is to keep DWV out of bee cells. Binding is the first step; whether it prevents infection still needs testing. We also need to address the mite that carries the virus.']
+  ['1. Minibinders', 'Minibinders are small proteins made to attach to a specific target. Ours binds the P domain, a part of DWV’s outer shell.'],
+  ['Why a minibinder?', 'We can design its shape to fit the virus. We chose the P domain because binding there could help keep DWV from entering bee cells.'],
+  ['Binding to DWV', 'Here, the minibinder meets the P domain on the virus’s surface. This is the contact we designed it to make.'],
+  ['What we tested', 'We made the protein and tested it against the isolated P domain, measuring how tightly the two bind.'],
+  ['Our binding result', 'Our minibinder bound the P domain in both repeats of the experiment. The best repeat measured about 550 nM.']
 ];
+// A few translucent forms and suspended particles give the scenes depth.
+// Their positions are fixed; the CSS drift pauses whenever a scene is hidden.
+document.querySelectorAll('[data-cell-field]').forEach(field => {
+  if(field.classList.contains('cell-field--protein')){
+    // Sparse, matte fragments leave the copy and binding site clear.
+    [[5,27,9],[17,15,6],[36,9,11],[49,74,8],[73,13,7],[86,28,10],[92,67,6],[19,79,7],[4,68,11],[60,84,5],[80,79,9],[43,23,5]].forEach(([x,y,size],i)=>{
+      const fragment=document.createElement('span');
+      fragment.className='gut-fragment';
+      fragment.style.cssText=`--x:${x}%;--y:${y}%;--size:${size}px;--delay:${-i*2.7}s;--duration:${28+i%4*6}s;--sway:${i%2?22:-18}px;--tilt:${i*37}deg`;
+      field.append(fragment);
+    });
+    return;
+  }
+  if(field.classList.contains('cell-field--rna')){
+    const accents = [
+      ['glow',-9,7,440],['glow',66,-18,520],['glow',51,77,390],
+      ['circle',4,34,66],['circle',14,79,38],['circle',28,9,94],
+      ['circle',40,67,47],['circle',53,29,30],['circle',63,82,82],
+      ['circle',77,15,54],['circle',91,46,104],['circle',84,83,35]
+    ];
+    accents.forEach(([kind,x,y,size],i) => {
+      const accent=document.createElement('span');
+      accent.className=`cell-field__${kind}`;
+      accent.style.cssText=`--x:${x}%;--y:${y}%;--size:${size}px;--delay:${-i*3.7}s;--duration:${26+i%5*5}s;--sway:${i%2?58:-48}px;--rise:${i%3?42:-54}px`;
+      field.append(accent);
+    });
+  }
+  const bubbles = [[2,12,142],[20,-5,86],[43,2,28],[75,-8,176],[96,21,110],[-3,61,176],[99,67,74],[88,92,152],[57,99,94],[23,98,67],[9,89,36],[82,49,27],[65,20,18],[36,87,24]];
+  bubbles.forEach(([x,y,size],i) => {
+    const bubble=document.createElement('span');
+    bubble.className='cell-field__bubble';
+    bubble.style.cssText=`--x:${x}%;--y:${y}%;--size:${size}px;--delay:${-i*2.3}s;--duration:${19+i%5*3}s;--sway:${i%2?18:-22}px;--tilt:${i*29}deg`;
+    field.append(bubble);
+  });
+  for(let i=0;i<36;i++){
+    const mote=document.createElement('i');
+    mote.className='cell-field__mote';
+    mote.style.cssText=`--x:${(i*37+11)%100}%;--y:${(i*61+7)%100}%;--size:${2+i%4}px;--delay:${-i*1.7}s;--duration:${22+i%7*3}s;--sway:${i%2?12:-16}px`;
+    field.append(mote);
+  }
+});
 const smooth = n => { const t=clamp(n); return t*t*(3-2*t); };
 let displayedMini = binderProgress(), miniPhase = -1;
 let copyAnimations=[];
 const miniHeading=mini.querySelector('h2'),miniExplanation=mini.querySelector('[data-mini-explanation]');
+const miniResult=mini.querySelector('[data-mini-result]');
 const siteLabel=host.querySelector('.protein-label--site'), binderLabel=host.querySelector('.protein-label--binder');
 host.addEventListener('anchors', e => {
   for(const anchor of e.detail.anchors){
@@ -60,6 +102,7 @@ function paintMini(p = displayedMini) {
     miniPhase=index;const [title,explanation]=modelStories[index];
     miniHeading.textContent=title;
     miniExplanation.textContent=explanation;
+    miniResult.hidden=index!==4;
     copyAnimations.forEach(animation=>animation.cancel());
     copyAnimations=reduced.matches?[]:[miniHeading,miniExplanation].map(element=>element.animate(
       [{opacity:.35,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],
@@ -85,6 +128,7 @@ player.addEventListener('rna-playhead', e => {
 });
 // A real scroll gesture takes over from playback at its current position.
 addEventListener('wheel', () => rnaPlayer.pause(), {passive: true});
+addEventListener('swarm-scrub-start', () => rnaPlayer.pause());
 addEventListener('touchstart', () => rnaPlayer.pause(), {passive: true});
 addEventListener('keydown', e => { if (['PageDown','PageUp','ArrowDown','ArrowUp','Home','End',' '].includes(e.key)) rnaPlayer.pause(); });
 function tick(now) {

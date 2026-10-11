@@ -1,0 +1,71 @@
+---
+import type { MarkdownHeading } from 'astro';
+import Nav from '../components/Nav';
+import Footer from '../components/Footer';
+import FooterNav from '../components/footernav';
+import TabReact from '../components/md_components/TabReact';
+import CanopyWindow from '../components/info/CanopyWindow.astro';
+import SideMap from '../components/info/SideMap.astro';
+import SectionSheet from '../components/info/SectionSheet.astro';
+import { readingPage } from '../components/info/pages';
+import type { Section } from '../components/info/sidemap';
+import '../styles/global.css';
+import '../components/info/reading.css';
+
+interface Props {
+  frontmatter: { title: string; description?: string; noTOC?: boolean; tabLabels?: string[]; tabLinks?: string[]; color?: string };
+  headings?: MarkdownHeading[];
+}
+const { frontmatter, headings = [] } = Astro.props;
+const slug = Astro.url.pathname.split('/').filter(Boolean).pop() ?? '';
+const page = readingPage(slug);
+const topDepth = headings.some(heading => heading.depth === 1) ? 1 : 2;
+const sections: Section[] = frontmatter.noTOC ? [] : headings
+  .filter(heading => heading.depth === topDepth || heading.depth === topDepth + 1)
+  .map(heading => ({ id: heading.slug, text: heading.text, depth: (heading.depth - topDepth + 2) as 2 | 3 }));
+const glance = sections.filter(section => section.depth === 2);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/webp" href="https://static.igem.wiki/teams/5612/mainlayout/fabicon.webp" />
+    <title>{`Lambert-GA | ${frontmatter.title}`}</title>
+    {frontmatter.description && <meta name="description" content={frontmatter.description} />}
+  </head>
+  <body class="info-page">
+    <a class="info-skip" href="#article">Skip to content</a>
+    <Nav client:load />
+    <main class:list={[{ 'plain-page': sections.length === 0 }]}>
+      <slot name="hero"><CanopyWindow title={frontmatter.title} summary={frontmatter.description} group={page.group} focal={page.focal} /></slot>
+      <div class="sheet" data-surface="sheet">
+        {frontmatter.tabLabels && frontmatter.tabLinks && <div class="info-tabs"><TabReact labels={frontmatter.tabLabels} links={frontmatter.tabLinks} focus={slug} color={frontmatter.color ?? 'green'} /></div>}
+        <div class:list={['longform', { 'longform--no-map': sections.length === 0 }]}>
+          {sections.length > 0 && <div class="longform__map"><SideMap sections={sections} /></div>}
+          <div class="longform__main">
+            {sections.length > 0 && <SectionSheet sections={sections} />}
+            <article id="article" class="info-prose flow content" tabindex="-1">
+              {glance.length > 0 && <div class="glance">
+                <p class="eyebrow glance__label" id="glance-label">At a glance</p>
+                <ol class="glance__list" role="list" aria-labelledby="glance-label">
+                  {glance.map((section, index) => <li><a class="glance__chip" href={`#${section.id}`} data-section-link data-depth="2"><span class="glance__cell" aria-hidden="true">{index + 1}</span><span class="glance__text">{section.text}</span></a></li>)}
+                </ol>
+              </div>}
+              <slot />
+            </article>
+            <div class="longform__end" data-longform-end aria-hidden="true"></div>
+            {(page.prev || page.next) && <nav class="continue" aria-label="Continue reading">
+              {page.prev && <a class="continue__card" href={page.prev.href} rel="prev"><span class="eyebrow continue__dir">← Previous</span><span class="continue__title">{page.prev.title}</span></a>}
+              {page.next && <a class="continue__card" href={page.next.href} rel="next"><span class="eyebrow continue__dir">Continue</span><span class="continue__title">{page.next.title} →</span></a>}
+            </nav>}
+          </div>
+        </div>
+      </div>
+    </main>
+    <div class="info-footer">
+      <div class="hidden md:block"><FooterNav /></div>
+      <div class="overflow-hidden w-full relative flex justify-center"><Footer /></div>
+    </div>
+  </body>
+</html>

@@ -14,7 +14,7 @@ interface LayoutProps {
   icon: string;
   color: "blue" | "magenta" | "green" | "pink" | (string & {});
   headings: any;
-  TOCPadding?: boolean;
+  hasTabs: boolean;
   noTOC: boolean;
   isTab?: boolean;
 }
@@ -22,6 +22,7 @@ interface LayoutProps {
 const PageLayout = ({
   children,
   tabs,
+  hasTabs,
   header,
   title,
   description,
@@ -52,6 +53,8 @@ const PageLayout = ({
       });
         */
       tables.forEach((table) => {
+        // Nested islands own their DOM; never reparent their React-rendered tables.
+        if (table.closest("astro-island") !== contentRef.current.closest("astro-island")) return;
         if (table.parentElement?.classList.contains("table-container")) return;
         const wrapper = document.createElement("div");
         wrapper.className = "table-container";
@@ -174,7 +177,7 @@ const PageLayout = ({
       )}
 
       <main className={clsx("w-full", { "bg-[#FFFCF3]": !isDarkTheme })}>
-        {tabs}
+        {hasTabs && tabs}
         <div className="seperator"></div>
 
         <div className="flex justify-center w-full items-start lg:mx-0 relative">

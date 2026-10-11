@@ -4,7 +4,7 @@
   const destinations = {
     top: () => 0, statement: () => at('statement', .12), earth: () => at('honeycomb-earth', .04),
     usa: () => at('honeycomb-earth', .16), atlanta: () => at('honeycomb-earth', .26), 'hive-arrival': () => at('honeycomb-earth', .385), hive: () => at('honeycomb-earth', .455), flower: () => at('honeycomb-earth', .455),
-    bee: () => at('honeycomb-earth', .585), minibinders: () => at('honeycomb-earth', .775), 'rna-intro': () => at('honeycomb-earth', 1.38), rnai: () => at('honeycomb-earth', 1.54),
+    bee: () => at('honeycomb-earth', .585), minibinders: () => at('honeycomb-earth', .775), mite: () => at('honeycomb-earth', 1.38), 'rna-intro': () => at('honeycomb-earth', 1.67), rnai: () => at('honeycomb-earth', 1.86),
     dwv: () => at('honeycomb-earth') + window.earthDiseaseOffset(.44), 'bee-comparison': () => at('honeycomb-earth') + window.earthDiseaseOffset(.82),
     together: () => at('together', .55), explore: () => at('explore')
   };

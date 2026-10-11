@@ -10,6 +10,7 @@ const story = [['Home', 'top'], ['Why bees matter', 'statement'], ['Worldwide', 
 const styles = `
   :host { position: fixed; top: 26px; left: 50%; transform: translateX(-50%); width: min(1320px, calc(100% - 80px)); z-index: 70; font-family: 'Inter', 'Inter Variable', sans-serif; color: #fff9e9; pointer-events: none; }
   * { box-sizing: border-box; }
+  :host([data-cursor-active]) * { cursor: none !important; }
   a { color: inherit; text-decoration: none; }
   button, summary { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
   button { border: 0; }
@@ -58,7 +59,8 @@ const styles = `
   :host([story]) { inset: 0; width: auto; transform: none; }
   :host([story]) .bar { position: absolute; top: 26px; left: 50%; width: min(1320px,calc(100% - 80px)); padding-right: 28px; transform: translateX(-50%); transition: opacity .22s,transform .22s,visibility .22s; }
   :host([story][data-scrolled]) .bar { opacity: 0; visibility: hidden; transform: translate(-50%,-14px); pointer-events: none; }
-  .honey-toggle { position: absolute; top: 10px; right: 10px; width: 72px; height: 78px; padding: 0; background: transparent; pointer-events: auto; border-radius: 12px; filter: drop-shadow(0 2px 2px #94611225); transition: transform .2s; }
+  .honey-toggle { position: absolute; top: 10px; right: 10px; width: 72px; height: 78px; padding: 0; background: transparent; pointer-events: none; opacity: 0; visibility: hidden; border-radius: 12px; filter: drop-shadow(0 2px 2px #94611225); transition: transform .2s,opacity .2s,visibility .2s; }
+  :host([data-scrolled]) .honey-toggle { opacity: 1; visibility: visible; pointer-events: auto; }
   .honey-toggle:hover { transform: translateY(-2px); }
   .honey-toggle[aria-expanded='true'] { filter: drop-shadow(0 2px 5px #94611255); }
   .honey-toggle svg { display: block; width: 100%; height: 100%; }
@@ -144,10 +146,17 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
         const bar=root.querySelector('.bar');
         this.syncScroll=()=>{
           const scrolled=scrollY>80;
-          if(this.hasAttribute('data-scrolled')===scrolled)return;
+          const changed=this.hasAttribute('data-scrolled')!==scrolled;
           this.toggleAttribute('data-scrolled',scrolled);
           bar.inert=scrolled;bar.setAttribute('aria-hidden',String(scrolled));
+          honeyToggle.inert=!scrolled;honeyToggle.setAttribute('aria-hidden',String(!scrolled));
           if(scrolled&&bar.contains(root.activeElement)){close();honeyToggle.focus({preventScroll:true});}
+          if(!scrolled){
+            const restoreFocus=root.activeElement===honeyToggle||honeyPanel.contains(root.activeElement);
+            close();
+            if(restoreFocus)(matchMedia('(max-width:1100px)').matches?toggle:bar.querySelector('summary')).focus({preventScroll:true});
+          }
+          if(changed)this.dispatchEvent(new CustomEvent('swarm-nav-state',{detail:{scrolled},bubbles:true,composed:true}));
         };
         addEventListener('scroll',this.syncScroll,{passive:true});this.syncScroll();
       }

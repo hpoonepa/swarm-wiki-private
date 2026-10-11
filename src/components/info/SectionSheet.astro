@@ -1,0 +1,32 @@
+---
+// The phone section map (spec §5.2): below 75rem a floating "Sections" pill opens the section list in a bottom sheet
+// (a modal <dialog> moved by a SheetController, sidemap.ts), open at 40% of the viewport. Drag the handle, tap Close or
+// the scrim, press Esc, or pick a section to dismiss it.
+import SideMap from './SideMap.astro';
+import type { Section } from './sidemap';
+import './layout.css';
+
+interface Props { sections: Section[] }
+const { sections } = Astro.props;
+---
+<button type="button" class="sections-pill" aria-haspopup="dialog" aria-expanded="false" aria-controls="section-sheet" data-pagefind-ignore="all">
+  <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false">
+    <circle cx="4.5" cy="5.5" r="1.5" fill="currentColor" />
+    <circle cx="4.5" cy="10" r="1.5" fill="currentColor" />
+    <circle cx="4.5" cy="14.5" r="1.5" fill="currentColor" />
+    <path d="M8.5 5.5h8M8.5 10h8M8.5 14.5h8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+  </svg>
+  <span>Sections</span>
+</button>
+<dialog id="section-sheet" class="section-sheet" data-surface="sheet" aria-labelledby="section-sheet-title" data-pagefind-ignore="all">
+  <div class="section-sheet__handle">
+    <span class="section-sheet__grip" aria-hidden="true"></span>
+    <p class="section-sheet__title" id="section-sheet-title">Sections</p>
+    <button type="button" class="section-sheet__close" data-sheet-close aria-label="Close sections">
+      <svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="m5 5 10 10M15 5 5 15" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+  <div class="section-sheet__body"><SideMap sections={sections} variant="list" /></div>
+</dialog>

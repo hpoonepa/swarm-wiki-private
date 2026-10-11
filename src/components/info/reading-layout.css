@@ -1,0 +1,16 @@
+
+  .flow {
+    --text-w: min(var(--measure), 100% - 2 * var(--gutter));
+    --wide-w: min(var(--wide), 100% - 2 * var(--gutter));
+    display: grid;
+    grid-template-columns:
+      [full-start] minmax(0, 1fr)
+      [wide-start] minmax(0, calc((var(--wide-w) - var(--text-w)) / 2))
+      [text-start] repeat(12, [t] calc(var(--text-w) / 12)) [text-end]
+      minmax(0, calc((var(--wide-w) - var(--text-w)) / 2)) [wide-end]
+      minmax(0, 1fr) [full-end];
+  }
+  .flow > * { grid-column: text; }
+  .flow > .wide { grid-column: wide; }
+  .flow > .full { grid-column: full; }
+  .container { width: min(var(--wide), 100% - 2 * var(--gutter)); margin-inline: auto; }
