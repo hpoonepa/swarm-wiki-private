@@ -12,4 +12,60 @@ import Wip from "../components/md_components/Wip";
 
 # Overview
 
-Placeholder. The Minibinder Overview write-up goes here.
+Minibinders are small, computationally designed proteins engineered to bind specific targets with high affinity (Figueiredo, 2025). Lambert iGEM generated and screened minibinders that bind to Deformed Wing Virus (DWV) through a sponsorship with Adaptyv. Our de-novo minibinder targets a protruding-domain (P-domain) on the external surface of DWV that allows it to bind to host cells (Škubník et al., 2017). By binding to this domain, viral entry is physically blocked because the minibinder prevents the virus from attaching to bee cell receptors.
+
+
+
+| Minibinders                                                                                                        | Nanobodies                                                                                                         | Antibodies                                                                                                         |
+|:------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|
+| De novo proteins engineered to bind targets with high affinity (Figueiredo, 2025)                                  | Antibody fragments derived from heavy-chain-only antibodies found in camelids (Kunz et al, 2023)                   | Y-shaped proteins produced by B cells (Weinstein, 2021)                                                            |
+| &lt;10 kDa (Figueiredo, 2025)                                                                                      | ~15 kDa (Kunz et al, 2023)                                                                                         | ~150 kDa (Weinstein, 2021)                                                                                         |
+| Stable; resistant to protease, pH, and temperature degradation (Braner, 2024; Figueiredo, 2025)                    | Stable; can be degraded by digestive enzymes (Hussack et al., 2011)                                                | Fragile; denatures under varying pH and temperature (Antibodies Incorporated, 2021)                                |
+| Cost effective production through expression in E. Coli (Figueiredo, 2025)                                         | Cost effective production through yeast/bacterial expression (Kunz et al, 2023)                                    | Expensive to produce; requires mammalian cell cultures (Chen et al., 2025)                                         |
+| Weeks to months; de novo computational design; no animal testing required (Figueiredo, 2025)                       | Months to years; requires animal immunization and antibody library screening (Wang et al., 2025)                   | Months to years; requires animal immunization, hybridoma creation, and extensive screening (Sino Biological, n.d.) |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Justification
+
+Initially, Lambert iGEM considered the use of nanobodies —antibody fragments derived from camelids — to bind the P-domain of VP3 of DWV. However, after meeting with nanobody specialist Aashish Manglik, a professor at the University of California, San Diego, our focus shifted to minibinders as they proposed greater potential wet-lab success. Minibinders also offered more promise with computational design tools and stability concerns (Bouchiba et al, 2022).
+
+## Target Selection
+
+Lambert iGEM designed de-novo minibinders to bind the P-domain of the VP3 protein of Deformed Wing Virus (DWV). The structure of DWV is an icosahedral capsid, a protein shell that protects the viral genome. Comprising the capsid are three structural proteins: VP1, VP2, and VP3. A polypeptide linker connects the VP3 protein to a P-domain that protrudes from the capsid. A Cyro-EM surface representation of DWV shows that portions of the VP1 and VP2 proteins are physically buried by the P-domain of the VP3 protein, rendering them ineffective targets in comparison to VP3 (Škubník et al., 2017). 
+
+The surface representation of the P-domain shows an Asp-His-Ser catalytic triad that is thought to participate in protein-protein interactions and cell entry. The dependence on this residue maintains its sequence and confirmation across all variants of DWV (Škubník et al., 2017). 
+
+## References
+
+Bouchiba, Y., Ruffini, M., Schiex, T., & Barbe, S. (2022). Computational design of miniprotein binders. Methods in Molecular Biology (Clifton, N.J.), 2405, 361–382. https://doi.org/10.1007/978-1-0716-1855-4_17
+
+Chen, C., Garcia, Z., Chen, D., Liu, H., & Trelstad, P. (2025). Cost and supply considerations for antibody therapeutics. MAbs, 17(1). https://doi.org/10.1080/19420862.2025.2451789
+
+Hussack, G., Hirama, T., Ding, W., MacKenzie, R., & Tanha, J. (2011). Engineered Single-Domain Antibodies with High Protease Resistance and Thermal Stability. PLoS ONE, 6(11), e28218. https://doi.org/10.1371/journal.pone.0028218
+
+Hybridoma Development Platform | Sino Biological. (2026). Sinobiological.com. https://www.sinobiological.com/services/platform/hybridoma-development
+Kunz, S., Manon Durandy, Seguin, L., & Feral, C. C. (2023). NANOBODY® Molecule, a Giga Medical Tool in Nanodimensions. International Journal of Molecular Sciences, 24(17), 13229–13229. https://doi.org/10.3390/ijms241713229
+
+Moxley, J. (2022). Scribbr. Scribbr.com. https://doi.org/DOI
+
+Sarah Braner. (2024). Designed “minibinder” proteins for autoinflammatory diseases. C&EN Global Enterprise, 102(20), 5–5. https://doi.org/10.1021/cen-10220-scicon1
+
+Škubník, K., Nováček, J., Füzik, T., Přidal, A., Paxton, R. J., & Plevka, P. (2017). Structure of deformed wing virus, a major honey bee pathogen. Proceedings of the National Academy of Sciences, 114(12), 3210–3215. https://doi.org/10.1073/pnas.1615695114
+
+Wang, J., Tong, T., & Wu, Q. (2025). Nanobodies in animal infectious disease control: diagnosis and therapy. Frontiers in Cellular and Infection Microbiology, 15. https://doi.org/10.3389/fcimb.2025.1640352
+
+Weinstein, A. (2021, January 19). Antibodies 101: Introduction to Antibodies. Blog.addgene.org. https://blog.addgene.org/antibodies-101-introduction-to-antibodies
+
+Westcot, A. (2021, March 25). What makes Antibodies Unstable? Antibodies Incorporated. https://www.antibodiesinc.com/blogs/news/what-makes-antibodies-unstable
