@@ -1,0 +1,109 @@
+---
+// Honeycomb window: a page header in the McGill 2025 arrangement. The eyebrow, the title and the
+// summary sit at the left gutter, straight under the nav, and the summary is set inside one large
+// honeycomb cell. On the right a comb of honey cells unfolds from its seed cell in the page's top
+// corner, under the floating nav, and falls down the page beside the title, tapering as it goes.
+// The cells are laid out here, at build time, for a top-right seed; honeycomb.css mirrors the comb
+// for the other corners, plays the unfold and holds the look. The comb is decoration: it takes no
+// pointer events and is hidden from the accessibility tree.
+import './honeycomb.css';
+
+export type HoneycombCorner = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left';
+interface Props { title: string; summary?: string; group: string; corner?: HoneycombCorner }
+const { title, summary, group, corner = 'top-right' } = Astro.props;
+// A page can put a large figure between its title and its summary (McGill 2025's Model page): the
+// hardware page puts its exploded-view explorer there. The comb then fades out above the figure.
+const hasFigure = Astro.slots.has('figure');
+
+// The artboard, taller than wide: the comb hangs. Pointy-top hexagons on a lattice of circumradius R;
+// each cell is drawn a little smaller than its lattice cell so the page shows between cells as walls.
+const ART_W = 720;
+const ART_H = 900;
+const R = 40;
+const R_DRAW = 36.5;
+const HEX_W = Math.sqrt(3) * R;
+const ROW_H = 1.5 * R;
+// The comb's reach from the seed: an ellipse whose horizontal reach shrinks with depth, so the comb is
+// widest along the top edge and narrows to a tail down the page's edge. Both reaches end short of the
+// artboard, so the comb dissolves on the page rather than being cut by an edge.
+const REACH_X = 660;
+const REACH_Y = 880;
+const TAPER = 0.55;
+const seed = { x: ART_W - HEX_W / 2, y: R };
+
+// Fixed per-cell noise, so a rebuild lays out the same comb.
+function noise(a: number, b: number, salt: number): number {
+  let h = (Math.imul(a, 374761393) + Math.imul(b, 668265263) + Math.imul(salt, 2246822519)) | 0;
+  h = Math.imul(h ^ (h >>> 13), 1274126177);
+  return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+}
+
+// Rings out from the seed, with the cells in odd-r offset coordinates (columns counted from the edge).
+function ring(c: number, r: number): number {
+  const q = c - (r - (r & 1)) / 2;
+  return Math.max(Math.abs(q), Math.abs(r), Math.abs(q + r));
+}
+
+function hexPoints(cx: number, cy: number, radius: number): string {
+  const points: string[] = [];
+  for (let k = 0; k < 6; k++) {
+    const a = (Math.PI / 180) * (60 * k + 30);
+    points.push(`${(cx + radius * Math.cos(a)).toFixed(2)},${(cy + radius * Math.sin(a)).toFixed(2)}`);
+  }
+  return points.join(' ');
+}
+
+interface Cell { points: string; opacity: number; outline: boolean; delay: number }
+const cells: Cell[] = [];
+for (let r = 0; ; r++) {
+  const cy = R + r * ROW_H;
+  if (cy - R_DRAW > ART_H) break;
+  for (let c = 0; ; c++) {
+    const cx = ART_W - HEX_W / 2 - c * HEX_W - (r & 1) * (HEX_W / 2);
+    if (cx + R_DRAW < 0) break;
+    const dy = (cy - seed.y) / REACH_Y;
+    const dx = (seed.x - cx) / (REACH_X * (1 - TAPER * Math.min(1, dy)));
+    const t = Math.sqrt(dx * dx + dy * dy); // 0 at the seed, 1 at the comb's full reach
+    if (t > 1) continue;
+    // The fringe thins out cell by cell, so the comb ends in a ragged edge rather than an arc.
+    if (noise(c, r, 1) < Math.max(0, (t - 0.7) / 0.3) * 0.92) continue;
+    const base = 1 - 0.7 * Math.pow(t, 1.25);
+    const grain = 0.82 + 0.36 * noise(c, r, 2);
+    const opacity = Math.min(1, Math.max(0.16, base * grain));
+    // A few cells out towards the edge are drawn as walls only.
+    const outline = t > 0.5 && noise(c, r, 3) < 0.2;
+    // Rings out from the seed, weighted towards the rows below it, so the comb reads as falling.
+    const delay = 0.05 + ring(c, r) * 0.045 + r * 0.03 + noise(c, r, 4) * 0.08;
+    cells.push({ points: hexPoints(cx, cy, R_DRAW), opacity: +opacity.toFixed(3), outline, delay: +delay.toFixed(3) });
+  }
+}
+---
+<header class:list={['honeycomb-window', { 'honeycomb-window--figure': hasFigure }]} data-honeycomb-window>
+  <div class="honeycomb-window__comb" data-corner={corner} aria-hidden="true">
+    <svg viewBox={`0 0 ${ART_W} ${ART_H}`} preserveAspectRatio="xMaxYMin meet" focusable="false">
+      <defs>
+        <linearGradient id="hc-gold" gradientUnits="userSpaceOnUse" x1={seed.x} y1={seed.y} x2={ART_W * 0.2} y2={ART_H}>
+          <stop offset="0" class="hc-stop-honey" />
+          <stop offset="0.45" class="hc-stop-deep" />
+          <stop offset="1" class="hc-stop-orange" />
+        </linearGradient>
+      </defs>
+      <g class="hc-cluster" style={`transform-origin:${seed.x}px ${seed.y}px`}>
+        {cells.map(cell => cell.outline
+          ? <polygon class="hc-cell hc-cell--wall" points={cell.points} style={`--hc-delay:${cell.delay}s`} stroke-opacity={Math.min(1, cell.opacity + 0.2)} />
+          : <polygon class="hc-cell" points={cell.points} style={`--hc-delay:${cell.delay}s`} fill-opacity={cell.opacity} />)}
+      </g>
+    </svg>
+  </div>
+  <div class="honeycomb-window__text">
+    <div class="honeycomb-window__inner">
+      <p class="eyebrow honeycomb-window__eyebrow">{group}</p>
+      <h1 class="display-l honeycomb-window__title">{title}</h1>
+      {!hasFigure && summary && <div class="honeycomb-window__cell"><div class="honeycomb-window__cell-inner"><p class="honeycomb-window__summary">{summary}</p></div></div>}
+    </div>
+  </div>
+  {hasFigure && <div class="honeycomb-window__figure"><slot name="figure" /></div>}
+  {hasFigure && summary && <div class="honeycomb-window__text"><div class="honeycomb-window__inner honeycomb-window__inner--after">
+    <div class="honeycomb-window__cell"><div class="honeycomb-window__cell-inner"><p class="honeycomb-window__summary">{summary}</p></div></div>
+  </div></div>}
+</header>
