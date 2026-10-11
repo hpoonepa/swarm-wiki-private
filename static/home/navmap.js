@@ -82,6 +82,9 @@ const hexDist = (a, b) => { const A = cube(...a), B = cube(...b); return Math.ma
 const hexPoints = (cx, cy, rad) => Array.from({ length: 6 }, (_, k) => { const a = Math.PI / 180 * (60 * k + 30); return `${(cx + rad * Math.cos(a)).toFixed(1)},${(cy + rad * Math.sin(a)).toFixed(1)}`; }).join(' ');
 const wrap = (text, max) => { const lines = ['']; for (const w of text.split(' ')) { const t = lines[lines.length - 1]; if (t && (t + ' ' + w).length > max) lines.push(w); else lines[lines.length - 1] = t ? t + ' ' + w : w; } return lines; };
 const delay = (c, r, seed) => (0.04 + hexDist([c, r], seed) * 0.032).toFixed(3) + 's';
+const splitWords = title => title.split(' ').flatMap(w => w.length > 15 ? [w.slice(0, 8) + '-', w.slice(8)] : [w]);
+const measure = (() => { let ctx; return (text, px) => { ctx ||= document.createElement('canvas').getContext('2d'); ctx.font = `650 ${px}px 'Inter Variable', Inter, sans-serif`; return ctx.measureText(text).width; }; })();
+const labelSize = (sections, R) => { const widest = Math.max(...sections.flatMap(([, items]) => items.flatMap(([title]) => splitWords(title).map(w => measure(w, 100))))); return Math.min(.215 * R, 1.56 * R * 100 / widest); };
 
 function cellSvg(c, r, R, kind, opts = {}) {
   const HW = Math.sqrt(3) * R, cx = HW * (c + (r & 1) * .5) + HW / 2, cy = 1.5 * R * r + R, d = delay(c, r, opts.seed || SEED);
@@ -90,8 +93,7 @@ function cellSvg(c, r, R, kind, opts = {}) {
     return `<g class="cell cell--wax${wall ? ' is-wall' : ''}" style="--d:${d}"><polygon points="${hexPoints(cx, cy, R * .92)}" ${wall ? `stroke-opacity="${(+o + .18).toFixed(2)}"` : `fill-opacity="${o}"`}/></g>`;
   }
   const [title, slug] = opts.page, current = slug === opts.current;
-  const words = title.split(' ').flatMap(w => w.length > 15 ? [w.slice(0, 8) + '-', w.slice(8)] : [w]), longest = Math.max(...words.map(w => w.length));
-  const fs = .215 * R * Math.max(.82, Math.min(1, 12 / longest)), lines = wrap(words.join(' '), 11).slice(0, 3);
+  const fs = opts.fs, lines = wrap(splitWords(title).join(' '), 11).slice(0, 3);
   const text = lines.map((l, i) => `<tspan x="${cx.toFixed(1)}" dy="${i ? '1.15em' : `${(-(lines.length - 1) * .575).toFixed(2)}em`}">${l}</tspan>`).join('');
   let honey = '';
   if (current) {
@@ -103,26 +105,27 @@ function cellSvg(c, r, R, kind, opts = {}) {
 }
 
 function comb(sections, current) {
-  const R = Math.max(40, Math.min(56, (innerWidth - 96) / (COLS + .5) / Math.sqrt(3), (innerHeight - 150) / (1.5 * (ROWS - 1) + 2)));
+  const R = Math.max(40, Math.min(60, (innerWidth - 96) / (COLS + .5) / Math.sqrt(3), (innerHeight - 120) / (1.5 * (ROWS - 1) + 2)));
   const HW = Math.sqrt(3) * R, W = HW * (COLS + .5), H = 1.5 * R * (ROWS - 1) + 2 * R;
   const taken = new Set(), pages = [];
   for (const key in layout) { layout[key].cells.forEach(cell => { taken.add(cell.join()); pages.push(cell); }); layout[key].pocket.forEach(cell => taken.add(cell.join())); }
+  const fs = labelSize(sections, R);
   let cells = '', last = '';
   for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
     if (taken.has([c, r].join())) continue;
     const near = Math.min(...pages.map(p => hexDist([c, r], p)));
     cells += cellSvg(c, r, R, 'wax', { fade: [1, 1, .62, .34, .16][Math.min(near, 4)] });
   }
-  for (const [title, items] of sections) layout[title].cells.forEach(([c, r], i) => { if (!items[i]) return; const svg = cellSvg(c, r, R, 'page', { page: items[i], current }); if (items[i][1] === current) last = svg; else cells += svg; });
+  for (const [title, items] of sections) layout[title].cells.forEach(([c, r], i) => { if (!items[i]) return; const svg = cellSvg(c, r, R, 'page', { page: items[i], current, fs }); if (items[i][1] === current) last = svg; else cells += svg; });
   const titles = sections.map(([title]) => { const [c, r] = layout[title].pocket[0]; return `<h3 class="title" style="left:${(HW * (c + (r & 1) * .5) + HW * .12).toFixed(1)}px;top:${(1.5 * R * r + R).toFixed(1)}px;--ts:${(R * .58).toFixed(1)}px">${title}</h3>`; }).join('');
   return `<div class="comb" style="--w:${W.toFixed(1)}px;--h:${H.toFixed(1)}px;--dmax:${delay(0, ROWS - 1, SEED)}"><svg viewBox="0 0 ${W.toFixed(1)} ${H.toFixed(1)}">${defs}<g class="comb__cells">${cells}${last}</g></svg>${titles}</div>`;
 }
 
 function stack(sections, current) {
-  const R = Math.min(52, (innerWidth - 36) / 3.5 / Math.sqrt(3)), HW = Math.sqrt(3) * R, cols = 3;
+  const R = Math.min(52, (innerWidth - 36) / 3.5 / Math.sqrt(3)), HW = Math.sqrt(3) * R, cols = 3, fs = labelSize(sections, R);
   return `<div class="stack">${sections.map(([title, items]) => {
     const rows = Math.ceil(items.length / cols), W = HW * (cols + .5), H = 1.5 * R * (rows - 1) + 2 * R;
-    const cells = items.map((page, i) => cellSvg(i % cols, Math.floor(i / cols), R, 'page', { page, current, seed: [cols - 1, 0] })).join('');
+    const cells = items.map((page, i) => cellSvg(i % cols, Math.floor(i / cols), R, 'page', { page, current, fs, seed: [cols - 1, 0] })).join('');
     return `<section><h3 class="title" style="--ts:${(R * .56).toFixed(1)}px">${title}</h3><div class="comb" style="--w:${W.toFixed(1)}px;--h:${H.toFixed(1)}px;--dmax:${delay(0, rows - 1, [cols - 1, 0])}"><svg viewBox="0 0 ${W.toFixed(1)} ${H.toFixed(1)}">${defs}<g class="comb__cells">${cells}</g></svg></div></section>`;
   }).join('')}</div>`;
 }
