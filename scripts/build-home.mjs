@@ -13,6 +13,12 @@ for(const file of ['vendor/capsid-engine.js','vendor/rna-player.js','journey.js'
   controller=controller.replace(pattern,'./'+file+'?v='+hash(file));
 }
 writeFileSync(root+'static/home/mechanisms.js',controller);
+let navbar=readFileSync(root+'static/home/navbar.js','utf8');
+for(const file of ['nav-data.js','navmap.js']) {
+  const pattern=new RegExp("\\./"+file.replaceAll('.','\\.')+"(?:\\?v=[^']*)?(?=')",'g');
+  navbar=navbar.replace(pattern,'./'+file+'?v='+hash(file));
+}
+writeFileSync(root+'static/home/navbar.js',navbar);
 let html=readFileSync(root+'static/home/index.html','utf8');
 for(const file of ['story.css','globe.js','earth-scroll.js','colony-loss.js','dwv-virus.js','menu.js','navbar.js','mechanisms.js','flight.js','cursor.js']) {
   html=html.replace(new RegExp(file.replaceAll('.','\\.')+'\\?v=[^"\\s]+','g'),file+'?v='+hash(file));
