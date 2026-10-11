@@ -2,9 +2,9 @@
 const groups = [
   ['Team', [['Team', 'team'], ['Attributions', 'attributions']]],
   ['Project', [['Description', 'description'], ['Contribution', 'contribution'], ['Engineering', 'engineering'], ['Implementation', 'implementation']]],
-  ['Wetlab', [['Diagnostics', [['Overview', 'diagnosticsoverview'], ['PDL', 'diagnostics-pdl'], ['RPA', 'diagnostics-rpa'], ['CRISPR-Cas12a', 'diagnostics-cas12']]], ['Therapeutics', [['Overview', 'therapeutics-overview'], ['CRISPRi', 'therapeutics-crispri'], ['LNPs', 'therapeutics-lnps']]], ['Parts library', 'parts-library'], ['Experiments', 'experiments'], ['Notebook', 'notebook'], ['Results', 'results']]],
+  ['Wetlab', [['Minibinders', [['Overview', 'diagnosticsoverview'], ['PDL', 'diagnostics-pdl'], ['RPA', 'diagnostics-rpa'], ['CRISPR-Cas12a', 'diagnostics-cas12']]], ['RNAi', [['Overview', 'therapeutics-overview'], ['CRISPRi', 'therapeutics-crispri'], ['LNPs', 'therapeutics-lnps']]], ['Parts library', 'parts-library'], ['Experiments', 'experiments'], ['Notebook', 'notebook'], ['Results', 'results']]],
   ['Drylab', [['Software', 'software'], ['Model', 'model'], ['Hardware', 'hardware']]],
-  ['Human Practices', [['Integrated human practices', 'human-practices'], ['Education', 'education'], ['Entrepreneurship', 'hp-entre'], ['Safety', 'safety']]],
+  ['Human Practices', [['Integrated human practices', 'human-practices'], ['Education', 'education'], ['Entrepreneurship', 'hp-entre'], ['Sustainable Development', 'hp-sustainability'], ['Safety', 'safety']]],
 ];
 const story = [['Home', 'top'], ['Why bees matter', 'statement'], ['Worldwide', 'earth'], ['United States', 'usa'], ['Why colony loss?', 'atlanta'], ['Deformed wing virus', 'dwv'], ['What happens to the bee', 'bee-comparison'], ['Introducing SWARM', 'hive'], ['The bee', 'bee'], ['Minibinders', 'minibinders'], ['Why RNAi?', 'rna-intro'], ['RNAi mechanism', 'rnai'], ['Together', 'together'], ['Explore SWARM', 'explore']];
 const styles = `

@@ -24,7 +24,7 @@ const MENU: { title: string; config: NavItem }[] = [
       { title: "PDL",          href: "/lambert-ga/diagnostics-pdl" },
       { title: "RPA",          href: "/lambert-ga/diagnostics-rpa" },
       { title: "Cas12",        href: "/lambert-ga/diagnostics-cas12" },
-      { title: "Therapeutics", href: "/lambert-ga/therapeutics-crispri" },
+      { title: "RNAi", href: "/lambert-ga/therapeutics-crispri" },
       { title: "LNPs",         href: "/lambert-ga/therapeutics-lnps" },
       { title: "Parts Library",href: "/lambert-ga/parts-library" },
       { title: "Experiments",  href: "/lambert-ga/experiments" },
@@ -39,7 +39,7 @@ const MENU: { title: string; config: NavItem }[] = [
   { title: "HP",     config: { title: "HP", items: [
       { title: "Our Approach", href: "/lambert-ga/human-practices" },
       { title: "Education",    href: "/lambert-ga/hp-healthcare" },
-      { title: "Agriculture",  href: "/lambert-ga/hp-agriculture" },
+      { title: "Sustainable Development",  href: "/lambert-ga/hp-sustainability" },
       { title: "Safety",       href: "/lambert-ga/safety" },
     ] } },
 ];
@@ -132,13 +132,13 @@ export function ExploreBadge() {
                 {/* Right column */}
                 <div>
                   <Section title="Wetlab">
-                    <NavLink href="/lambert-ga/diagnosticsoverview" onClose={() => setOpen(false)}>Diagnostic Overview</NavLink>
+                    <NavLink href="/lambert-ga/diagnosticsoverview" onClose={() => setOpen(false)}>Minibinders</NavLink>
                     <div className="ml-4">
                       <NavLink href="/lambert-ga/diagnostics-pdl" onClose={() => setOpen(false)}>PDL</NavLink>
                       <NavLink href="/lambert-ga/diagnostics-rpa" onClose={() => setOpen(false)}>RPA</NavLink>
                       <NavLink href="/lambert-ga/diagnostics-cas12" onClose={() => setOpen(false)}>Cas12a</NavLink>
                     </div>
-                    <NavLink href="/lambert-ga/therapeutics-overview" onClose={() => setOpen(false)}>Therapeutics Overview</NavLink>
+                    <NavLink href="/lambert-ga/therapeutics-overview" onClose={() => setOpen(false)}>RNAi</NavLink>
                     <div className="ml-4">
                       <NavLink href="/lambert-ga/therapeutics-crispri" onClose={() => setOpen(false)}>CRISPRi</NavLink>
                       <NavLink href="/lambert-ga/therapeutics-lnps" onClose={() => setOpen(false)}>LNPs</NavLink>
@@ -153,6 +153,7 @@ export function ExploreBadge() {
                     <NavLink href="/lambert-ga/human-practices" onClose={() => setOpen(false)}>Integrated HP</NavLink>
                     <NavLink href="/lambert-ga/education" onClose={() => setOpen(false)}>Education</NavLink>
                     <NavLink href="/lambert-ga/hp-entre" onClose={() => setOpen(false)}>Entrepreneurship</NavLink>
+                    <NavLink href="/lambert-ga/hp-sustainability" onClose={() => setOpen(false)}>Sustainable Development</NavLink>
                     <NavLink href="/lambert-ga/safety" onClose={() => setOpen(false)}>Safety</NavLink>
                   </Section>
                 </div>
