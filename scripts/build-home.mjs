@@ -24,4 +24,8 @@ for(const file of ['story.css','globe.js','earth-scroll.js','colony-loss.js','dw
   html=html.replace(new RegExp(file.replaceAll('.','\\.')+'\\?v=[^"\\s]+','g'),file+'?v='+hash(file));
 }
 writeFileSync(root+'static/home/index.html',html);
+for(const layout of ['src/layouts/InformationLayout.astro']) {
+  const text=readFileSync(root+layout,'utf8').replace(/cursor\.js\?v=[^"\s]+/g,'cursor.js?v='+hash('cursor.js'));
+  writeFileSync(root+layout,text);
+}
 console.log('Built both animation bundles and updated content hashes.');

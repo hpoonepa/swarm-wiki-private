@@ -1,4 +1,4 @@
-/* A small, section-colored glow follows the pointer without trailing behind it. */
+/* A small, section-colored glow follows the pointer without trailing behind it, and carries over between pages. */
 (() => {
   const style = document.createElement('style');
   style.textContent = `
@@ -13,13 +13,12 @@
 `;
   document.head.append(style);
   const fine = matchMedia('(hover: hover) and (pointer: fine)');
-  const home = !!document.querySelector('.hero');
   const cursor = document.createElement('div');
   cursor.className = 'story-cursor';
   cursor.setAttribute('aria-hidden', 'true');
   cursor.innerHTML = '<span></span><svg viewBox="0 0 28 32" fill="none"><path d="M4 3.5c-.9-.4-1.9.4-1.7 1.4l4.1 22c.2 1.1 1.7 1.4 2.3.4l5.1-8.5 9.4-3.4c1.1-.4 1.2-1.9.1-2.4L4 3.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>';
-  document.body.append(cursor);
-  let x = 0, y = 0, inside = false, frame = 0;
+  (document.body || document.documentElement).append(cursor);
+  let x = 0, y = 0, inside = false, frame = 0, theme = '', home = false;
   const palettes = {
     paper: ['#766b8d', '#ffffff'],
     gut: ['#a96c26', '#fff9e6'],
@@ -28,6 +27,21 @@
     flower: ['#b87553', '#fffaf0'],
     sheet: ['#ffe78a', '#1a322a']
   };
+  const isHome = () => home || (home = !!document.querySelector('.hero'));
+  function setTheme(next) {
+    if (theme === next) return;
+    theme = next;
+    cursor.dataset.theme = next;
+    cursor.style.setProperty('--cursor-glow', palettes[next][0]);
+    cursor.style.setProperty('--cursor-edge', palettes[next][1]);
+  }
+  function place() { cursor.style.transform = `translate3d(${x - 3}px,${y - 4}px,0)`; }
+  function show() {
+    cursor.dataset.visible = 'true';
+    document.documentElement.classList.add('has-story-cursor');
+    const nav = document.querySelector('swarm-nav');
+    if (nav && !nav.hasAttribute('data-cursor-active')) nav.setAttribute('data-cursor-active', '');
+  }
   function hide() {
     cursor.dataset.visible = 'false';
     document.documentElement.classList.remove('has-story-cursor');
@@ -40,21 +54,11 @@
       hide(); return;
     }
     const nav = target.closest('swarm-nav');
-    const theme = target.closest('#rnai') ? 'rna' : target.closest('#minibinders') ? 'gut' : nav ? (nav.hasAttribute('data-dark') ? 'forest' : 'sheet') : target.closest('.hero') ? 'forest' : target.closest('#together') ? 'flower' : home ? 'paper' : 'sheet';
-    if (cursor.dataset.theme !== theme) {
-      cursor.dataset.theme = theme;
-      cursor.style.setProperty('--cursor-glow', palettes[theme][0]);
-      cursor.style.setProperty('--cursor-edge', palettes[theme][1]);
-    }
+    setTheme(target.closest('#rnai') ? 'rna' : target.closest('#minibinders') ? 'gut' : nav ? (nav.hasAttribute('data-dark') ? 'forest' : 'sheet') : target.closest('.hero') ? 'forest' : target.closest('#together') ? 'flower' : isHome() ? 'paper' : 'sheet');
     cursor.dataset.link = String(!!target.closest('a,button,summary,swarm-nav'));
     place();
-    if (cursor.dataset.visible !== 'true') {
-      cursor.dataset.visible = 'true';
-      document.documentElement.classList.add('has-story-cursor');
-      document.querySelector('swarm-nav')?.setAttribute('data-cursor-active', '');
-    }
+    show();
   }
-  function place() { cursor.style.transform = `translate3d(${x - 3}px,${y - 4}px,0)`; }
   function kick() { if (!frame) frame = requestAnimationFrame(paint); }
   function move(event) {
     if (event.pointerType === 'touch') { inside = false; hide(); return; }
@@ -72,4 +76,15 @@
   addEventListener('blur', () => { inside = false; hide(); });
   document.addEventListener('visibilitychange', () => { if (document.hidden) hide(); });
   fine.addEventListener('change', () => { if (!fine.matches) hide(); else kick(); });
+  document.addEventListener('DOMContentLoaded', kick);
+  addEventListener('pagehide', () => { if (inside) try { sessionStorage.setItem('swarm-cursor', JSON.stringify({ x, y, theme })); } catch {} });
+  try {
+    const last = JSON.parse(sessionStorage.getItem('swarm-cursor') || 'null');
+    if (last && fine.matches && !document.hidden) {
+      x = last.x; y = last.y; inside = true;
+      setTheme(last.theme in palettes ? last.theme : 'sheet');
+      place();
+      show();
+    }
+  } catch {}
 })();
