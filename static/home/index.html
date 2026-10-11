@@ -16,7 +16,7 @@
   /* hero: the art portion of Frame 8.svg (everything above the white curve) */
   .hero { width: 100%; aspect-ratio: 1440 / 1066; overflow: hidden; position: relative; z-index: 2;
     clip-path: ellipse(108% 100% at 50% 0%); }   /* curved bottom edge: sides rise ~12%, centre reaches the bottom */
-  .hero img { width: 100%; height: auto; display: block; }
+  .hero img { width: 100%; height: auto; display: block; margin-top: calc(-68 / 1440 * 100%); }   /* frame starts 68 units into the art */
 
   /* statement: one sentence at a time, cross-fading in the same spot as you scroll */
   #statement { position: relative; height: 340vh; z-index: 2; pointer-events: none; }
@@ -75,8 +75,8 @@
   .menu-panel a:hover, .menu-panel a:focus-visible { background: rgba(255,255,255,.08); }
   .menu-scrim { position: fixed; inset: 0; z-index: 54; background: rgba(14,43,37,.35); opacity: 0; pointer-events: none; transition: opacity .3s; }
   .menu-open .menu-scrim { opacity: 1; pointer-events: auto; }
-  /* ---------- hero logo: its own image, placed where it sits in the hero art (hero units x179.9 y92.4 w672.7 of 1440) ---------- */
-  #heroLogo { position: absolute; z-index: 3; left: calc(179.9 / 1440 * 100%); top: calc(92.4 / 1440 * 100vw); width: calc(672.7 / 1440 * 100%);
+  /* ---------- hero logo: its own image, placed where it sits in the hero art (hero units x179.9 y92.4 w672.7 of 1440, less the 68-unit top crop) ---------- */
+  #heroLogo { position: absolute; z-index: 3; left: calc(179.9 / 1440 * 100%); top: calc(24.4 / 1440 * 100vw); width: calc(672.7 / 1440 * 100%);
     transform-origin: 0 0; pointer-events: none; }
   #heroLogo img { display: block; width: 100%; height: auto; }
   /* while loading the same logo sits centred above the green screen and fills with honey */
@@ -216,7 +216,7 @@
   window.scrollTo(0, 0);
   function home() {                           // the logo's resting spot in the hero (page coordinates at scroll 0)
     var W = document.documentElement.clientWidth;
-    return { x: W * 179.9 / 1440, y: W * 92.4 / 1440, w: W * 672.7 / 1440 };
+    return { x: W * 179.9 / 1440, y: W * 24.4 / 1440, w: W * 672.7 / 1440 };
   }
   function centre() {                         // its size and spot on the loading screen
     var W = document.documentElement.clientWidth, H = window.innerHeight, w = Math.min(260, W * .46), h = w * 758.9 / 672.7;
@@ -373,8 +373,12 @@
           <img class="journey-art" src="https://static.igem.wiki/teams/6185/wiki/homepage/bee-honeycomb-mite.avif" alt="" width="1536" height="1024">
         </div>
       </div>
+      <div class="intro-scene">
       <img class="intro-hive" src="assets/journey/commercial-hive.png" alt="" width="560" height="1400" aria-hidden="true">
       <div class="intro-bee" aria-hidden="true"><div class="intro-bee__hover"><svg viewBox="200 40 690 600" aria-hidden="true" focusable="false">
+<g class="bee-legs bee-legs--far" fill="none" stroke="#4a1230" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path data-hip="666,418"/><path data-hip="698,428"/><path data-hip="728,422"/></g>
+<g class="bee-wing bee-wing--back" transform="rotate(-6 690 335) translate(440 147) scale(2)"><g class="bee-wing__flap">
+<path d="M122.042 71.3437C95.8775 50.1333 63.1728 11.8453 14.0346 1.01465C-35.1036 -9.81599 60.7209 69.3889 58.8276 80.3013C56.9344 91.2136 105.73 84.8221 125.667 94.0233C145.605 103.224 148.207 92.5541 122.042 71.3437Z" fill="#E1E1E1" fill-opacity="0.6" stroke="#8d8d8d" stroke-opacity=".55" stroke-width=".8" stroke-linejoin="round"/><path d="M122 92 C 95 66, 60 30, 22 8 M 98 70 C 80 60, 60 52, 44 46" fill="none" stroke="#8d8d8d" stroke-opacity=".45" stroke-width=".7" stroke-linecap="round"/></g></g>
 <g class="bee-abdomen" transform="translate(331 219) scale(2.5)">
 <ellipse cx="33.2299" cy="34.0343" rx="33.2299" ry="34.0343" transform="matrix(-0.865065 0.507757 0.552113 0.830501 75.1847 55.8416)" fill="#FCC42F"/>
 <path d="M46.1836 126.855C55.6197 135.18 71.7241 137.065 86.1208 128.615C100.518 120.165 108.667 105.099 102.969 96.5279C97.2705 87.9566 87.8182 98.6038 73.4215 107.054C59.0247 115.504 44.4338 125.748 46.1836 126.855Z" fill="#E57624"/>
@@ -386,13 +390,13 @@
 <path d="M89.352 104.202C95.0367 112.753 114.641 115.947 126.515 108.977C138.39 102.007 143.407 89.4255 137.722 80.8744C132.038 72.3233 126.127 83.007 114.253 89.9767C102.378 96.9463 96.0323 98.4348 89.352 104.202Z" fill="#B62704"/>
 <ellipse cx="24.6118" cy="30.9283" rx="24.6118" ry="30.9283" transform="matrix(-0.865065 0.507757 0.552113 0.830501 123.56 32.3682)" fill="#FCC42F"/>
 <path d="M108.007 92.7571C109.322 96.5065 127.118 102.752 138.627 95.9968C150.135 89.242 155.617 76.1801 149.94 67.6395C144.262 59.0989 132.872 80.2168 127.921 81.1944C122.97 82.1719 106.693 89.0078 108.007 92.7571Z" fill="#E57624"/></g>
-<g class="bee-wing bee-wing--back" transform="translate(378 55) scale(2.5)">
-<path d="M122.042 71.3437C95.8775 50.1333 63.1728 11.8453 14.0346 1.01465C-35.1036 -9.81599 60.7209 69.3889 58.8276 80.3013C56.9344 91.2136 105.73 84.8221 125.667 94.0233C145.605 103.224 148.207 92.5541 122.042 71.3437Z" fill="#E1E1E1" fill-opacity="0.64"/></g>
-<g class="bee-legs" fill="none" stroke="#6E1B41" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path data-hip="642,428"/><path data-hip="674,440"/><path data-hip="708,436"/></g>
+<g class="bee-legs bee-legs--near" fill="none" stroke="#6E1B41" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path data-hip="642,428"/><path data-hip="674,440"/><path data-hip="708,436"/></g>
 <g class="bee-thorax" transform="translate(615.5 281) scale(2.5)">
 <ellipse cx="31.7955" cy="33.1336" rx="31.7955" ry="33.1336" transform="matrix(-0.965855 -0.259084 -0.259084 0.965855 71.1895 9.28891)" fill="#62172F"/></g>
 <g class="bee-thorax-low" transform="translate(604.5 334) scale(2.5)">
 <path d="M0.00277471 17.8673C-0.0573922 28.1766 7.96467 39.0218 23.657 43.2312C39.3493 47.4405 54.2012 42.9094 56.8296 33.1107C59.4581 23.312 48.8677 11.9561 33.1754 7.7468C-2.23511 -6.78621 0.103719 0.570717 0.00277471 17.8673Z" fill="#461021"/></g>
+<g class="bee-wing bee-wing--front" transform="rotate(-17 676 345) translate(376 249) scale(2)"><g class="bee-wing__flap">
+<path d="M138.305 28.242C106.264 17.8574 61.9801 -6.11127 12.2339 1.44986C-37.5124 9.01099 80.3818 48.4658 82.5387 59.3291C84.6955 70.1924 127.93 46.6841 149.842 48.1015C171.755 49.5189 170.346 38.6265 138.305 28.242Z" fill="#E1E1E1" fill-opacity="0.6" stroke="#8d8d8d" stroke-opacity=".55" stroke-width=".8" stroke-linejoin="round"/><path d="M148 46 C 110 30, 60 14, 14 8 M 118 36 C 100 42, 80 46, 60 46" fill="none" stroke="#8d8d8d" stroke-opacity=".45" stroke-width=".7" stroke-linecap="round"/></g></g>
 <g class="bee-head" transform="translate(654 161) scale(2.5)">
 <ellipse cx="14.9041" cy="18.12" rx="14.9041" ry="18.12" transform="matrix(-0.868886 0.495013 0.495013 0.868886 63.4083 36.5837)" fill="black"/>
 <ellipse cx="24.3434" cy="25.3679" rx="24.3434" ry="25.3679" transform="matrix(-0.868886 0.495013 0.495013 0.868886 55.6928 29.0627)" fill="#FDC62E"/>
@@ -409,10 +413,9 @@
 <path d="M63.846 46.2447C62.8026 46.4618 62.1281 47.4505 62.3077 48.4995L63.7089 56.6827C63.9588 58.142 65.4064 59.1078 66.8515 58.7794C68.2704 58.4569 69.1021 57.0175 68.6752 55.6234L66.2368 47.6615C65.9265 46.6482 64.8819 46.0292 63.846 46.2447Z" fill="#6E1B41"/>
 <path d="M50.7324 16.0186C49.8671 15.3904 48.6731 15.9044 48.5762 16.9467L47.0926 32.9009C47.0447 33.4163 47.0345 33.9357 47.0622 34.455L47.652 45.5136C47.7059 46.5243 48.5837 47.3196 49.5957 47.2744C50.645 47.2276 51.4034 46.2994 51.2425 45.2588L49.7414 35.5532C49.5975 34.6233 49.5746 33.6826 49.6732 32.7546L51.3141 17.3044C51.3666 16.8098 51.1438 16.3171 50.7324 16.0186Z" fill="#6E1B41"/>
 <path d="M83.8641 25.4619C83.5566 24.4339 82.3028 24.0983 81.5644 24.8465L70.6432 35.912C70.2568 36.3036 69.9002 36.7253 69.5767 37.1736L63.3548 45.7928C62.748 46.6334 62.9381 47.8313 63.7754 48.4439C64.6453 49.0804 65.8495 48.8224 66.3862 47.8845L71.061 39.7159C71.536 38.8859 72.1193 38.1275 72.7946 37.4618L83.5038 26.905C83.879 26.5352 84.0183 25.9773 83.8641 25.4619Z" fill="#6E1B41"/></g>
-<g class="bee-wing bee-wing--front" transform="translate(295 235) scale(2.5)">
-<path d="M138.305 28.242C106.264 17.8574 61.9801 -6.11127 12.2339 1.44986C-37.5124 9.01099 80.3818 48.4658 82.5387 59.3291C84.6955 70.1924 127.93 46.6841 149.842 48.1015C171.755 49.5189 170.346 38.6265 138.305 28.242Z" fill="#E1E1E1" fill-opacity="0.64"/></g>
 </svg>
 </div></div>
+      </div>
       <div class="journey-copy journey-copy--hive" id="hive" aria-hidden="true" inert>
         <h2><span class="swarm-introducing">Introducing</span><img class="swarm-wordmark" src="https://static.igem.wiki/teams/6185/wiki/homepage/swarm-wordmark.avif" alt="SWARM" width="866" height="813"></h2>
       </div>
@@ -637,7 +640,7 @@
   <script type="module" src="navbar.js?v=2a2124915828"></script>
   <script src="menu.js?v=9aad81326082"></script>
   <script src="ux.js?v=story1"></script>
-  <script src="intro-bee.js?v=3" defer></script>
+  <script src="intro-bee.js?v=6" defer></script>
   <script src="cursor.js?v=4909035069b3" defer></script>
   <script src="flight.js?v=c05448bf20a6"></script>
   <script type="module" src="mechanisms.js?v=3036f39e45d7"></script>
