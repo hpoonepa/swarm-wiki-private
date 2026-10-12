@@ -6,7 +6,6 @@
   color: var(--ink);
 }
 
-/* ---- The comb ---- */
 .honeycomb-window__comb {
   position: absolute;
   top: 0;
@@ -28,11 +27,12 @@
 .honeycomb-window__comb[data-corner='bottom-right'] { top: auto; bottom: 0; transform: scaleY(-1); }
 .honeycomb-window__comb[data-corner='bottom-left'] { top: auto; right: auto; bottom: 0; left: 0; transform: scale(-1, -1); }
 
-.hc-stop-honey { stop-color: var(--honey); }
-.hc-stop-deep { stop-color: var(--honey-deep); }
-.hc-stop-orange { stop-color: var(--orange); }
-.hc-cell { fill: url(#hc-gold); }
-.hc-cell--wall { fill: none; stroke: url(#hc-gold); stroke-width: 2.5; stroke-linejoin: round; }
+.hc-cell { --hc-fill: var(--honey); fill: var(--hc-fill); }
+.hc-cell[data-tone='1'] { --hc-fill: color-mix(in oklch, var(--honey) 55%, var(--honey-deep)); }
+.hc-cell[data-tone='2'] { --hc-fill: var(--honey-deep); }
+.hc-cell[data-tone='3'] { --hc-fill: color-mix(in oklch, var(--honey-deep) 55%, var(--orange)); }
+.hc-cell[data-tone='4'] { --hc-fill: var(--orange); }
+.hc-cell--wall { fill: none; stroke: var(--hc-fill); stroke-width: 2.5; stroke-linejoin: round; }
 
 .hc-cluster {
   transform-box: view-box;
@@ -53,7 +53,6 @@
   to { opacity: 1; transform: scale(1); }
 }
 
-/* ---- The title block ---- */
 .honeycomb-window__text {
   position: relative;
   z-index: 1;
@@ -69,7 +68,6 @@
 }
 .honeycomb-window__title { margin: 0; max-width: 100%; }
 
-/* ---- The summary cell ---- */
 .honeycomb-window__cell {
   --hc-shape: polygon(
     var(--hc-chamfer) 0, calc(100% - var(--hc-chamfer)) 0, 100% 50%,

@@ -1,10 +1,9 @@
-/* Full-screen project map: one honeycomb, every page a cell, opened from the corner honeycomb. */
 export const mapStyles = `
   :host([data-map-open]) { z-index: 900; }
   .map { position: absolute; inset: 0; z-index: 1; display: none; overflow: auto; overscroll-behavior: contain; color: #1a322a; pointer-events: auto; --ease-out: cubic-bezier(.22, 1, .36, 1); --ease-in: cubic-bezier(.7, 0, .84, 0); }
   .map.is-open, .map.is-closing { display: block; }
   .map.is-closing { pointer-events: none; }
-  .map__veil { position: absolute; inset: 0; background: radial-gradient(90% 70% at 100% 0%, #FFF1C4 0%, #FFFDF6 55%, #FFFFFF 100%); }
+  .map__veil { position: absolute; inset: 0; background: #FFFDF6; }
   .map.is-open .map__veil { animation: map-fade .22s var(--ease-out) both; }
   .map.is-closing .map__veil { animation: map-fade-out .2s var(--ease-in) both; animation-delay: .42s; }
   .map__stage { position: absolute; inset: 0; display: grid; place-items: center; padding: 72px 32px 48px; }
@@ -16,18 +15,17 @@ export const mapStyles = `
   .cell { transform-box: fill-box; transform-origin: center; }
   .map.is-open .cell { animation: map-pop .42s var(--ease-out) both; animation-delay: var(--d); }
   .map.is-closing .cell { animation: map-pop-out .3s var(--ease-in) both; animation-delay: calc(var(--dmax) - var(--d)); }
-  .cell--wax polygon { fill: url(#hc); }
-  .cell--wax.is-wall polygon { fill: none; stroke: url(#hc); stroke-width: 1.6; }
+  .cell--wax.is-wall polygon { fill: none; stroke-width: 1.6; }
   .cell--page { filter: drop-shadow(0 2px 3px rgba(26, 50, 42, .10)) drop-shadow(0 14px 26px rgba(26, 50, 42, .14)); transition: transform .18s var(--ease-out), filter .18s; }
-  .cell--page polygon { fill: url(#hc-cell); transition: fill .15s; }
+  .cell--page polygon { transition: fill .15s; }
   .cell--page text { fill: #1a322a; font-weight: 650; letter-spacing: -.01em; pointer-events: none; }
   .cell--page:hover, .cell--page:focus-visible { transform: translateY(-3px); filter: drop-shadow(0 4px 6px rgba(26, 50, 42, .10)) drop-shadow(0 22px 34px rgba(26, 50, 42, .18)); }
-  .cell--page:hover polygon { fill: url(#hc-hover); }
+  .cell--page:hover polygon { fill: #FFE38F; }
   .cell--page:focus-visible { outline: none; }
   .cell--page:focus-visible polygon { stroke: #1a322a; stroke-width: 2; }
-  .cell--current polygon { fill: url(#hc-current); }
+  .cell--current polygon { fill: #FFF0BF; }
   .honey { filter: drop-shadow(0 1px 1.5px rgba(120, 70, 0, .35)); }
-  .honey__stream { fill: none; stroke: url(#honey-band); stroke-linecap: round; stroke-linejoin: round; }
+  .honey__stream { fill: none; stroke: #F5B827; stroke-linecap: round; stroke-linejoin: round; }
   .honey__sheen { fill: none; stroke: rgba(255, 248, 214, .9); stroke-linecap: round; stroke-linejoin: round; }
   .map.is-open .honey__stream { animation: map-pour 1.6s cubic-bezier(.45, .05, .35, 1) both; animation-delay: calc(var(--d) + .35s); }
   .map.is-open .honey__sheen { animation: map-sheen 4.5s linear infinite; animation-delay: calc(var(--d) + 2.3s); }
@@ -68,14 +66,9 @@ const layout = {
   'Human Practices': { cells: [[6, 4], [7, 4], [8, 4], [6, 5], [7, 5], [8, 5]], pocket: [[6, 3], [7, 3], [8, 3], [9, 3]] },
 };
 const COLS = 12, ROWS = 7, SEED = [11, 0];
-const defs = `<defs>
-  <linearGradient id="hc" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FEC341"/><stop offset=".55" stop-color="#E5B144"/><stop offset="1" stop-color="#E57624"/></linearGradient>
-  <linearGradient id="hc-cell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD65C"/><stop offset="1" stop-color="#F0B02C"/></linearGradient>
-  <linearGradient id="hc-hover" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE38F"/><stop offset="1" stop-color="#FFC43D"/></linearGradient>
-  <linearGradient id="hc-current" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFF0BF"/><stop offset="1" stop-color="#FFD65C"/></linearGradient>
-  <linearGradient id="honey-band" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE58C"/><stop offset=".5" stop-color="#F5B827"/><stop offset="1" stop-color="#D98E14"/></linearGradient>
-</defs>`;
 
+const WAX = ['#FEC341', '#F5B827', '#E5B144', '#EDAA22', '#D98E14'], PAGE = ['#FFD65C', '#FFCF45', '#F9C640', '#FFDA6B'];
+const pick = (list, c, r, s) => list[Math.floor(noise(c, r, s) * list.length)];
 const noise = (a, b, s) => { let h = (Math.imul(a, 374761393) + Math.imul(b, 668265263) + Math.imul(s, 2246822519)) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
 const cube = (c, r) => { const q = c - (r - (r & 1)) / 2; return [q, r, -q - r]; };
 const hexDist = (a, b) => { const A = cube(...a), B = cube(...b); return Math.max(Math.abs(A[0] - B[0]), Math.abs(A[1] - B[1]), Math.abs(A[2] - B[2])); };
@@ -90,7 +83,7 @@ function cellSvg(c, r, R, kind, opts = {}) {
   const HW = Math.sqrt(3) * R, cx = HW * (c + (r & 1) * .5) + HW / 2, cy = 1.5 * R * r + R, d = delay(c, r, opts.seed || SEED);
   if (kind === 'wax') {
     const o = ((0.10 + 0.14 * noise(c, r, 2)) * (opts.fade ?? 1)).toFixed(3), wall = noise(c, r, 3) < 0.16;
-    return `<g class="cell cell--wax${wall ? ' is-wall' : ''}" style="--d:${d}"><polygon points="${hexPoints(cx, cy, R * .92)}" ${wall ? `stroke-opacity="${(+o + .18).toFixed(2)}"` : `fill-opacity="${o}"`}/></g>`;
+    return `<g class="cell cell--wax${wall ? ' is-wall' : ''}" style="--d:${d}"><polygon points="${hexPoints(cx, cy, R * .92)}" ${wall ? 'stroke' : 'fill'}="${pick(WAX, c, r, 4)}" ${wall ? `stroke-opacity="${(+o + .18).toFixed(2)}"` : `fill-opacity="${o}"`}/></g>`;
   }
   const [title, slug] = opts.page, current = slug === opts.current;
   const fs = opts.fs, lines = wrap(splitWords(title).join(' '), 11).slice(0, 3);
@@ -101,7 +94,7 @@ function cellSvg(c, r, R, kind, opts = {}) {
     const right = `M${V(270)}L${V(330)}L${V(30)}L${V(90)}`, left = `M${V(270)}L${V(210)}L${V(150)}L${V(90)}`, bw = (R * .14).toFixed(1), sw = (R * .045).toFixed(1), dash = `${(rad * .45).toFixed(1)} ${L}`;
     honey = `<g class="honey" style="--L:${L}px;--d:${d}">${[right, left].map(p => `<path class="honey__stream" d="${p}" stroke-width="${bw}" stroke-dasharray="${L}" stroke-dashoffset="${L}"/>`).join('')}${[right, left].map(p => `<path class="honey__sheen" d="${p}" stroke-width="${sw}" stroke-dasharray="${dash}" stroke-dashoffset="${L}"/>`).join('')}</g>`;
   }
-  return `<a class="cell cell--page${current ? ' cell--current' : ''}" href="/lambert-ga/${slug}/" style="--d:${d}"${current ? ' aria-current="page"' : ''}><polygon points="${hexPoints(cx, cy, R * .92)}"/><text x="${cx.toFixed(1)}" y="${cy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="${fs.toFixed(1)}">${text}</text>${honey}</a>`;
+  return `<a class="cell cell--page${current ? ' cell--current' : ''}" href="/lambert-ga/${slug}/" style="--d:${d}"${current ? ' aria-current="page"' : ''}><polygon points="${hexPoints(cx, cy, R * .92)}" fill="${pick(PAGE, c, r, 6)}"/><text x="${cx.toFixed(1)}" y="${cy.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="${fs.toFixed(1)}">${text}</text>${honey}</a>`;
 }
 
 function comb(sections, current) {
@@ -118,7 +111,7 @@ function comb(sections, current) {
   }
   for (const [title, items] of sections) layout[title].cells.forEach(([c, r], i) => { if (!items[i]) return; const svg = cellSvg(c, r, R, 'page', { page: items[i], current, fs }); if (items[i][1] === current) last = svg; else cells += svg; });
   const titles = sections.map(([title]) => { const [c, r] = layout[title].pocket[0]; return `<h3 class="title" style="left:${(HW * (c + (r & 1) * .5) + HW * .12).toFixed(1)}px;top:${(1.5 * R * r + R).toFixed(1)}px;--ts:${(R * .58).toFixed(1)}px">${title}</h3>`; }).join('');
-  return `<div class="comb" style="--w:${W.toFixed(1)}px;--h:${H.toFixed(1)}px;--dmax:${delay(0, ROWS - 1, SEED)}"><svg viewBox="0 0 ${W.toFixed(1)} ${H.toFixed(1)}">${defs}<g class="comb__cells">${cells}${last}</g></svg>${titles}</div>`;
+  return `<div class="comb" style="--w:${W.toFixed(1)}px;--h:${H.toFixed(1)}px;--dmax:${delay(0, ROWS - 1, SEED)}"><svg viewBox="0 0 ${W.toFixed(1)} ${H.toFixed(1)}"><g class="comb__cells">${cells}${last}</g></svg>${titles}</div>`;
 }
 
 function stack(sections, current) {
@@ -126,7 +119,7 @@ function stack(sections, current) {
   return `<div class="stack">${sections.map(([title, items]) => {
     const rows = Math.ceil(items.length / cols), W = HW * (cols + .5), H = 1.5 * R * (rows - 1) + 2 * R;
     const cells = items.map((page, i) => cellSvg(i % cols, Math.floor(i / cols), R, 'page', { page, current, fs, seed: [cols - 1, 0] })).join('');
-    return `<section><h3 class="title" style="--ts:${(R * .56).toFixed(1)}px">${title}</h3><div class="comb" style="--w:${W.toFixed(1)}px;--h:${H.toFixed(1)}px;--dmax:${delay(0, rows - 1, [cols - 1, 0])}"><svg viewBox="0 0 ${W.toFixed(1)} ${H.toFixed(1)}">${defs}<g class="comb__cells">${cells}</g></svg></div></section>`;
+    return `<section><h3 class="title" style="--ts:${(R * .56).toFixed(1)}px">${title}</h3><div class="comb" style="--w:${W.toFixed(1)}px;--h:${H.toFixed(1)}px;--dmax:${delay(0, rows - 1, [cols - 1, 0])}"><svg viewBox="0 0 ${W.toFixed(1)} ${H.toFixed(1)}"><g class="comb__cells">${cells}</g></svg></div></section>`;
   }).join('')}</div>`;
 }
 

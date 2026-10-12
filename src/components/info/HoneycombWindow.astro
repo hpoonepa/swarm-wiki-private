@@ -36,7 +36,7 @@ function hexPoints(cx: number, cy: number, radius: number): string {
   return points.join(' ');
 }
 
-interface Cell { points: string; opacity: number; outline: boolean; delay: number }
+interface Cell { points: string; opacity: number; outline: boolean; delay: number; tone: number }
 const cells: Cell[] = [];
 for (let r = 0; ; r++) {
   const cy = R + r * ROW_H;
@@ -54,24 +54,18 @@ for (let r = 0; ; r++) {
     const opacity = Math.min(1, Math.max(0.16, base * grain));
     const outline = t > 0.5 && noise(c, r, 3) < 0.2;
     const delay = 0.05 + ring(c, r) * 0.045 + r * 0.03 + noise(c, r, 4) * 0.08;
-    cells.push({ points: hexPoints(cx, cy, R_DRAW), opacity: +opacity.toFixed(3), outline, delay: +delay.toFixed(3) });
+    const tone = Math.min(4, Math.max(0, Math.round(t * 4 + (noise(c, r, 5) - 0.5) * 1.4)));
+    cells.push({ points: hexPoints(cx, cy, R_DRAW), opacity: +opacity.toFixed(3), outline, delay: +delay.toFixed(3), tone });
   }
 }
 ---
 <header class="honeycomb-window" data-honeycomb-window>
   <div class="honeycomb-window__comb" data-corner={corner} aria-hidden="true">
     <svg viewBox={`0 0 ${ART_W} ${ART_H}`} preserveAspectRatio="xMaxYMin meet" focusable="false">
-      <defs>
-        <linearGradient id="hc-gold" gradientUnits="userSpaceOnUse" x1={seed.x} y1={seed.y} x2={ART_W * 0.2} y2={ART_H}>
-          <stop offset="0" class="hc-stop-honey" />
-          <stop offset="0.45" class="hc-stop-deep" />
-          <stop offset="1" class="hc-stop-orange" />
-        </linearGradient>
-      </defs>
       <g class="hc-cluster" style={`transform-origin:${seed.x}px ${seed.y}px`}>
         {cells.map(cell => cell.outline
-          ? <polygon class="hc-cell hc-cell--wall" points={cell.points} style={`--hc-delay:${cell.delay}s`} stroke-opacity={Math.min(1, cell.opacity + 0.2)} />
-          : <polygon class="hc-cell" points={cell.points} style={`--hc-delay:${cell.delay}s`} fill-opacity={cell.opacity} />)}
+          ? <polygon class="hc-cell hc-cell--wall" data-tone={cell.tone} points={cell.points} style={`--hc-delay:${cell.delay}s`} stroke-opacity={Math.min(1, cell.opacity + 0.2)} />
+          : <polygon class="hc-cell" data-tone={cell.tone} points={cell.points} style={`--hc-delay:${cell.delay}s`} fill-opacity={cell.opacity} />)}
       </g>
     </svg>
   </div>
