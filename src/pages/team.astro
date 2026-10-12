@@ -1,6 +1,25 @@
 ---
-import InformationLayout from "../layouts/InformationLayout.astro";
-const frontmatter = { title: "Team" };
+import Nav from '../components/Nav';
+import Footer from '../components/Footer';
+import TeamPage from '../components/team/TeamPage.astro';
+import '../styles/fonts.css';
+import '../styles/global.css';
 ---
-
-<InformationLayout frontmatter={frontmatter} />
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Team | Lambert-GA</title>
+    <meta name="description" content="Meet the students and advisors behind SWARM, Lambert-GA's 2026 iGEM project." />
+    <link rel="icon" href="/lambert-ga/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/lambert-ga/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/lambert-ga/apple-touch-icon.png" />
+  </head>
+  <body class="team-page">
+    <a class="hive-skip" href="#team-main">Skip to the team</a>
+    <Nav client:load />
+    <TeamPage />
+    <Footer />
+  </body>
+</html>
