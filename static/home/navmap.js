@@ -76,7 +76,7 @@ const hexPoints = (cx, cy, rad) => Array.from({ length: 6 }, (_, k) => { const a
 const wrap = (text, max) => { const lines = ['']; for (const w of text.split(' ')) { const t = lines[lines.length - 1]; if (t && (t + ' ' + w).length > max) lines.push(w); else lines[lines.length - 1] = t ? t + ' ' + w : w; } return lines; };
 const delay = (c, r, seed) => (0.04 + hexDist([c, r], seed) * 0.032).toFixed(3) + 's';
 const splitWords = title => title.split(' ').flatMap(w => w.length > 15 ? [w.slice(0, 8) + '-', w.slice(8)] : [w]);
-const measure = (() => { let ctx; return (text, px) => { ctx ||= document.createElement('canvas').getContext('2d'); ctx.font = `650 ${px}px 'Inter Variable', Inter, sans-serif`; return ctx.measureText(text).width; }; })();
+const measure = (() => { let ctx; return (text, px) => { ctx ||= document.createElement('canvas').getContext('2d'); ctx.font = `650 ${px}px 'Space Grotesk Variable', 'Space Grotesk', Inter, sans-serif`; return ctx.measureText(text).width; }; })();
 const labelSize = (sections, R) => { const widest = Math.max(...sections.flatMap(([, items]) => items.flatMap(([title]) => splitWords(title).map(w => measure(w, 100))))); return Math.min(.215 * R, 1.56 * R * 100 / widest); };
 
 function cellSvg(c, r, R, kind, opts = {}) {

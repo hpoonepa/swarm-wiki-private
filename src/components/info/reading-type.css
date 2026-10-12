@@ -1,10 +1,10 @@
 
-  :is(.display-xl, .display-l, .display-m), .info-prose :where(h2) { font-family: 'Inter Variable', 'Inter Display Fallback', var(--font-sans); }
+  :is(.display-xl, .display-l, .display-m), .info-prose :where(h2) { font-family: 'Space Grotesk Variable', var(--font-sans); }
   .display-xl { font-size: var(--fs-display-xl); font-weight: 700; letter-spacing: -0.035em; line-height: 1.02; text-wrap: balance; }
   .display-l  { font-size: var(--fs-display-l);  font-weight: 650; letter-spacing: -0.03em;  line-height: 1.04; text-wrap: balance; }
   .display-m  { font-size: var(--fs-display-m);  font-weight: 600; letter-spacing: -0.02em;  line-height: 1.1;  text-wrap: balance; }
   .title      { font-size: var(--fs-title);      font-weight: 600; letter-spacing: -0.01em;  line-height: 1.2;  text-wrap: balance; }
-  .body-l, .abstract__summary p { font-family: 'Inter Variable', 'Inter Lead Fallback', var(--font-sans); }
+  .body-l, .abstract__summary p { font-family: 'Space Grotesk Variable', var(--font-sans); }
   .body-l     { font-size: var(--fs-body-l);     font-weight: 400; letter-spacing: -0.005em; line-height: 1.55; }
   .caption    { font-size: var(--fs-caption);    font-weight: 500; letter-spacing: 0.01em;   line-height: 1.4; }
   .eyebrow    { font-size: var(--fs-eyebrow);    font-weight: 600; letter-spacing: 0.06em;   line-height: 1.2; text-transform: uppercase; }

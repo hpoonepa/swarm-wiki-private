@@ -10,7 +10,7 @@
     --maroon: #62172F; --maroon-deep: #461021; --plum: #6E1B41; --orange: #E57624; --pink: #ED827C;
 
     /* type */
-    --font-sans: 'Inter Variable', 'Inter Fallback', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-sans: 'Space Grotesk Variable', 'Inter Variable', 'Inter Fallback', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
     --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     --fs-display-xl: clamp(4rem, 2.4rem + 6.4vw, 8rem);
     --fs-display-l: clamp(2.75rem, 1.9rem + 3.6vw, 5rem);

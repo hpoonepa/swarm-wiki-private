@@ -154,6 +154,7 @@ export default {
     		},
     		fontFamily: {
     			Inter: [
+    				'Space Grotesk Variable',
     				'Inter Variable', 
     				'Inter', 
     				'system-ui', 
@@ -167,6 +168,7 @@ export default {
     				'sans-serif'
     			],
     			sans: [
+    				'Space Grotesk Variable',
     				'Inter Variable', 
     				'Inter', 
     				'system-ui', 

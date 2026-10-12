@@ -207,7 +207,7 @@ html { scrollbar-gutter: stable; }
 .protein-label { position: absolute; z-index: 3; white-space: nowrap; pointer-events: none; visibility: hidden; transform: translate(-50%,-100%); color: #2d5d43; padding: 4px 6px; border-radius: 3px; background: #ffffffe6; font-size: 14px; font-weight: 600; }
 .protein-label--site { color: #996214; }
 .rna-continuous { width: 100%; height: 100%; display: block; overflow: hidden; }
-.rna-continuous text { font-family: Inter,sans-serif; font-size: 22px; font-weight: 600; fill: #285260; text-anchor: middle; }
+.rna-continuous text { font-family: 'Space Grotesk',Inter,sans-serif; font-size: 22px; font-weight: 600; fill: #285260; text-anchor: middle; }
 .rna-stage { top: 21%; height: 62%; left: 2%; width: 96%; }
 @media (max-width:760px) {
   .journey-protein .mechanism-copy { width: 86%; top: 12%; }

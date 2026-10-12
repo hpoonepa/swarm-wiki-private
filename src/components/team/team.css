@@ -1,5 +1,5 @@
 @font-face{font-family:HiveHand;src:url('https://static.igem.wiki/teams/6185/wiki/homepage/caveat.woff2') format('woff2');font-display:swap}
-.team-page{margin:0;background:#fff;color:#493421;font-family:Inter,Arial,sans-serif}
+.team-page{margin:0;background:#fff;color:#493421;font-family:'Space Grotesk Variable',Inter,Arial,sans-serif}
 .hive-page{--hive-gold:#d8a336;--hive-muted:#87745d;position:relative;isolation:isolate;overflow:hidden}
 .hive-backdrop{--honey:#FEC341;--honey-deep:#E5B144;--orange:#E57624;--ease-out:cubic-bezier(.23,1,.32,1);position:absolute;inset:0 0 auto;height:1100px;z-index:-1;pointer-events:none}
 .hive-backdrop .honeycomb-window{height:100%;padding:0;--hc-comb-w:46%}
