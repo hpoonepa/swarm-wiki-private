@@ -1,0 +1,154 @@
+---
+import './sdg-wheel.css';
+import { goals, summaryText, type GoalId } from './sdg-data';
+import { glyphs } from './sdg-glyphs';
+import { byId, chipsMarkup, defaultRing, hintMarkup, viewBox, wheelMarkup } from './sdg-wheel-geometry';
+
+interface Props { hub?: GoalId }
+const hub: GoalId = Astro.props.hub ?? 'zero-hunger';
+const ring = defaultRing(hub);
+const { nodes, arrows, labels } = wheelMarkup(hub, ring, 'large');
+const first = byId[hub];
+---
+<section class="sdg-wheel" aria-label="Sustainable Development Goals" data-sdg-wheel data-hub={hub} data-ring={ring.join(',')} data-layout="large" style={`--panel-tone:${first.tone}`}>
+  <svg class="sdg-wheel__svg" viewBox={viewBox('large')} role="group" aria-label="Goal wheel">
+    <defs>
+      {goals.map(g => <symbol id={`sdg-glyph-${g.id}`} viewBox={glyphs[g.id].viewBox} fill="currentColor" set:html={glyphs[g.id].body} />)}
+    </defs>
+    <g data-arrows set:html={arrows} />
+    <g data-nodes set:html={nodes} />
+    <g data-labels aria-hidden="true" set:html={labels} />
+    <g data-hint set:html={hintMarkup('large')} />
+  </svg>
+  <aside class="sdg-wheel__panel" data-panel data-state="summary" aria-live="polite" aria-atomic="true">
+    <div class="sdg-wheel__chips" data-chips aria-hidden="true" set:html={chipsMarkup(first)} />
+    <div class="sdg-wheel__text">
+      <p class="eyebrow sdg-wheel__eyebrow" data-eyebrow>Goal {first.number}</p>
+      <p class="sdg-wheel__title" data-title>{first.name}</p>
+      <p class="sdg-wheel__body" data-body>{summaryText(hub)}</p>
+    </div>
+  </aside>
+</section>
+<script>
+  import { animate } from 'motion';
+  import { goals, linkState, pairText, summaryText, type GoalId } from './sdg-data';
+  import { byId, chipsMarkup, defaultRing, hintMarkup, point, viewBox, wheelMarkup, SHAPES, SLOTS, type Layout } from './sdg-wheel-geometry';
+  import { prefersReducedMotion } from './motion/reduced';
+
+  const TURN = 120;
+  const EASE = [0.6, 0.05, 0.2, 1] as [number, number, number, number];
+  const phone = matchMedia('(max-width: 760px)');
+  const layoutNow = (): Layout => (phone.matches ? 'small' : 'large');
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-sdg-wheel]')) {
+    const svg = root.querySelector('svg')!;
+    const nodes = svg.querySelector<SVGGElement>('[data-nodes]')!;
+    const arrows = svg.querySelector<SVGGElement>('[data-arrows]')!;
+    const labels = svg.querySelector<SVGGElement>('[data-labels]')!;
+    const hint = svg.querySelector<SVGGElement>('[data-hint]')!;
+    const panel = root.querySelector<HTMLElement>('[data-panel]')!;
+    const chips = panel.querySelector<HTMLElement>('[data-chips]')!;
+    const eyebrow = panel.querySelector<HTMLElement>('[data-eyebrow]')!;
+    const title = panel.querySelector<HTMLElement>('[data-title]')!;
+    const body = panel.querySelector<HTMLElement>('[data-body]')!;
+    let hub = root.dataset.hub as GoalId;
+    let ring = root.dataset.ring!.split(',') as GoalId[];
+    let layout = layoutNow();
+    let pair: [GoalId, GoalId] | null = null;
+    let busy = false;
+
+    const mark = () => {
+      arrows.querySelectorAll('.sdg-link--selected').forEach(l => { l.classList.remove('sdg-link--selected'); l.removeAttribute('aria-pressed'); });
+      if (!pair) return;
+      const link = arrows.querySelector(`.sdg-link[data-from="${pair[0]}"][data-to="${pair[1]}"]`);
+      link?.classList.add('sdg-link--selected'); link?.setAttribute('aria-pressed', 'true');
+    };
+    const paint = () => {
+      layout = layoutNow();
+      const m = wheelMarkup(hub, ring, layout);
+      svg.setAttribute('viewBox', viewBox(layout));
+      nodes.innerHTML = m.nodes; arrows.innerHTML = m.arrows; labels.innerHTML = m.labels; hint.innerHTML = hintMarkup(layout);
+      root.dataset.hub = hub; root.dataset.ring = ring.join(','); root.dataset.layout = layout;
+      root.style.setProperty('--panel-tone', byId[hub].tone);
+      mark();
+    };
+    const showSummary = () => {
+      const g = byId[hub];
+      pair = null; mark();
+      chips.innerHTML = chipsMarkup(g);
+      eyebrow.textContent = `Goal ${g.number}`; title.textContent = g.name; body.textContent = summaryText(hub); panel.dataset.state = 'summary';
+    };
+    const showPair = (from: GoalId, to: GoalId) => {
+      const a = byId[from], b = byId[to], state = linkState(from, to);
+      pair = [from, to]; mark();
+      chips.innerHTML = chipsMarkup(a, b);
+      eyebrow.textContent = state === 'tension' ? `Goals ${a.number} and ${b.number}, a tension` : `Goals ${a.number} and ${b.number}`;
+      title.textContent = `${a.name} and ${b.name}`; body.textContent = pairText(from, to); panel.dataset.state = state;
+      panel.scrollIntoView({ block: 'nearest', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+    };
+    const fromHash = (): GoalId | null => {
+      const m = /^#sdg-(\d+)$/.exec(location.hash);
+      return m ? goals.find(g => g.number === Number(m[1]))?.id ?? null : null;
+    };
+    const jump = (id: GoalId) => { hub = id; ring = defaultRing(id); paint(); showSummary(); };
+
+    const choose = (id: GoalId) => {
+      if (busy || id === hub) return;
+      const k = ring.indexOf(id); if (k < 0) return;
+      root.dataset.hinted = '';
+      const old = hub, next = ring.slice(), step = TURN / 60;
+      for (let i = 0; i < 6; i++) if (i !== k) next[(i + step) % 6] = ring[i];
+      next[(k + step) % 6] = old;
+      const finish = () => {
+        hub = id; ring = next; paint(); showSummary(); busy = false;
+        history.replaceState(null, '', `#sdg-${byId[id].number}`);
+        nodes.querySelector<SVGGElement>('.sdg-node--hub')?.focus({ preventScroll: true });
+      };
+      if (prefersReducedMotion()) { finish(); return; }
+      busy = true;
+      const s = SHAPES[layout];
+      const els = new Map<GoalId, SVGGraphicsElement>();
+      nodes.querySelectorAll<SVGGraphicsElement>('[data-goal]').forEach(el => els.set(el.dataset.goal as GoalId, el));
+      const part = (el: Element) => ({ circle: el.querySelector('circle')!, use: el.querySelector('use')! });
+      const fly = part(els.get(id)!), leave = part(els.get(old)!);
+      const shape = (p: ReturnType<typeof part>, r: number, size: number) => {
+        p.circle.setAttribute('r', String(r));
+        p.use.setAttribute('width', String(size)); p.use.setAttribute('height', String(size)); p.use.setAttribute('x', String(-size / 2)); p.use.setAttribute('y', String(-size / 2));
+      };
+      animate([arrows, labels], { opacity: 0 }, { duration: 0.12 });
+      animate(0, 1, { duration: 0.7, ease: EASE, onUpdate: t => {
+        for (let i = 0; i < 6; i++) {
+          const p = point(layout, SLOTS[i] + TURN * t, i === k ? 1 - t : 1);
+          els.get(ring[i])!.setAttribute('transform', `translate(${p.x} ${p.y})`);
+        }
+        const p = point(layout, SLOTS[k] + TURN * t, t);
+        els.get(old)!.setAttribute('transform', `translate(${p.x} ${p.y})`);
+        shape(fly, s.sat + (s.hub - s.sat) * t, s.glyph.sat + (s.glyph.hub - s.glyph.sat) * t);
+        shape(leave, s.hub - (s.hub - s.sat) * t, s.glyph.hub - (s.glyph.hub - s.glyph.sat) * t);
+      }, onComplete: () => { finish(); animate([arrows, labels], { opacity: [0, 1] }, { duration: 0.25 }); } });
+    };
+
+    svg.addEventListener('click', e => {
+      const target = e.target as Element;
+      const sat = target.closest<SVGAElement>('.sdg-node--sat');
+      if (sat) { e.preventDefault(); choose(sat.dataset.goal as GoalId); return; }
+      const arrow = target.closest<SVGGElement>('.sdg-link[data-from]');
+      if (arrow) showPair(arrow.dataset.from as GoalId, arrow.dataset.to as GoalId);
+    });
+    svg.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      const target = e.target as Element;
+      const arrow = target.closest<SVGGElement>('.sdg-link[data-from]');
+      if (arrow) { e.preventDefault(); showPair(arrow.dataset.from as GoalId, arrow.dataset.to as GoalId); return; }
+      const sat = target.closest<SVGAElement>('.sdg-node--sat');
+      if (sat && e.key === ' ') { e.preventDefault(); choose(sat.dataset.goal as GoalId); }
+    });
+    phone.addEventListener('change', () => { if (!busy) paint(); });
+    addEventListener('hashchange', () => { const id = fromHash(); if (id && id !== hub && !busy) jump(id); });
+
+    if (layout !== 'large') paint();
+    const initial = fromHash();
+    if (initial && initial !== hub) jump(initial); else showSummary();
+    if (initial) root.scrollIntoView({ block: 'center' });
+  }
+</script>

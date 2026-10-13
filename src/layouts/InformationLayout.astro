@@ -7,13 +7,14 @@ import CanopyWindow from '../components/info/CanopyWindow.astro';
 import HoneycombWindow, { type HoneycombCorner } from '../components/info/HoneycombWindow.astro';
 import SideMap from '../components/info/SideMap.astro';
 import SectionSheet from '../components/info/SectionSheet.astro';
+import SdgWheel from '../components/info/SdgWheel.astro';
 import { readingPage } from '../components/info/pages';
 import type { Section } from '../components/info/sidemap';
 import '../styles/global.css';
 import '../components/info/reading.css';
 
 interface Props {
-  frontmatter: { title: string; description?: string; noTOC?: boolean; tabLabels?: string[]; tabLinks?: string[]; color?: string; hero?: 'honeycomb' | 'canopy'; honeycombCorner?: HoneycombCorner };
+  frontmatter: { title: string; description?: string; noTOC?: boolean; tabLabels?: string[]; tabLinks?: string[]; color?: string; hero?: 'honeycomb' | 'canopy'; honeycombCorner?: HoneycombCorner; band?: 'sdg' };
   headings?: MarkdownHeading[];
 }
 const { frontmatter, headings = [] } = Astro.props;
@@ -24,7 +25,6 @@ const topDepth = headings.some(heading => heading.depth === 1) ? 1 : 2;
 const sections: Section[] = frontmatter.noTOC ? [] : headings
   .filter(heading => heading.depth === topDepth || heading.depth === topDepth + 1)
   .map(heading => ({ id: heading.slug, text: heading.text, depth: (heading.depth - topDepth + 2) as 2 | 3 }));
-const glance = sections.filter(section => section.depth === 2);
 ---
 <!doctype html>
 <html lang="en">
@@ -41,10 +41,11 @@ const glance = sections.filter(section => section.depth === 2);
     <script is:inline src="/lambert-ga/home/cursor.js?v=a436bab094c0"></script>
     <a class="info-skip" href="#article">Skip to content</a>
     <Nav client:load />
-    <main class:list={[{ 'plain-page': sections.length === 0 }]}>
+    <main class:list={[{ 'plain-page': sections.length === 0 }]} data-band={frontmatter.band}>
       <slot name="hero">{hero === 'honeycomb'
         ? <HoneycombWindow title={frontmatter.title} summary={frontmatter.description} corner={frontmatter.honeycombCorner} />
         : <CanopyWindow title={frontmatter.title} summary={frontmatter.description} group={page.group} focal={page.focal} />}</slot>
+      {frontmatter.band === 'sdg' && <SdgWheel />}
       <div class="sheet" data-surface="sheet">
         {frontmatter.tabLabels && frontmatter.tabLinks && <div class="info-tabs"><TabReact labels={frontmatter.tabLabels} links={frontmatter.tabLinks} focus={slug} color={frontmatter.color ?? 'green'} /></div>}
         <div class:list={['longform', { 'longform--no-map': sections.length === 0 }]}>
@@ -52,12 +53,6 @@ const glance = sections.filter(section => section.depth === 2);
           <div class="longform__main">
             {sections.length > 0 && <SectionSheet sections={sections} />}
             <article id="article" class="info-prose flow content" tabindex="-1">
-              {glance.length > 0 && <div class="glance">
-                <p class="eyebrow glance__label" id="glance-label">At a glance</p>
-                <ol class="glance__list" role="list" aria-labelledby="glance-label">
-                  {glance.map((section, index) => <li><a class="glance__chip" href={`#${section.id}`} data-section-link data-depth="2"><span class="glance__cell" aria-hidden="true">{index + 1}</span><span class="glance__text">{section.text}</span></a></li>)}
-                </ol>
-              </div>}
               <slot />
             </article>
             <div class="longform__end" data-longform-end aria-hidden="true"></div>

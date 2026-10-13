@@ -19,7 +19,6 @@
 .info-prose > h1::before { content: ''; position: absolute; top: .46em; left: -1.1rem; width: .5rem; height: 3px; border-radius: 999px; background: var(--lime); rotate: -24deg; }
 .info-prose > h2, .info-prose > h3 { font-size: var(--fs-title); margin-block: 1.8em .5em; }
 .info-prose > h4 { font-size: 1.1rem; font-weight: 600; margin-block: 1.5em .5em; }
-.info-prose > .glance + * { margin-block-start: 0; }
 .info-prose > :is(ul,ol):not([role='list']) { padding-inline-start: 1.4em; }
 .info-prose > ul:not([role='list']) { list-style: disc; }
 .info-prose > ol:not([role='list']) { list-style: decimal; }
@@ -34,8 +33,6 @@
 .info-prose > table { display: block; max-width: 100%; overflow-x: auto; margin-block: 1.25rem; border-spacing: 0; border-collapse: collapse; background: var(--sheet-raised); }
 .info-prose > table :is(th,td) { padding: .8rem 1rem; border-bottom: 1px solid #1a322a24; text-align: left; vertical-align: top; min-width: 7rem; }
 .info-prose > table th { background: #e5b14430; font-weight: 650; }
-.info-prose .glance :where(li,ol) { margin: 0; }
-.info-prose .glance__chip { color: var(--ink); }
 .longform--no-map { display: block; }
 .info-tabs { width: min(1100px,calc(100% - 32px)); margin: 0 auto 2rem; }
 .info-tabs .tabs { display: flex; gap: .75rem; overflow-x: auto; padding: .25rem; }

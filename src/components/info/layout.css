@@ -1,4 +1,4 @@
-/* The long-form template: canopy header, sheet, side map and phone section sheet, "At a glance", Continue.
+/* The long-form template: canopy header, sheet, side map and phone section sheet, Continue.
    Colours, radii, shadows, easing and durations come from tokens.css (spec §4, §7). */
 
   /* The long-form frame. From 75rem the sheet holds two columns, the side map and the main column; the header text
@@ -113,44 +113,6 @@
     border-radius: var(--r-pill);
     background: var(--lime);
     rotate: -24deg;
-  }
-
-  /* ---- "At a glance": the page's h2 sections as round honeycomb-cell chips ---- */
-  .glance { margin-block: 0 clamp(1.75rem, 3.5vw, 2.25rem); }
-  /* The article's first block starts at the glance row's own spacing (grid items' margins do not collapse). */
-  .flow > .glance + * { margin-block-start: 0; }
-  .glance__label { margin: 0 0 0.625rem; color: var(--moss); }
-  .glance__list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0; }
-  .glance__chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    min-height: 2.5rem;
-    padding: 0.375rem 1rem 0.375rem 0.375rem;
-    border-radius: var(--r-pill);
-    background: var(--sheet-raised);
-    box-shadow: var(--shadow-1);
-    color: var(--ink);
-    font-size: 0.9375rem;
-    font-weight: 550;
-    line-height: 1.25;
-    text-decoration: none;
-    touch-action: manipulation;
-    transition: transform var(--dur-press) var(--ease-out);
-  }
-  .glance__cell {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: 50%;
-    background: var(--honey);
-    color: var(--canopy-deep);
-    font-size: 0.8125rem;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-    line-height: 1;
   }
 
   /* ---- Section lists: the side map and the sheet ---- */
@@ -440,7 +402,6 @@
   }
 
   /* ---- Feedback ---- */
-  .glance__chip:active:not(:focus-visible),
   .section-list__link:active:not(:focus-visible),
   .side-map__search:active:not(:focus-visible),
   .sections-pill:active:not(:focus-visible),
@@ -448,11 +409,9 @@
   .continue__card:active:not(:focus-visible) { transform: scale(0.97); }
   /* Colour-only hover, fine pointers only (Ruling 45). */
   @media (hover: hover) and (pointer: fine) {
-    .glance__chip,
     .section-list__link,
     .side-map__search,
     .continue__card { transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-hover) ease, color var(--dur-hover) ease; }
-    .glance__chip:hover,
     .continue__card:hover { background: color-mix(in oklch, var(--honey) 16%, var(--sheet-raised)); }
     .section-list__link:hover { background: color-mix(in oklch, var(--ink) 6%, transparent); color: var(--ink); }
     .side-map__search:hover { background: color-mix(in oklch, var(--ink) 11%, transparent); color: var(--ink); }
@@ -460,9 +419,6 @@
 
   /* Phones and touch screens: 44px targets. The side map shows only from 75rem, where a touch screen (a tablet in
      landscape) still gets 44px rows and a 44px search button. */
-  @media (width < 75rem), (pointer: coarse) {
-    .glance__chip { min-height: 44px; }
-  }
   @media (pointer: coarse) {
     .side-map .section-list__link { align-items: center; min-height: 44px; }
     .side-map .section-list__marker { margin-block: 0; }
@@ -486,14 +442,12 @@
 
   /* Reduced motion: presses dim instead of shrinking, the pill fades without moving, buds switch state at once. */
   @media (prefers-reduced-motion: reduce) {
-    .glance__chip,
     .section-list__link,
     .side-map__search,
     .section-sheet__close,
     .continue__card { transition: opacity var(--dur-press) ease; }
     .sections-pill { transition: opacity var(--dur-press) ease, visibility 0s linear; }
     .sections-pill[data-hidden] { transform: none; transition: opacity var(--dur-press) ease, visibility 0s linear var(--dur-press); }
-    .glance__chip:active:not(:focus-visible),
     .section-list__link:active:not(:focus-visible),
     .side-map__search:active:not(:focus-visible),
     .sections-pill:active:not(:focus-visible),
@@ -504,7 +458,6 @@
     .section-sheet::backdrop { transition-duration: 120ms; }
   }
   @media (prefers-reduced-motion: reduce) and (hover: hover) and (pointer: fine) {
-    .glance__chip,
     .section-list__link,
     .side-map__search,
     .continue__card { transition: opacity var(--dur-press) ease, background-color var(--dur-hover) ease, color var(--dur-hover) ease; }

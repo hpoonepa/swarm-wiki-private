@@ -1,5 +1,5 @@
 .honeycomb-window {
-  --hc-comb-w: 46%;
+  --hc-comb-w: 32%;
   --hc-chamfer: clamp(28px, 4vw, 56px);
   position: relative;
   padding-block: calc(var(--nav-h) + clamp(2rem, 5vw, 3.5rem)) clamp(2.5rem, 5vw, 4rem);

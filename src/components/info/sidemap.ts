@@ -341,7 +341,7 @@ function init(): void {
   const progress = readingProgress(sections, lists, end);
   const sectionSheet = initSheet(progress, lists.find((l) => l.kind === 'sheet'));
 
-  // Section links (side map, sheet rows, "At a glance" chips) jump without a default anchor jump.
+  // Section links (side map, sheet rows) jump without a default anchor jump.
   document.addEventListener('click', (e) => {
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     const link = e.target instanceof Element ? e.target.closest<HTMLAnchorElement>('a[data-section-link]') : null;
