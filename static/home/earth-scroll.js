@@ -1,7 +1,7 @@
 /* Shared scroll mapping: pause for the yearly data, the DWV comparison, then the SWARM introduction. */
 (() => {
   // [progress where the pause happens, name of its own 0-1 progress, length in screen heights]
-  const HOLDS = [[.16, 'years', 1.2], [.285, 'disease', 4], [.325, 'intro', 3.2]];
+  const HOLDS = [[.16, 'years', 1.2], [.285, 'disease', 6.4], [.325, 'intro', 3.2]];
   function parts() {
     const section = document.getElementById('honeycomb-earth');
     const height = section.querySelector('.geo-stage').clientHeight;

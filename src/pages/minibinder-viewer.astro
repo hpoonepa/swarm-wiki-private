@@ -1,0 +1,25 @@
+---
+import Nav from '../components/Nav';
+import Footer from '../components/Footer';
+import BinderViewer from '../components/binder/BinderViewer.astro';
+import '../styles/fonts.css';
+import '../styles/global.css';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Minibinder viewer | Lambert-GA</title>
+    <meta name="description" content="Explore predicted minibinder complexes in three dimensions, inspect residues, and open your own protein structures." />
+    <link rel="icon" href="/lambert-ga/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/lambert-ga/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/lambert-ga/apple-touch-icon.png" />
+  </head>
+  <body class="binder-page">
+    <a class="bv-skip" href="#binder-main">Skip to the structure viewer</a>
+    <Nav client:load />
+    <BinderViewer />
+    <Footer />
+  </body>
+</html>

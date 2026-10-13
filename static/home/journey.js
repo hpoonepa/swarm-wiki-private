@@ -17,12 +17,9 @@ export const rnaScroll = p => journeyScroll(RNA_START + p * (RNA_END - RNA_START
 export function initJourney() {
   const section = root(), stage = section.querySelector('.geo-stage');
   const map = section.querySelector('.map-view'), stats = section.querySelector('.geo-copy');
-  const garden = section.querySelector('.pollinator-scene'), composition = section.querySelector('.hive-composition');
-  const artwork = section.querySelector('.journey-art');
   const hiveCopy = section.querySelector('.journey-copy--hive'), beeCopy = section.querySelector('.journey-copy--bee');
   const miteCopy = section.querySelector('.journey-copy--mite');
   const protein = document.getElementById('minibinders'), proteinView = protein.querySelector('.protein-view');
-  const proteinCopy = protein.querySelector('.mechanism-copy');
   const rna = document.getElementById('rnai');
   const rnaIntro = document.getElementById('rna-intro'), rnaMechanism = rna.querySelector('.rna-layout');
   const virus = document.getElementById('dwv'), disease = section.querySelector('.dwv-story');
@@ -30,15 +27,13 @@ export function initJourney() {
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   // DWV wings: each outline is sampled once, then shrunk toward its hinge,
   // curled down and creased as the infection gets more severe.
-  const stageText = ['Healthy wings', 'Wings start to crumple', 'Deformed wings'];
-  const stageTitle = comparison.querySelector('.dwv-bee__stage');
   const wings = [...comparison.querySelectorAll('.dwv-wing')].map(path => {
     const [hx, hy] = path.dataset.hinge.split(',').map(Number), total = path.getTotalLength(), n = 180;
     const pts = Array.from({length: n}, (_, i) => { const q = path.getPointAtLength(total * i / n); return [q.x - hx, q.y - hy]; });
     const reach = Math.max(...pts.map(([x, y]) => Math.hypot(x, y)));
     return { path, hx, hy, pts, reach, side: hx > 343 ? 1 : -1 };
   });
-  let shownSev = -1, shownStage = -1;
+  let shownSev = -1;
   let virusBase = 0;
   function shrivel(sev) {
     if (Math.abs(sev - shownSev) < .0005) return;
@@ -56,14 +51,11 @@ export function initJourney() {
       w.path.setAttribute('d', d + 'Z');
     }
     comparison.style.setProperty('--sev', sev.toFixed(4));
-    const stage = sev < .3 ? 0 : sev < .72 ? 1 : 2;
-    if (stage !== shownStage) {
-      shownStage = stage; stageTitle.textContent = stageText[stage];
-      if (!reduced.matches) stageTitle.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.2,.7,.2,1)' });
-    }
+
   }
-  let width = 1, height = 1, cw = 1, ch = 1, cx = 0, cy = 0, beeX = 0, beeY = 0, miteX = 0, miteY = 0;
+  let width = 1, height = 1, miteAnchorX = 0, miteAnchorY = 0;
   const introBee = section.querySelector('.intro-bee'), introScene = section.querySelector('.intro-scene');
+  const introMite = section.querySelector('.intro-mite');
   let beeAnchorX = 0, beeAnchorY = 0;
   const introHive = section.querySelector('.intro-hive'), introTitle = hiveCopy.querySelector('h2');
   let titleMid = 0;
@@ -79,68 +71,56 @@ export function initJourney() {
   function paint(raw, diseaseProgress, introProgress) {
     let p = raw, d = diseaseProgress, i = introProgress;
     if (reduced.matches) p = raw < .35 ? raw : raw < .49 ? .46 : raw < .69 ? .59 : raw < 1.105 ? .90 : raw < 1.30 ? 1.245 : raw < 1.49 ? 1.38 : raw < 1.82 ? 1.67 : 1.86;
-    if (reduced.matches) d = d < .20 ? 0 : d < .60 ? .44 : .85;
+    if (reduced.matches) d = d <= 0 ? 0 : d < .28 ? .22 : d < .50 ? .42 : d < .73 ? .66 : .96;
     if (reduced.matches) i = i > .02 ? 1 : 0;
     const mobile = width <= 760;
-    const arrive = between(p, .345, .435), focus = between(p, .49, .615), enter = between(p, .655, .75);
-    const returning = between(p, 1.13, 1.265), towardMite = between(p, 1.30, 1.43);
+    const enter = between(p, .655, .75);
+    const returning = between(p, 1.085, 1.27), towardMite = between(p, 1.30, 1.46);
     const intoRNA = between(p, 1.455, 1.53);
     const modelIn = between(p, .69, .76), modelOut = between(p, 1.085, 1.17);
     const sceneName = raw < .325 ? diseaseProgress > .15 ? 'dwv' : 'earth' : raw < .49 ? 'hive' : raw < .69 ? 'bee' : raw < 1.085 ? 'minibinders' : raw < 1.285 ? 'return-hive' : raw < 1.49 ? 'mite' : raw < 1.82 ? 'rna-intro' : 'rnai';
     section.dataset.journey = sceneName;
     section.dataset.journeyProgress = raw.toFixed(3);
     section.dataset.diseaseProgress = diseaseProgress.toFixed(3);
+    // Warm the page as DWV gives way to SWARM, and keep that color beneath
+    // every later scene so the camera never returns to a white background.
+    const warmth = reduced.matches ? Number(raw >= .325) : between(raw, .30, .325);
+    stage.style.setProperty('--swarm-warmth', warmth.toFixed(4));
     // Globe to virus reads as one camera pan: the globe glides up out of frame while
     // the capsid arcs up from its corner; the heading waits until the globe is gone.
-    const riseT = clamp((d-.04)/.38), rise = smooth(riseT), riseY = smooth(Math.min(1, riseT*1.3));
-    const compare = between(d, .46, .58), depart = between(p, .295, .325);
-    const globeOut = between(d, .04, .40), globeFade = between(d, .16, .38);
+    const riseT = clamp((d-.015)/.19), rise = smooth(riseT), riseY = smooth(Math.min(1, riseT*1.3));
+    const compare = between(d, .29, .40), depart = between(p, .295, .325);
+    const globeOut = between(d, .01, .19), globeFade = between(d, .06, .18);
     map.style.opacity = ((1 - between(p, .355, .415)) * (1-globeFade)).toFixed(4);
     map.style.visibility = p > .42 || globeFade > .999 ? 'hidden' : 'visible';
     map.style.transform = reduced.matches ? 'none' : `translate3d(0,${-height*.8*globeOut}px,0) scale(${1-.3*globeOut})`;
     stats.style.setProperty('--stats-opacity', ((1 - between(p, .315, .365))*(1-between(d,.02,.10))).toFixed(4));
     stats.inert = p > .355 || d > .10;
     stats.setAttribute('aria-hidden', String(stats.inert));
-    // The capsid steps aside to the right while the bee shows what it does.
-    const aside = between(d,.44,.58);
-    const virusAlpha = between(p,.235,.238)*(1-between(p,.295,.31));
+    // The capsid and bee share one focal point. The structure recedes before
+    // the healthy bee arrives; the mite attaches before the wing change starts.
+    const virusAlpha = between(p,.235,.238)*(1-between(d,.27,.36))*(1-between(p,.295,.31));
     virus.classList.toggle('on',p > .235 && p < .31 && virusAlpha > .002);
     const base = Math.min(height*.90, width*.72);
-    const centerSize = Math.min(height*.68, width*(mobile?.88:.58));
-    const sideSize = mobile ? width*.5 : centerSize;                        // same size as in the centre
-    comparison.style.setProperty('--bee', `${Math.round(sideSize*.79)}px`);  // bee wingspan matches the capsid's drawn width
-    const vx = mix(mix(-base*.12,width*.5,rise), width*(mobile?.8:.72), aside);
-    const vy = mix(mix(height+base*.12,height*(mobile?.49:.53),riseY), height*(mobile?.6:.53), aside);
-    const size = mix(mix(base,centerSize,rise), sideSize, aside);
+    const centerSize = Math.min(height*(mobile?.47:.70), width*(mobile?.9:.43));
+    comparison.style.setProperty('--bee', `${Math.round(Math.min(height*(mobile?.47:.65), width*(mobile?.9:.43)))}px`);
+    const vx = mix(-base*.12,width*.5,rise);
+    const vy = mix(height+base*.12,height*(mobile?.67:.53),riseY);
+    const size = mix(base,centerSize,rise)*(1-.12*between(d,.27,.36));
     if (base !== virusBase) { virusBase = base; virus.style.width = virus.style.height = `${base}px`; }   // resize only when it actually changes
     virus.style.transform = `translate3d(${vx-base/2}px,${vy-base/2}px,0) scale(${size/base})`;
     virus.style.opacity = virusAlpha.toFixed(4);
-    layer(disease, between(d,.33,.46)*(1-depart));
+    layer(disease, between(d,.12,.21)*(1-depart));
     comparison.style.opacity = compare.toFixed(4);
-    shrivel(between(d,.6,.95));
+    shrivel(between(d,.73,.97));
+    comparison.style.setProperty('--mite-arrival', between(d,.50,.66).toFixed(4));
+    comparison.style.setProperty('--mite-visible', between(d,.48,.53).toFixed(4));
+    comparison.style.setProperty('--bite', (between(d,.64,.69)*(1-between(d,.74,.81))).toFixed(4));
     comparison.style.setProperty('--compare',compare.toFixed(4));
     comparison.inert = compare < .02;
     comparison.setAttribute('aria-hidden',String(compare < .02));
     document.body.classList.toggle('dwv-focus',p > .225 && p < .54);
 
-    const beeFocus = focus * (1 - returning);
-    const targetX = width * (mobile ? .50 : .70) - cx;
-    const targetY = height * (mobile ? .71 : .48) - cy;
-    // Interpolate the subject's screen position separately from magnification.
-    // Its body arrives at the same focal point in both directions, without drifting.
-    const beeZoom = Math.exp(Math.log(2.9) * beeFocus + Math.log(1.16) * enter * (1-returning));
-    const zoom = mix(.94, 1, arrive) * beeZoom * Math.exp(Math.log(4.5) * towardMite);
-    const focusX = towardMite > 0 ? miteX : beeX;
-    const focusY = towardMite > 0 ? miteY : beeY;
-    const focusAmount = towardMite > 0 ? towardMite : beeFocus;
-    const tx = mix(focusX, targetX, focusAmount) - focusX * zoom;
-    const ty = mix(focusY, targetY, focusAmount) - focusY * zoom + height * .015 * (1-arrive);
-    composition.style.transform = `translate(-50%,-50%) translate3d(${tx}px,${ty}px,0) scale(${zoom})`;
-    const returnHive = between(p, 1.085, 1.135) * (1 - between(p, 1.50, 1.53));
-    const artAlpha = returnHive;                                             // the first visit now zooms into the team's bee instead
-    garden.style.opacity = artAlpha.toFixed(4);
-    garden.style.visibility = artAlpha < .002 ? 'hidden' : 'visible';
-    garden.style.setProperty('--subject-focus', Math.max(beeFocus, towardMite).toFixed(4));
     // SWARM introduction (its own scroll pause): the word alone in the middle, the logo
     // grows in beside it, then the hive pops up from below and lifts the title to the top.
     const word = between(i, 0, .1), logo = between(i, .2, .45), lift = between(i, .55, .85);
@@ -149,31 +129,50 @@ export function initJourney() {
     // bee ends on the focal point, where the Minibinders scene opens out of it.
     const zoomIn = between(p, .345, .61), sceneOut = between(p, .725, .76), leave = between(p, .36, .5);
     const beeZ = reduced.matches ? 1 : Math.exp(Math.log(mobile ? 3.2 : 4.2) * zoomIn + Math.log(1.25) * enter);
-    const beeTX = mix(beeAnchorX, width * (mobile ? .5 : .7), zoomIn) - beeAnchorX * beeZ;
+    const beeTX = mix(beeAnchorX, width * .5, zoomIn) - beeAnchorX * beeZ;
     const beeTY = mix(beeAnchorY, height * (mobile ? .71 : .48), zoomIn) - beeAnchorY * beeZ;
-    introScene.style.transform = reduced.matches ? 'none' : `translate3d(${beeTX.toFixed(1)}px,${beeTY.toFixed(1)}px,0) scale(${beeZ.toFixed(4)})`;
+    // Return to the very same commercial hive, then focus on its mite.
+    // The bee stays faded out after the first visit.
+    const returnVisit = p >= 1.085;
+    const returnAlpha = between(p, 1.085, 1.18) * (1 - intoRNA);
+    introScene.style.willChange = returnVisit ? 'auto' : 'transform';
+    if (returnVisit) {
+      const miteZoom = Math.min(height * .62, width * .72) / Math.max(1, introMite.offsetWidth);
+      const z = reduced.matches ? 1 : mix(1.4, 1, returning) * Math.exp(Math.log(miteZoom) * towardMite);
+      const anchorX = mix(width * .5, miteAnchorX, towardMite);
+      const anchorY = mix(height * .52, miteAnchorY, towardMite);
+      const tx = (1-z) * anchorX + (width * .5 - anchorX) * towardMite;
+      const ty = (1-z) * anchorY + (height * .52 - anchorY) * towardMite;
+      introScene.style.transform = reduced.matches ? 'none' : `translate3d(${tx.toFixed(1)}px,${ty.toFixed(1)}px,0) scale(${z.toFixed(4)})`;
+      introScene.style.opacity = returnAlpha.toFixed(4);
+    } else {
+      introScene.style.transform = reduced.matches ? 'none' : `translate3d(${beeTX.toFixed(1)}px,${beeTY.toFixed(1)}px,0) scale(${beeZ.toFixed(4)})`;
+      introScene.style.opacity = '1';
+    }
     layer(hiveCopy, word * (1 - between(p, .335, .38)));
     hiveCopy.style.setProperty('--logo', logo.toFixed(4));
     introTitle.style.transform = reduced.matches ? 'none' : `translate3d(0,${((height / 2 - titleMid) * (1 - lift)).toFixed(1)}px,0) scale(${mix(mix(mobile ? 1.9 : 2.3, mobile ? 1.12 : 1.6, logo), 1, lift).toFixed(4)})`;
-    introHive.style.setProperty('--rise', pop.toFixed(4));
-    introHive.style.setProperty('--leave', leave.toFixed(4));
-    introHive.style.visibility = popT < .001 || leave > .999 ? 'hidden' : 'visible';
+    introHive.style.setProperty('--rise', returnVisit ? '1' : pop.toFixed(4));
+    introHive.style.setProperty('--leave', returnVisit ? '0' : leave.toFixed(4));
+    const hiveAlpha = returnVisit ? 1 - between(p, 1.325, 1.405) : 1 - leave;
+    introHive.style.opacity = hiveAlpha.toFixed(4);
+    introHive.style.visibility = (returnVisit ? returnAlpha < .002 || hiveAlpha < .002 : popT < .001 || leave > .999) ? 'hidden' : 'visible';
+    const miteAlpha = returnVisit ? Number(returnAlpha > .002) : between(i, .85, .97) * (1 - leave);
+    layer(introMite, miteAlpha);
     const fly = between(i, .8, .97);
     introBee.style.setProperty('--fly', fly.toFixed(4));
     introBee.style.setProperty('--leave', sceneOut.toFixed(4));
     introBee.style.visibility = fly < .001 || sceneOut > .999 ? 'hidden' : 'visible';
     layer(beeCopy, between(p, .515, .555) * (1 - between(p, .69, .735)));
     layer(miteCopy, between(p, 1.285, 1.325) * (1 - between(p, 1.46, 1.515)));
-    const portal = modelIn * (1-modelOut);
-    const focalX = mobile ? 50 : 70, focalY = mobile ? 71 : 48;
+    const focalX = 50, focalY = mobile ? 71 : 48;
     const radius = Math.hypot(width, height);
-    layer(protein, clamp(portal * 8));
-    protein.style.clipPath = reduced.matches ? 'none' : `circle(${radius * portal}px at ${focalX}% ${focalY}%)`;
-    proteinCopy.style.opacity = (between(p, .73, .76) * (1-between(p, 1.085, 1.115))).toFixed(4);
-    proteinView.style.transform = reduced.matches ? 'none' : `scale(${mix(.86, 1, portal)})`;
+    layer(protein, clamp(modelIn * 8) * (1-modelOut));
+    protein.style.clipPath = reduced.matches || p >= 1.085 ? 'none' : `circle(${radius * modelIn}px at ${focalX}% ${focalY}%)`;
+    proteinView.style.transform = reduced.matches ? 'none' : `scale(${mix(.86, 1, modelIn) * mix(1, .72, modelOut)})`;
     protein.style.setProperty('--model-labels', between(p, .75, .79).toFixed(4));
     layer(rna, clamp(intoRNA * 8));
-    rna.style.clipPath = reduced.matches ? 'none' : `circle(${radius * intoRNA}px at ${focalX}% ${focalY}%)`;
+    rna.style.clipPath = reduced.matches ? 'none' : `circle(${radius * intoRNA}px at 50% 52%)`;
     layer(rnaIntro, between(p, 1.54, 1.59) * (1-between(p, 1.77, 1.83)));
     layer(rnaMechanism, between(p, 1.81, 1.85));
     rna.querySelector('.rna-stage').style.transform = reduced.matches ? 'none' : `translate3d(${width * (mobile ? 0 : .07) * (1-intoRNA)}px,${height * .03 * (1-intoRNA)}px,0) scale(${mix(.88, 1, intoRNA)})`;
@@ -194,13 +193,8 @@ export function initJourney() {
   function kick() { if (!frame && visible && !document.hidden) { previous = performance.now(); frame = requestAnimationFrame(tick); } }
   function resize() {
     height = stage.clientHeight; width = stage.clientWidth;
-    cw = composition.offsetWidth; ch = composition.offsetHeight;
-    cx = composition.offsetLeft; cy = composition.offsetTop;
-    // Focal points stay attached to the organisms in the supplied composition.
-    beeX = cw * (.245 - .5);
-    beeY = ch * (.56 - .5);
-    miteX = cw * (.795 - .5);
-    miteY = ch * (.49 - .5);
+    miteAnchorX = introMite.offsetLeft + introMite.offsetWidth * .5;
+    miteAnchorY = introMite.offsetTop + introMite.offsetHeight * .5;
     titleMid = hiveCopy.offsetTop + introTitle.offsetTop + introTitle.offsetHeight / 2;
     // how far "Introducing" sits from the centre once the logo is beside it
     const wordmark = introTitle.querySelector('.swarm-wordmark');
@@ -215,7 +209,8 @@ export function initJourney() {
     else { protein.dataset.active = rna.dataset.active = 'false'; }
   }).observe(stage);
   new ResizeObserver(resize).observe(stage);
-  artwork.addEventListener('load', resize);
+  introHive.addEventListener('load', resize);
+  introMite.addEventListener('load', resize);
   addEventListener('scroll', kick, { passive: true });
   document.addEventListener('visibilitychange', kick);
   reduced.addEventListener('change', () => { shown = journeyProgress(); resize(); });

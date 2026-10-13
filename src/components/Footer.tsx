@@ -1,5 +1,8 @@
 import React from "react";
-import { SiInstagram, SiGmail, SiX, SiGooglemaps } from "@icons-pack/react-simple-icons";
+import SiInstagram from "@icons-pack/react-simple-icons/icons/SiInstagram.mjs";
+import SiGmail from "@icons-pack/react-simple-icons/icons/SiGmail.mjs";
+import SiX from "@icons-pack/react-simple-icons/icons/SiX.mjs";
+import SiGooglemaps from "@icons-pack/react-simple-icons/icons/SiGooglemaps.mjs";
 
 const SPONSOR_LOGOS = [
   { name: "Thermo Fisher Scientific", url: "https://static.igem.wiki/teams/5612/footer/bhamla-sponsor-card.webp" },

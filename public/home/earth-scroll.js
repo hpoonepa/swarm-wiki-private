@@ -1,24 +1,33 @@
-/* Shared scroll mapping: pause for the yearly data, then for the DWV comparison. */
+/* Shared scroll mapping: pause for the yearly data, the DWV comparison, then the SWARM introduction. */
 (() => {
-  const HOLD_AT = .16, DWV_AT = .285;
+  // [progress where the pause happens, name of its own 0-1 progress, length in screen heights]
+  const HOLDS = [[.16, 'years', 1.2], [.285, 'disease', 6.4], [.325, 'intro', 3.2]];
   function parts() {
     const section = document.getElementById('honeycomb-earth');
     const height = section.querySelector('.geo-stage').clientHeight;
-    return { top: section.getBoundingClientRect().top + scrollY, unit: height * 10, hold: height * 1.8, dwvHold: height * 4 };
+    return { top: section.getBoundingClientRect().top + scrollY, unit: height * 10, height };
   }
   window.earthScroll = (position = scrollY) => {
-    const {top, unit, hold, dwvHold} = parts();
-    const distance = Math.max(0, position - top), start = HOLD_AT * unit;
-    if (distance < start) return {p: distance / unit, years: 0, disease: 0};
-    if (distance < start + hold) return {p: HOLD_AT, years: (distance - start) / hold, disease: 0};
-    const afterYears = distance - hold, dwvStart = DWV_AT * unit;
-    if (afterYears < dwvStart) return {p: afterYears / unit, years: 1, disease: 0};
-    if (afterYears < dwvStart + dwvHold) return {p: DWV_AT, years: 1, disease: (afterYears-dwvStart)/dwvHold};
-    return {p: (afterYears - dwvHold) / unit, years: 1, disease: 1};
+    const {top, unit, height} = parts();
+    const distance = Math.max(0, position - top), out = {years: 0, disease: 0, intro: 0};
+    let shift = 0;
+    for (const [at, key, length] of HOLDS) {
+      const start = at * unit + shift, hold = length * height;
+      if (distance < start) return {...out, p: (distance - shift) / unit};
+      if (distance < start + hold) return {...out, p: at, [key]: (distance - start) / hold};
+      out[key] = 1; shift += hold;
+    }
+    return {...out, p: (distance - shift) / unit};
   };
   window.earthOffset = p => {
-    const {unit, hold, dwvHold} = parts();
-    return p * unit + (p > HOLD_AT ? hold : 0) + (p > DWV_AT ? dwvHold : 0);
+    const {unit, height} = parts();
+    return HOLDS.reduce((sum, [at, , length]) => sum + (p > at ? length * height : 0), p * unit);
   };
-  window.earthDiseaseOffset = progress => { const {unit, hold, dwvHold} = parts(); return DWV_AT*unit + hold + Math.max(0,Math.min(1,progress))*dwvHold; };
+  // Scroll offset of a point inside one of the pauses.
+  const holdOffset = (name, progress) => {
+    const {unit, height} = parts(); let shift = 0;
+    for (const [at, key, length] of HOLDS) { if (key === name) return at * unit + shift + Math.max(0, Math.min(1, progress)) * length * height; shift += length * height; }
+  };
+  window.earthDiseaseOffset = progress => holdOffset('disease', progress);
+  window.earthIntroOffset = progress => holdOffset('intro', progress);
 })();

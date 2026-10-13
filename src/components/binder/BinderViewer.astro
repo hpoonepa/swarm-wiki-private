@@ -1,0 +1,144 @@
+---
+import './binder.css';
+---
+
+<main id="binder-main" class="bv-main">
+  <header class="bv-header">
+    <a class="bv-back" href="/lambert-ga/model-minibinder/">
+      <span aria-hidden="true">←</span> Minibinder modeling
+    </a>
+    <div class="bv-heading-row">
+      <h1>Minibinder viewer</h1>
+      <p>VP3 and our designed minibinders.</p>
+    </div>
+  </header>
+
+  <div class="bv-workspace">
+    <aside class="bv-designs" aria-label="Choose a structure">
+      <div class="bv-section-heading">
+        <h2>Designs</h2>
+        <span class="bv-small-label">Predicted complexes</span>
+      </div>
+      <label class="bv-mobile-design" for="bv-design">Choose a design</label>
+      <select id="bv-design" class="bv-mobile-design" aria-label="Choose a design">
+        <option value="">Loading designs…</option>
+      </select>
+      <div id="bv-design-list" class="bv-design-list"></div>
+      <p class="bv-design-help">Choose a design to inspect its proposed binding pose.</p>
+    </aside>
+
+    <section class="bv-view" aria-label="Structure viewer">
+      <div class="bv-view-heading">
+        <div class="bv-model-heading">
+          <h2 id="bv-model-title">Loading structure</h2>
+          <p id="bv-subtitle">Predicted protein complex</p>
+        </div>
+        <div class="bv-toolbar" aria-label="View controls">
+          <button id="bv-reset" type="button" title="Reset the camera">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 7a6 6 0 1 1-.4 5M4 3v4h4" /></svg>
+            <span>Reset</span>
+          </button>
+          <button id="bv-spin" type="button" aria-pressed="false" title="Rotate the structure automatically">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4.8C3.9 5.4 2 7.4 2 10c0 3.2 3.6 5.8 8 5.8s8-2.6 8-5.8c0-2.6-1.9-4.6-5-5.2M7 2v3l-3 1" /></svg>
+            <span>Spin</span>
+          </button>
+          <button id="bv-fullscreen" type="button" title="Expand the structure viewer">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 3H3v4m10-4h4v4M3 13v4h4m10-4v4h-4" /></svg>
+            <span class="bv-sr-only">Fullscreen</span>
+          </button>
+        </div>
+      </div>
+
+      <div id="bv-stage" class="bv-stage" role="region" aria-label="Interactive three-dimensional protein structure">
+        <div id="bv-canvas" class="bv-canvas"></div>
+        <div id="bv-status" class="bv-status" role="status" aria-live="polite">Loading structure…</div>
+        <div class="bv-stage-legend" aria-label="Chain colors">
+          <span><i class="bv-dot bv-dot-target"></i>Target</span>
+          <span><i class="bv-dot bv-dot-binder"></i>Minibinder</span>
+        </div>
+        <p class="bv-stage-hint">Drag to rotate <span aria-hidden="true">·</span> Scroll or pinch to zoom</p>
+      </div>
+
+      <div class="bv-under-stage">
+        <p id="bv-residue" class="bv-residue-readout" role="status" aria-live="polite">Select a residue to inspect it.</p>
+        <p id="bv-interface-note" class="bv-interface-note" hidden>Nearby residues within 5 Å. Proximity is not proof of a bond.</p>
+      </div>
+
+      <section class="bv-sequence-panel" aria-labelledby="bv-sequence-heading">
+        <div class="bv-sequence-heading">
+          <h3 id="bv-sequence-heading">Minibinder sequence</h3>
+          <span id="bv-sequence-count"></span>
+        </div>
+        <div id="bv-sequence-overview" class="bv-sequence-overview" aria-hidden="true"></div>
+        <div id="bv-sequence" class="bv-sequence" aria-label="Minibinder amino acid sequence"></div>
+        <p class="bv-sequence-key"><span aria-hidden="true"></span> Gold marks residues within 5 Å of the target. Select a letter to see it on the structure.</p>
+      </section>
+    </section>
+
+    <aside class="bv-settings" aria-label="Structure controls and information">
+      <section class="bv-control-section" aria-labelledby="bv-display-heading">
+        <h2 id="bv-display-heading">Display</h2>
+        <div class="bv-field">
+          <label for="bv-style">Representation</label>
+          <select id="bv-style">
+            <option value="cartoon">Cartoon</option>
+            <option value="surface">Surface</option>
+            <option value="stick">Sticks</option>
+          </select>
+        </div>
+        <div class="bv-field">
+          <label for="bv-focus">Focus</label>
+          <select id="bv-focus">
+            <option value="complex">Full complex</option>
+            <option value="interface">Binding interface</option>
+            <option value="target">Target</option>
+            <option value="binder">Minibinder</option>
+          </select>
+        </div>
+        <fieldset class="bv-chains">
+          <legend>Visible chains</legend>
+          <label><input id="bv-chain-target" type="checkbox" checked /><i class="bv-dot bv-dot-target"></i><span>Target</span></label>
+          <label><input id="bv-chain-binder" type="checkbox" checked /><i class="bv-dot bv-dot-binder"></i><span>Minibinder</span></label>
+        </fieldset>
+      </section>
+
+      <section class="bv-control-section bv-structure-info" aria-labelledby="bv-structure-heading">
+        <h2 id="bv-structure-heading">Structure</h2>
+        <div id="bv-details" class="bv-details"></div>
+        <div class="bv-chain-mapping">
+          <div class="bv-field">
+            <label for="bv-target-chain">Target chain</label>
+            <select id="bv-target-chain" aria-label="Target chain"><option value="">—</option></select>
+          </div>
+          <div class="bv-field">
+            <label for="bv-binder-chain">Binder chain</label>
+            <select id="bv-binder-chain" aria-label="Minibinder chain"><option value="">—</option></select>
+          </div>
+        </div>
+        <p id="bv-source-note" class="bv-source-note"></p>
+        <a id="bv-download" class="bv-download" download aria-disabled="true">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 2v11m-4-4 4 4 4-4M3 13v4h14v-4" /></svg>
+          Download structure
+        </a>
+      </section>
+
+      <section class="bv-control-section bv-open-section" aria-labelledby="bv-open-heading">
+        <h2 id="bv-open-heading">Your structure</h2>
+        <label class="bv-open-label" for="bv-open-file">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 6V4h6l2 2h8v10H2V6Zm8 3v5m-2.5-2.5h5" /></svg>
+          Open a structure
+          <input id="bv-open-file" type="file" accept=".pdb,.cif,.mmcif" />
+        </label>
+        <p class="bv-file-note">PDB or mmCIF. Files stay in your browser.</p>
+      </section>
+    </aside>
+  </div>
+
+  <p class="bv-prediction-note">Predicted structures show a proposed binding pose, not a measured binding result.</p>
+  <p class="bv-prediction-note">Viewer: <a href="https://3dmol.org/">3Dmol.js</a> · <a href="https://github.com/3dmol/3Dmol.js/blob/master/LICENSE">BSD 3-Clause license</a>. Target sequence: <a href="https://www.rcsb.org/structure/5MV5">PDB 5MV5, VP3</a>.</p>
+  <noscript><p class="bv-noscript">Enable JavaScript to explore the interactive structures.</p></noscript>
+</main>
+
+<script>
+  import './viewer';
+</script>

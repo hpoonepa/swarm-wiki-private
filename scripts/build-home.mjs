@@ -8,7 +8,7 @@ for(const [entry,out] of [['components/protein/scene.ts','capsid-engine'],['comp
   buildSync({absWorkingDir:root,entryPoints:['src/home/'+entry],bundle:true,format:'esm',minify:true,define:{'import.meta.env.DEV':'false'},outfile:'static/home/vendor/'+out+'.js'});
 }
 let controller=readFileSync(root+'static/home/mechanisms.js','utf8');
-for(const file of ['vendor/capsid-engine.js','vendor/rna-player.js','journey.js']) {
+for(const file of ['vendor/capsid-engine.js','vendor/rna-player.js','journey.js','binder-scene.js']) {
   const pattern=new RegExp("\\./"+file.replaceAll('.','\\.')+"(?:\\?v=[^']*)?(?=')",'g');
   controller=controller.replace(pattern,'./'+file+'?v='+hash(file));
 }

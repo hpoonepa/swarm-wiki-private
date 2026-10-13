@@ -5,18 +5,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Lambert-GA</title>
-<link rel="icon" type="image/webp" href="https://static.igem.wiki/teams/5612/mainlayout/fabicon.webp">
+<link rel="icon" href="/lambert-ga/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/lambert-ga/favicon-32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="/lambert-ga/apple-touch-icon.png">
 <style>
+  @font-face { font-family: 'Space Grotesk'; src: url('/lambert-ga/fonts/space-grotesk-latin-wght-normal.woff2') format('woff2-variations'); font-weight: 300 700; font-style: normal; font-display: swap; }
   @font-face { font-family: 'Inter'; src: url('https://static.igem.wiki/teams/6185/wiki/homepage/inter.woff2') format('woff2'); font-weight: 100 900; font-style: normal; font-display: swap; }
   :root{ --cream:#FFFBFA; --ink:#0E2B25; --teal:#153F36; --orange:#E57624; --honey:#FCC42F; --maroon:#461021; }
   html, body { margin: 0; padding: 0; background: #fff; color: var(--teal);
-    font-family: 'Inter', sans-serif; }
+    font-family: 'Space Grotesk', 'Inter', sans-serif; }
   button, input, select, textarea { font-family: inherit; }
 
   /* hero: the art portion of Frame 8.svg (everything above the white curve) */
   .hero { width: 100%; aspect-ratio: 1440 / 1066; overflow: hidden; position: relative; z-index: 2;
     clip-path: ellipse(108% 100% at 50% 0%); }   /* curved bottom edge: sides rise ~12%, centre reaches the bottom */
-  .hero img { width: 100%; height: auto; display: block; }
+  .hero img { width: 100%; height: auto; display: block; margin-top: calc(-68 / 1440 * 100%); }   /* frame starts 68 units into the art */
 
   /* statement: one sentence at a time, cross-fading in the same spot as you scroll */
   #statement { position: relative; height: 340vh; z-index: 2; pointer-events: none; }
@@ -75,8 +78,8 @@
   .menu-panel a:hover, .menu-panel a:focus-visible { background: rgba(255,255,255,.08); }
   .menu-scrim { position: fixed; inset: 0; z-index: 54; background: rgba(14,43,37,.35); opacity: 0; pointer-events: none; transition: opacity .3s; }
   .menu-open .menu-scrim { opacity: 1; pointer-events: auto; }
-  /* ---------- hero logo: its own image, placed where it sits in the hero art (hero units x179.9 y92.4 w672.7 of 1440) ---------- */
-  #heroLogo { position: absolute; z-index: 3; left: calc(179.9 / 1440 * 100%); top: calc(92.4 / 1440 * 100vw); width: calc(672.7 / 1440 * 100%);
+  /* ---------- hero logo: its own image, placed where it sits in the hero art (hero units x179.9 y92.4 w672.7 of 1440, less the 68-unit top crop) ---------- */
+  #heroLogo { position: absolute; z-index: 3; left: calc(179.9 / 1440 * 100%); top: calc(24.4 / 1440 * 100vw); width: calc(672.7 / 1440 * 100%);
     transform-origin: 0 0; pointer-events: none; }
   #heroLogo img { display: block; width: 100%; height: auto; }
   /* while loading the same logo sits centred above the green screen and fills with honey */
@@ -202,21 +205,22 @@
 
   .after { height: 40vh; }
 </style>
-<link rel="stylesheet" href="story.css?v=8b975060b71c">
+<link rel="stylesheet" href="story.css?v=a0d9e7968487">
 </head>
 <body>
+<script src="cursor.js?v=a436bab094c0"></script>
 <div id="heroLogo"><img src="https://static.igem.wiki/teams/6185/wiki/homepage/logo.webp" alt="SWARM" width="1202" height="1354"></div>
 <div id="loader" role="status" aria-label="Loading"><img class="ghost" id="ldGhost" src="https://static.igem.wiki/teams/6185/wiki/homepage/logo-loader.avif" alt=""></div>
 <script>
 /* loading screen: the hero's own logo waits in the centre, fills with honey as the page loads, then travels up into the hero */
 (function () {
   var L = document.getElementById('loader'), logo = document.getElementById('heroLogo'), ghost = document.getElementById('ldGhost');
-  var shown = 0, target = 0, loaded = false, t0 = performance.now(), MIN = 1700, done = false;
+  var shown = 0, target = 0, loaded = false, t0 = performance.now(), MIN = 1700, done = false, lastTick = t0;
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
   function home() {                           // the logo's resting spot in the hero (page coordinates at scroll 0)
     var W = document.documentElement.clientWidth;
-    return { x: W * 179.9 / 1440, y: W * 92.4 / 1440, w: W * 672.7 / 1440 };
+    return { x: W * 179.9 / 1440, y: W * 24.4 / 1440, w: W * 672.7 / 1440 };
   }
   function centre() {                         // its size and spot on the loading screen
     var W = document.documentElement.clientWidth, H = window.innerHeight, w = Math.min(260, W * .46), h = w * 758.9 / 672.7;
@@ -238,17 +242,21 @@
   document.addEventListener('load', function (e) { if (e.target && e.target.dataset) e.target.dataset.ok = 1; count(); }, true);
   var iv = setInterval(count, 150);
   window.addEventListener('load', function () { clearInterval(iv); (document.fonts ? document.fonts.ready : Promise.resolve()).then(function () { loaded = true; }); });
-  setTimeout(function () { loaded = true; }, 12000);            // never trap anyone behind the loader
+  setTimeout(function () { loaded = true; if (!done) finish(); }, 12000);            // never trap anyone behind the loader
   function tick() {
+    if (done) return;
+    var now = performance.now(), dt = now - lastTick; lastTick = now;
     var el = performance.now() - t0, cap = Math.min(1, el / MIN);
     var goal = Math.min(cap, loaded ? 1 : Math.max(target * .92, .9 * (1 - Math.exp(-el / 2500))));
-    shown += (goal - shown) * .08;
+    shown += (goal - shown) * (1 - Math.exp(-dt / 200));
     if (loaded && cap >= 1 && 1 - shown < .004) shown = 1;
     logo.style.setProperty('--p', (shown * 103 - 3).toFixed(2) + '%');
     if (shown >= 1) return setTimeout(finish, 350);
     requestAnimationFrame(tick);
   }
   function finish() {
+    if (done) return;
+    clearInterval(iv);
     done = true; window.scrollTo(0, 0);
     // fly: stay fixed above the green, animate from the centred pose to the hero pose (same box, transform only)
     logo.classList.add('flying');
@@ -307,112 +315,133 @@
           <p class="stat-description">estimated U.S. colony loss in 2024–25, across all causes.</p>
         </article>
         <article class="geo-panel geo-panel--headline" data-region-panel="atlanta" aria-hidden="true" inert>
-          <h2>Why?</h2>
+          <h2>The reason?</h2>
         </article>
       </div>
 
       <div class="why-virus" id="dwv" data-embed data-preload aria-hidden="true"></div>
       <div class="dwv-story" aria-hidden="true" inert>
-        <div class="dwv-heading">
-          <h2>Deformed wing virus</h2>
-          <p>A major contributor to colony losses.</p>
-        </div>
-        <div class="bee-comparison" id="bee-comparison" aria-label="Comparison of healthy wing development and wings affected by deformed wing virus">
-          <figure class="bee-comparison__healthy">
-            <img src="https://static.igem.wiki/teams/6185/wiki/homepage/bee.svg" alt="The team's bee illustration with full-length wings" width="366" height="314">
-            <figcaption><h3>Before</h3><p>Healthy wing development</p></figcaption>
+        <div class="bee-comparison" id="bee-comparison" aria-label="Illustrated progression from healthy wings to mite-associated DWV infection and developmental wing damage">
+          <figure class="dwv-bee">
+            <svg viewBox="0 0 743 644" role="img" aria-label="A honey bee seen from above; its wings shrink and crumple as the infection worsens">
+            <g class="dwv-legs" fill="none" stroke="#6E1B41" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M292 222 L248 186 L236 140 L226 128"/>
+              <path d="M284 262 L214 266 L186 312 L180 328"/>
+              <path d="M292 300 L214 356 L200 440 L204 458"/>
+              <path d="M383.3 222 L427.3 186 L439.3 140 L449.3 128"/>
+              <path d="M391.3 262 L461.3 266 L489.3 312 L495.3 328"/>
+              <path d="M383.3 300 L461.3 356 L475.3 440 L471.3 458"/>
+            </g>
+            <ellipse cx="89.6195" cy="86.1962" rx="89.6195" ry="86.1962" transform="matrix(-0.0608149 0.995273 -1.00146 -0.0531053 428.544 410.155)" fill="#FCC42F"/>
+            <path d="M294.137 569.627C264.215 559.302 241.333 524.835 244.063 480.164C246.792 435.492 271.857 396.147 298.034 397.535C324.21 398.923 310.754 435.224 308.025 479.896C305.295 524.568 298.688 572.138 294.137 569.627Z" fill="#E57624"/>
+            <ellipse cx="117.742" cy="109.398" rx="117.742" ry="109.398" transform="matrix(-0.0608149 0.995273 -1.00146 -0.0531052 455.647 318.631)" fill="#C94607"/>
+            <path d="M287.389 533.44C254.708 520.047 226.605 471.036 230.263 411.171C233.921 351.306 263.128 304.167 295.5 305.884C327.871 307.6 315.253 357.072 311.595 416.937C307.937 476.803 317.649 545.84 287.389 533.44Z" fill="#B62704"/>
+            <ellipse cx="111.648" cy="119.817" rx="111.648" ry="119.817" transform="matrix(-0.0608149 0.995273 -1.00146 -0.0531052 467.197 286.964)" fill="#FCC42F"/>
+            <path d="M270.911 482.609C235.981 457.154 218.271 434.711 221.177 387.15C224.083 339.588 250.33 304.583 285.008 306.422C319.687 308.261 309.689 340.44 306.782 388.001C304.729 496.629 335.762 518.388 270.911 482.609Z" fill="#E57624"/>
+            <ellipse cx="90.5784" cy="102.528" rx="90.5784" ry="102.528" transform="matrix(-0.0608149 0.995273 -1.00146 -0.0531052 450.719 278.81)" fill="#C94607"/>
+            <path d="M296.181 439.351C270.066 437.967 240.155 397.237 242.407 360.392C244.658 323.548 267.653 294.802 293.768 296.187C319.883 297.572 302.26 325.777 300.009 362.621C297.757 399.466 301.67 416.099 296.181 439.351Z" fill="#B62704"/>
+            <ellipse cx="66.377" cy="78.33" rx="66.377" ry="78.33" transform="matrix(-0.0608149 0.995273 -1.00146 -0.0531052 421.053 262.443)" fill="#FCC42F"/>
+            <path d="M300.85 380.79C290.757 382.892 255.952 350.493 258.134 314.784C260.316 279.076 283.872 248.604 309.955 249.987C336.038 251.37 300.865 306.447 304.338 319.172C307.81 331.897 310.942 378.687 300.85 380.79Z" fill="#E57624"/>
+            <ellipse cx="337.629" cy="246.161" rx="86.6292" ry="83.1625" fill="#62172F"/>
+            <ellipse cx="331.328" cy="148.671" rx="66.3255" ry="63.6713" fill="#FDC62E"/>
+            <path class="dwv-wing" data-hinge="404,297" d="M465.593 269.403C546.299 325.978 692.471 388.618 732.486 514.761C772.5 640.905 471.061 434.752 429.026 447.384C386.99 460.015 413.206 322.99 378.482 275.105C343.759 227.22 384.887 212.828 465.593 269.403Z" fill="#E1E1E1" fill-opacity="0.64"/>
+            <path class="dwv-wing" data-hinge="282,297" d="M223.423 285.466C155.865 353.227 29.6241 436.735 5.69102 566.922C-18.242 697.109 234.591 449.098 273.881 455.259C313.172 461.419 276.079 330.408 302.85 278.071C329.622 225.735 290.981 217.705 223.423 285.466Z" fill="#E1E1E1" fill-opacity="0.64"/>
+            <path d="M390.325 102.651C393.23 111.263 404.991 131.993 396.491 155.493C394.566 160.815 374.828 162.22 352.493 136.493C334.792 116.103 339.001 85.0001 345 86.5C367 90.5 384.912 97.7666 390.325 102.651Z" fill="#E57624"/>
+            <path d="M270.251 108.434C277.669 103.183 293.5 91 319.5 86C325.058 84.9311 322.748 109.229 304.501 138C290.039 160.802 267 168.429 265.5 157.5C262 132 267.123 115.021 270.251 108.434Z" fill="#E57624"/>
+            <rect x="410.645" y="60" width="7" height="45.2316" rx="3.5" transform="rotate(67.0303 410.645 60)" fill="#6E1B41"/>
+            <rect x="436.866" y="38" width="7" height="45.2316" rx="3.5" transform="rotate(52.4619 436.866 38)" fill="#6E1B41"/>
+            <path d="M397.334 97.6582C400.239 106.27 420.794 131.677 397.767 151.666C393.493 155.377 382.698 156.992 360.363 131.265C342.662 110.875 339.725 93.9078 344.727 89.5641C367.753 69.5746 391.921 92.7737 397.334 97.6582Z" fill="black"/>
+            <ellipse cx="389.047" cy="129.501" rx="6.18559" ry="9.9921" transform="rotate(-5.08596 389.047 129.501)" fill="#D9D9D9"/>
+            <ellipse cx="361.269" cy="95.065" rx="3.86128" ry="6.23745" transform="rotate(-103.927 361.269 95.065)" fill="#D9D9D9"/>
+            <ellipse cx="388.183" cy="102.114" rx="6.02448" ry="5.56654" transform="rotate(38.8341 388.183 102.114)" fill="#7D7D7D"/>
+            <path d="M261.938 99.1698C269.683 94.4147 289.857 68.7038 314.485 86.6829C319.056 90.0201 323.043 100.182 302.955 127.699C287.034 149.508 271.152 156.161 265.8 152.256C241.172 134.276 258.386 105.538 261.938 99.1698Z" fill="black"/>
+            <ellipse cx="269.084" cy="127.662" rx="6.18559" ry="9.9921" transform="rotate(38.8341 269.084 127.662)" fill="#D9D9D9"/>
+            <ellipse cx="294.269" cy="94.0651" rx="3.86128" ry="6.23745" transform="rotate(-65.9915 294.269 94.0651)" fill="#D9D9D9"/>
+            <ellipse cx="277" cy="106.966" rx="2.94466" ry="2.72083" transform="rotate(38.8341 277 106.966)" fill="#7D7D7D"/>
+            <rect x="295.637" y="38.9795" width="7" height="45.2316" rx="3.5" transform="rotate(-15.1272 295.637 38.9795)" fill="#6E1B41"/>
+            <rect x="317.232" width="7" height="45.2316" rx="3.5" transform="rotate(27.9965 317.232 0)" fill="#6E1B41"/>
+            <path d="M319 130C319 133.866 314.59 139.5 311 139.5C307.41 139.5 306 134.866 306 131C306 127.134 308.91 124 312.5 124C316.09 124 319 126.134 319 130Z" fill="#E57624"/>
+            <path d="M354.124 129C354.124 132.866 350.09 135.5 346.5 135.5C342.91 135.5 341.124 133.866 341.124 130C341.124 126.134 339.035 122 342.625 122C346.214 122 354.124 125.134 354.124 129Z" fill="#E57624"/>
+            <rect x="306" y="71.3472" width="7" height="63" rx="3.5" transform="rotate(-2.8428 306 71.3472)" fill="#6E1B41"/>
+            <rect x="373.235" y="74" width="7" height="63" rx="3.5" transform="rotate(29.7221 373.235 74)" fill="#6E1B41"/>
+            </svg>
+            <img class="dwv-mite" src="assets/journey/mite.svg" alt="Varroa mite attaching to the bee" width="186" height="184">
+            <span class="dwv-bite" aria-hidden="true"></span>
           </figure>
-          <figure class="bee-comparison__affected">
-            <img src="https://static.igem.wiki/teams/6185/wiki/homepage/bee-deformed.svg" alt="The same bee artwork with shortened, crumpled wings to illustrate severe DWV symptoms" width="366" height="314">
-            <figcaption><h3>After</h3><p>Wings damaged by DWV</p></figcaption>
-          </figure>
-          <p class="bee-comparison__explanation">DWV can disrupt a bee’s development. In severe cases, bees emerge with crumpled wings and cannot fly.</p>
         </div>
       </div>
-      <div class="pollinator-scene" aria-hidden="true">
-        <div class="hive-composition">
-          <img class="journey-art" src="https://static.igem.wiki/teams/6185/wiki/homepage/bee-honeycomb-mite.avif" alt="" width="1536" height="1024">
-        </div>
+      <div class="intro-scene">
+      <img class="intro-hive" src="assets/journey/commercial-hive.png" alt="" width="560" height="1400" aria-hidden="true">
+      <img class="intro-mite" src="assets/journey/mite.svg" alt="Varroa mite on the hive" width="186" height="184" aria-hidden="true">
+      <div class="intro-bee" aria-hidden="true"><div class="intro-bee__hover"><svg viewBox="200 40 690 600" aria-hidden="true" focusable="false">
+<g class="bee-legs bee-legs--far" fill="none" stroke="#4a1230" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path data-hip="666,418"/><path data-hip="698,428"/><path data-hip="728,422"/></g>
+<g class="bee-wing bee-wing--back" transform="rotate(-6 690 335) translate(440 147) scale(2)"><g class="bee-wing__flap">
+<path d="M122.042 71.3437C95.8775 50.1333 63.1728 11.8453 14.0346 1.01465C-35.1036 -9.81599 60.7209 69.3889 58.8276 80.3013C56.9344 91.2136 105.73 84.8221 125.667 94.0233C145.605 103.224 148.207 92.5541 122.042 71.3437Z" fill="#E1E1E1" fill-opacity="0.6" stroke="#8d8d8d" stroke-opacity=".55" stroke-width=".8" stroke-linejoin="round"/><path d="M122 92 C 95 66, 60 30, 22 8 M 98 70 C 80 60, 60 52, 44 46" fill="none" stroke="#8d8d8d" stroke-opacity=".45" stroke-width=".7" stroke-linecap="round"/></g></g>
+<g class="bee-abdomen" transform="translate(331 219) scale(2.5)">
+<ellipse cx="33.2299" cy="34.0343" rx="33.2299" ry="34.0343" transform="matrix(-0.865065 0.507757 0.552113 0.830501 75.1847 55.8416)" fill="#FCC42F"/>
+<path d="M46.1836 126.855C55.6197 135.18 71.7241 137.065 86.1208 128.615C100.518 120.165 108.667 105.099 102.969 96.5279C97.2705 87.9566 87.8182 98.6038 73.4215 107.054C59.0247 115.504 44.4338 125.748 46.1836 126.855Z" fill="#E57624"/>
+<ellipse cx="43.6575" cy="43.1953" rx="43.6575" ry="43.1953" transform="matrix(-0.865065 0.507757 0.552113 0.830501 97.848 30.2052)" fill="#C94607"/>
+<path d="M59.6373 123.024C70.6515 131.759 92.6645 132.948 111.958 121.624C131.251 110.3 141.179 92.5266 134.133 81.9269C127.086 71.3271 113.061 83.9131 93.7672 95.2375C74.4739 106.562 49.4392 114.935 59.6373 123.024Z" fill="#B62704"/>
+<ellipse cx="41.3978" cy="47.3092" rx="41.3978" ry="47.3092" transform="matrix(-0.865065 0.507757 0.552113 0.830501 106.131 20.9807)" fill="#FCC42F"/>
+<path d="M79.935 119.996C95.4337 127.454 106.482 129.627 121.81 120.63C137.138 111.633 143.599 96.9019 136.05 85.5466C128.501 74.1913 119.737 82.9804 104.409 91.9773C68.4834 110.984 55.0002 104.213 79.935 119.996Z" fill="#E57624"/>
+<ellipse cx="33.5854" cy="40.4828" rx="33.5854" ry="40.4828" transform="matrix(-0.865065 0.507757 0.552113 0.830501 112.154 25.1489)" fill="#C94607"/>
+<path d="M89.352 104.202C95.0367 112.753 114.641 115.947 126.515 108.977C138.39 102.007 143.407 89.4255 137.722 80.8744C132.038 72.3233 126.127 83.007 114.253 89.9767C102.378 96.9463 96.0323 98.4348 89.352 104.202Z" fill="#B62704"/>
+<ellipse cx="24.6118" cy="30.9283" rx="24.6118" ry="30.9283" transform="matrix(-0.865065 0.507757 0.552113 0.830501 123.56 32.3682)" fill="#FCC42F"/>
+<path d="M108.007 92.7571C109.322 96.5065 127.118 102.752 138.627 95.9968C150.135 89.242 155.617 76.1801 149.94 67.6395C144.262 59.0989 132.872 80.2168 127.921 81.1944C122.97 82.1719 106.693 89.0078 108.007 92.7571Z" fill="#E57624"/></g>
+<g class="bee-legs bee-legs--near" fill="none" stroke="#6E1B41" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path data-hip="642,428"/><path data-hip="674,440"/><path data-hip="708,436"/></g>
+<g class="bee-thorax" transform="translate(615.5 281) scale(2.5)">
+<ellipse cx="31.7955" cy="33.1336" rx="31.7955" ry="33.1336" transform="matrix(-0.965855 -0.259084 -0.259084 0.965855 71.1895 9.28891)" fill="#62172F"/></g>
+<g class="bee-thorax-low" transform="translate(604.5 334) scale(2.5)">
+<path d="M0.00277471 17.8673C-0.0573922 28.1766 7.96467 39.0218 23.657 43.2312C39.3493 47.4405 54.2012 42.9094 56.8296 33.1107C59.4581 23.312 48.8677 11.9561 33.1754 7.7468C-2.23511 -6.78621 0.103719 0.570717 0.00277471 17.8673Z" fill="#461021"/></g>
+<g class="bee-wing bee-wing--front" transform="rotate(-17 676 345) translate(376 249) scale(2)"><g class="bee-wing__flap">
+<path d="M138.305 28.242C106.264 17.8574 61.9801 -6.11127 12.2339 1.44986C-37.5124 9.01099 80.3818 48.4658 82.5387 59.3291C84.6955 70.1924 127.93 46.6841 149.842 48.1015C171.755 49.5189 170.346 38.6265 138.305 28.242Z" fill="#E1E1E1" fill-opacity="0.6" stroke="#8d8d8d" stroke-opacity=".55" stroke-width=".8" stroke-linejoin="round"/><path d="M148 46 C 110 30, 60 14, 14 8 M 118 36 C 100 42, 80 46, 60 46" fill="none" stroke="#8d8d8d" stroke-opacity=".45" stroke-width=".7" stroke-linecap="round"/></g></g>
+<g class="bee-head" transform="translate(654 161) scale(2.5)">
+<ellipse cx="14.9041" cy="18.12" rx="14.9041" ry="18.12" transform="matrix(-0.868886 0.495013 0.495013 0.868886 63.4083 36.5837)" fill="black"/>
+<ellipse cx="24.3434" cy="25.3679" rx="24.3434" ry="25.3679" transform="matrix(-0.868886 0.495013 0.495013 0.868886 55.6928 29.0627)" fill="#FDC62E"/>
+<path d="M31.2136 78.7005C34.318 87.1905 46.6333 90.0733 57.232 86.366C70.2977 81.7959 73.717 64.7444 70.6126 56.2544C67.5082 47.7645 55.382 52.9083 44.7833 56.6155C34.1845 60.3227 28.1091 70.2105 31.2136 78.7005Z" fill="#E57624"/>
+<path d="M41.3852 83.5518C49.8287 82.0092 54.323 72.0003 52.3635 62.6049C50.404 53.2095 36.5389 46.3608 28.0954 47.9034C19.6519 49.4459 20.5894 59.9375 22.5489 69.3329C24.5084 78.7283 32.9417 85.0943 41.3852 83.5518Z" fill="#E57624"/>
+<ellipse cx="14.769" cy="18.7552" rx="14.769" ry="18.7552" transform="matrix(-0.851159 0.524907 0.524413 0.851464 37.4745 41.8254)" fill="#6D6D6D"/>
+<ellipse cx="13.6485" cy="17.0219" rx="13.6485" ry="17.0219" transform="matrix(-0.851159 0.524907 0.524413 0.851464 38.6698 43.6839)" fill="black"/>
+<path d="M28.3118 75.3412C31.3473 80.6694 40.2267 83.1575 44.9533 80.4647C49.6799 77.7719 52.0673 68.865 49.0318 63.5368C45.9963 58.2087 37.3787 56.1799 32.6521 58.8727C27.9255 61.5655 25.2763 70.013 28.3118 75.3412Z" fill="#3A3A3A"/>
+<ellipse cx="4.51197" cy="3.37909" rx="4.51197" ry="3.37909" transform="matrix(-0.93665 -0.350266 -0.34247 0.939529 47.0756 58.2988)" fill="#5A5A5A"/>
+<ellipse cx="5.54701" cy="4.50703" rx="5.54701" ry="4.50703" transform="matrix(-0.93665 -0.350266 -0.34247 0.939529 39.0446 68.513)" fill="#7D7D7D"/>
+<ellipse cx="2.28705" cy="1.84764" rx="2.28705" ry="1.84764" transform="matrix(-0.93665 -0.350266 -0.34247 0.939529 48.6813 69.9573)" fill="white"/>
+<ellipse cx="5.07306" cy="4.09837" rx="5.07306" ry="4.09837" transform="matrix(-0.93665 -0.350266 -0.34247 0.939529 35.4523 57.1715)" fill="white"/>
+<path d="M49.0939 44.4867C48.0543 44.7031 47.3865 45.6931 47.5762 46.7367L49.5463 57.5736C49.813 59.0405 51.2757 60.0019 52.7292 59.6656C54.1469 59.3376 54.9826 57.905 54.5724 56.5061L51.4652 45.9107C51.1677 44.8965 50.1273 44.2717 49.0939 44.4867Z" fill="#6E1B41"/>
+<path d="M63.846 46.2447C62.8026 46.4618 62.1281 47.4505 62.3077 48.4995L63.7089 56.6827C63.9588 58.142 65.4064 59.1078 66.8515 58.7794C68.2704 58.4569 69.1021 57.0175 68.6752 55.6234L66.2368 47.6615C65.9265 46.6482 64.8819 46.0292 63.846 46.2447Z" fill="#6E1B41"/>
+<path d="M50.7324 16.0186C49.8671 15.3904 48.6731 15.9044 48.5762 16.9467L47.0926 32.9009C47.0447 33.4163 47.0345 33.9357 47.0622 34.455L47.652 45.5136C47.7059 46.5243 48.5837 47.3196 49.5957 47.2744C50.645 47.2276 51.4034 46.2994 51.2425 45.2588L49.7414 35.5532C49.5975 34.6233 49.5746 33.6826 49.6732 32.7546L51.3141 17.3044C51.3666 16.8098 51.1438 16.3171 50.7324 16.0186Z" fill="#6E1B41"/>
+<path d="M83.8641 25.4619C83.5566 24.4339 82.3028 24.0983 81.5644 24.8465L70.6432 35.912C70.2568 36.3036 69.9002 36.7253 69.5767 37.1736L63.3548 45.7928C62.748 46.6334 62.9381 47.8313 63.7754 48.4439C64.6453 49.0804 65.8495 48.8224 66.3862 47.8845L71.061 39.7159C71.536 38.8859 72.1193 38.1275 72.7946 37.4618L83.5038 26.905C83.879 26.5352 84.0183 25.9773 83.8641 25.4619Z" fill="#6E1B41"/></g>
+</svg>
+</div></div>
       </div>
       <div class="journey-copy journey-copy--hive" id="hive" aria-hidden="true" inert>
         <h2><span class="swarm-introducing">Introducing</span><img class="swarm-wordmark" src="https://static.igem.wiki/teams/6185/wiki/homepage/swarm-wordmark.avif" alt="SWARM" width="866" height="813"></h2>
-        <p class="swarm-subtitle">Minibinders for the virus. RNAi for the mite.</p>
       </div>
       <div class="journey-copy journey-copy--bee journey-approach" id="bee" aria-hidden="true" inert>
         <h2><span>1.</span> Minibinders</h2>
       </div>
-  <div id="minibinders" class="journey-protein" aria-hidden="true" inert aria-labelledby="minibinder-title">
-      <div class="cell-field cell-field--protein" data-cell-field aria-hidden="true">
-        <svg class="gut-lining" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
-          <defs>
-            <pattern id="gut-paper-grain" width="149" height="113" patternUnits="userSpaceOnUse">
-              <circle cx="13" cy="21" r=".8"/><circle cx="79" cy="8" r=".65"/><circle cx="122" cy="67" r=".9"/>
-              <path d="m43 84 1.5-.5m62-43 1 .6M8 103l1-.8M138 29l1.7.2" fill="none" stroke="currentColor" stroke-width=".7"/>
-            </pattern>
-          </defs>
-          <rect width="1440" height="900" fill="url(#gut-paper-grain)" class="gut-grain"/>
-          <g class="gut-wall gut-wall--top">
-            <path d="M-20-20H1460V39C1359 69 1305 24 1182 45S1005 66 897 35S708 15 586 47S390 69 272 40S95 64-20 38Z" fill="#eac171"/>
-            <path d="M-20-20H1460V16C1347 46 1291 8 1176 24S1005 40 899 13S708-9 585 25S388 45 274 20S89 42-20 15Z" fill="#d6a24c"/>
-            <path d="M-20 43C95 68 153 13 272 43S466 78 586 51S788 8 897 39S1066 70 1182 49S1359 73 1460 43" fill="none" stroke="#ba833c" stroke-width="2" opacity=".6"/>
-            <g stroke="#b17d37" stroke-width="1.5" fill="none" opacity=".45">
-              <path d="M92-5 103 40M231-8l-6 39M389-7l8 62M541-6l14 52M699-4l-9 26M845-5l7 32M1007-4l-3 54M1158-5l9 48M1325-3l-7 41"/>
-            </g>
-          </g>
-          <g class="gut-wall gut-wall--bottom">
-            <path d="M-30 902V815C31 776 104 836 175 816S267 770 343 805S440 848 518 821S631 799 705 826S824 798 903 795S1018 850 1090 815S1210 792 1276 809S1402 767 1470 795V922Z" fill="#f1d493"/>
-            <path d="M-30 922V842C42 809 103 861 175 841S268 797 343 831S447 870 518 848S636 825 705 851S824 824 903 824S1013 872 1090 843S1207 819 1276 836S1401 796 1470 824V922Z" fill="#dfb45f"/>
-            <path d="M-30 815C31 776 104 836 175 816S267 770 343 805S440 848 518 821S631 799 705 826S824 798 903 795S1018 850 1090 815S1210 792 1276 809S1402 767 1470 795" fill="none" stroke="#ba8439" stroke-width="2.5"/>
-            <g fill="none" stroke="#ad7935" stroke-width="2" opacity=".6">
-              <path d="M84 813C67 842 95 865 87 914M190 811C211 847 181 875 195 914M319 795C302 840 337 871 321 916M440 833C425 859 449 881 436 915M566 810C588 843 560 875 577 915M693 822C676 850 708 882 699 914M816 810C834 843 807 881 823 915M943 801C924 843 950 874 939 914M1071 824C1088 856 1064 881 1078 915M1183 799C1168 838 1196 881 1186 914M1306 811C1328 847 1294 880 1316 915M1423 785C1403 831 1428 876 1417 915"/>
-            </g>
-            <g fill="#bc873c" opacity=".42">
-              <ellipse cx="35" cy="861" rx="20" ry="12" transform="rotate(17 35 861)"/>
-              <ellipse cx="139" cy="881" rx="15" ry="22" transform="rotate(-22 139 881)"/>
-              <ellipse cx="255" cy="851" rx="23" ry="14" transform="rotate(-14 255 851)"/>
-              <ellipse cx="379" cy="879" rx="16" ry="21" transform="rotate(20 379 879)"/>
-              <ellipse cx="506" cy="887" rx="22" ry="13" transform="rotate(-12 506 887)"/>
-              <ellipse cx="634" cy="865" rx="20" ry="14" transform="rotate(31 634 865)"/>
-              <ellipse cx="754" cy="876" rx="16" ry="23" transform="rotate(-17 754 876)"/>
-              <ellipse cx="881" cy="853" rx="24" ry="13" transform="rotate(8 881 853)"/>
-              <ellipse cx="1004" cy="889" rx="19" ry="16" transform="rotate(-27 1004 889)"/>
-              <ellipse cx="1134" cy="863" rx="19" ry="12" transform="rotate(25 1134 863)"/>
-              <ellipse cx="1253" cy="880" rx="16" ry="22" transform="rotate(-13 1253 880)"/>
-              <ellipse cx="1366" cy="850" rx="22" ry="14" transform="rotate(18 1366 850)"/>
-            </g>
-            <g fill="none" stroke="#b68439" stroke-width="2.5" stroke-linecap="round" opacity=".5">
-              <path d="M19 801l-3 -12 M47 804l1 -17 M76 813l3 -14 M106 819l-1 -10 M139 822l-3 -16 M177 815l1 -12 M207 803l3 -17 M235 796l-1 -14 M264 792l-3 -10 M295 793l1 -16 M325 799l3 -12 M358 812l-1 -17 M388 824l-3 -14 M420 834l1 -10 M455 837l3 -16 M489 832l-1 -12 M525 819l-3 -17 M561 812l1 -14 M594 813l3 -10 M629 817l-1 -16 M665 821l-3 -12 M702 829l1 -17 M737 831l3 -14 M774 824l-1 -10 M807 813l-3 -16 M843 803l1 -12 M878 797l3 -17 M912 797l-1 -14 M946 806l-3 -10 M979 820l1 -16 M1011 832l3 -12 M1046 834l-1 -17 M1080 820l-3 -14 M1114 807l1 -10 M1149 800l3 -16 M1184 799l-1 -12 M1218 802l-3 -17 M1253 809l1 -14 M1287 810l3 -10 M1321 802l-1 -16 M1355 793l-3 -12 M1390 785l1 -17 M1423 785l3 -14"/>
-            </g>
+  <div id="minibinders" class="journey-protein" aria-hidden="true" inert aria-label="Minibinder binding in the bee gut">
+      <figure class="bee-cutaway" aria-label="Schematic of the digestive tract inside a honey bee">
+        <svg viewBox="0 0 743 644" role="img" aria-label="The bee’s gut is highlighted in orange">
+          <image href="assets/journey/dwv-bee.svg" width="743" height="644" opacity=".3"/>
+          <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M339 152 C337 207 328 251 339 307 C346 343 309 346 307 375 C303 408 367 399 371 430 C375 459 315 451 312 479 C308 500 337 520 337 546" stroke="#fff8d6" stroke-width="35"/>
+            <path d="M339 152 C337 207 328 251 339 307 C346 343 309 346 307 375 C303 408 367 399 371 430 C375 459 315 451 312 479 C308 500 337 520 337 546" stroke="#bf693c" stroke-width="20"/>
+            <path d="M339 307 C346 343 309 346 307 375 C303 408 367 399 371 430" stroke="#efbd63" stroke-width="10"/>
+            <circle cx="336" cy="395" r="78" stroke="#9b552b" stroke-width="2" stroke-dasharray="5 7"/>
           </g>
         </svg>
-      </div>
-      <div class="mechanism-copy mechanism-copy--headline">
-        <h2 id="minibinder-title">1. Minibinders</h2>
-        <p class="mini-explanation" data-mini-explanation>Minibinders are small proteins made to attach to a specific target. Ours binds the P domain, a part of DWV’s outer shell.</p>
-        <div class="mini-result" data-mini-result hidden>
-          <p class="mini-result__value">~550 <span>nM</span></p>
-          <p class="mini-result__detail">Best replicate apparent K<sub>d</sub><br>~604 nM overall · BLI assay</p>
-          <a href="assets/evidence/binding-summary.csv" download>View the binding data</a>
-        </div>
-      </div>
+      </figure>
+      <svg class="gut-zoom-link" viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M834 227 L701 132 H669 M834 227 L715 410" fill="none" stroke="currentColor" stroke-width=".8" stroke-dasharray="3 6"/>
+      </svg>
       <div class="protein-view">
-        <div class="gut-cell" aria-hidden="true">
-          <svg viewBox="0 0 400 650" xmlns="http://www.w3.org/2000/svg">
-            <path d="M184-40C87 85 114 172 153 278C194 394 84 480 172 690H440V-40Z" fill="#e7b854"/>
-            <path d="M184-40C87 85 114 172 153 278C194 394 84 480 172 690" fill="none" stroke="#ad762c" stroke-width="15"/>
-            <path d="M202-40C105 85 132 172 171 278C212 394 102 480 190 690" fill="none" stroke="#f8d986" stroke-width="5"/>
-            <ellipse cx="313" cy="326" rx="65" ry="88" fill="#cd963d" transform="rotate(-17 313 326)"/>
-            <ellipse cx="319" cy="329" rx="25" ry="32" fill="#a36c29"/>
-            <path d="M234 145Q277 110 315 145M257 499Q315 453 370 487" fill="none" stroke="#f2cc70" stroke-width="17" stroke-linecap="round"/>
-          </svg>
-          <span>Bee gut cell</span>
+
+        <div id="capsid-host" tabindex="0" role="img" aria-description="Teal: our minibinder. Gold: the viral P domain. Predicted complex. Drag or use arrow keys to rotate; press R to reset." aria-label="Predicted 3D structure of the SWARM minibinder l79_s469532_mpnn9 and the DWV VP3 P domain">
+          <div class="protein-viewport"></div>
+          <p class="model-fallback" role="status">Loading our minibinder structure…</p>
         </div>
-        <div id="capsid-host" tabindex="0" role="img" aria-describedby="capsid-controls" aria-label="DWV capsid structure, with illustrative minibinders approaching and binding to its surface">
-          <span class="protein-label protein-label--site" aria-hidden="true">P domain</span>
-          <span class="protein-label protein-label--binder" aria-hidden="true">Minibinder</span>
-          <p class="model-fallback" role="status">Loading the DWV structure…</p>
-        </div>
-        <p id="capsid-controls" class="sr-only">Drag to rotate. Use the arrow keys to turn the model.</p>
+
       </div>
 
   </div>
@@ -426,15 +455,14 @@
     <div id="rna-intro" class="rna-discovery" aria-hidden="true" inert>
       <div class="rna-discovery__copy">
         <h2>2. RNAi</h2>
-        <p>Cells use messenger RNA as instructions for making proteins. RNA interference, or RNAi, breaks down a matching message so less of that protein is made.</p>
-        <p>We’re targeting three genes used by <em>Varroa</em> mites’ salivary glands. We want to reduce the proteins that help mites feed on bees.</p>
+        <p>We’re targeting three <em>Varroa</em> genes to reduce the proteins mites use to feed.</p>
       </div>
         <div class="rna-targets">
-          <h3>Three salivary gene targets</h3>
+          <h3>Our targets</h3>
           <dl>
             <div><dt>Vd-CHIsal</dt><dd>Salivary chitinase</dd></div>
             <div><dt>Vd-CHIBIN</dt><dd>Chitin-binding protein</dd></div>
-            <div><dt>AV422</dt><dd>Salivary protein linked to feeding</dd></div>
+            <div><dt>AV422</dt><dd>Salivary protein</dd></div>
           </dl>
         </div>
     </div>
@@ -521,7 +549,7 @@
   </div>
 
   <button class="to-top" type="button">Back to top ↑</button>
-  <swarm-nav story></swarm-nav>
+  <swarm-nav dark-over=".hero"></swarm-nav>
   <!-- iGEM requirement: license notice + repository link on every page (same wording as src/components/Footer.tsx) -->
   <footer class="wiki-footer">
     <details class="home-references">
@@ -538,7 +566,9 @@
         <li><a href="https://pubmed.ncbi.nlm.nih.gov/42102981/" target="_blank" rel="noreferrer">Varroa salivary proteins, feeding and fertility</a></li>
         <li><a href="https://www.nature.com/articles/s41598-025-31753-0" target="_blank" rel="noreferrer">DWV and honey bee colony losses</a></li>
         <li><a href="https://www.ars.usda.gov/pacific-west-area/tucson-az/carl-hayden-bee-research-center/research/varroa/varroosis/" target="_blank" rel="noreferrer">USDA ARS: Varroa, DWV and deformed wings</a></li>
-        <li>Bee comparison adapted from the team’s supplied bee artwork; only the wings differ.</li>
+        <li>Bee and Varroa illustrations supplied by the team. The animated wing change illustrates damage associated with infection during development.</li>
+        <li><a href="https://www.nature.com/articles/s42003-023-04704-6">DWV infection during pupal development and wing deformity — Communications Biology (2023).</a></li>
+        <li>Minibinder: team-predicted l79_s469532_mpnn9 complex, rendered from PDB coordinates with <a href="https://3dmol.org/">3Dmol.js</a>. The predicted binding pose is not an experimentally determined complex structure.</li>
         <li><a href="assets/evidence/binding-summary.csv" download>SWARM binding result: Adaptyv Bio round 2 summary (CSV)</a></li>
         <li><a href="assets/evidence/rnai-design-summary.csv" download>SWARM RNA guide design panel: v10 summary (CSV)</a></li>
         <li>SWARM logo and bee, honeycomb, and mite composition supplied by the team.</li>
@@ -550,17 +580,17 @@
   <script src="vendor/three.min.js"></script>
   <script src="assets/landmask.js"></script>
   <script src="assets/landmask-hi.js"></script>
-  <script src="earth-scroll.js?v=6dbda1a86ebc"></script>
+  <script src="earth-scroll.js?v=18c3ece92189"></script>
   <script src="colony-loss.js?v=845977d85632"></script>
-  <script src="globe.js?v=cbbea770ca82"></script>
-  <script src="dwv-virus.js?v=29bb8a0b764c"></script>
+  <script src="globe.js?v=50d774e7b94d"></script>
+  <script src="dwv-virus.js?v=79949ffefc10"></script>
   <script src="statement.js?v=smooth1"></script>
   <script src="food.js?v=4"></script>
-  <script type="module" src="navbar.js?v=23bb511af627"></script>
-  <script src="menu.js?v=513c1f0340b8"></script>
+  <script type="module" src="navbar.js?v=2c505def1573"></script>
+  <script src="menu.js?v=828e0c6b19dd"></script>
   <script src="ux.js?v=story1"></script>
-  <script src="cursor.js?v=b8ab9b037e0c" defer></script>
-  <script src="flight.js?v=c05448bf20a6"></script>
-  <script type="module" src="mechanisms.js?v=c1c26c514d91"></script>
+  <script src="intro-bee.js?v=6" defer></script>
+  <script src="flight.js?v=20148d0e0ac5"></script>
+  <script type="module" src="mechanisms.js?v=64ff6a83ecbd"></script>
 </body>
 </html>

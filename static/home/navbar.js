@@ -1,4 +1,4 @@
-import { groups, sections } from './nav-data.js?v=8e9bbf33a3cd';
+import { groups, sections } from './nav-data.js?v=9fe18f639b5c';
 import { mapStyles, mountMap } from './navmap.js?v=951a75de8fa3';
 const styles = `
   :host { position: fixed; inset: 0; z-index: 70; font-family: 'Space Grotesk Variable', 'Space Grotesk', 'Inter', sans-serif; color: #1a322a; pointer-events: none; }

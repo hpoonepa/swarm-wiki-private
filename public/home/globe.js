@@ -297,12 +297,13 @@
       paint(goal < .115 ? 0 : goal < .235 ? .175 : .30, now);
       return;
     }
-    shown += (goal - shown) * (1 - Math.exp(-dt * 10));
+    shown += (goal - shown) * (1 - Math.exp(-dt * 5.5));          // softer follow so wheel steps glide
     if (Math.abs(goal - shown) < .0001) shown = goal;
-    yearsShown += (yGoal - yearsShown) * (1 - Math.exp(-dt * 8));
+    yearsShown += (yGoal - yearsShown) * (1 - Math.exp(-dt * 5));
     if (Math.abs(yGoal - yearsShown) < .0005) yearsShown = yGoal;
     paint(shown, now, dt);
-    if ((popAt !== null && goal < .09) || shown !== goal || yearsShown !== yGoal || (popAt !== null && now-popAt<1700)) raf = requestAnimationFrame(tick);
+    // keep turning gently while the whole globe is in view, not only while scrolling
+    if ((popAt !== null && goal < .2) || shown !== goal || yearsShown !== yGoal || (popAt !== null && now-popAt<1700)) raf = requestAnimationFrame(tick);
   }
   function kick() { if (!raf && visible && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(tick); } }
   function resize() {
