@@ -73,11 +73,15 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
       if (this.shadowRoot) return;
       const root=this.attachShadow({mode:'open'});
       const slug=location.pathname.replace(/\/$/,'').split('/').pop();
+      const isHomepage=/^\/lambert-ga(?:\/home)?(?:\/index\.html)?\/?$/.test(location.pathname);
+      const logo=isHomepage
+        ? {src:'https://static.igem.wiki/teams/6185/wiki/homepage/logo.webp',width:1202,height:1354}
+        : {src:'/lambert-ga/brand/swarm-logo.svg',width:488,height:550};
       const links=items=>items.map(([title,destination])=>Array.isArray(destination)
         ? `<details class="subgroup"><summary>${title}</summary><div>${links(destination)}</div></details>`
         : `<a href="/lambert-ga/${destination}/"${destination===slug?' aria-current="page"':''}>${title}</a>`).join('');
       root.innerHTML=`<style>${styles}</style><div class="bar">
-        <a class="brand" href="/lambert-ga/home/" aria-label="SWARM home"><img src="https://static.igem.wiki/teams/6185/wiki/homepage/logo.webp" alt="SWARM" width="1202" height="1354" decoding="async"></a>
+        <a class="brand" href="/lambert-ga/home/" aria-label="SWARM home"><img src="${logo.src}" alt="SWARM" width="${logo.width}" height="${logo.height}" decoding="async"></a>
         <button class="mobile-toggle glass" aria-expanded="false" aria-controls="wiki-links"><span>Menu</span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
         <nav class="glass" id="wiki-links" aria-label="Main"><div class="items">
         ${groups.map(([title,items])=>`<details class="group"><summary>${title}</summary><div class="dropdown glass">${links(items)}</div></details>`).join('')}
