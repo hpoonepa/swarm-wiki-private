@@ -44,18 +44,30 @@ const styles = `
   :host([data-dark]) .subgroup > div { border-color: #ffffff24; }
   .mobile-toggle { display: none; pointer-events: auto; align-items: center; gap: 10px; border-radius: 999px; min-height: 50px; padding: 0 18px; font-size: 13px; font-weight: 650; }
   .mobile-toggle svg { width: 18px; height: 18px; }
-  .honey-toggle { position: absolute; top: 10px; right: 10px; z-index: 3; width: 72px; height: 78px; padding: 0; background: transparent; pointer-events: auto; border-radius: 12px; filter: drop-shadow(0 2px 2px #94611225); transition: transform .5s cubic-bezier(.7, 0, .84, 0), filter .4s; }
-  .honey-toggle:hover { transform: translateY(-2px); }
+  .honey-toggle { position: absolute; top: 10px; right: 10px; z-index: 3; width: 72px; height: 78px; padding: 0; background: transparent; pointer-events: auto; border-radius: 12px; filter: drop-shadow(0 2px 2px #94611225); transition: transform .28s cubic-bezier(.22, 1, .36, 1), filter .28s; }
+  @media (hover: hover) and (pointer: fine) {
+    .honey-toggle:hover { transform: translateY(-2px) scale(1.12); filter: drop-shadow(0 5px 8px #c58a1c45); }
+  }
+  .honey-toggle:focus-visible { transform: translateY(-2px) scale(1.12); filter: drop-shadow(0 5px 8px #c58a1c45); }
+  .honey-toggle:active { transform: scale(.96); }
   .honey-toggle svg { display: block; width: 100%; height: 100%; }
   :host([data-map-open]) .honey-toggle { transform: rotate(30deg); filter: drop-shadow(0 4px 14px rgba(254, 195, 65, .45)); transition: transform .3s cubic-bezier(.22, 1, .36, 1), filter .3s; }
-  :host([data-map-open]) .honey-toggle:hover { transform: rotate(30deg) scale(1.06); }
+  @media (hover: hover) and (pointer: fine) {
+    :host([data-map-open]) .honey-toggle:hover { transform: rotate(30deg) scale(1.12); }
+  }
+  :host([data-map-open]) .honey-toggle:focus-visible { transform: rotate(30deg) scale(1.12); }
+  :host([data-map-open]) .honey-toggle:active { transform: rotate(30deg) scale(.96); }
   .honey-label { display: none; }
   :host([data-homepage]) .honey-label { position: absolute; right: calc(100% + 8px); top: 50%; display: block; padding: 9px 13px; border: 1px solid #d9c89b; border-radius: 999px; background: #fff9e9; color: #244c3e; box-shadow: 0 2px 9px #242f2012; font-size: 14px; font-weight: 650; line-height: 1.2; white-space: nowrap; opacity: 0; visibility: hidden; transform: translate(5px, -50%); transition: opacity .2s, transform .2s, visibility .2s; }
   :host([data-homepage][data-hidden]) .honey-label, :host([data-homepage][data-map-open]) .honey-label { opacity: 1; visibility: visible; transform: translate(0, -50%); }
   .honey-label__short { display: none; }
   :host([data-homepage]) .honey-toggle svg { transition: transform .3s cubic-bezier(.22, 1, .36, 1); }
   :host([data-homepage][data-map-open]) .honey-toggle { transform: none; }
-  :host([data-homepage][data-map-open]) .honey-toggle:hover { transform: translateY(-2px); }
+  @media (hover: hover) and (pointer: fine) {
+    :host([data-homepage][data-map-open]) .honey-toggle:hover { transform: translateY(-2px) scale(1.12); }
+  }
+  :host([data-homepage][data-map-open]) .honey-toggle:focus-visible { transform: translateY(-2px) scale(1.12); }
+  :host([data-homepage][data-map-open]) .honey-toggle:active { transform: scale(.96); }
   :host([data-homepage][data-map-open]) .honey-toggle svg { transform: rotate(30deg); }
   @media (max-width: 1100px) {
     .bar { top: 16px; width: calc(100% - 32px); padding-right: 72px; }
@@ -73,7 +85,7 @@ const styles = `
   }
   @media (max-width: 760px) { .bar { padding-right: 62px; } .honey-toggle { top: 8px; right: 6px; width: 56px; height: 62px; } }
   @media (max-width: 600px) { :host([data-homepage]) .honey-label { right: calc(100% + 4px); padding: 8px 11px; } .honey-label__full { display: none; } .honey-label__short { display: inline; } }
-  @media (prefers-reduced-motion: reduce) { *, *::after { transition: none !important; } }
+  @media (prefers-reduced-motion: reduce) { *, *::after { transition: none !important; } .honey-toggle { transform: none !important; } }
   ${mapStyles}
 `;
 if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {

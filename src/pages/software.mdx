@@ -1,13 +1,85 @@
 ---
 layout: ../layouts/ContentLayout.astro
 title: Software Writeups
-description: 'Summary placeholder for the Software Writeups page.'
+description: 'PRINCE combines structural analysis with published research to prioritize binding regions for de novo minibinder design.'
 ---
 
-import Wip from "../components/md_components/Wip";
+{/* Draft figure: Abstract or Pipeline Graphic showing everything. */}
 
-<Wip />
+## Introduction
 
-# Overview
+De novo minibinders are small, computationally designed proteins that bind specific molecular targets, offering promising applications in therapeutics, diagnostics, and synthetic biology (see [minibinders](/lambert-ga/minibinder/) for more). However, designing functional binders remains difficult, as computationally promising candidates often fail experimentally. Fortunately, recent advances in AI have introduced powerful open-source tools such as RFdiffusion, BoltzGen, and BindCraft, significantly improving the accessibility and success rates of protein design.
 
-Placeholder. The Software Writeups write-up goes here.
+Despite these advances, binder design remains computationally expensive and GPU-intensive, excluding experimental validation which introduces heavy additional costs. For teams with limited resources, selecting the right binding region before beginning a design campaign is therefore critical.
+
+{/* Draft example needs values and a source before publication: Anthropic spent x on compute for creating x binders. */}
+
+Lambert iGEM initially used established protein design tools to generate minibinders against deformed wing virus's (DWV) VP3 capsid (see [modeling](/lambert-ga/model-minibinder/) for more). Despite promising computational predictions, our first experimental campaign produced no confirmed binding hits. Discussions with researchers highlighted a pressing issue: epitope selection.
+
+> “There is no straightforward way to identify which epitopes would work. We develop antibodies against different regions and test all of them to figure out which one works.”
+>
+> **Dr. Kadowaki**, DWV antibody researcher
+
+> “Epitope selection can be very hit-or-miss and can only be determined by validation”
+>
+> **Dr. Michael Hecht**, Princeton University
+
+Although design tools can generate binders against specific computationally identified hotspots, they do not incorporate contextual literature to prioritize known biological findings such as validated epitopes. This creates a gap between existing knowledge and computational design, motivating the development of **PRINCE**, our literature-informed epitope analysis and hotspot prioritization framework.
+
+## PRINCE
+
+PRINCE combines computational hotspot analysis with literature to identify biologically relevant epitopes for de novo minibinder design.
+
+### 1. Structural and Hotspot Analysis
+
+Inspired by established epitope prediction tools such as BepiPred and DiscoTope, PRINCE evaluates:
+
+- Solvent-accessible surface area (SASA)
+- Hydrophobic residue distributions
+- Local structural properties
+
+These properties identify accessible and favorable binding regions based on their predicted suitability for protein binding.
+
+{/* Draft figure: Table or graphic showing PRINCE working on a hotspot. */}
+
+### 2. Literature-Based Epitope Analysis
+
+PRINCE's key innovation is incorporating existing experimental literature into epitope prediction. Many protein targets have published studies identifying functional regions, experimentally validated binding sites, or unsuccessful binding attempts. To leverage this information, we trained a large language model (LLM) to analyze relevant literature, extract biological evidence, and evaluate its implications for candidate epitopes.
+
+PRINCE then weighs this literature-derived evidence alongside structural scores to produce an informed epitope ranking supported by experimental knowledge alongside protein design pipelines.
+
+{/* Draft figure: Full PRINCE architecture. */}
+
+## Expert Feedback
+
+*Additional expert feedback to be added.*
+
+## Results and Validation
+
+### Experimental Validation
+
+Using PRINCE, we conducted a second DWV minibinder campaign targeting two newly identified hotspots and were able to generate the **first successful binder for DWV**.
+
+{/* Draft figure: Picture of binder working. */}
+
+We also applied PRINCE to GFP. Experimental results are pending.
+
+### Retrospective Validation
+
+We benchmarked PRINCE using the Structural Antibody Database (SAbDab), comprising **8,241 antibody-antigen interfaces** divided into cluster-disjoint training, validation, and testing sets. In our current evaluation, PRINCE successfully identified **83% of known epitopes**, demonstrating its potential to recover experimentally characterized binding regions.
+
+{/* Draft table: PRINCE accuracy results and benchmark compared with other tools. */}
+
+## Usage and Accessibility
+
+1. **Web Application:** An accessible interface for epitope analysis and hotspot prediction without programming experience.
+2. **Command-Line Interface (CLI):** Enables automated analysis and integration into existing protein design pipelines.
+3. **Open-Source Repository:** Our iGEM GitLab contains the complete codebase, documentation, and protein datasets used in development and validation, supporting reproducibility and further improvement.
+
+{/* Draft video: Web application demo. Add the confirmed software repository and application URLs when supplied. */}
+
+## Broader Applications
+
+PRINCE extends beyond DWV by providing literature-informed hotspot selection for diverse protein targets. Future development will focus on expanding validation across protein families, improving literature-based predictions, and integrating more directly with existing binder design tools.
+
+{/* Editorial notes from the source PDF: Add citations for RFdiffusion, BindCraft, BoltzGen, compute costs and design requirements, the DWV/VP3 structural papers, BepiPred, DiscoTope, and SAbDab. Confirm affiliations and direct quotes for Kadowaki and Hecht. Link the software repository for methodology, datasets, the 83% result, and wet-lab validation. */}
