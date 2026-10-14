@@ -1,41 +1,156 @@
 ---
 layout: ../layouts/HardwareLayout.astro
 title: Hardware
-description: 'Hardware writeup placeholder.'
+description: 'Vapor-X: a frugal vacuum dryer for stabilizing biological samples for under $85.'
 icon: "Plane"
 color: "green"
 ---
 
 # Overview
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+Lyophilization (freeze-drying) is a critical process for stabilizing biological samples such as enzymes, minibinders, and proteins for long-term storage. However, commercial lyophilizers range from $2,000 to $15,000+, placing them out of reach for underfunded labs, including school teams and labs in low-resource regions (Excedr, 2025). To address this, Lambert iGEM developed a frugal vacuum dryer for under $85 USD using accessible components to perform a similar function as commercial units for a fraction of the cost, thereby making substance-drying accessible to all.
 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+<Reference>
+Excedr. (2025, October 4). *How much does a lyophilizer cost?* https://www.excedr.com/blog/how-much-does-a-lyophilizer-cost
+</Reference>
 
-# Chamber and sample support
+# SWARM Application
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.
+SWARM utilizes minibinders for virus inhibition and double-stranded RNA (dsRNA) in an RNA interference (RNAi) system for Varroa mite elimination. After the minibinders and dsRNA are produced, they remain stable at room temperature for only two to three weeks before degrading below quantifiable limits. Dehydration significantly extends the shelf life of the minibinders. However, proteins are prone to denaturation, which limits the temperatures that can be applied during drying. Vapor-X addresses this constraint by reducing the pressure within the chamber to 29 kPa, at which water boils at approximately 68 °C rather than 100 °C. As a result, the minibinders can be dehydrated at temperatures well below those required at atmospheric pressure, reducing the risk of denaturation.
 
-Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.
+During operation, the minibinder solution is placed in a steel cup within the mason jar. This container was selected based on preliminary testing of the effect of microcentrifuge tube geometry on evaporation rate. At 29 kPa, a steel dish fully evaporated a sample of solution within approximately 30 minutes, whereas an equal volume in the microcentrifuge tube showed minimal evaporation. We linked this difference to the narrow opening of the microcentrifuge tube, which limits the liquid surface area exposed to the reduced pressure.
 
-# Controls and enclosure
+# Vapor-X Design
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+## Scientific Principles
 
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+Vapor-X is built around the Clausius-Clapeyron relation: the evaporation temperature of a substance decreases as the air pressure of its environment decreases (Tatum, n.d.). Lambert iGEM's hardware system uses a vacuum pump to lower the pressure inside an airtight mason jar, while a resistive heating pad heats a sample inside the mason jar. By heating substances in a vacuum chamber to temperatures lower than their normal boiling points at atmospheric pressure, Vapor-X can effectively dry substances while reducing the risk of degradation or melting at high temperatures.
 
-# Design checks
+<Reference>
+Tatum, J. B. (n.d.). *The Clausius-Clapeyron equation.* University of Victoria. https://www.astro.uvic.ca/~tatum/thermod/thermod14.pdf
+</Reference>
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+## Circuit
 
-| Area | Placeholder details |
+Lambert iGEM integrated all electrical sensors and units into a consolidated hardware system, Vapor-X. The system is controlled by a Raspberry Pi Pico W, which coordinates a 12 volt (V) vacuum pump, a resistive heating pad, a thermistor (temperature sensor), and a BME280 environment sensor (Adafruit Industries, n.d.). These components allow Vapor-X to actively control the drying process while continuously monitoring temperature and environmental conditions within the system (see [Programming](#programming)).
+
+Vapor-X receives power through a 12 V power supply. An LM2596 adjustable step-down converter is used to input 5 V into the Pico W (Texas Instruments, n.d.). However, the Pico W can only provide a maximum output voltage of 3.3 V, which is insufficient for both the vacuum pump and the heating pad (Raspberry Pi Ltd, 2022). Therefore, both of these components must also be powered from the external power supply. To control the on-off state of both of these externally powered components from the Raspberry Pi, we utilized two N-channel MOSFETs (metal–oxide–semiconductor field-effect transistors) in the following control structure:
+
+- The N-channel MOSFETs each contain three pins: gate, source, and drain.
+- The positive pins of both the vacuum pump and the heater are connected to the positive pin of the adjustable power supply.
+- The negative pins of these two components are connected to the drain pin of their respective MOSFETs.
+- The source pins of the MOSFETs are connected to both the ground pin of the Raspberry Pi Pico and the ground pin of the power supply.
+- The gate pin of each MOSFET is connected to a GPIO pin on the Raspberry Pi Pico W.
+- When the Raspberry Pi sends a HIGH signal through the gate pin, a barrier between the source pin and the drain pin opens, completing the circuit and allowing electricity to flow to the heating pad and the vacuum pump.
+
+The Pico W also connects an SSD1306 OLED display, a KY-040 rotary encoder, and a piezo buzzer for intuitive machine operation. Pressing down and rotating the knob of the rotary encoder sends pulses to different GPIO pins on the Pico W through its I2C (Inter-Integrated Circuit) interface, allowing the user to control an interface on the OLED display and receive audible cycle start/end notifications and other warnings from Vapor-X (see [Programming](#programming)).
+
+<Reference>
+Adafruit Industries. (n.d.). *Adafruit BME280 humidity + barometric pressure + temperature sensor breakout.* https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout
+
+Raspberry Pi Ltd. (2022). *Raspberry Pi Pico W datasheet.* https://datasheets.raspberrypi.com/picow/pico-w-datasheet.pdf
+
+Texas Instruments. (n.d.). *LM2596 SIMPLE SWITCHER power converter 150-kHz 3-A step-down voltage regulator* [Data sheet]. https://www.ti.com/product/LM2596
+</Reference>
+
+The circuit's breadboard schematic shows how these components combine to make one holistic circuit (see Figure 3).
+
+<Image
+  src="https://static.igem.wiki/teams/6185/wiki/hardware/breadboard.avif"
+  caption="Figure 3. Vapor-X breadboard schematic."
+  size="lg"
+/>
+
+## Programming
+
+The Raspberry Pi Pico W is programmed in MicroPython, a lean implementation of the Python 3 programming language that is efficient for small microcontrollers. The code was uploaded to the Pico W using Thonny IDE, a Python code editor with microcontroller execution built in. The Python file first initiates the user interface on the OLED display. Then, a rotary encoder is initiated and actively monitored for clockwise and counterclockwise rotations and button presses. As the user rotates or presses the rotary encoder, the user interface updates in real time to reflect the selected menu option, adjusted setting, or drying cycle startup (see [Machine Operation](#machine-operation)).
+
+Once the user starts the drying cycle, the Pico W activates both the vacuum pump and heating pad as part of the same automated process. The thermistor measures the heating pad temperature every second. A bang-bang feedback loop then allows the Pico W to turn the heating pad on when the temperature falls below the selected target and off when it exceeds the target. At the same time, the BME280 continuously monitors chamber pressure to verify that the vacuum pump is successfully reducing pressure inside the sealed chamber. The temperature and pressure readings are refreshed on the OLED display every 250 milliseconds. If pressure fails to decrease to the required threshold within a set period, the screen displays a warning indicating a possible air leak, poor mason jar seal, or vacuum pump malfunction. If the temperature sensor fails to send a reading back to the Pico W, this error is also displayed on the screen and the user is prevented from starting the drying cycle. Finally, the Python file configures a piezo buzzer that complements the user interface. A beep is played when the cycle starts and ends, as well as when a sensor error or pressure warning occurs.
+
+Lambert iGEM implemented software-level safety protocols into Vapor-X. The Pico W evaluates the thermistor signal and identifies invalid readings in three primary ways:
+
+1. The thermistor is an analog sensor whose voltage is converted into a digital value by the Pico W's Analog-to-Digital Converter (ADC). If the raw ADC value is extremely close to either end of its measurable range (≤150 or ≥65385), the software interprets this as a short or open circuit in the thermistor's wiring.
+2. The software calculates the thermistor's resistance from the measured ADC value. A calculated resistance less than or equal to zero is physically impossible for the intended circuit and is therefore treated as an invalid sensor reading.
+3. The calculated temperature is also checked against a predefined acceptable range of −20 °C to 180 °C. Any value outside this range is considered invalid.
+
+When any of these three conditions are true, the system either automatically shuts off or prevents the drying cycle from starting. These safeguards reduce the risk of uncontrolled heating and help protect both the user and the system's electrical components.
+
+The code for Vapor-X can be downloaded from our [GitLab](https://gitlab.igem.org/REPLACE-WITH-CODE-LINK).
+
+## Ease-of-Use
+
+In the creation of Vapor-X, Lambert iGEM considered ease-of-use in every aspect of the design. The electronic components of Vapor-X are contained within an edge-filleted, box-like structure. Its exterior includes an engraved stripe and ridge pattern that adds both texture and visual detail to the housing (see Figure 4). The front of the enclosure is slightly angled upward, creating space for an ergonomic control panel. This angled section houses the OLED display and the rotary encoder, allowing users to easily view the screen and interact with Vapor-X.
+
+<Image
+  src="https://static.igem.wiki/teams/6185/REPLACE-figure-4-cad-model"
+  caption="Figure 4. Vapor-X finalized Computer Aided Design (CAD) model."
+  size="lg"
+/>
+
+For the final design, we integrated these components into a printed circuit board (PCB) to reduce clutter inside a 3D-printed casing (see Figure 5).
+
+<Image
+  src="https://static.igem.wiki/teams/6185/wiki/hardware/pcb.avif"
+  caption="Figure 5. Vapor-X printed circuit board design."
+  size="md"
+/>
+
+The PCB integrates most of the components and wiring, including the Raspberry Pi Pico W, into the board itself, and includes jumper wire header pins or screw terminals where all external components (pressure sensor, OLED screen, heating pad, vacuum pump, thermistor, rotary encoder) are plugged in.
+
+The PCB also adds some additional components for user safety and circuit protection (see Table 1).
+
+| Component | Function |
 | --- | --- |
-| Chamber | Lorem ipsum dolor sit amet, consectetur adipiscing elit. |
-| Sample support | Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. |
-| Controls | Ut enim ad minim veniam, quis nostrud exercitation ullamco. |
-| Enclosure | Duis aute irure dolor in reprehenderit in voluptate velit esse. |
+| 15 Amp fuse | Protects the board and wiring from an input overcurrent or short circuit |
+| TVS diode | Clamps voltage spikes on the 12 V input |
+| Reverse-polarity MOSFET | Protects the board if the 12 V is connected backward |
+| Bulk capacitor | Smooths the 12 V rail and supplies bursts of current during voltage dips |
+| Input bypass capacitor | Filters high-frequency input noise |
+| AP63205 5 V buck converter | Replaces the breadboard's adjustable LM2596 module with a compact 5 V regulator |
+| Dual gate driver | Drives heater and vacuum pump MOSFET gates strongly and quickly |
+| 10 kΩ gate pulldowns | Keep MOSFETs off while the Pico is booting or unpowered |
 
-Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+*Table 1. List of important safety components added to the PCB.*
+
+## Machine Operation
+
+Users operate Vapor-X by placing the sample in a small metal bowl secured to a 3D-printed holder with thermal putty (see Figure 6). The holder positions the sample directly on top of the heating pad, while a thermistor on the heating pad monitors its temperature. The mason jar is then secured to the chamber and sealed before the vacuum pump is activated to reduce the internal pressure.
+
+<Image
+  src="https://static.igem.wiki/teams/6185/REPLACE-figure-6-sample-holder"
+  caption="Figure 6. Vapor-X sample holder."
+  size="md"
+/>
+
+The user controls Vapor-X through a user interface consisting of a rotary encoder and OLED display. Using the rotary encoder, the user selects the target drying temperature and initiates the drying cycle. When navigating the menu, items highlighted on the OLED display indicate the currently selected option. Pressing down on the rotary encoder selects that option, changing the side indicator to an asterisk to show that the user is actively editing that setting (target temperature, cycle time, or vacuum intensity).
+
+<Image
+  src="https://static.igem.wiki/teams/6185/REPLACE-figure-7-ui-demo"
+  caption="Figure 7. OLED and rotary encoder user interface demonstration."
+  size="md"
+/>
+
+The automated vacuum-assisted heating cycle continues until the sample reaches the target drying time. At the end of the operating sequence, the Pico W turns off the heating pad and vacuum pump (see Figure 8). The user then waits until the chamber returns to atmospheric pressure, removes the mason jar, and retrieves the dried sample.
+
+<Image
+  src="https://static.igem.wiki/teams/6185/REPLACE-figure-8-operating-sequence"
+  caption="Figure 8. Vapor-X operating sequence."
+  size="lg"
+/>
+
+# Applications
+
+### Our application
+
+Lambert iGEM's project utilizes minibinders and double-stranded RNA (dsRNA) for RNA interference, both of which are intended for agricultural use. In solution, the minibinders remain stable for only approximately two to three weeks, which would require farmers to replace their supply frequently. Dehydration significantly extends the shelf life of the minibinders. However, proteins are prone to denaturation, which limits the temperatures that can be applied during drying. Vapor-X addresses this constraint by reducing the pressure within the chamber to 29 kPa, at which water boils at approximately 68 °C rather than 100 °C. As a result, the minibinders can be dehydrated at temperatures well below those required at atmospheric pressure, reducing the risk of denaturation.
+
+During operation, the minibinder solution is placed in a steel cup within the mason jar. This container was selected based on preliminary testing of the effect of microcentrifuge tube geometry on evaporation rate. At 29 kPa, a steel dish fully evaporated a sample of solution within approximately 30 minutes, whereas an equal volume in the microcentrifuge tube showed minimal evaporation. We linked this difference to the narrow opening of the microcentrifuge tube, which limits the liquid surface area exposed to the reduced pressure.
+
+### Other applications
+
+Because Vapor-X requires only an airtight jar, a vacuum pump, and a resistive heating pad, the system can be adapted for other applications involving heat-sensitive materials. Research laboratories and other iGEM teams without access to a lyophilizer could use Vapor-X to dehydrate proteins or enzymes for long-term storage. In molecular biology, Vapor-X could also serve as an alternative to a vacuum concentrator for small sample volumes, such as drying DNA or RNA pellets following ethanol precipitation or concentrating dilute samples. In agricultural settings, the system could be used to dehydrate leaf or seed tissue prior to DNA extraction in order to preserve samples during transport to a laboratory.
+
+Beyond biological applications, Vapor-X can function as a compact dehydrator for food products and herbs, as well as for hygroscopic materials such as nylon 3D printing filament, which absorbs atmospheric moisture and exhibits reduced print quality as a result. Additionally, the transparent glass chamber allows students to observe water boiling at temperatures well below 100 °C, making Vapor-X suitable as an educational demonstration of the relationship between pressure and boiling point.
 
 # Files and related work
 
