@@ -10,6 +10,161 @@ import Wip from "../components/md_components/Wip";
 
 <Wip />
 
-# Overview
+# RNAi Model
+## Overview
+Lambert iGEM determined a system of deterministic Ordinary Differential Equations (ODEs) to model our RNA-interference (RNAi) reaction in Sf9 insect cells. RNAi can be summarized with the following steps:
+- siRNA synthesis: siRNA designs targeting three *Varroa destructor* salivary gland genes are ordered as DNA oligonucleotides and transcribed into RNA duplexes by in vitro transcription. The three most efficient are combined into a single multiplexed dsRNA construct.
+- Co-transfection: Sf9 cells are co-transfected with the psiCHECK-2 dual-luciferase reporter and design.
+- Knockdown: siRNA loads onto Argonaute-2 to form RNA-induced silencing complex(RISC), cleaving the *Renilla* transcript, which carries the three target sites in its 3′UTR
+- Detection: Luminescence is read with the Promega Dual-Glo system and knockdown appears as a drop in the *Renilla* to Firefly ratio relative to a non-targeting control.
 
-Placeholder. The RNAi Model write-up goes here.
+## Development
+To assist in interpreting and validating RNAi reactions, we incorporated an ODE model to simulate the gene-silencing and correlate *Renilla* and firefly luciferase expression with siRNA dose and time elapsed. The model is intended to guide the wetlab in interpreting the luminescence output recorded. 
+
+## Signaling Pathway
+We used MATLAB’s SimBiology software to diagram each reaction using the Law of Mass Action and Michaelis Menten Enzyme Kinetics. The Mass Action equations are used to diagram the collision of reactants in a solution, which is needed for all the reactants in our reaction pathways. Michaelis Menten is to properly diagram catalytic enzyme kinetics when utilizing multiple ligand areas. The pathway begins with the introduction of a multiplexed dsRNA and Reporter construct into a system and ends with production of *Renilla* and Firefly luminescence.
+
+<Image
+  src="https://static.igem.wiki/teams/6185/wiki/modeling/rnai-model-pathway.avif"
+  caption="Figure X. Representation of the RNAi reaction pathway using SimBiology"
+  size="md"
+/>
+
+## Biochemical Reactions
+The RNAi model contains a total of 25 biochemical reactions (see Table X) for the overall pathway, as shown below (see Table X):
+
+| #  | Reaction                                                       | Description |
+|----|----------------------------------------------------------------|-------------|
+| 1  | dsRNA_1 + [Dicer-2] -> siRNA_1 + [Dicer-2] + siRNA_2 + siRNA_3 | Dicer-2 cleaves the multiplexed dsRNA construct, cleaving into the three siRNAs it carries |
+| 2  | siRNA_1 + Ago2 -> RISC_1                                       | The first siRNA loads onto Argonaute-2 forming the RNAi silencing complex. |
+| 3  | siRNA_2 + Ago2 -> RISC_2                                       | The second siRNA loads onto Argonaute-2 forming the RNAi silencing complex. |
+| 4  | siRNA_3 + Ago2 -> RISC_3                                       | The third siRNA loads onto Argonaute-2 forming the RNAi silencing complex. |
+| 5  | RISC_1 + mRNA_R -> RISC_1                                      | The first RISC recognises its target site and cleaves the *Renilla* hybrid transcript. RISC is released intact and cleaves again. |
+| 6  | RISC_2 + mRNA_R -> RISC_2                                      | The second RISC recognises its target site and cleaves the *Renilla* hybrid transcript. RISC is released intact and cleaves again. |
+| 7  | RISC_3 + mRNA_R -> RISC_3                                      | The third RISC recognises its target site and cleaves the *Renilla* hybrid transcript. RISC is released intact and cleaves again. |
+| 8  | mRNA_R -> Rluc + mRNA_R                                        | The *Renilla* transcript is translated into *Renilla* luciferase and the transcript is reused for further translation rounds. |
+| 9  | Reporter -> mRNA_R + Reporter                                  | The Reporter plasmid is transcribed into the hybrid transcript carrying the *Renilla* coding sequence and the three target sites. |
+| 10 | Reporter -> mRNA_F + Reporter                                  | The Reporter plasmid is transcribed into the Firefly transcript which carries no target sites. |
+| 11 | mRNA_F -> Fluc + mRNA_F                                        | The Firefly transcript is translated into Firefly luciferase |
+| 12 | dsRNA_1 -> null                                                | Unprocessed dsRNA is degraded by cellular nucleases. |
+| 13 | RISC_1 -> Ago2                                                 | The first RISC unloads its guide strand and returns Ago2 to the free pool. |
+| 14 | RISC_2 -> Ago2                                                 | The second RISC unloads its guide strand and returns Ago2 to the free pool. |
+| 15 | RISC_3 -> Ago2                                                 | The third RISC unloads its guide strand and returns Ago2 to the free pool. |
+| 16 | mRNA_R -> null                                                 | The *Renilla* transcript turns over through normal mRNA decay independent of RISC cleavage |
+| 17 | Rluc -> null                                                   | *Renilla* luciferase in cells without siRNA is degraded and diluted by cell division |
+| 18 | Reporter -> null                                               | The reporter plasmid is diluted as cells divide |
+| 19 | mRNA_F -> null                                                 | The firefly transcript turns over through normal mRNA decay |
+| 20 | Fluc -> null                                                   | Firefly luciferase protein is degraded and diluted by cell division |
+| 21 | siRNA_1 -> null                                                | Free siRNA that has not been loaded to Ago2 is degraded and diluted by cell division |
+| 22 | siRNA_2 -> null                                                | Free siRNA that has not been loaded to Ago2 is degraded and diluted by cell division |
+| 23 | siRNA_3 -> null                                                | Free siRNA that has not been loaded to Ago2 is degraded and diluted by cell division |
+
+<center>*Table X.  Reactions and descriptions of the 23 biochemical reactions in the Minibinder pathway.*</center>
+
+## Initial Values of Species
+In order to simulate our reactions, our team needed to input quantities to initialize each component in our model (see Table X). The initial value of each species was obtained from RNAi wetlab protocols (see Experiments): 
+
+| **Variable** | **Initial Value**                             | **Units**        |
+|----------|-------------------------------------------|--------------|
+| dsRNA_1  | 0, or 114.2 for the multiplexed construct | Nanomolarity |
+| Dicer-2  | 100                                       | Nanomolarity |
+| siRNA_1  | 0                                         | Nanomolarity |
+| siRNA_2  | 0                                         | Nanomolarity |
+| siRNA_3  | 0                                         | Nanomolarity |
+| Ago2     | 82                                        | Nanomolarity |
+| RISC_1   | 0                                         | Nanomolarity |
+| RISC_2   | 0                                         | Nanomolarity |
+| RISC_3   | 0                                         | Nanomolarity |
+| mRNA_R   | 0                                         | Nanomolarity |
+| Rluc     | 0                                         | Nanomolarity |
+| Reporter | (nanodrop)                                | Nanomolarity |
+| mRNA_F   | 0                                         | Nanomolarity |
+| Fluc     | 0                                         | Nanomolarity |
+
+<center>*Table X.  Initial RNAi wetlab protocol values and units*</center>
+
+### Variants
+In order to simulate our different scenarios of our model to correspond to different wetlab experiments, our team utilized variants to set specific initial values per run.
+
+| Scenario      | Initial Value Changes                                                   | Units        |
+|---------------|-------------------------------------------------------------------------|--------------|
+| Neg_no_siRNA  | dsRNA_1 = 0                                                             | Nanomolarity |
+| S_peri_560    | dsRNA_1 = 0, siRNA_1 = 525.109                                          | Nanomolarity |
+| S_peri_171    | dsRNA_1 = 0, siRNA_1 = 519.329                                          | Nanomolarity |
+| S_VdCHI_103   | dsRNA_1 = 0, siRNA_1 = 519.312                                          | Nanomolarity |
+| S_VdCHI_445   | dsRNA_1 = 0, siRNA_1 = 524.962                                          | Nanomolarity |
+| S_Vdav_580    | dsRNA_1 = 0, siRNA_1 = 525.739                                          | Nanomolarity |
+| S_Vdav_164    | dsRNA_1 = 0, siRNA_1 = 522.378                                          | Nanomolarity |
+| S_POS_Renilla | dsRNA_1 = 0, siRNA_1 = 523.4664                                         | Nanomolarity |
+| S2_Peri_VdCHI | dsRNA_1 = 0, siRNA_1 = 525.12, siRNA_2 = 524.9785                       | Nanomolarity |
+| S2_Peri_Vdav  | dsRNA_1 = 0, siRNA_1 = 525.1255, siRNA_2 = 525.7556                     | Nanomolarity |
+| S2_VdCHI_Vdav | dsRNA_1 = 0, siRNA_1 = 524.9785, siRNA_2 = 525.7556                     | Nanomolarity |
+| P3_all_three  | dsRNA_1 = 0, siRNA_1 = 525.1255, siRNA_2 = 524.9785, siRNA_3 = 525.7556 | Nanomolarity |
+| MX_dsRNA      | dsRNA = 114.2002                                                        | Nanomolarity |
+
+<center>*Table X.  Initial value variants and their units*</center>
+
+## Parameters
+Rate constants and degradation rates were inputted into our Mass Action equations. These parameters were either sourced from existing literature or estimated when values could not be found. The value for each parameter is listed below (see Table X):
+
+| Variable | Reaction                                                                                         | Values   | Units                 | Citation |
+|----------|--------------------------------------------------------------------------------------------------|----------|-----------------------|----------|
+| Vm       | Maximal Velocity of Dicer-2 cleaving the multiplexed dsRNA construct into siRNAs                 | 1.612    | Nanomolarity          | (Singh et al., 2021) |
+| Km       | Michaelis-Menten constant for Dicer-2 binding dsRNA                                              | 50       | Nanomolarity          | (Vermeulen et al., 2005) |
+| kf       | Rate at which the first siRNA duplex loads onto Argonaute-2 to form RISC                         | 0.0756   | liter/nanomole/second | (Deerberg et al., 2013) |
+| kf_1     | Rate at which the second siRNA duplex loads onto Argonaute-2 to form RISC                        | 0.0756   | liter/nanomole/second | (Deerberg et al., 2013) |
+| kf_2     | Rate at which the third siRNA duplex loads onto Argonaute-2 to form RISC                         | 0.0756   | liter/nanomole/second | (Deerberg et al., 2013) |
+| Vm_1     | Maximal velocity of RISC cleaving the *Renilla* hybrid transcript                                  | 0.078    | 1/second              | (Salomon et al., 2015) |
+| Km_1     | Michaelis-Menten constant for RISC binding the *Renilla* hybrid transcript                         | 1.7      | Nanomolarity          | (Darzacq et al., |
+| kf_3     | Rate at which the *Renilla* transcript is translated into *Renilla* luciferase                       | 0.00167  | 1/second              | Experimentation. Equation: 206101*x + 70894 |
+| kf_4     | Rate at which the reporter plasmid is transcribed into the *Renilla* hybrid transcript             | 5.6e-4   | 1/second              | (Darzacq et al., 2005) |
+| kf_5     | Rate at which the reporter plasmid is transcribed into the Firefly transcript                    | 5.6e-4   | 1/second              | (Darzacq et al., 2005) |
+| kf_6     | Rate at which the Firefly transcript is translated into Firefly luciferase                       | 0.000943 | 1/second              | Experimentation. Equation: 1.6E-03*x + -0.0893 |
+| kf_7     | Rate at which unprocessed dsRNA is degraded by cellular nucleases                                | 8.5e-5   | 1/second              | (Koo & Palli, 2023) |
+| kf_8     | -                                                                                                | 8.5e-5   | 1/second              | (Koo & Palli, 2023) |
+| kf_9     | -                                                                                                | 8.5e-5   | 1/second              | (Koo & Palli, 2023) |
+| kf_10    | Rate at which the first RISC unloads its guide strand returning Ago2 to the free pool            | 1.01e-5  | 1/second              | (Brown et al., 2020) |
+| kf_11    | Rate at which the second RISC unloads its guide strand returning Ago2 to the free pool           | 1.01e-5  | 1/second              | (Brown et al., 2020) |
+| kf_12    | Rate at which the third RISC unloads its guide strand returning Ago2 to the free pool            | 1.01e-5  | 1/second              | (Brown et al., 2020) |
+| kf_13    | Rate at which the *Renilla* transcript turns over through mRNA decay.                              | 2.94e-5  | 1/second              | (Schwanhäusser et al., 2011) |
+| kf_14    | Rate at which *Renilla* luciferase protein is degraded and diluted by cell division.               | 2.18e-5  | 1/second              | (Loening et al., 2007) |
+| kf_15    | Rate at which the reporter plasmid is lost from the cell population by dilution during division. | 1.132e-5 | 1/second              | (Fliedl et al., 2015) |
+| kf_16    | Rate at which the Firefly transcript turns over through mRNA decay.                              | 2.94e-5  | 1/second              | (Schwanhäusser et al., 2011) |
+| kf_17    | Rate at which Firefly luciferase protein is degraded and diluted by cell division.               | 6.03e-5  | 1/second              | (Leclerc et al., 2000) |
+| kf_18    | Rate at which siRNA_1 is degraded                                                                | 1.6e-5   | 1/second              | (Bartlett & Davis, 2006) |
+| kf_19    | Rate at which siRNA_2 is degraded                                                                | 1.6e-5   | 1/second              | (Bartlett & Davis, 2006) |
+| kf_20    | Rate at which siRNA_3 is degraded                                                                | 1.6e-5   | 1/second              | (Bartlett & Davis, 2006) |
+| kf_25    | Rate at which dsRNA_1 is degraded                                                                | 8.5e-5   | 1/second              | (Koo & Chakravarthy) |
+
+<center>*Table X. Reactions and values for RNAi  parameters*</center>
+
+## Ordinary Differential Equations
+We used the Mass Action Kinetic Laws, Michaelis-Menten Equations, and Hill equations to represent different reactions for the RNAi  model. We created X ordinary differential equations for the full RNAi system (see Table X):
+
+<div class="math-table-container">
+
+| # | Ordinary Differential Equations |
+|---|----------|
+| 1 | $$\frac{d(dsRNA_1)}{dt} = \frac{1}{cytoplasm} \left[-\left(\frac{Vm \cdot dsRNA_1}{Km + dsRNA_1}\right) \cdot cytoplasm \right]$$ |
+| 2 | $$\frac{d(siRNA_1)}{dt} = \frac{1}{cytoplasm} \left[\left(\frac{Vm \cdot dsRNA_1}{Km + dsRNA_1}\right) \cdot cytoplasm - ((kf \cdot siRNA_1 \cdot Ago2) \cdot cytoplasm) \right]$$ |
+| 3 | $$\frac{d(siRNA_2)}{dt} = \frac{1}{cytoplasm} \left[\left(\frac{Vm \cdot dsRNA_1}{Km + dsRNA_1}\right) \cdot cytoplasm - ((kf_1 \cdot siRNA_2 \cdot Ago2) \cdot cytoplasm) \right]$$ |
+| 4 | $$\frac{d(siRNA_3)}{dt} = \frac{1}{cytoplasm} \left[\left(\frac{Vm \cdot dsRNA_1}{Km + dsRNA_1}\right) \cdot cytoplasm - ((kf_2 \cdot siRNA_3 \cdot Ago2) \cdot cytoplasm) \right]$$ |
+| 5 | $$\frac{d(Ago2)}{dt} = \frac{1}{cytoplasm} \left[-((kf \cdot siRNA_1 \cdot Ago2) \cdot cytoplasm) - ((kf_1 \cdot siRNA_2 \cdot Ago2) \cdot cytoplasm) - ((kf_2 \cdot siRNA_3 \cdot Ago2) \cdot cytoplasm) + ((kf_{10} \cdot RISC_1) \cdot cytoplasm) + ((kf_{11} \cdot RISC_2) \cdot cytoplasm) + ((kf_{12} \cdot RISC_3) \cdot cytoplasm) \right]$$ |
+| 6 | $$\frac{d(RISC_1)}{dt} = \frac{1}{cytoplasm} \left[((kf \cdot siRNA_1 \cdot Ago2) \cdot cytoplasm) - ((kf_{10} \cdot RISC_1) \cdot cytoplasm) \right]$$ |
+| 7 | $$\frac{d(RISC_2)}{dt} = \frac{1}{cytoplasm} \left[((kf_1 \cdot siRNA_2 \cdot Ago2) \cdot cytoplasm) - ((kf_{11} \cdot RISC_2) \cdot cytoplasm) \right]$$ |
+| 8 | $$\frac{d(RISC_3)}{dt} = \frac{1}{cytoplasm} \left[((kf_2 \cdot siRNA_3 \cdot Ago2) \cdot cytoplasm) - ((kf_{12} \cdot RISC_3) \cdot cytoplasm) \right]$$ |
+| 9 | $$\frac{d(mRNA_R)}{dt} = \frac{1}{cytoplasm} \left[-\left(\frac{Vm_1 \cdot RISC_1 \cdot mRNA_R}{Km_1 + mRNA_R}\right) \cdot cytoplasm - \left(\frac{Vm_1 \cdot RISC_2 \cdot mRNA_R}{Km_1 + mRNA_R}\right) \cdot cytoplasm - \left(\frac{Vm_1 \cdot RISC_3 \cdot mRNA_R}{Km_1 + mRNA_R}\right) \cdot cytoplasm + ((kf_4 \cdot Reporter) \cdot cytoplasm) - ((kf_{13} \cdot mRNA_R) \cdot cytoplasm) \right]$$ |
+| 10 | $$\frac{d(Rluc)}{dt} = \frac{1}{cytoplasm} \left[((kf_3 \cdot mRNA_R) \cdot cytoplasm) - ((kf_{14} \cdot Rluc) \cdot cytoplasm) \right]$$ |
+| 11 | $$\frac{d(Reporter)}{dt} = \frac{1}{cytoplasm} \left[-((kf_{15} \cdot Reporter) \cdot cytoplasm) \right]$$ |
+| 12 | $$\frac{d(mRNA_F)}{dt} = \frac{1}{cytoplasm} \left[((kf_5 \cdot Reporter) \cdot cytoplasm) - ((kf_{16} \cdot mRNA_F) \cdot cytoplasm) \right]$$ |
+| 13 | $$\frac{d(Fluc)}{dt} = \frac{1}{cytoplasm} \left[((kf_6 \cdot mRNA_F) \cdot cytoplasm) - ((kf_{17} \cdot Fluc) \cdot cytoplasm) \right]$$ |
+
+</div>
+
+<center>*Table X. ODE equations for RNAi reactions.*</center>
+
+## Assumptions
+The RNAi ODE model assumes rate constants as continuous, as Sf9 cultures are held at a constant 27 °C without external environmental factors that could alter them. Therefore, the model is able to isolate the silencing process to simulate knockdown of the Renilla reporter. The model also assumes that the initial quantities of siRNA, Argonaute-2, Dicer-2, and the psiCHECK-2 reporter are known, and that the cytoplasm behaves as a single well-mixed compartment. Additionally, the model assumes that synthetic 21-mer siRNA duplexes bypass Dicer-2 processing, that all three target sites sit within a single Renilla transcript, and that RISC cleaves that transcript at a constant rate regardless of which siRNA is loaded.
+
+## Results
+XXX
