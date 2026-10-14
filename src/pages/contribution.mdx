@@ -1,35 +1,34 @@
-
-Contribution 
+---
+layout: ../layouts/ContentLayout.astro
+title: Contribution
 ---
 
----
- 
 import Wip from "../components/md_components/Wip";
 import Image from "../components/md_components/Image";
- 
+
 <Wip />
 # Overview
- 
+
 Lambert iGEM has focused on making synthetic biology more accessible by addressing the financial, technical, and educational barriers that limit what other teams can accomplish. While developing SWARM, we recognized that many of the challenges we faced extended beyond our own project, from identifying effective protein-binding sites to learning computational modeling. Rather than developing solutions exclusively for our own research, we wanted to create resources that future iGEM teams can explore and build upon.
- 
+
 Our contributions span four areas of synthetic biology. In software, we developed PRINCE, a literature-informed computational framework that combines structural analysis with published research to prioritize potential protein-binding sites. Using this approach, we designed a GFP minibinder and documented its sequence and design methodology to provide future teams with a starting point for developing accessible protein-binding reagents. We also engineered VAPOR-X, a low-cost vacuum-assisted drying system with a prototype component cost of under $100, offering an alternative for laboratory drying applications that do not require full lyophilization capabilities. Finally, we created a seven-part computational modeling video series and an open-access MATLAB template to help students translate wet-lab experiments into mathematical models. By sharing our software, biological designs, hardware documentation, and educational resources, we hope to make research tools more accessible and give future iGEM teams a foundation to expand upon our work.
- 
+
 ---
- 
+
 # PRINCE
- 
+
 ## Description
- 
+
 We developed PRINCE, a software model designed to address a major challenge in de novo minibinder development: identifying biologically relevant binding regions before initiating resource-intensive protein design campaigns. While tools such as RFdiffusion, BindCraft, and BoltzGen have made computational protein design more accessible, identifying effective binding sites remains a challenge. Minibinders that demonstrate strong computational predictions often fail to achieve comparable results in experimental settings. Successful minibinder design therefore requires not only generating promising candidates but also identifying and targeting suitable epitopes.
- 
+
 After our initial Deformed Wing Virus (DWV) minibinder campaign produced no confirmed binding hits, we developed PRINCE to integrate structural analysis with existing experimental literature. The software evaluates solvent-accessible surface area (SASA), hydrophobic residue distributions, and local structural properties while using a large language model (LLM) to extract relevant biological evidence from published research. By combining these findings, PRINCE ranks candidate binding hotspots to help researchers prioritize epitopes for downstream minibinder design, potentially reducing unnecessary computational and experimental costs.
- 
+
 ## Contribution
- 
+
 PRINCE contributes to the synthetic biology community by providing an accessible, open-source approach to literature-informed epitope identification that future iGEM teams can apply to their own protein targets. By integrating structural predictions with published biological evidence, our software reduces the need for researchers to manually evaluate extensive literature and independently identify promising binding regions. We released PRINCE as a web application for teams without a programming background, a command-line interface for teams integrating it into an existing design pipeline, and a GitLab repository holding the source code, documentation, and datasets. Through PRINCE, we aim to lower technical barriers to computational protein engineering and establish a reusable framework that future teams can utilize for applications beyond DWV.
- 
+
 ## How to Replicate and Use PRINCE
- 
+
 1. **Access the software:** Open the PRINCE web application or download the source code from Lambert iGEM's GitLab repository.
 2. **Prepare a target structure:** Obtain the protein's three-dimensional structure from the Protein Data Bank (PDB) or another suitable structural source.
 3. **Run structural analysis:** Use PRINCE to evaluate solvent accessibility, hydrophobicity, and local structural properties to identify potential binding regions.
@@ -37,61 +36,59 @@ PRINCE contributes to the synthetic biology community by providing an accessible
 5. **Evaluate ranked hotspots:** Review the resulting epitope rankings and supporting evidence to select promising regions for downstream protein design.
 6. **Design and validate minibinders:** Incorporate selected hotspots into compatible design pipelines, such as RFdiffusion or BindCraft, and evaluate candidate binders computationally and experimentally.
 ## Platforms and Resources
- 
+
 PRINCE Web Application, Command-Line Interface (CLI), Lambert iGEM GitLab, Protein Data Bank (PDB), RFdiffusion, BindCraft, and BoltzGen.
- 
+
 ---
- 
+
 # GFP Minibinder
- 
+
 ## Description
- 
+
 We designed a minibinder against green fluorescent protein (GFP) and contributed it to the Registry as a general-purpose reagent for the iGEM community. GFP remains among the most widely used reporters in synthetic biology, and teams working with GFP-tagged constructs frequently need a binding partner for pull-down, immobilization, localization, and detection work. Commercial anti-GFP nanobodies serve this role well but carry costs that place them outside many team budgets, particularly for high school teams and teams in low-resource settings. A freely available, documented binder sequence that a team can order and express directly removes that barrier.
- 
+
 We designed this part computationally rather than selecting it experimentally. Candidate epitopes on the GFP surface were ranked using PRINCE, our literature-informed epitope prioritization framework, and minibinders were generated against the highest-ranked sites using the same workflow we applied to our Deformed Wing Virus designs. We have published the design rationale, the selected epitope, and the full pipeline parameters so that teams can evaluate the reasoning behind the sequence rather than accepting it on trust.
- 
+
 ## Why a GFP Minibinder?
- 
+
 Few reagents have the potential to benefit as many iGEM teams as a GFP-binding minibinder. For over two decades, green fluorescent protein (GFP) has been widely used as a reporter in synthetic biology, making it a valuable target for binder development. Teams working with GFP-tagged proteins could use such a binder for protein pull-down assays, surface immobilization, localization studies, and detection applications, providing a versatile alternative to conventional antibodies. Commercial anti-GFP nanobodies do this job well and have done so for years. They also cost several hundred dollars per aliquot, which is a trivial line item in a university core facility and an insurmountable one for a high school team or a team working without institutional backing.
- 
+
 That gap is what we set out to close. A sequence published openly in the Registry costs a team only the price of synthesis and whatever expression they can already do, which for a binder of this size is within reach of any lab running basic recombinant protein work. The reagent itself is not novel; its accessibility is the contribution.
- 
+
 ## How a Team Would Use It
- 
+
 The minibinder's small size and predicted soluble expression in *Escherichia coli* make experimental production feasible using standard laboratory methods. The process involves synthesizing the coding sequence, incorporating a His-tag for purification, expressing the protein in *E. coli*, and isolating it through immobilized metal affinity chromatography (IMAC). Protein purity and molecular weight can then be assessed using SDS-PAGE. This workflow relies on techniques and equipment commonly available in molecular biology laboratories.
- 
+
 GFP is particularly convenient for binding assays because its intrinsic fluorescence allows researchers to detect and monitor the protein without additional labeling. Teams can use fluorescence polarization or thermal shift assays to screen for potential binding interactions, while more advanced techniques, such as biolayer interferometry or surface plasmon resonance, can provide quantitative measurements of binding affinity. Including a commercial anti-GFP nanobody as a positive control also allows teams to compare their results against an established binder, helping distinguish weak binding interactions from unsuccessful designs.
- 
+
 ## Contribution
- 
+
 Future iGEM teams can build upon this work by experimentally validating the GFP minibinder, optimizing its expression and stability, and evaluating its performance in different applications. Once binding is confirmed, the design could be investigated for GFP-tagged protein purification, immobilization, localization, and detection. Teams can also adapt the documented computational workflow to develop minibinders against other proteins relevant to their projects.
- 
+
 ---
- 
+
 # VAPOR-X
- 
+
 ## Description
- 
+
 We developed VAPOR-X, a compact, automated vacuum-assisted drying system designed to remove moisture from biological materials at lower temperatures, reducing the risk of heat-induced degradation. Based on the Clausius-Clapeyron relationship, VAPOR-X uses a vacuum pump to lower the pressure inside a sealed chamber, allowing moisture to evaporate at temperatures below its normal atmospheric boiling point. A resistive heating pad provides controlled heating, while a thermistor and BME280 environmental sensor monitor temperature and chamber pressure. The system is controlled by a Raspberry Pi Pico W programmed in MicroPython, which uses a feedback loop to regulate heating and monitor vacuum conditions. By combining reduced-pressure drying with automated temperature control, VAPOR-X offers an accessible approach to preparing temperature-sensitive biological materials.
- 
+
 To make VAPOR-X affordable, reproducible, and accessible to future iGEM teams, Lambert iGEM designed a custom printed circuit board (PCB), a 3D-printed enclosure, and an intuitive user interface featuring an OLED display and rotary encoder. Users can adjust drying parameters, monitor operating conditions, and receive automated notifications throughout the drying process. The system incorporates multiple safety features, including temperature sensor validation, pressure monitoring, automatic shutdown protocols, and circuit protection components.
- 
+
 ## Contribution
- 
+
 VAPOR-X contributes to the broader synthetic biology community by addressing the financial and technical barriers associated with conventional laboratory drying equipment. Commercial lyophilizers can cost thousands of dollars, making sample preservation and preparation difficult for underfunded laboratories, high school iGEM teams, and researchers in low-resource settings. By developing a vacuum-assisted drying system for under $100, we provide an affordable alternative for applications that do not require full freeze-drying capabilities. To ensure that future teams can reproduce and adapt our design, we have made our circuit schematics, hardware designs, and MicroPython code publicly accessible. These resources allow other iGEM teams to construct their own systems, modify operating parameters, and integrate vacuum-assisted drying into their experimental workflows. Through VAPOR-X, we hope to reduce the cost of laboratory equipment and expand access to experimental techniques across the synthetic biology community.
- 
+
 ---
- 
+
 # Modeling Instructional Videos
- 
+
 ## Description and Contribution
- 
+
 To close the knowledge gap between wet-lab protocols and computational modeling for iGEM teams and students with limited modeling experience, we developed a seven-part video series, which is publicly available on YouTube (see Figure 1). Its framework takes viewers through a four-stage workflow showing how to use MATLAB SimBiology and export the resulting data into a readable graph. It explains how experimental workflows translate into computational models using individual protocols and wet-lab steps from Lambert's internationally recognized LANCET project. We engineered an open-access template in MATLAB utilizing ordinary differential equations (ODEs) to give learners a starting point for exploring biochemical pathways and building their own models. This series helps teams predict system behavior and refine their designs, connecting modeling education to engineering. Overall, by making a modeling toolkit that others can learn from, adapt, and build upon, we are supporting broader participation in synthetic biology.
- 
+
 <Image
   src="https://static.igem.wiki/teams/6185/wiki/deliverables/contribution/screenshot-2026-10-14-at-14-42-01.avif"
   caption="Figure 1. Lambert iGEM YouTube Channel"
   size="lg"
 />
- 
-
