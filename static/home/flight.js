@@ -15,7 +15,7 @@
   const progress = () => maxScroll > 0 ? clamp(scrollY / maxScroll) : 0;
 
   function syncVisibility() {
-    const visible = dragging || scrollY > 80;
+    const visible = innerWidth >= 600 && (dragging || document.querySelector('swarm-nav')?.hasAttribute('data-hidden'));
     layer.dataset.visible = String(visible);
     layer.inert = !visible;
     if (!visible && document.activeElement === control) {

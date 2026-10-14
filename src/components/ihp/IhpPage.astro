@@ -1,0 +1,65 @@
+---
+import { phases } from './ihp-data';
+import HoneyCell from './HoneyCell.astro';
+import ConversationPhoto from './ConversationPhoto.astro';
+import './ihp.css';
+// Each phase is its own small comb, with breathing room between conversations.
+const wideSlots = [[4, 1], [0, 1], [1, .5], [2, 0], [0, 2], [1, 1.5], [2, 1], [3, .5], [2, 2], [3, 1.5], [4, 2]];
+const smallSlots = [[2, 0], [0, 0], [1, .5], [0, 1], [2, 1], [1, 1.5], [0, 2], [2, 2], [1, 2.5], [0, 3], [2, 3]];
+function position(index: number) {
+  const layouts = [
+    { name: 'wide', slots: wideSlots, width: 920, height: 630 },
+    { name: 'small', slots: smallSlots, width: 582, height: 830 },
+  ];
+  return layouts.map(({ name, slots, width, height }) => {
+    const [col, row] = slots[index];
+    return `--${name}-x:${(12 + col * 169) / width * 100}%;--${name}-y:${(12 + row * 202) / height * 100}%`;
+  }).join(';') + `;--cell-tilt:${[-.5, .4, -.3, .5][index % 4]}deg`;
+}
+---
+<div id="ihp-main" class="full">
+  <div class="ihp-map" aria-label="Human practices conversations">
+    {phases.map((phase, i) => <section class="ihp-phase" id={phase.id} aria-labelledby={`${phase.id}-title`}>
+      <h2 id={`${phase.id}-title`} class="sr-only">Phase {Number(phase.number)}: {phase.name}</h2>
+      {i < phases.length - 1 && <svg class="ihp-flight" viewBox="0 0 920 740" preserveAspectRatio="none" aria-hidden="true"><path d="M565 12 C775 -44 963 74 904 241 S910 523 729 586 S442 600 380 728" /></svg>}
+      <div class="ihp-phase-cell" style={position(0)}><HoneyCell title={`Phase ${Number(phase.number)}`} phase={phase.number} shade={i} /></div>
+      {phase.entries.map((entry, j) => <button type="button" class="ihp-entry" data-ihp-entry={entry.id} aria-label={`Open ${entry.title} conversation, sample entry`} aria-haspopup="dialog" aria-expanded="false" aria-controls="ihp-dialog" style={position(j + 1)}>
+        <HoneyCell title={entry.title} shade={i + j + 1} />
+      </button>)}
+    </section>)}
+  </div>
+
+  <dialog id="ihp-dialog" class="ihp-dialog" aria-labelledby="ihp-dialog-title">
+    <div class="ihp-dialog__paper">
+      <button type="button" class="ihp-dialog__close" data-ihp-close aria-label="Close conversation" autofocus><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button>
+      <div class="ihp-dialog__content" data-ihp-content></div>
+      <div class="ihp-dialog__nav">
+        <button type="button" data-ihp-prev aria-label="Previous conversation"><span aria-hidden="true">←</span> Previous</button>
+        <span data-ihp-count></span>
+        <button type="button" data-ihp-next aria-label="Next conversation">Next <span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+  </dialog>
+
+  {phases.map(phase => phase.entries.map(entry => <template data-ihp-template={entry.id}>
+    <header class="ihp-note-header">
+      <ConversationPhoto name={entry.title} photo={entry.photo} />
+      <div class="ihp-note-heading">
+        <p class="ihp-note-phase">Phase {Number(phase.number)} <span>·</span> {phase.name}</p>
+        <h2 id="ihp-dialog-title">{entry.title}</h2>
+        <p class="ihp-note-person">{entry.person}</p>
+        <p class="ihp-note-date">{entry.date}</p>
+        <span class="ihp-note-tag">Sample person</span>
+      </div>
+    </header>
+    <div class="ihp-note-body">
+      <section><h3>What they taught us</h3><p>{entry.takeaway}</p></section>
+      <section class="ihp-note-change"><h3>What changed in SWARM</h3><p>{entry.change}</p></section>
+      <section><h3>Following up</h3><p>{entry.followup}</p></section>
+    </div>
+  </template>))}
+</div>
+<script>
+  import { initIhp } from './ihp';
+  initIhp();
+</script>

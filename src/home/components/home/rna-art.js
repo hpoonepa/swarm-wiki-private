@@ -312,14 +312,15 @@ export function createRnaScene(cv) {
       });
     });
 
+    const [cx, cy, vw, vh] = camAt(T), z = Math.min(cw / vw, ch / vh);
     LABELS.forEach(([, t0, t1, pos], i) => {
       const o = labO[i], on = T >= t0 && T <= t1; o.mesh.visible = on; if (!on) return;
       const aIn = E.out(clamp((T - t0) / .45)), aOut = 1 - clamp((T - (t1 - .4)) / .4), [x, y] = pos();
-      o.m.opacity = aIn * aOut; o.mesh.position.set(x, y + (1 - aIn) * 8, 0); o.mesh.scale.set(o.w, -o.h, 1);
+      o.m.opacity = aIn * aOut; o.mesh.position.set(x, y + (1 - aIn) * 8, 0); const legibility = Math.max(1, 14 / (o.size * z));
+      o.mesh.scale.set(o.w * legibility, -o.h * legibility, 1);
     });
 
 
-    const [cx, cy, vw, vh] = camAt(T), z = Math.min(cw / vw, ch / vh);
     cam.left = cx - cw / (2 * z); cam.right = cx + cw / (2 * z); cam.top = -cy + ch / (2 * z); cam.bottom = -cy - ch / (2 * z);
     cam.updateProjectionMatrix();
     renderer.render(scene, cam);

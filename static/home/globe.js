@@ -214,11 +214,12 @@
     if (yearsBar) {
       yearsBar.style.opacity = usOn.toFixed(3);
       yearsBar.style.visibility = usOn < .02 ? 'hidden' : 'visible';
+      yearsBar.inert = usOn < .02; yearsBar.setAttribute('aria-hidden', String(usOn < .02));
       yearsBar.style.setProperty('--t', (yf / (N - 1)).toFixed(4));          // fill grows from a pill-sized stub to the full track
       if (shown !== shownYear) {
         shownYear = shown;
         yearLabel.textContent = LOSS.years[shown];
-        yearTotal.textContent = LOSS.states['United States'].lost[shown].toLocaleString('en-US') + ' colonies lost nationwide';
+        yearTotal.textContent = LOSS.states['United States'].lost[shown].toLocaleString('en-US') + ' colonies';
       }
     }
   }
@@ -270,19 +271,19 @@
     spin.rotation.y=-Math.PI/2-longitude*radians+(idleTurn-entranceTurn)*(1-toUSA);
     world.position.y=mix(world.position.y,0,toUSA);
     camera.position.z=worldDistance;
-    const centred=toUSA;
-    camera.setViewOffset(width,height,mobile?0:-width*.20*(1-centred),mobile?-height*.20*(1-centred):height*.01,width,height);
+    const centred=toAtlanta;
+    camera.setViewOffset(width,height,mobile?0:-width*.20*(1-centred),mobile?-height*.20:height*.01,width,height);
     // The colony-loss outline belongs to the United States step only.
     const usOn=ease((p-.1)/.04)*(1-ease((p-.215)/.03));
     uniforms.uUsAmt.value=usOn;
     paintYears(usOn);
     const markerAlpha=ease((p-.24)/.05)*(1-ease((p-.335)/.055));
-    pinMaterial.opacity=markerAlpha;ringMaterial.opacity=markerAlpha*.9;
+    pinMaterial.opacity=0;ringMaterial.opacity=0;
     renderer.render(scene, camera);
     pin.getWorldPosition(projected).project(camera);
     placeLabel.style.left=`${(projected.x*.5+.5)*width}px`;
     placeLabel.style.top=`${(-projected.y*.5+.5)*height}px`;
-    placeLabel.style.opacity=markerAlpha*(1-ease((p-.31)/.035));
+    placeLabel.style.opacity='0';
     section.dataset.focusLat=latitude.toFixed(3);
     section.dataset.focusLon=longitude.toFixed(3);
     section.dataset.cameraDistance=camera.position.z.toFixed(3);

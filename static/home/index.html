@@ -4,7 +4,14 @@
 <link rel="preload" href="https://static.igem.wiki/teams/6185/wiki/homepage/inter.woff2" as="font" type="font/woff2" crossorigin>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lambert-GA</title>
+<title>SWARM | Honey bee health | Lambert-GA iGEM</title>
+<meta name="description" content="Meet SWARM, Lambert-GA’s research into minibinders for Deformed wing virus and RNA interference for the Varroa mites that spread it.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SWARM | Protecting honey bees from DWV and Varroa">
+<meta property="og:description" content="Explore our two-part approach: designed proteins for the virus and RNA interference for the mite.">
+<meta property="og:image" content="https://static.igem.wiki/teams/6185/wiki/homepage/logo.webp">
+<meta property="og:image:alt" content="SWARM logo illustrated in golden honey">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="/lambert-ga/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/lambert-ga/favicon-32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="/lambert-ga/apple-touch-icon.png">
@@ -22,7 +29,7 @@
   .hero img { width: 100%; height: auto; display: block; margin-top: calc(-68 / 1440 * 100%); }   /* frame starts 68 units into the art */
 
   /* statement: one sentence at a time, cross-fading in the same spot as you scroll */
-  #statement { position: relative; height: 340vh; z-index: 2; pointer-events: none; }
+  #statement { position: relative; height: 230vh; z-index: 2; pointer-events: none; }
   #statement .pin { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; overflow: hidden; }
   #statement .line { position: absolute; left: 7vw; max-width: min(62vw, 980px); margin: 0;
     font-size: clamp(38px, 5.6vw, 92px); line-height: 1.02; letter-spacing: -.035em; font-weight: 850; color: var(--teal);
@@ -205,7 +212,7 @@
 
   .after { height: 40vh; }
 </style>
-<link rel="stylesheet" href="story.css?v=a0d9e7968487">
+<link rel="stylesheet" href="story.css?v=30f4c3e5d2f3">
 </head>
 <body>
 <script src="cursor.js?v=a436bab094c0"></script>
@@ -215,11 +222,12 @@
 /* loading screen: the hero's own logo waits in the centre, fills with honey as the page loads, then travels up into the hero */
 (function () {
   var L = document.getElementById('loader'), logo = document.getElementById('heroLogo'), ghost = document.getElementById('ldGhost');
-  var shown = 0, target = 0, loaded = false, t0 = performance.now(), MIN = 1700, done = false, lastTick = t0;
+  var shown = 0, target = 0, loaded = false, t0 = performance.now(), MIN = 650, done = false, lastTick = t0;
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
   function home() {                           // the logo's resting spot in the hero (page coordinates at scroll 0)
     var W = document.documentElement.clientWidth;
+    if (W <= 600) return {x: W * .08, y: 70, w: W * .64};
     return { x: W * 179.9 / 1440, y: W * 24.4 / 1440, w: W * 672.7 / 1440 };
   }
   function centre() {                         // its size and spot on the loading screen
@@ -241,8 +249,12 @@
   }
   document.addEventListener('load', function (e) { if (e.target && e.target.dataset) e.target.dataset.ok = 1; count(); }, true);
   var iv = setInterval(count, 150);
-  window.addEventListener('load', function () { clearInterval(iv); (document.fonts ? document.fonts.ready : Promise.resolve()).then(function () { loaded = true; }); });
-  setTimeout(function () { loaded = true; if (!done) finish(); }, 12000);            // never trap anyone behind the loader
+  document.addEventListener('DOMContentLoaded', function () {
+    var hero = document.querySelector('.hero > img');
+    if (hero.complete) loaded = true;
+    else { hero.addEventListener('load', function () { loaded = true; }, {once:true}); hero.addEventListener('error', function () { loaded = true; }, {once:true}); }
+  });
+  setTimeout(function () { loaded = true; if (!done) finish(); }, 4000);            // never trap anyone behind the loader
   function tick() {
     if (done) return;
     var now = performance.now(), dt = now - lastTick; lastTick = now;
@@ -251,7 +263,7 @@
     shown += (goal - shown) * (1 - Math.exp(-dt / 200));
     if (loaded && cap >= 1 && 1 - shown < .004) shown = 1;
     logo.style.setProperty('--p', (shown * 103 - 3).toFixed(2) + '%');
-    if (shown >= 1) return setTimeout(finish, 350);
+    if (shown >= 1) return setTimeout(finish, 80);
     requestAnimationFrame(tick);
   }
   function finish() {
@@ -278,8 +290,11 @@
   requestAnimationFrame(tick);
 })();
 </script>
+<main id="main-content">
 <header class="hero" id="top">
+    <h1 class="sr-only">SWARM: Protecting honey bees from Deformed wing virus and Varroa</h1>
     <img src="https://static.igem.wiki/teams/6185/wiki/homepage/frame8-hero.svg?v=5" alt="SWARM jungle hero with a honey bee on a red flower" width="1440" height="3137">
+    <button class="scroll-cue" type="button" aria-label="Scroll to explore the story">Scroll to explore <span aria-hidden="true">↓</span></button>
   </header>
 
 
@@ -300,30 +315,45 @@
 
   <section id="honeycomb-earth" class="scroll-story" aria-label="From Earth to the hive, inside a honey bee, and inside a Varroa mite" data-region="world">
     <div class="stage geo-stage">
-      <div class="map-view"><canvas id="globe" role="img" aria-label="An illustrated Earth turns toward the United States, marking how many honey bee colonies each major beekeeping state lost each winter from 2016 to 2026, then points to Atlanta, Georgia"></canvas><span class="globe-location" aria-hidden="true">Atlanta, Georgia</span>
+      <div class="map-view"><canvas id="globe" role="img" aria-label="An illustrated Earth turns toward the United States. Circles show January–March colony losses in 20 selected states from 2016 to 2026."></canvas><span class="globe-location" aria-hidden="true"></span>
       </div>
-      <div class="loss-years" aria-hidden="true"><b class="ly-year">2016</b><span class="ly-total"></span><div class="ly-bar"><i class="ly-track"></i><i class="ly-fill"></i></div></div>
+      <aside class="loss-years" aria-label="Quarterly U.S. colony losses" aria-hidden="true" inert>
+        <span class="ly-label">U.S. colonies lost · January–March</span>
+        <b class="ly-year">2016</b><span class="ly-total"></span>
+        <p class="ly-scope">Operations with 5+ colonies. A separate measure from annual losses.</p>
+        <a class="ly-source" href="https://esmis.nal.usda.gov/sites/default/release-files/796006/hcny0726.txt" target="_blank" rel="noreferrer">USDA NASS, 2016–2026 ↗</a>
+        <div class="ly-bar" aria-hidden="true"><i class="ly-track"></i><i class="ly-fill"></i></div>
+      </aside>
       <div class="geo-copy">
         <article class="geo-panel is-active" data-region-panel="world">
           <h2>Worldwide</h2>
           <p class="stat">75<span>%</span></p>
-          <p class="stat-description">of global food crop types depend on pollinators.</p>
+          <p class="stat-description">of global food crop types depend, at least in part, on animal pollination.</p>
+          <a class="stat-source" href="https://www.ipbes.net/assessment-reports/pollinators" target="_blank" rel="noreferrer">Source: IPBES ↗</a>
         </article>
         <article class="geo-panel" data-region-panel="usa" aria-hidden="true" inert>
           <h2>United States</h2>
           <p class="stat">55.6<span>%</span></p>
-          <p class="stat-description">estimated U.S. colony loss in 2024–25, across all causes.</p>
+          <p class="stat-description">estimated annual loss of managed U.S. honey bee colonies.</p>
+          <p class="stat-note">April 2024–April 2025 · All causes</p>
+          <a class="stat-source" href="https://apiaryinspectors.org/US-beekeeping-survey-24-25" target="_blank" rel="noreferrer">U.S. Beekeeping Survey ↗</a>
         </article>
         <article class="geo-panel geo-panel--headline" data-region-panel="atlanta" aria-hidden="true" inert>
-          <h2>The reason?</h2>
+          <h2>One major<br>threat.</h2>
         </article>
       </div>
 
       <div class="why-virus" id="dwv" data-embed data-preload aria-hidden="true"></div>
       <div class="dwv-story" aria-hidden="true" inert>
+        <div class="disease-caption">
+          <article data-disease-beat="virus"><h2>Deformed wing<br>virus <span>(DWV).</span></h2><p>A virus that threatens honey bee health.</p></article>
+          <article data-disease-beat="bee" aria-hidden="true" inert><h2>Healthy wings.<br>A vulnerable bee.</h2><p>DWV can infect a bee even when there are no visible signs.</p></article>
+          <article data-disease-beat="mite" aria-hidden="true" inert><h2>A tiny mite.<br>A route for DWV.</h2><p><em>Varroa</em> mites feed on bees and can transmit the virus.</p></article>
+          <article data-disease-beat="wings" aria-hidden="true" inert><h2>Too damaged<br>to fly.</h2><p>Bees infected during development can emerge with crumpled wings and be unable to fly.</p><small>The animation illustrates effects during development.</small></article>
+        </div>
         <div class="bee-comparison" id="bee-comparison" aria-label="Illustrated progression from healthy wings to mite-associated DWV infection and developmental wing damage">
           <figure class="dwv-bee">
-            <svg viewBox="0 0 743 644" role="img" aria-label="A honey bee seen from above; its wings shrink and crumple as the infection worsens">
+            <svg viewBox="0 0 743 644" role="img" aria-label="A honey bee seen from above, illustrating wing damage associated with DWV infection during development">
             <g class="dwv-legs" fill="none" stroke="#6E1B41" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
               <path d="M292 222 L248 186 L236 140 L226 128"/>
               <path d="M284 262 L214 266 L186 312 L180 328"/>
@@ -416,11 +446,25 @@
       </div>
       <div class="journey-copy journey-copy--hive" id="hive" aria-hidden="true" inert>
         <h2><span class="swarm-introducing">Introducing</span><img class="swarm-wordmark" src="https://static.igem.wiki/teams/6185/wiki/homepage/swarm-wordmark.avif" alt="SWARM" width="866" height="813"></h2>
+        <p class="swarm-subtitle">Two approaches. One goal: protect bees from DWV.</p>
       </div>
       <div class="journey-copy journey-copy--bee journey-approach" id="bee" aria-hidden="true" inert>
         <h2><span>1.</span> Minibinders</h2>
+        <p>Small proteins designed to bind the virus.</p>
       </div>
-  <div id="minibinders" class="journey-protein" aria-hidden="true" inert aria-label="Minibinder binding in the bee gut">
+  <div id="minibinders" class="journey-protein" aria-hidden="true" inert aria-label="Minibinder approach inside the bee">
+      <div class="binder-copy">
+        <p class="scene-eyebrow">Inside the bee</p>
+        <h2>A grip on the virus.</h2>
+        <p>Minibinders are small designed proteins. Ours targets VP3 on DWV’s outer shell. We’re studying whether this binding can help block infection.</p>
+      </div>
+      <div class="binder-panel">
+        <div class="protein-toolbar">
+          <div class="protein-title"><h3>3D binding model</h3><p>Predicted complex</p></div>
+          <div class="protein-key" aria-label="Molecular colors"><span><i class="binder-dot"></i>Our minibinder</span><span><i class="virus-dot"></i>DWV capsid protein (VP3)</span></div>
+          <button class="protein-reset" type="button" data-protein-reset aria-label="Reset the 3D model view">Reset view <span aria-hidden="true">↺</span></button>
+        </div>
+        <div class="protein-stage">
       <figure class="bee-cutaway" aria-label="Schematic of the digestive tract inside a honey bee">
         <svg viewBox="0 0 743 644" role="img" aria-label="The bee’s gut is highlighted in orange">
           <image href="assets/journey/dwv-bee.svg" width="743" height="644" opacity=".3"/>
@@ -432,37 +476,38 @@
           </g>
         </svg>
       </figure>
-      <svg class="gut-zoom-link" viewBox="0 0 1000 650" preserveAspectRatio="none" aria-hidden="true">
-        <path d="M834 227 L701 132 H669 M834 227 L715 410" fill="none" stroke="currentColor" stroke-width=".8" stroke-dasharray="3 6"/>
-      </svg>
       <div class="protein-view">
-
         <div id="capsid-host" tabindex="0" role="img" aria-description="Teal: our minibinder. Gold: the viral P domain. Predicted complex. Drag or use arrow keys to rotate; press R to reset." aria-label="Predicted 3D structure of the SWARM minibinder l79_s469532_mpnn9 and the DWV VP3 P domain">
           <div class="protein-viewport"></div>
           <p class="model-fallback" role="status">Loading our minibinder structure…</p>
         </div>
-
       </div>
-
+        </div>
+        <div class="protein-footer">
+          <p class="protein-note">Drag to rotate <span aria-hidden="true">·</span> Arrow keys to turn</p>
+          <a href="../minibinder/">Explore our minibinders <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
   </div>
 
       <div id="mite" class="journey-copy journey-copy--mite journey-approach" aria-hidden="true" inert>
         <h2><span>2.</span> RNAi</h2>
+        <p>Now, the mite that spreads it.</p>
       </div>
 
   <div id="rnai" class="journey-rna" data-theme="dark" aria-labelledby="rnai-title" aria-hidden="true" inert>
     <div class="cell-field cell-field--rna" data-cell-field aria-hidden="true"></div>
     <div id="rna-intro" class="rna-discovery" aria-hidden="true" inert>
       <div class="rna-discovery__copy">
-        <h2>2. RNAi</h2>
-        <p>We’re targeting three <em>Varroa</em> genes to reduce the proteins mites use to feed.</p>
+        <h2>Interrupt<br>the feeding.</h2>
+        <p>RNA interference (RNAi) reduces specific gene messages. We’re targeting three salivary genes in <em>Varroa</em> to interfere with feeding.</p>
       </div>
         <div class="rna-targets">
           <h3>Our targets</h3>
           <dl>
-            <div><dt>Vd-CHIsal</dt><dd>Salivary chitinase</dd></div>
-            <div><dt>Vd-CHIBIN</dt><dd>Chitin-binding protein</dd></div>
-            <div><dt>AV422</dt><dd>Salivary protein</dd></div>
+            <div><dt>Vd-CHIsal</dt><dd>An enzyme that may help keep feeding wounds open.</dd></div>
+            <div><dt>Vd-CHIBIN</dt><dd>A protein that may affect the bee’s wound response.</dd></div>
+            <div><dt>AV422</dt><dd>A saliva protein involved in mite feeding and reproduction.</dd></div>
           </dl>
         </div>
     </div>
@@ -499,6 +544,7 @@
       <div class="together-copy">
         <h2 id="together-title">Protecting bees<br>from <span>DWV.</span></h2>
         <p>SWARM is designed to target the virus inside the bee and the <em>Varroa</em> mite that spreads it. Our goal is to limit new infections and help bees already exposed to DWV.</p>
+        <p class="delivery-note">Bringing this into a hive will also mean testing how to deliver the treatment safely and effectively.</p>
         <a class="together-safety" href="../safety/">How we assess safety <span aria-hidden="true">↗</span></a>
         <nav class="together-links" aria-label="Explore our approach">
           <a href="../description/">Our project <span aria-hidden="true">↗</span></a>
@@ -524,7 +570,11 @@
       </a>
       <a class="project-card project-card--engineering" href="../engineering/" data-wiki-page="engineering">
         <div class="project-card__copy"><span class="project-card__eyebrow">Design &amp; test</span><h3>Engineering</h3><p>Protein design, binding tests, RNA guide screening, and what we changed.</p></div>
-        <img class="project-card__rna" src="https://static.igem.wiki/teams/6185/wiki/homepage/dsrna.svg" alt="" loading="lazy">
+        <svg class="project-card__rna" viewBox="0 0 220 250" aria-hidden="true" focusable="false" fill="none" stroke-linecap="round">
+          <path d="M55 15 C185 65 35 110 165 160 S35 220 70 245" stroke="#286858" stroke-width="12"/>
+          <path d="M165 15 C35 65 185 110 55 160 S185 220 150 245" stroke="#d79b30" stroke-width="12"/>
+          <path d="M75 24 L145 24 M92 47 L128 47 M75 76 L145 76 M75 106 L145 106 M94 132 L126 132 M80 160 L140 160 M93 187 L127 187 M73 217 L147 217 M74 242 L146 242" stroke="#f4cb67" stroke-width="7"/>
+        </svg>
         <span class="project-card__arrow" aria-hidden="true">↗</span>
       </a>
       <a class="project-card project-card--people" href="../human-practices/" data-wiki-page="human-practices">
@@ -551,6 +601,7 @@
   <button class="to-top" type="button">Back to top ↑</button>
   <swarm-nav dark-over=".hero"></swarm-nav>
   <!-- iGEM requirement: license notice + repository link on every page (same wording as src/components/Footer.tsx) -->
+  </main>
   <footer class="wiki-footer">
     <details class="home-references">
       <summary>References &amp; artwork</summary>
@@ -580,17 +631,17 @@
   <script src="vendor/three.min.js"></script>
   <script src="assets/landmask.js"></script>
   <script src="assets/landmask-hi.js"></script>
-  <script src="earth-scroll.js?v=18c3ece92189"></script>
+  <script src="earth-scroll.js?v=a7b061453341"></script>
   <script src="colony-loss.js?v=845977d85632"></script>
-  <script src="globe.js?v=50d774e7b94d"></script>
+  <script src="globe.js?v=9ab639ae531c"></script>
   <script src="dwv-virus.js?v=79949ffefc10"></script>
   <script src="statement.js?v=smooth1"></script>
   <script src="food.js?v=4"></script>
-  <script type="module" src="navbar.js?v=37d0f077da9d"></script>
+  <script type="module" src="navbar.js?v=38a537166b5e"></script>
   <script src="menu.js?v=828e0c6b19dd"></script>
   <script src="ux.js?v=story1"></script>
   <script src="intro-bee.js?v=6" defer></script>
-  <script src="flight.js?v=20148d0e0ac5"></script>
-  <script type="module" src="mechanisms.js?v=64ff6a83ecbd"></script>
+  <script src="flight.js?v=c4c4168e8890"></script>
+  <script type="module" src="mechanisms.js?v=2443029127de"></script>
 </body>
 </html>

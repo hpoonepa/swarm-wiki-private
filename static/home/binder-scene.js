@@ -23,7 +23,7 @@ export async function mountBinderScene(host, { progress = 0, reduced = false } =
   const pdb = await response.text();
   const viewport = host.querySelector('.protein-viewport');
   const viewer = mol.createViewer(viewport, {
-    backgroundAlpha: 0, antialias: true, nomouse: true, cartoonQuality: 8
+    backgroundAlpha: 0, antialias: true, nomouse: true, cartoonQuality: 8, disableFog: true
   });
   viewer.setProjection('orthographic');
   viewer.addModel(pdb, 'pdb');
@@ -32,23 +32,37 @@ export async function mountBinderScene(host, { progress = 0, reduced = false } =
   viewer.rotate(25, 'y');
   viewer.rotate(-15, 'x');
   const orientationView = viewer.getView();
+  const backbone = viewer.selectedAtoms({ atom: 'CA' });
+  const binderBackbone = backbone.filter(atom => atom.chain === 'A');
   let complexView, binderView;
+  function fitProjected(atoms) {
+    const view = viewer.getView();
+    const center = viewer.modelToScreen({ x: -view[0], y: -view[1], z: -view[2] });
+    const points = viewer.modelToScreen(atoms);
+    const extentX = Math.max(1, ...points.map(point => Math.abs(point.x - center.x)));
+    const extentY = Math.max(1, ...points.map(point => Math.abs(point.y - center.y)));
+    // Reserve space for ribbon thickness and fit both axes, including after a turn.
+    const fit = Math.min(viewport.clientWidth * .42 / extentX, viewport.clientHeight * .42 / extentY);
+    viewer.zoom(fit);
+  }
+  function fitSelection(selection) {
+    viewer.zoomTo(selection);
+    fitProjected(selection.chain ? binderBackbone : backbone);
+    return viewer.getView();
+  }
   function fitViews() {
     viewer.setView(orientationView);
-    viewer.zoomTo();
-    viewer.zoom(2.2);
-    complexView = viewer.getView();
-    viewer.zoomTo({ chain: 'A' });
-    viewer.zoom(2);
-    binderView = viewer.getView();
+    complexView = fitSelection({});
+    binderView = fitSelection({ chain: 'A' });
+    viewer.setSlab(-150, 150);
   }
   fitViews();
-  viewer.setSlab(-150, 150);
   let current = progress, targetShown = null, yaw = 0, pitch = 0, down = null, destroyed = false;
   function paint(p) {
     if (destroyed) return;
     current = p;
-    const reveal = reduced ? Number(p >= .43) : smooth((p - .38) / .22);
+    // Finish framing the whole complex before the second chain appears.
+    const reveal = reduced ? Number(p >= .43) : smooth((p - .28) / .15);
     const showTarget = p >= .43;
     if (showTarget !== targetShown) {
       targetShown = showTarget;
@@ -60,6 +74,7 @@ export async function mountBinderScene(host, { progress = 0, reduced = false } =
     viewer.setView(binderView.map((v, i) => i < 4 ? v + (complexView[i] - v) * reveal : v));
     if (yaw) viewer.rotate(yaw, 'y');
     if (pitch) viewer.rotate(pitch, 'x');
+    if (yaw || pitch) fitProjected(showTarget ? backbone : binderBackbone);
     host.dataset.progress = p.toFixed(3);
   }
   const onDown = event => {
@@ -84,6 +99,8 @@ export async function mountBinderScene(host, { progress = 0, reduced = false } =
     yaw += directions[event.key][0]; pitch += directions[event.key][1]; paint(current);
   };
   const reset = () => { yaw = pitch = 0; paint(current); };
+  const resetButton = host.closest('.binder-panel')?.querySelector('[data-protein-reset]');
+  resetButton?.addEventListener('click', reset);
   host.addEventListener('pointerdown', onDown);
   host.addEventListener('pointermove', onMove);
   host.addEventListener('pointerup', onUp);
@@ -112,6 +129,7 @@ export async function mountBinderScene(host, { progress = 0, reduced = false } =
       host.removeEventListener('pointerup', onUp);
       host.removeEventListener('pointercancel', onUp);
       host.removeEventListener('keydown', onKey);
+      resetButton?.removeEventListener('click', reset);
     }
   };
 }

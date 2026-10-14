@@ -27,6 +27,10 @@ const first = byId[hub];
       <p class="sdg-wheel__title" data-title>{first.name}</p>
       <p class="sdg-wheel__body" data-body>{summaryText(hub)}</p>
     </div>
+    <div class="sdg-wheel__legend" aria-label="Connection colors">
+      <span><i aria-hidden="true"></i>Supports</span>
+      <span><i aria-hidden="true"></i>Tension</span>
+    </div>
   </aside>
 </section>
 <script>
@@ -51,6 +55,11 @@ const first = byId[hub];
     const eyebrow = panel.querySelector<HTMLElement>('[data-eyebrow]')!;
     const title = panel.querySelector<HTMLElement>('[data-title]')!;
     const body = panel.querySelector<HTMLElement>('[data-body]')!;
+    // On stacked screens, reserve space for the card's current content.
+    const fitPanel = () => root.style.setProperty('--sdg-panel-height', `${Math.ceil(panel.getBoundingClientRect().height)}px`);
+    const panelObserver = new ResizeObserver(fitPanel);
+    panelObserver.observe(panel);
+    fitPanel();
     let hub = root.dataset.hub as GoalId;
     let ring = root.dataset.ring!.split(',') as GoalId[];
     let layout = layoutNow();

@@ -1,0 +1,19 @@
+---
+interface Props { title: string; phase?: string; shade?: number; }
+const { title, phase, shade = 0 } = Astro.props;
+const shapes = [
+  'M64 8 Q56 7 51 16 L10 85 Q4 96 10 107 L50 178 Q55 188 65 187 L157 185 Q166 184 171 176 L211 105 Q215 97 209 86 L168 16 Q163 7 152 8 Z',
+  'M64 10 Q55 10 50 19 L9 89 Q5 98 11 108 L52 180 Q57 188 67 187 L158 187 Q166 187 171 178 L211 108 Q216 99 210 88 L170 19 Q165 10 154 9 Z',
+];
+const shape = shapes[shade % 2];
+---
+<span class:list={['ihp-cell', `ihp-cell--${shade % 3}`, { 'ihp-cell--phase': !!phase }]}>
+  <svg class="ihp-cell__shape" viewBox="0 0 220 198" aria-hidden="true">
+    <path class="ihp-cell__face" d={shape} />
+    <path class="ihp-cell__inner" d="M66 20 Q61 19 57 27 L20 90 Q16 97 21 105 L58 171 Q61 177 70 177 L153 175 Q160 175 164 167 L201 103 Q205 97 200 89 L162 26 Q158 19 150 20 Z" />
+  </svg>
+  <span class="ihp-cell__words">
+    {phase ? <><span class="ihp-cell__phase-label">Phase</span><strong class="ihp-cell__phase-number">{Number(phase)}</strong></> : <strong class="ihp-cell__title">{title.split(' ').map(word => <span>{word}</span>)}</strong>}
+  </span>
+  {!phase && <span class="ihp-cell__open" aria-hidden="true">+</span>}
+</span>

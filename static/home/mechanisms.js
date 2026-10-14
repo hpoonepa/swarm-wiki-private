@@ -1,5 +1,5 @@
-import { initRnaPlayer } from './vendor/rna-player.js?v=faf544f7714b';
-import { initJourney, binderProgress, rnaProgress, rnaScroll } from './journey.js?v=66565db5000d';
+import { initRnaPlayer } from './vendor/rna-player.js?v=0ad76dc16e5c';
+import { initJourney, binderProgress, rnaProgress, rnaScroll } from './journey.js?v=558ed0b02251';
 
 initJourney();
 
@@ -30,7 +30,7 @@ async function loadProtein() {
   if (scene || loading) return;
   loading = true;
   try {
-    const { mountBinderScene } = await import('./binder-scene.js?v=502c32a3a893');
+    const { mountBinderScene } = await import('./binder-scene.js?v=ea9d837111b6');
     scene = await mountBinderScene(host, { reduced: reduced.matches, progress: binderProgress() });
     host.dataset.backend = scene.backend;
     paintMini();

@@ -28,9 +28,10 @@ export function point(layout: Layout, angle: number, k: number): { x: number; y:
 }
 
 export function arrow(layout: Layout, angle: number, outward: boolean): { shaft: string; head: string; hit: string } {
-  const s = SHAPES[layout], hub = point(layout, angle, 0), a = (angle * Math.PI) / 180;
-  const ux = Math.cos(a), uy = Math.sin(a), side = outward ? 1 : -1, nx = -uy * side, ny = ux * side;
-  const inner = s.hub + GAP, outer = s.r - s.sat - GAP;
+  const s = SHAPES[layout], hub = point(layout, angle, 0), sat = point(layout, angle, 1);
+  const distance = Math.hypot(sat.x - hub.x, sat.y - hub.y);
+  const ux = (sat.x - hub.x) / distance, uy = (sat.y - hub.y) / distance, side = outward ? 1 : -1, nx = -uy * side, ny = ux * side;
+  const inner = s.hub + GAP, outer = distance - s.sat - GAP;
   const at = (d: number, off: number) => ({ x: hub.x + ux * d + nx * off, y: hub.y + uy * d + ny * off });
   const p0 = at(outward ? inner : outer, BOW), p1 = at((inner + outer) / 2, BOW * 2.4), tip = at(outward ? outer : inner, BOW);
   const tl = Math.hypot(tip.x - p1.x, tip.y - p1.y), tx = (tip.x - p1.x) / tl, ty = (tip.y - p1.y) / tl;
