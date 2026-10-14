@@ -43,6 +43,25 @@
   transform-origin: center;
   animation: hc-pop 0.6s cubic-bezier(0.34, 1.4, 0.64, 1) both;
   animation-delay: var(--hc-delay, 0s);
+  scale: 1;
+  transition: scale .24s cubic-bezier(.22, 1, .36, 1), fill .2s, fill-opacity .2s, stroke .2s, stroke-opacity .2s, filter .24s;
+}
+@media (hover: hover) and (pointer: fine) {
+  /* Only the hexagons receive the pointer, leaving the space between them clear. */
+  .honeycomb-window__comb .hc-cell { pointer-events: all; }
+  .honeycomb-window__comb .hc-cell:hover {
+    scale: 1.16;
+    fill: #ffd45c;
+    fill-opacity: 1;
+    stroke: #d99520;
+    stroke-width: 1.5;
+    stroke-opacity: 1;
+    filter: drop-shadow(0 4px 5px rgb(145 89 16 / .24));
+  }
+  .honeycomb-window__comb .hc-cell--wall:hover {
+    fill: #ffe8a0;
+    stroke-width: 2.5;
+  }
 }
 @keyframes hc-unfold {
   from { transform: scale(0.2); }
@@ -101,6 +120,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hc-cluster, .hc-cell { animation: none; }
+  .hc-cell { transition: none; }
+  .honeycomb-window__comb .hc-cell:hover { scale: 1; }
 }
 @media (forced-colors: active) {
   .hc-cell { fill: CanvasText; }
