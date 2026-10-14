@@ -49,6 +49,14 @@ const styles = `
   .honey-toggle svg { display: block; width: 100%; height: 100%; }
   :host([data-map-open]) .honey-toggle { transform: rotate(30deg); filter: drop-shadow(0 4px 14px rgba(254, 195, 65, .45)); transition: transform .3s cubic-bezier(.22, 1, .36, 1), filter .3s; }
   :host([data-map-open]) .honey-toggle:hover { transform: rotate(30deg) scale(1.06); }
+  .honey-label { display: none; }
+  :host([data-homepage]) .honey-label { position: absolute; right: calc(100% + 8px); top: 50%; display: block; padding: 9px 13px; border: 1px solid #d9c89b; border-radius: 999px; background: #fff9e9; color: #244c3e; box-shadow: 0 2px 9px #242f2012; font-size: 14px; font-weight: 650; line-height: 1.2; white-space: nowrap; opacity: 0; visibility: hidden; transform: translate(5px, -50%); transition: opacity .2s, transform .2s, visibility .2s; }
+  :host([data-homepage][data-hidden]) .honey-label, :host([data-homepage][data-map-open]) .honey-label { opacity: 1; visibility: visible; transform: translate(0, -50%); }
+  .honey-label__short { display: none; }
+  :host([data-homepage]) .honey-toggle svg { transition: transform .3s cubic-bezier(.22, 1, .36, 1); }
+  :host([data-homepage][data-map-open]) .honey-toggle { transform: none; }
+  :host([data-homepage][data-map-open]) .honey-toggle:hover { transform: translateY(-2px); }
+  :host([data-homepage][data-map-open]) .honey-toggle svg { transform: rotate(30deg); }
   @media (max-width: 1100px) {
     .bar { top: 16px; width: calc(100% - 32px); padding-right: 72px; }
     .brand { height: 50px; } .brand img { height: 48px; }
@@ -64,6 +72,7 @@ const styles = `
     .dropdown a { padding-block: 11px; }
   }
   @media (max-width: 760px) { .bar { padding-right: 62px; } .honey-toggle { top: 8px; right: 6px; width: 56px; height: 62px; } }
+  @media (max-width: 600px) { :host([data-homepage]) .honey-label { right: calc(100% + 4px); padding: 8px 11px; } .honey-label__full { display: none; } .honey-label__short { display: inline; } }
   @media (prefers-reduced-motion: reduce) { *, *::after { transition: none !important; } }
   ${mapStyles}
 `;
@@ -74,6 +83,7 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
       const root=this.attachShadow({mode:'open'});
       const slug=location.pathname.replace(/\/$/,'').split('/').pop();
       const isHomepage=/^\/lambert-ga(?:\/home)?(?:\/index\.html)?\/?$/.test(location.pathname);
+      this.toggleAttribute('data-homepage',isHomepage);
       const logo=isHomepage
         ? {src:'https://static.igem.wiki/teams/6185/wiki/homepage/logo.webp',width:1202,height:1354}
         : {src:'/lambert-ga/brand/swarm-logo.svg',width:488,height:550};
@@ -86,7 +96,7 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
         <nav class="glass" id="wiki-links" aria-label="Main"><div class="items">
         ${groups.map(([title,items])=>`<details class="group"><summary>${title}</summary><div class="dropdown glass">${links(items)}</div></details>`).join('')}
         </div></nav></div>
-        <button class="honey-toggle" aria-label="Open the project map" aria-expanded="false" aria-haspopup="dialog" title="Project map"><svg viewBox="0 0 48 52" aria-hidden="true"><path d="m24 2 10 6v12l-10 6-10-6V8Z" fill="#ffd75c" stroke="#c58a1c" stroke-width="1.6"/><path d="m14 20 10 6v12l-10 6-10-6V26Z" fill="#fbc438" stroke="#c58a1c" stroke-width="1.6"/><path d="m34 20 10 6v12l-10 6-10-6V26Z" fill="#f4b324" stroke="#c58a1c" stroke-width="1.6"/><path d="m24 8 5 3v6l-5 3-5-3v-6Zm-10 18 5 3v6l-5 3-5-3v-6Zm20 0 5 3v6l-5 3-5-3v-6Z" fill="none" stroke="#fff1b3" stroke-width="1.4"/></svg></button>`;
+        <button class="honey-toggle" aria-label="${isHomepage?'Explore the wiki menu':'Open the project map'}" aria-expanded="false" aria-haspopup="dialog" title="${isHomepage?'Explore the wiki':'Project map'}"><span class="honey-label" aria-hidden="true"><span class="honey-label__full">Explore the wiki</span><span class="honey-label__short">Menu</span></span><svg viewBox="0 0 48 52" aria-hidden="true"><path d="m24 2 10 6v12l-10 6-10-6V8Z" fill="#ffd75c" stroke="#c58a1c" stroke-width="1.6"/><path d="m14 20 10 6v12l-10 6-10-6V26Z" fill="#fbc438" stroke="#c58a1c" stroke-width="1.6"/><path d="m34 20 10 6v12l-10 6-10-6V26Z" fill="#f4b324" stroke="#c58a1c" stroke-width="1.6"/><path d="m24 8 5 3v6l-5 3-5-3v-6Zm-10 18 5 3v6l-5 3-5-3v-6Zm20 0 5 3v6l-5 3-5-3v-6Z" fill="none" stroke="#fff1b3" stroke-width="1.4"/></svg></button>`;
       const nav=root.querySelector('#wiki-links'), toggle=root.querySelector('.mobile-toggle'), bar=root.querySelector('.bar'), honeyToggle=root.querySelector('.honey-toggle');
       const close=()=>{
         root.querySelectorAll('details[open]').forEach(el=>el.open=false);
@@ -96,7 +106,11 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
         this.toggleAttribute('data-map-open',open);
         bar.inert=open||this.hasAttribute('data-hidden');
         honeyToggle.setAttribute('aria-expanded',String(open));
-        honeyToggle.setAttribute('aria-label',open?'Close the project map':'Open the project map');
+        const honeyAction=open?'Close the project map':isHomepage?'Explore the wiki menu':'Open the project map';
+        honeyToggle.setAttribute('aria-label',honeyAction);
+        honeyToggle.title=honeyAction;
+        root.querySelector('.honey-label__full').textContent=open?'Close':'Explore the wiki';
+        root.querySelector('.honey-label__short').textContent=open?'Close':'Menu';
         if(!open)honeyToggle.focus({preventScroll:true});
       }});
       honeyToggle.addEventListener('click',()=>{if(map.isOpen())map.close();else{close();map.open();}});
