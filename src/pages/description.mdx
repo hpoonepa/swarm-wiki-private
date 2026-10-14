@@ -1,13 +1,130 @@
 ---
 layout: ../layouts/ContentLayout.astro
 title: Project Description
-description: 'Summary placeholder for the Project Description page.'
+description: 'Protecting honey bees by targeting deformed wing virus and the Varroa mite that spreads it.'
 ---
 
-import Wip from "../components/md_components/Wip";
-
-<Wip />
+{/* Adapted from SWARM Project Description.pdf, supplied October 14, 2026.
+    The full write-up on pages 3–7 supersedes the planning outline on pages 1–2.
+    Both images are extracted unchanged from the supplied PDF; no new graphics.
+    Editorial follow-ups retained from the source:
+    - Supply the bibliography for references [1]–[20].
+    - Add the DWV researchers' statement supporting VP3 as a target.
+    - Supply the missing figures before restoring references to Figures 1, 3–7.
+      The supplied feeder sketch itself is labeled Figure 4 in its image.
+    - Delivery: confirm whether drying has been performed, drying temperature,
+      cost in USD, stability results, and why low-temperature drying matters
+      given the heat tolerance in Table 2.
+    - The outline requests a 150-word abstract, modeling, and SDG discussion;
+      no completed copy for those sections was supplied.
+*/}
 
 # Overview
 
-Placeholder. The Project Description write-up goes here.
+Lambert iGEM designed SWARM to protect honey bees from deformed wing virus (DWV) by targeting both the virus and the mite that spreads it, *Varroa destructor*.
+
+We designed small proteins called minibinders to grab the virus's outer shell, and double-stranded RNA (dsRNA) to switch off genes critical to the mite's survival. Together, the two treatments target both infection and transmission.
+
+# Introduction
+
+SWARM addresses a threat to one of agriculture's most important pollinators. Honey bees visit crop flowers more often than any other single species, and many crops rely on them heavily [1]. In our home state of Georgia, beekeepers lost about 88,000 colonies between October 2025 and June 2026, translating to approximately 20% of the state's colonies lost every three months [2].
+
+Across the United States, beekeepers lost 39.9% of their managed colonies between April 2025 and April 2026 [3]. Worldwide, the share of crop production that depends directly on animal pollinators is worth an estimated \$235 billion to \$577 billion USD each year [4]. Parasites, pesticides, and a lack of flowers all contribute to bee declines, but most U.S. colony losses trace back to the *Varroa destructor* mite and the virus it spreads, deformed wing virus (DWV) [5], [6].
+
+DWV threatens honey bees worldwide, and when researchers tested bees from 603 apiaries across the United States, they detected DWV in 89.4% of them [7], [8]. The mite wedges itself under the overlapping plates of a bee's abdomen, pierces the soft membrane between them, and feeds on the fat tissue underneath [9]. Each feeding wound gives DWV a direct route into the bee [7].
+
+<figure>
+  <a href="/lambert-ga/description/dwv-distribution.png" aria-label="Open the DWV distribution map at full size">
+    <img src="/lambert-ga/description/dwv-distribution.png" width="754" height="460" loading="lazy" decoding="async" alt="World map labeled DWV, with countries shaded in red, gray, and green, as supplied in the project description." style={{ width: '100%', maxWidth: '580px', marginInline: 'auto', borderRadius: '14px' }} />
+  </a>
+  <figcaption>DWV distribution graphic from the project description draft. Select the image to view it at full size.</figcaption>
+</figure>
+
+Without mites, DWV infections usually cause no visible symptoms, but mites drive viral levels high enough to cause deformed wings and early death [10], [11]. Each new round of brood adds more mites and more infected bees, and an untreated colony will likely die [12], [14].
+
+# Current Solutions
+
+Current treatments face two shortfalls: mites resist several existing miticides, and the Honey Bee Health Coalition's 2026 guide lists treatments for the mite only [6], [14].
+
+**Table 1. Current Varroa treatments**
+
+| Approach | Examples | Limitations |
+| --- | --- | --- |
+| Synthetic miticides | Amitraz, tau-fluvalinate, coumaphos | Mites resist them; residues persist in wax [6], [14], [15] |
+| Organic acids | Formic acid, oxalic acid | Formic acid can kill brood in heat; oxalic acid misses mites under cappings [14] |
+| Mechanical and cultural methods | Drone brood removal, screened bottom boards | Work poorly on their own [14] |
+| RNA interference (registered in 2025) | Vadescana, sold as Norroa | Targets one mite gene, not the virus; needs open brood [12], [14] |
+
+As one member of the Metro Atlanta Beekeepers Association said:
+
+> “It's not a matter of if there are Varroa mites. Every colony has them.”
+
+The gaps in existing treatments leave colonies facing a persistent threat, with broader ecological consequences.
+
+# Introducing SWARM
+
+SWARM began with four design requirements, drawn from the gaps in current treatments and from beekeepers' needs:
+
+- Treat DWV directly, since current guidance lists only mite treatments [14].
+- Reduce mites without the brood harm or wax residues of chemicals [14], [15].
+- Slow resistance, because mites already resist several miticides [6], [14].
+- Fit into hive routines as a practical, low-cost treatment.
+
+To meet them, SWARM pairs two treatments in one hive-top feeder: minibinders against DWV and dsRNA against Varroa. Bees would take in both treatments through the feeder's sucrose solution. We designed the minibinders to act on the virus in the bee's gut, and the dsRNA to reach the mite when it feeds on a treated bee, a route earlier researchers demonstrated [16].
+
+<figure>
+  <a href="/lambert-ga/description/swarm-delivery-concept.png" aria-label="Open the SWARM delivery concept at full size">
+    <img src="/lambert-ga/description/swarm-delivery-concept.png" width="1250" height="682" loading="lazy" decoding="async" alt="Draft SWARM delivery concept: a three-chamber feeder provides minibinder powder, sucrose solution, and dsRNA to worker bees. Minibinders target DWV, while mites take up dsRNA when feeding on treated bees. PRINCE, a vacuum evaporator, and three dosing models support the system." style={{ width: '100%', borderRadius: '14px' }} />
+  </a>
+  <figcaption>Original delivery concept sketch from the project description draft. This is a design concept, not experimental data. Select the image to view it at full size.</figcaption>
+</figure>
+
+# Minibinders
+
+SWARM targets DWV with minibinders, small proteins designed on a computer to bind a specific target. We designed our minibinders against VP3, one of the proteins that form the virus's outer shell, or capsid. Part of VP3 folds into a knob on the virus's surface that may help the virus enter bee cells [17].
+
+We designed the minibinders to inhibit viral replication by binding VP3 to block host cell binding. We compared minibinders with antibodies and with nanobodies, small antibody fragments from camels and llamas, and chose minibinders for their small size and heat tolerance (Table 2).
+
+**Table 2. Antibodies compared with minibinders and nanobodies**
+
+| Property | Antibodies | Nanobodies | Minibinders |
+| --- | --- | --- | --- |
+| Size | Large, multi-part proteins of about 150 kilodaltons [18] | A single antibody domain of about 15 kilodaltons [18] | Fewer than approximately 100 amino acids [19] |
+| Heat tolerance | Lose activity after heating [20] | High stability [18] | Keep activity after exposure to high temperatures [20] |
+| Origin | Made by an animal's immune system or selected in the lab | Taken from antibodies that camels and llamas make [18] | Designed on a computer from the target's shape alone [19] |
+
+Nanobodies were the primary option we considered prior to minibinders. However, Dr. Aashish Manglik from UCSF advised us on the difficulty with design, stating:
+
+> “For our computational design projects, we still make libraries of hundreds or thousands of candidates.”
+
+Through more conversations with stakeholders and literature, we decided to pivot towards minibinder design as it had far greater promise in creating a binding molecule.
+
+To choose which designs to test, we built [PRINCE](/lambert-ga/software/), software trained on more than 5,000 experimentally validated minibinder designs. PRINCE first finds binding hotspots, the places on VP3 most likely to anchor a binder, then ranks each design on predicted binding and predicted expression, or how much usable protein gets produced. Through two cycles of binder expression testing, we created the first ever minibinder for deformed wing virus!
+
+[Explore our minibinder design and experiments →](/lambert-ga/minibinder/)
+
+# RNAi
+
+SWARM targets the mite with RNA interference, a natural process in which cells use dsRNA to switch off target genes. When a mite cell takes in dsRNA that matches one of its genes, the cell destroys that gene's messenger RNA (the working copy it uses to build a protein) to limit it from making that protein.
+
+We designed a multiplexed dsRNA that targets three Varroa salivary gland genes essential to mite survival. By designing novel siRNA sequences for **Vd-CHIsal**, **Vd-CHIBIN**, and **VdAV422**, we are able to silence three genes compared to one in existing remedies [12]. Earlier work that silenced a single mite gene reduced mite populations by over 60%, so targeting three should not only boost efficacy but also limit the likelihood of resistance that mites are developing [16].
+
+Our dsRNA approach is delivered through treated bees, the same route used to successfully silence mite genes in the past [16].
+
+To address ecological concerns with reduced mite populations, we spoke to entomologist Jeff Pettis, who assured us it would be “completely fine to eliminate Varroa, as honeybees get no benefit at all from it” (see [Integrated Human Practices](/lambert-ga/human-practices/)).
+
+[Explore our RNAi design and experiments →](/lambert-ga/rnai/)
+
+# Delivery
+
+SWARM reaches bees through a hive-top sucrose feeder. Our design dries the minibinders into a powder, intended to be shelf-stable, with a low-cost vacuum evaporator. The evaporator removes water at low temperature so heat does not unfold, or denature, the proteins.
+
+A three-chamber feeder holds the minibinder powder, a sucrose solution, and the dsRNA in separate compartments, so one unit delivers both treatments to the colony.
+
+[Explore the hardware →](/lambert-ga/hardware/)
+
+# Project Document
+
+[Read the original SWARM Project Description (PDF)](/lambert-ga/description/swarm-project-description.pdf).
+
+Reference numbers follow the supplied project description draft. The bibliography was not included in that document and remains to be added.
