@@ -12,4 +12,489 @@ import Wip from "../components/md_components/Wip";
 
 # Overview
 
-Placeholder. The Modeling Overview write-up goes here.
+# Judging
+
+# Minibinder Model
+## Overview
+Deformed Wing Virus (DWV) has become a major contributor to honey bee colony losses due to its transmission by Varroa mites. Lambert iGEM developed de novo minibinders to inhibit viral entry into the host cells. A hardware system was created that would deliver the minibinder concentration in a powdered form mixed with sucrose solution to serve as a delivery mechanism. However, the effectiveness of this therapeutic approach depends on delivering a sufficient concentration of minibinders to bees through the sucrose feeding system. To predict the minibinder dose that our hardware would deliver, Lambert iGEM created a linked model spanning molecular binding, bee-scale, and pharmacokinetics. The model predicts 15,821 mg/L of binder in 1:1 sucrose syrup, backed by the spanning of the models (Table X).
+
+| Module                           |   |
+|----------------------------------|---|
+| M1- Compartment Model            |   |
+| M2 - Refill Schedule             |   |
+| M3 - Concentration to powder     |   |
+| M4 - Prevention dose-response    |   |
+| M5 - Stochastic Establishment    |   |
+| M6 - Sensitivity and Uncertainty |   |
+| M7 - Affinity to dose            |   |
+| M8 - Minibinder vs IgY Antibody  |   |
+
+<center>*Table X - The model stack and what each module returns*</center>
+
+## Development
+The model stack was developed in three layers with each answering a question that progressed the development further.
+Layer 1- x
+Layer 2- x
+Layer 3- x
+
+## Parameters
+Rate constants and degradation rates were inputted into our models. Parameters were determined by four methods with scaled levels of certainty. Parameters were sourced by existing literature and experimentally measured where possible. As exact rate values within the bee pathophysiology is often limited by lack of existing research and measurement, using existing analogue-derived values and source parameter studies, some parameters were estimated through pooling each parameter’s soiree studies with a random effects estimator and coupled with a hierarchical Bayesian model that recovers heterogeneity. All modules draw from a parameter file holding variables measured. Of the list, using sensitivity analysis testing determined 17 parameters with the highest effect on the modeled amount (Table X).
+
+| Variable        | Meaning | Values | Units | Citation |
+|-----------------|---------|--------|-------|----------|
+| k_on            |         |        |       |          |
+| k_off           |         |        |       |          |
+| K_d             |         |        |       |          |
+| MW_binder       |         |        |       |          |
+| k_cx_clear      |         |        |       |          |
+| c_clear         |         |        |       |          |
+| k_syrup_deg     |         |        |       |          |
+| k_empty         |         |        |       |          |
+| k_gut_transit   |         |        |       |          |
+| k_prot          |         |        |       |          |
+| f_abs           |         |        |       |          |
+| t_half_hem      |         |        |       |          |
+| V_hem_adult     |         |        |       |          |
+| q_intake        |         |        |       |          |
+| p_prod          |         |        |       |          |
+| delta_I         |         |        |       |          |
+| f_reachable (φ) |         |        |       |          |
+| P_field         |         |        |       |          |
+| N₀              |         |        |       |          |
+| N_A conv        |         |        |       |          |
+
+<center>*Table X. Minibinder signaling pathway species and descriptions.*</center>
+
+## Assumptions
+(Combine all assumptions form mini models)
+
+## Model 1
+### Overview
+To predict how much minibinder reaches the site at which it must act, Lambert iGEM developed a compartmental model tracking protein from the feeder to the viral capsid. This pathway follows four main steps:
+1. Degradation: Protein dissolved in sucrose syrup degrades in the feeder across the refill interval.
+2. Ingestion: Foraging bees swallow the syrup, carrying protein into the crop.
+3. Transit: The crop empties into the midgut, where proteolysis and transit compete with absorption.
+4. Absorption: Intact protein crosses the midgut epithelium into the haemolymph, where it is cleared and where it binds free virions.
+
+### Development
+To simulate the progression of the delivery pathway, our team utilized a system of ODEs describing each compartment. Our model tracks amounts in nanomoles per bee rather than concentrations, which allows gut volume to be left unspecified and makes mass conservation an exact identity rather than a numerical tolerance. Because of this, oral bioavailability is produced as an output of the model rather than entered as an input. Binding to the viral capsid was represented as a reversible second-order association followed by irreversible clearance of the complex, using rate constants measured on our own construct.
+
+Binding is carried as a reversible second-order association with irreversible clearance of the complex, parameterised from our own BLI data.
+
+### Species and Reactions
+We mapped out the full delivery pathway using the Law of Mass Action, which simulates basic collisions of reactants (see Fig. 1). The pathway begins with minibinder dissolved in sucrose solution at the feeder and ends in one of five terminal sinks: degraded in the syrup, digested in the gut, excreted, cleared from the haemolymph, or cleared as a neutralised complex.
+
+#### Species
+| Species | Compartment                        | Initial Value | Units    |
+|---------|------------------------------------|---------------|----------|
+| S       | Feeder Syrup                       |               | nM       |
+| C       | Crop                               |               | nmol/bee |
+| G       | Midgut                             |               | nmol/bee |
+| H       | hemolymph                          |               | nmol/bee |
+| MBV     | Bound to VPe                       |               | nM       |
+| V       | Free virions delivered at the bite |               |          |
+
+<center>*Table X. Initial minibinder wetlab reagent values and units.*</center>
+
+#### Reactions
+| # | Reaction | Description |
+|---|----------|-------------|
+| 1 |          |             |
+| 2 |          |             |
+
+<center>*Table X. Minibinder biochemical reactions and descriptions.*</center>
+
+### Equations
+(insert)
+
+### Assumptions
+Our compartmental ODE model assumes that all rate constants and parameters remain constant, disregarding external environmental factors. The model assumes that absorption across the midgut epithelium is linear, which is justified because the concentrations our schedule produces sit below the reported transport constant, where linear and saturable forms are not distinguishable. The model also assumes that protein reaching the hemolymph is intact and functional.
+
+### Results
+After developing a complete set of ODEs, we simulated all four compartments over four refill cycles at the adopted loading (see Fig. X). The bee reaches its periodic steady state within approximately one refill cycle, which indicates that protection does not accumulate with continued dosing.
+
+[Figure X - four state trajectory over four refill cycles]
+
+Our model predicts that of the protein placed in the feeder, 61.9% survives a 24 hour refill in warm syrup, and 0.300% of what is swallowed reaches the hemolymph as intact functional protein. The 15 µL of hemolymph it enters clears it with a half-life of 4.5 hours. The product of these losses determines the required dose (see Table X).
+
+[insert table x]
+
+The periodic cycle closing to 6.21 × 10⁻²² indicates that the periodic steady state is exact rather than approximate. The agreement between the emergent and closed-form values of oral bioavailability confirms that the compartmental structure is internally consistent.
+
+## Model 2
+### Overview
+Our dose criterion evaluates a single circulating concentration, which requires the concentration profile between refills to remain flat. To achieve this, Lambert iGEM modeled the feeder volume and refill interval together, sizing the feeder so that drain time equals the refill interval exactly.
+
+### Development
+A feeder that empties before the next refill leaves the colony without protein for part of every cycle, producing a deep trough and requiring a much higher peak concentration to compensate. Rather than treat this as a biological constraint, our team treated feeder volume as a design variable and solved for the volume at which drain time matches the refill interval. The colony draw rate was modeled at the colony level from standard practice guidance for a strong colony, and was deliberately not decomposed into a per-bee rate.
+
+### Assumptions
+Our refill schedule model assumes that the residual batch is replaced rather than topped up at each refill, which is the conservative convention because it discards whatever active protein remains. The model also assumes that syrup is drawn uniformly by the colony at the modeled rate throughout the interval.
+
+### Results
+We simulated haemolymph binder concentration across four refill cycles beginning from an empty bee (see Fig. X). The peak-to-trough ratio is 1.128, indicating that the remaining ripple is the refill cycle itself rather than a swing the criterion must average over. Concentration rises while the bee drinks and falls as protein clears with a 4.5 hour half-life, and each cycle returns to the same value.
+
+[Figure X]
+
+The adopted schedule parameters and their basis are listed below (see Table 9).
+
+[Table X]
+
+The 24 hour interval was taken from the only published experiment that fed an anti-DWV protein to bees in syrup, which replaced feed daily. The feeder volume was not measured but chosen, so that the feeder drains in exactly one interval and the flat profile our criterion requires is maintained.
+
+## Model 3
+### Overview
+The circulating concentration is the quantity the bee experiences, but the mass of powder is the quantity a beekeeper must weigh out. To convert between them, our team inverted the delivery model to obtain the syrup concentration that holds the required haemolymph level, then multiplied by feeder volume and refill count to obtain the hive-scale figure.
+
+### Development
+Because the delivery cascade is linear, the inversion admits a closed form, so our team derived one rather than solving numerically. The closed form is checked against an independent root-find on each model run. If that check were to fail, the delivery model would no longer be linear and every mass figure would be invalid. Molecular weight and reconstitution recovery enter the inversion as exact linear multipliers, which allows the mass figure to be rescaled without re-running the model if the construct changes.
+
+### Assumptions
+Our inversion model assumes that reconstitution recovery remains constant across batches, and that syrup is shared uniformly across the colony at the modeled draw rate.
+
+### Results
+We traced the mass of protein through each stage from weighed powder to absorbed protein (see Fig. X). The overall reduction across the cascade is a factor of 634, and each contributing multiplier is accounted for separately (see Table X).
+
+[Figure X]
+
+[Table x]
+
+Inverting the delivery model at the required haemolymph level gives a syrup concentration of 15.82 mg/mL, equivalent to 1.582% w/v, which corresponds to 82.4 g of powder per hive per week (see Table 11). At this concentration the formulation is an ordinary sucrose syrup, which is the condition our hardware was designed to handle.
+
+[Table X]
+
+## Model 4
+### Overview
+The quantity our platform must improve is not the amount of virus destroyed, but the frequency with which a mite bite fails to start an infection. Field measurements report that 39.8% of mites induce an overt infection in an untreated bee. To predict how circulating minibinder changes that frequency, Lambert iGEM developed a dose-response model relating syrup concentration to the probability that a single bite establishes an infection.
+
+### Development
+Our team derived the establishment probability in closed form from the number of particles delivered per bite. A mite delivers a countable number of effective genome equivalents, each of which either starts a productive infection or is neutralised before it can. Circulating binder changes the probability that any individual particle escapes neutralization, and the probability of establishment per bite follows by compounding that escape probability across the delivered inoculum. Sweeping syrup concentration across the deliverable range then produces the full dose-response relationship.
+
+### Assumptions
+Our dose-response model assumes that the criterion applies per encounter rather than per season, as the model carries no mite encounter rate. The model also assumes that the reported field establishment probability combines the likelihood that a mite was infectious at all with the likelihood that an infection established, so the binder is credited in part for mites carrying no infectious virus.
+
+### Results
+We simulated the reduction in new infections across syrup concentrations spanning the deliverable range (see Fig. 5). The adopted concentration of 15.82 mg/mL produces a 74.9% reduction in new infections, with a half-maximal concentration of 5.34 mg/mL and a ceiling of 87.5%.
+
+[FIGURE 5 — PLACEHOLDER: prevention dose-response curve]
+
+Figure X
+
+The syrup concentration and weekly hive mass required for each target reduction are listed below 
+(see Table X).
+
+Above a reduction of 87.5% the limiting constraint ceases to be concentration and becomes the fraction of virus the binder can physically reach, so the curve approaches a vertical asymptote rather than approaching complete prevention. Our team therefore specified a target within the attainable range rather than quoting a reduction the chemistry cannot deliver.
+
+## Model 5
+### Overview
+Our deterministic models treat virus as a continuous concentration, but a mite does not deliver a concentration. It delivers a countable handful of infectious particles, and each one either starts a productive infection or is cleared beforehand. At these particle numbers the outcome is governed by chance, so an average concentration is not an appropriate description. To address this, Lambert iGEM developed a stochastic model of establishment using the Gillespie algorithm.
+
+### Development
+The Gillespie algorithm simulates the exact sequence of discrete events in the system, drawing the waiting time to each event from its own rate: one particle infects a cell, another is cleared, an infected cell bursts. Running the simulation many times produces the probability that an infection establishes rather than an average viral load. Our team then compared that simulated probability against the closed-form branching calculation. Because the two are derived by completely different methods, agreement between them indicates that the establishment threshold is a real property of the system rather than an artefact of either approach.
+
+### Assumptions
+Our stochastic model assumes that each delivered particle acts independently of the others, and that the branching process is evaluated at the initial availability of target cells.
+
+### Results
+We simulated establishment probability across a grid of delivered particle counts and compared the result against the closed-form branching probability (see Fig. 6). The two methods agree to within 3.46 standard errors, and the branching identity closes to 4.46 × 10⁻¹⁶.
+
+[Figure X]
+
+These results indicate that the deterministic threshold and the stochastic threshold describe the same property of the system, reached by two independent derivations.
+
+## Model 6
+### Overview
+To determine which parameters control the required loading and how much the answer could move given what remains unmeasured, Lambert iGEM performed two complementary sensitivity analyses and one joint uncertainty propagation. Elasticity analysis measures how far the answer moves per unit change in a single parameter. Sobol analysis measures how much of the total variance in the answer each parameter is responsible for when all parameters vary together, including through their interactions.
+
+### Development
+The elasticities were derived analytically from the closed form of the delivery chain rather than estimated from samples, which is why several values fall at exactly plus or minus one. The Sobol indices were computed from 24,576 model evaluations with every declared parameter bracket swept simultaneously. A third analysis propagated all declared brackets jointly across 3,000 draws to produce a distribution of required loading.
+
+### Assumptions
+Our sensitivity analyses assume that Sobol indices are conditional on the ranges sampled, so a parameter may score low either because it has little effect or because its range is already narrow. The joint uncertainty band assumes the declared brackets contain the true values, and is a prior-predictive distribution over those ranges rather than a posterior, because no pharmacokinetic measurement in bees is available to condition on.
+
+### Results
+Perturbing each of the 114 scalars on the live model showed that 17 can move the required loading and 97 cannot. The elasticity of each is listed below (see Table 14), where an elasticity of plus one indicates that the required dose is exactly proportional to that parameter.
+
+[Table X]
+
+The total-order Sobol indices are listed below (see Table 15). First-order indices account for 96.7% of the total variance, indicating that the response is close to additive and that interactions between parameters carry only a small remainder.
+
+[Table X]
+
+The two tables must be interpreted together. The dissociation constant scores near zero in the Sobol analysis but almost exactly plus one in the elasticity analysis. Sobol indices attribute variance, so a parameter whose range is already narrow contributes little variance regardless of how strong its effect is. The sampled range of the dissociation constant spans roughly 1.2 times, while the haemolymph half-life spans three times. The elasticity analysis is therefore the correct table for reading effect size.
+
+Propagating every declared bracket simultaneously across 3,000 draws gives a 5th to 95th percentile span of 14.0 times, from 0.462% to 6.45% w/v (see Fig. 9). The adopted loading sits at the 47.9th percentile of that distribution, near its middle rather than at an optimistic edge.
+
+## Model 7
+### Overview
+To establish how much an improvement in binding affinity would reduce the required material, Lambert iGEM modeled the relationship between the dissociation constant of the construct and the syrup concentration needed to meet the criterion.
+
+### Development
+Our team derived the relationship from the closed form of the requirement rather than fitting it, and the required dose was found to be exactly linear in the dissociation constant. This linearity is asserted in our test suite on each model run. We then mapped the resulting relationship against the field and laboratory concentrations of a registered dsRNA product for Varroa control, so that an affinity target could be expressed in terms of a product already in use.
+
+### Assumptions
+Our affinity model assumes that an improvement in affinity arrives without changing molecular weight or reconstitution recovery, both of which enter the required loading as independent linear multipliers.
+
+### Results
+We simulated required loading across a range of dissociation constants spanning two orders of magnitude (see Fig. 10). Because the relationship is exactly linear, a stated fold improvement in affinity produces exactly that fold reduction in required material, which makes the improvement path a specification rather than an estimate (see Table 16).
+
+[FIGURE 10 — PLACEHOLDER: required loading vs binding affinity]
+
+Table X
+
+## Model 8
+### Overview
+To evaluate our construct against an existing alternative, Lambert iGEM compared the minibinder to the only anti-DWV protein that has been fed to bees in syrup and published. The comparison was made on mass concentration in haemolymph, which removes both the delivery chain and molecular weight as confounding factors and asks how much viral load reduction each protein produces per unit of mass actually present in the blood.
+
+### Development
+The antibody values are experimental measurements from the published study, while the minibinder curve is a prediction from our model at the measured dissociation constant. The published study reports two doses, and our team fitted an implied potency curve to each dose separately rather than averaging them, because the two did not fall on a single curve.
+
+### Assumptions
+Our comparison model assumes that both proteins act by the same neutralization mechanism, which is what makes a comparison on mass concentration meaningful.
+
+### Results
+We plotted predicted viral load reduction against protein mass in haemolymph for both molecules (see Fig. 11). The two published antibody doses imply effective association rates 6.05 times apart, which indicates that the potency of the antibody is not identifiable from that data, so both implied curves were carried through the comparison.
+
+[FIGURE 11 — PLACEHOLDER: viral load reduction vs haemolymph protein mass]
+
+The advantage of the minibinder per unit mass depends on which implied curve is used as the reference because the advantage straddles parity, no potency-derived advantage can be quoted, and our test suite asserts this result so that no single fold value can be reintroduced into the claim. The published study also reports that a tenfold increase in dose produced only 2.24 times more reduction, which is considerably more sublinear than any of our models predict, with absorption saturation the most likely explanation.
+
+Two further quantities separate the two molecules (see Table 18). Neither protein reaches the concentration at which viral load stops growing: our model places that concentration at 3.87 × 10⁵ nM for the minibinder and 3.65 × 10⁴ nM for the antibody, against the 56.1 nM actually measured in the published study. Separately, the two projects evaluate different endpoints. At our criterion the required concentration is 15.82 mg/mL, while at the published study's own endpoint it is 1.661 mg/mL. That factor of 9.53 reflects the choice of endpoint rather than a difference in performance, and our team reports it so the two concentrations are not compared directly.
+
+The quantity that holds across both reference curves is the measured molecular weight ratio of 19.15 times. Per binding site delivered, the minibinder carries that much less protein mass. This is the comparison our team reports, because it rests on two measured molecular weights rather than on a fitted potency.
+
+# RNAi Model
+## Overview
+Lambert iGEM determined a system of deterministic Ordinary Differential Equations (ODEs) to model our RNA-interference (RNAi) reaction in Sf9 insect cells. RNAi can be summarized with the following steps:
+- siRNA synthesis: siRNA designs targeting three *Varroa destructor* salivary gland genes are ordered as DNA oligonucleotides and transcribed into RNA duplexes by in vitro transcription. The three most efficient are combined into a single multiplexed dsRNA construct.
+- Co-transfection: Sf9 cells are co-transfected with the psiCHECK-2 dual-luciferase reporter and design.
+- Knockdown: siRNA loads onto Argonaute-2 to form RNA-induced silencing complex(RISC), cleaving the *Renilla* transcript, which carries the three target sites in its 3′UTR
+- Detection: Luminescence is read with the Promega Dual-Glo system and knockdown appears as a drop in the *Renilla* to Firefly ratio relative to a non-targeting control.
+
+## Development
+To assist in interpreting and validating RNAi reactions, we incorporated an ODE model to simulate the gene-silencing and correlate *Renilla* and firefly luciferase expression with siRNA dose and time elapsed. The model is intended to guide the wetlab in interpreting the luminescence output recorded. 
+
+## Signaling Pathway
+We used MATLAB’s SimBiology software to diagram each reaction using the Law of Mass Action and Michaelis Menten Enzyme Kinetics. The Mass Action equations are used to diagram the collision of reactants in a solution, which is needed for all the reactants in our reaction pathways. Michaelis Menten is to properly diagram catalytic enzyme kinetics when utilizing multiple ligand areas. The pathway begins with the introduction of a multiplexed dsRNA and Reporter construct into a system and ends with production of *Renilla* and Firefly luminescence.
+
+<Image
+  src="https://static.igem.wiki/teams/6185/wiki/modeling/rnai-model-pathway.avif"
+  caption="Figure X. Representation of the RNAi reaction pathway using SimBiology"
+  size="md"
+/>
+
+## Biochemical Reactions
+The RNAi model contains a total of 25 biochemical reactions (see Table X) for the overall pathway, as shown below (see Table X):
+
+| #  | Reaction                                                       | Description |
+|----|----------------------------------------------------------------|-------------|
+| 1  | dsRNA_1 + [Dicer-2] -> siRNA_1 + [Dicer-2] + siRNA_2 + siRNA_3 | Dicer-2 cleaves the multiplexed dsRNA construct, cleaving into the three siRNAs it carries |
+| 2  | siRNA_1 + Ago2 -> RISC_1                                       | The first siRNA loads onto Argonaute-2 forming the RNAi silencing complex. |
+| 3  | siRNA_2 + Ago2 -> RISC_2                                       | The second siRNA loads onto Argonaute-2 forming the RNAi silencing complex. |
+| 4  | siRNA_3 + Ago2 -> RISC_3                                       | The third siRNA loads onto Argonaute-2 forming the RNAi silencing complex. |
+| 5  | RISC_1 + mRNA_R -> RISC_1                                      | The first RISC recognises its target site and cleaves the *Renilla* hybrid transcript. RISC is released intact and cleaves again. |
+| 6  | RISC_2 + mRNA_R -> RISC_2                                      | The second RISC recognises its target site and cleaves the *Renilla* hybrid transcript. RISC is released intact and cleaves again. |
+| 7  | RISC_3 + mRNA_R -> RISC_3                                      | The third RISC recognises its target site and cleaves the *Renilla* hybrid transcript. RISC is released intact and cleaves again. |
+| 8  | mRNA_R -> Rluc + mRNA_R                                        | The *Renilla* transcript is translated into *Renilla* luciferase and the transcript is reused for further translation rounds. |
+| 9  | Reporter -> mRNA_R + Reporter                                  | The Reporter plasmid is transcribed into the hybrid transcript carrying the *Renilla* coding sequence and the three target sites. |
+| 10 | Reporter -> mRNA_F + Reporter                                  | The Reporter plasmid is transcribed into the Firefly transcript which carries no target sites. |
+| 11 | mRNA_F -> Fluc + mRNA_F                                        | The Firefly transcript is translated into Firefly luciferase |
+| 12 | dsRNA_1 -> null                                                | Unprocessed dsRNA is degraded by cellular nucleases. |
+| 13 | RISC_1 -> Ago2                                                 | The first RISC unloads its guide strand and returns Ago2 to the free pool. |
+| 14 | RISC_2 -> Ago2                                                 | The second RISC unloads its guide strand and returns Ago2 to the free pool. |
+| 15 | RISC_3 -> Ago2                                                 | The third RISC unloads its guide strand and returns Ago2 to the free pool. |
+| 16 | mRNA_R -> null                                                 | The *Renilla* transcript turns over through normal mRNA decay independent of RISC cleavage |
+| 17 | Rluc -> null                                                   | *Renilla* luciferase in cells without siRNA is degraded and diluted by cell division |
+| 18 | Reporter -> null                                               | The reporter plasmid is diluted as cells divide |
+| 19 | mRNA_F -> null                                                 | The firefly transcript turns over through normal mRNA decay |
+| 20 | Fluc -> null                                                   | Firefly luciferase protein is degraded and diluted by cell division |
+| 21 | siRNA_1 -> null                                                | Free siRNA that has not been loaded to Ago2 is degraded and diluted by cell division |
+| 22 | siRNA_2 -> null                                                | Free siRNA that has not been loaded to Ago2 is degraded and diluted by cell division |
+| 23 | siRNA_3 -> null                                                | Free siRNA that has not been loaded to Ago2 is degraded and diluted by cell division |
+
+<center>*Table X.  Reactions and descriptions of the 23 biochemical reactions in the Minibinder pathway.*</center>
+
+## Initial Values of Species
+In order to simulate our reactions, our team needed to input quantities to initialize each component in our model (see Table X). The initial value of each species was obtained from RNAi wetlab protocols (see Experiments): 
+
+| **Variable** | **Initial Value**                             | **Units**        |
+|----------|-------------------------------------------|--------------|
+| dsRNA_1  | 0, or 114.2 for the multiplexed construct | Nanomolarity |
+| Dicer-2  | 100                                       | Nanomolarity |
+| siRNA_1  | 0                                         | Nanomolarity |
+| siRNA_2  | 0                                         | Nanomolarity |
+| siRNA_3  | 0                                         | Nanomolarity |
+| Ago2     | 82                                        | Nanomolarity |
+| RISC_1   | 0                                         | Nanomolarity |
+| RISC_2   | 0                                         | Nanomolarity |
+| RISC_3   | 0                                         | Nanomolarity |
+| mRNA_R   | 0                                         | Nanomolarity |
+| Rluc     | 0                                         | Nanomolarity |
+| Reporter | (nanodrop)                                | Nanomolarity |
+| mRNA_F   | 0                                         | Nanomolarity |
+| Fluc     | 0                                         | Nanomolarity |
+
+<center>*Table X.  Initial RNAi wetlab protocol values and units*</center>
+
+### Variants
+In order to simulate our different scenarios of our model to correspond to different wetlab experiments, our team utilized variants to set specific initial values per run.
+
+| Scenario      | Initial Value Changes                                                   | Units        |
+|---------------|-------------------------------------------------------------------------|--------------|
+| Neg_no_siRNA  | dsRNA_1 = 0                                                             | Nanomolarity |
+| S_peri_560    | dsRNA_1 = 0, siRNA_1 = 525.109                                          | Nanomolarity |
+| S_peri_171    | dsRNA_1 = 0, siRNA_1 = 519.329                                          | Nanomolarity |
+| S_VdCHI_103   | dsRNA_1 = 0, siRNA_1 = 519.312                                          | Nanomolarity |
+| S_VdCHI_445   | dsRNA_1 = 0, siRNA_1 = 524.962                                          | Nanomolarity |
+| S_Vdav_580    | dsRNA_1 = 0, siRNA_1 = 525.739                                          | Nanomolarity |
+| S_Vdav_164    | dsRNA_1 = 0, siRNA_1 = 522.378                                          | Nanomolarity |
+| S_POS_Renilla | dsRNA_1 = 0, siRNA_1 = 523.4664                                         | Nanomolarity |
+| S2_Peri_VdCHI | dsRNA_1 = 0, siRNA_1 = 525.12, siRNA_2 = 524.9785                       | Nanomolarity |
+| S2_Peri_Vdav  | dsRNA_1 = 0, siRNA_1 = 525.1255, siRNA_2 = 525.7556                     | Nanomolarity |
+| S2_VdCHI_Vdav | dsRNA_1 = 0, siRNA_1 = 524.9785, siRNA_2 = 525.7556                     | Nanomolarity |
+| P3_all_three  | dsRNA_1 = 0, siRNA_1 = 525.1255, siRNA_2 = 524.9785, siRNA_3 = 525.7556 | Nanomolarity |
+| MX_dsRNA      | dsRNA = 114.2002                                                        | Nanomolarity |
+
+<center>*Table X.  Initial value variants and their units*</center>
+
+## Parameters
+Rate constants and degradation rates were inputted into our Mass Action equations. These parameters were either sourced from existing literature or estimated when values could not be found. The value for each parameter is listed below (see Table X):
+
+| Variable | Reaction                                                                                         | Values   | Units                 | Citation |
+|----------|--------------------------------------------------------------------------------------------------|----------|-----------------------|----------|
+| Vm       | Maximal Velocity of Dicer-2 cleaving the multiplexed dsRNA construct into siRNAs                 | 1.612    | Nanomolarity          | (Singh et al., 2021) |
+| Km       | Michaelis-Menten constant for Dicer-2 binding dsRNA                                              | 50       | Nanomolarity          | (Vermeulen et al., 2005) |
+| kf       | Rate at which the first siRNA duplex loads onto Argonaute-2 to form RISC                         | 0.0756   | liter/nanomole/second | (Deerberg et al., 2013) |
+| kf_1     | Rate at which the second siRNA duplex loads onto Argonaute-2 to form RISC                        | 0.0756   | liter/nanomole/second | (Deerberg et al., 2013) |
+| kf_2     | Rate at which the third siRNA duplex loads onto Argonaute-2 to form RISC                         | 0.0756   | liter/nanomole/second | (Deerberg et al., 2013) |
+| Vm_1     | Maximal velocity of RISC cleaving the *Renilla* hybrid transcript                                  | 0.078    | 1/second              | (Salomon et al., 2015) |
+| Km_1     | Michaelis-Menten constant for RISC binding the *Renilla* hybrid transcript                         | 1.7      | Nanomolarity          | (Darzacq et al., |
+| kf_3     | Rate at which the *Renilla* transcript is translated into *Renilla* luciferase                       | 0.00167  | 1/second              | Experimentation. Equation: 206101*x + 70894 |
+| kf_4     | Rate at which the reporter plasmid is transcribed into the *Renilla* hybrid transcript             | 5.6e-4   | 1/second              | (Darzacq et al., 2005) |
+| kf_5     | Rate at which the reporter plasmid is transcribed into the Firefly transcript                    | 5.6e-4   | 1/second              | (Darzacq et al., 2005) |
+| kf_6     | Rate at which the Firefly transcript is translated into Firefly luciferase                       | 0.000943 | 1/second              | Experimentation. Equation: 1.6E-03*x + -0.0893 |
+| kf_7     | Rate at which unprocessed dsRNA is degraded by cellular nucleases                                | 8.5e-5   | 1/second              | (Koo & Palli, 2023) |
+| kf_8     | -                                                                                                | 8.5e-5   | 1/second              | (Koo & Palli, 2023) |
+| kf_9     | -                                                                                                | 8.5e-5   | 1/second              | (Koo & Palli, 2023) |
+| kf_10    | Rate at which the first RISC unloads its guide strand returning Ago2 to the free pool            | 1.01e-5  | 1/second              | (Brown et al., 2020) |
+| kf_11    | Rate at which the second RISC unloads its guide strand returning Ago2 to the free pool           | 1.01e-5  | 1/second              | (Brown et al., 2020) |
+| kf_12    | Rate at which the third RISC unloads its guide strand returning Ago2 to the free pool            | 1.01e-5  | 1/second              | (Brown et al., 2020) |
+| kf_13    | Rate at which the *Renilla* transcript turns over through mRNA decay.                              | 2.94e-5  | 1/second              | (Schwanhäusser et al., 2011) |
+| kf_14    | Rate at which *Renilla* luciferase protein is degraded and diluted by cell division.               | 2.18e-5  | 1/second              | (Loening et al., 2007) |
+| kf_15    | Rate at which the reporter plasmid is lost from the cell population by dilution during division. | 1.132e-5 | 1/second              | (Fliedl et al., 2015) |
+| kf_16    | Rate at which the Firefly transcript turns over through mRNA decay.                              | 2.94e-5  | 1/second              | (Schwanhäusser et al., 2011) |
+| kf_17    | Rate at which Firefly luciferase protein is degraded and diluted by cell division.               | 6.03e-5  | 1/second              | (Leclerc et al., 2000) |
+| kf_18    | Rate at which siRNA_1 is degraded                                                                | 1.6e-5   | 1/second              | (Bartlett & Davis, 2006) |
+| kf_19    | Rate at which siRNA_2 is degraded                                                                | 1.6e-5   | 1/second              | (Bartlett & Davis, 2006) |
+| kf_20    | Rate at which siRNA_3 is degraded                                                                | 1.6e-5   | 1/second              | (Bartlett & Davis, 2006) |
+| kf_25    | Rate at which dsRNA_1 is degraded                                                                | 8.5e-5   | 1/second              | (Koo & Chakravarthy) |
+
+<center>*Table X. Reactions and values for RNAi  parameters*</center>
+
+## Ordinary Differential Equations
+We used the Mass Action Kinetic Laws, Michaelis-Menten Equations, and Hill equations to represent different reactions for the RNAi  model. We created X ordinary differential equations for the full RNAi system (see Table X):
+
+<div class="math-table-container">
+
+| # | Ordinary Differential Equations |
+|---|----------|
+| 1 | $$\frac{d(dsRNA_1)}{dt} = \frac{1}{cytoplasm} \left[-\left(\frac{Vm \cdot dsRNA_1}{Km + dsRNA_1}\right) \cdot cytoplasm \right]$$ |
+| 2 | $$\frac{d(siRNA_1)}{dt} = \frac{1}{cytoplasm} \left[\left(\frac{Vm \cdot dsRNA_1}{Km + dsRNA_1}\right) \cdot cytoplasm - ((kf \cdot siRNA_1 \cdot Ago2) \cdot cytoplasm) \right]$$ |
+| 3 | $$\frac{d(siRNA_2)}{dt} = \frac{1}{cytoplasm} \left[\left(\frac{Vm \cdot dsRNA_1}{Km + dsRNA_1}\right) \cdot cytoplasm - ((kf_1 \cdot siRNA_2 \cdot Ago2) \cdot cytoplasm) \right]$$ |
+| 4 | $$\frac{d(siRNA_3)}{dt} = \frac{1}{cytoplasm} \left[\left(\frac{Vm \cdot dsRNA_1}{Km + dsRNA_1}\right) \cdot cytoplasm - ((kf_2 \cdot siRNA_3 \cdot Ago2) \cdot cytoplasm) \right]$$ |
+| 5 | $$\frac{d(Ago2)}{dt} = \frac{1}{cytoplasm} \left[-((kf \cdot siRNA_1 \cdot Ago2) \cdot cytoplasm) - ((kf_1 \cdot siRNA_2 \cdot Ago2) \cdot cytoplasm) - ((kf_2 \cdot siRNA_3 \cdot Ago2) \cdot cytoplasm) + ((kf_{10} \cdot RISC_1) \cdot cytoplasm) + ((kf_{11} \cdot RISC_2) \cdot cytoplasm) + ((kf_{12} \cdot RISC_3) \cdot cytoplasm) \right]$$ |
+| 6 | $$\frac{d(RISC_1)}{dt} = \frac{1}{cytoplasm} \left[((kf \cdot siRNA_1 \cdot Ago2) \cdot cytoplasm) - ((kf_{10} \cdot RISC_1) \cdot cytoplasm) \right]$$ |
+| 7 | $$\frac{d(RISC_2)}{dt} = \frac{1}{cytoplasm} \left[((kf_1 \cdot siRNA_2 \cdot Ago2) \cdot cytoplasm) - ((kf_{11} \cdot RISC_2) \cdot cytoplasm) \right]$$ |
+| 8 | $$\frac{d(RISC_3)}{dt} = \frac{1}{cytoplasm} \left[((kf_2 \cdot siRNA_3 \cdot Ago2) \cdot cytoplasm) - ((kf_{12} \cdot RISC_3) \cdot cytoplasm) \right]$$ |
+| 9 | $$\frac{d(mRNA_R)}{dt} = \frac{1}{cytoplasm} \left[-\left(\frac{Vm_1 \cdot RISC_1 \cdot mRNA_R}{Km_1 + mRNA_R}\right) \cdot cytoplasm - \left(\frac{Vm_1 \cdot RISC_2 \cdot mRNA_R}{Km_1 + mRNA_R}\right) \cdot cytoplasm - \left(\frac{Vm_1 \cdot RISC_3 \cdot mRNA_R}{Km_1 + mRNA_R}\right) \cdot cytoplasm + ((kf_4 \cdot Reporter) \cdot cytoplasm) - ((kf_{13} \cdot mRNA_R) \cdot cytoplasm) \right]$$ |
+| 10 | $$\frac{d(Rluc)}{dt} = \frac{1}{cytoplasm} \left[((kf_3 \cdot mRNA_R) \cdot cytoplasm) - ((kf_{14} \cdot Rluc) \cdot cytoplasm) \right]$$ |
+| 11 | $$\frac{d(Reporter)}{dt} = \frac{1}{cytoplasm} \left[-((kf_{15} \cdot Reporter) \cdot cytoplasm) \right]$$ |
+| 12 | $$\frac{d(mRNA_F)}{dt} = \frac{1}{cytoplasm} \left[((kf_5 \cdot Reporter) \cdot cytoplasm) - ((kf_{16} \cdot mRNA_F) \cdot cytoplasm) \right]$$ |
+| 13 | $$\frac{d(Fluc)}{dt} = \frac{1}{cytoplasm} \left[((kf_6 \cdot mRNA_F) \cdot cytoplasm) - ((kf_{17} \cdot Fluc) \cdot cytoplasm) \right]$$ |
+
+</div>
+
+<center>*Table X. ODE equations for RNAi reactions.*</center>
+
+## Assumptions
+The RNAi ODE model assumes rate constants as continuous, as Sf9 cultures are held at a constant 27 °C without external environmental factors that could alter them. Therefore, the model is able to isolate the silencing process to simulate knockdown of the Renilla reporter. The model also assumes that the initial quantities of siRNA, Argonaute-2, Dicer-2, and the psiCHECK-2 reporter are known, and that the cytoplasm behaves as a single well-mixed compartment. Additionally, the model assumes that synthetic 21-mer siRNA duplexes bypass Dicer-2 processing, that all three target sites sit within a single Renilla transcript, and that RISC cleaves that transcript at a constant rate regardless of which siRNA is loaded.
+
+## Results
+XXX
+
+# Epidemiological Model
+## Overview
+As Deformed Wing Virus (DWV) has begun to rapidly disseminate throughout honeybee colonies worldwide, treatments aimed at targeting the virus’ main vector, the Varroa destructor, as well as the molecular structural integrity of the pathogen, are critical to effectively mitigating the efficacy of DWV and preventing the collapse of bee colonies globally. After developing a dual-based therapeutic addressing this concern for our project this year, we recognized the need for an exemplary model that predicts how our treatment platform performs at the scale of a colony and its surrounding environment to determine the scale at which our therapeutic decreases the DWV prevalence and demonstrates colony function preservation.
+
+To capture colony level behavior, we built an individual based model that would simulate the four processes on a daily time step:
+
+1. Colony Demography. Every adult bee is tracked as an individual with an age, a task (house bee or forager), and a DWV status. Brood is carried as daily cohorts through a fixed developmental delay.
+2. The Varroa cycle. Mites are tracked as individuals that invade brood cells at capping and reproduce inside a sealed cell, emerging with the adult bee.
+3. DWV transmission. The virus spreads through the mites transmitting the virus to adult bees, infected mites transmitting it to pupae inside sealed brood cells, and low-level transmission from outside the colony. 
+4. Delivery. Medicated sucrose syrup is fed on the beekeeper's real seasonal windows, and each bee's own syrup intake sets its own level of minibinder protection.
+
+The model was run for 20 paired weather seeds across 6 years with two locations(Atlanta, GA and Ithaca, NY) against a Varroa free reference colony with each component of our therapeutic. We simulated the therapeutic as a whole and with each of its two components alone to attribute colony level benefit to the minibinder and RNAi construct separately. Our model predicted that adding a therapeutic to an integrated pest management program retained crop pollination from 0.734 to 0.895 at Atlanta and from 0.877 to 0.939 at Ithaca.
+
+To make the model useful to the beekeepers who would administer the treatment, we reported its outputs in the units that are used in the field. Mite infestation is reported in mites per 100 adult bees with quantity a sugar roll returns and the model marks the Honey Bee Coalition action threshold of 3 mites per 100. Our model supports five of the United Nations Sustainable Development Goals (see Table X).
+
+| Goal                                       | Connection to the Model                                                     |
+|--------------------------------------------|-----------------------------------------------------------------------------|
+| 2. Zero Hunger                             | Quantifies retained pollination of crops dependent on managed colonies      |
+| 3. Good Health and Well-being              | Models an antiviral delivery strategy transferable to other managed species |
+| 8. Decent Work and Economic Growth         | Reports honey yield in kg per colony per year                               |
+| 12. Responsible Consumption and Production | Tests treatment schedules against withdrawal period constraints             |
+| 15. Life on Land                           | Predicts colony survival under parasite and pathogen pressure               |
+
+<center>*Table X. Connecting SDGs to the purpose of the Epidemiological Model.*</center>
+
+## Development
+The hive is modeled as two 10-frame Langstroth deeps, which places a fixed comb ceiling on brood rearing. Within that space, the individual variation in age and infection status determines the colony level outcomes so the treatment would produce a different age structure or mite load.
+
+To ensure that every component carried an established background and that the model’s behavior could be attributed to known biology, we assembled it from published Varroa, DWV, and honey bee colony models. Four model families supply the backbone:
+- **Sumpter & Martin 2004** supplies the DWV block - the in-cell and phoretic transmission routes, seasonal brood death, and the epidemic threshold the model is later tested against.
+- **Khoury, Myerscough & Barron 2011** supplies colony demography: the saturating egg-laying term N/(w+N), the house-bee-to-forager recruitment rule R = α − σF/N, and the social-inhibition route to collapse. **Betti, Wahl & Zamir 2014** supplies forager mortality on foraging days.
+- **BEEPOP/VarroaPop** (DeGrandi-Hoffman et al.) and **BEEHAVE** (Becher et al. 2014) supply the weather-driven structure: egg laying as a function of temperature, photoperiod and colony size, and a foraging-day threshold on daily maximum temperature.
+- **Vetharaniam & Stevens 2020, Martin 1998** and **Calis et al. 1999** supply the daily age-structured mite cycle, which was validated in those papers against field mite growth.
+Individual aspects are drawn from the studies that measured them (See Table X):
+
+(Table X)
+
+## Assumptions
+Our colony model relies on structural assumptions that are adopted to keep the simulation computationally tractable at the scale of individual bees and mites over six years. 
+
+1. We assume that mites attach to adult bees at random with respect to the task. Mites in the field attach to the nurse bees and this raises the probability that a mite reaches a brood cell.
+2. Mites enter the colony from surrounding apiaries at a constant daily rate in an invasion season.
+3. There is no horizontal bee to bee DWV transmission in the absence of a mite.
+4. Mites do not evolve resistance to the treatment and that the virus does not evolve over the years.
+5. Weather drives the colony through daily maximum temperature and that precipitation has no day to day persistence. 
+6. A fixed comb ceiling of two 10 frame Langstroth deeps and a beekeeper who feeds on schedule when a feeding window is open. 
+7. The queen is never lost, the colony never swarms, bees do not drift in or out, and no other treatments are applied. Treated and untreated colonies share the same starting conditions, parameters and weather, so any difference between them comes from the treatment.
+8. We only model adult bees and they have no age structure. Brood comes in only as daily emergence, which follows the queen’s seasonal egg laying and drops off in small colonies. Only mites carrying DWV reduce emergence, and the bees that do emerge are healthy.
+9. Infected bees only differ from healthy bees in mortality and infectiousness, and they never recover. Natural mortality and mortality from mites, crowding and DWV act independently and add together.
+10. Phoretic and reproductive mites are treated as one population. Mites only reproduce in capped broods and their numbers are limited to a set number per adult bee. They die naturally or are groomed off at a rate that saturates with colony size.
+11. DWV is the only pathogen in the model and it does not affect mite survival or reproduction. Mites are born without the virus, pick it up from infected bees at the same seasonal rate they pass it to bees, and can lose it again. Transmission depends on the proportions of healthy and infected bees, not on colony size.
+12. The dsRNA only affects mites. A bee is either protected or not, and mites respond to that rather than to how much the bee drank. Bees become protected at a constant rate while dsRNA syrup is available and protection wears off at a constant rate.
+13. Mites only get dsRNA by feeding on protected bees. They are disabled at a rate set by a Hill dose response, and once disabled they stop feeding and die.
+14. We assume parameters taken from different studies describe one representative temperate colony. Seasonal rates follow the same cycle every year, but the treatment parameters and a few of the colony parameters stay fixed no matter the season or weather.
+
+## Minibinder Pathway
+To predict the amount of protection the minibinder applies at the colony scale, we imported its measured molecular properties from the within-host model (see X) and applied them to each individual bee as a function of that bee’s syrup intake (See Table X). 
+
+The minibinder blocks mite to mite DWV transmission through the occupation of the virion surface so its colony level effects enters the model as a reduction in the per-bite probability that the feeding mite infects its host. This was anchored on the measured baseline that a single infected mite feeding on an uninfected adult and transmits DWV with a probability of 0.398 (Posada -Florez et al. 2019). The binder’s predicted measured blocking fraction is ρ = 0.5863 and the protection an individual bee receives scales under cumulative intake offered to the colony. 
+
+| Parameter            | Description                                | Value     | Provenance                            |
+|----------------------|--------------------------------------------|-----------|---------------------------------------|
+| ρ                    | Fraction of per-bite transmission blocked  | 0.5863    | Prediction from Minibinder model      |
+| per_bite_P_untreated | Baseline per-bite transmission probability | 0.398     | Measured (Posada-Flórez et al., 2019) |
+| K_d                  | Binder dissociation constant               | 603.45 nM | Adaptyv measured binding affinity     |
+| t_half               | Binder half-life in the bee                | 4.5 h     | From Minibinder model                 |
+| intake               | Mean per-bee syrup intake multiplier       | 1.6848    |                                       |
+| dose                 | Syrup concentration required               | 6–24 g/L  |                                       |
+
+<center>*Table X. Parameter values and descriptions for the Minibinder Epidemiological Model.*</center>
+
+To determine the maximum benefit the minibinder could provide, we simulated a perfect binder by removing the transmission route and comparing it against knockouts of each remaining route (see Table 10 in Results). Our model predicted that a perfect binder reduces DWV prevalence in year 2 from 0.80 to 0.20, a 74% reduction, but reduces the fraction of overtly symptomatic adults only from 6.8% to 5.7%.
+
+## RNAi Pathway
+## Results
+
