@@ -6,8 +6,258 @@ tabLabels: ["Overview", "RNAi Model", "Minibinder Model", "Epidemiological Model
 tabLinks: ["model", "model-rnai", "model-minibinder", "model-epidemiological", "model-instructional"]
 ---
 
-# Minibinder structures
+# Minibinder Structures
 
 Explore our predicted minibinders alongside the VP3 P-domain. Rotate each complex, inspect nearby residues, or switch between cartoon and surface views.
 
 [Open the minibinder viewer →](/lambert-ga/minibinder-viewer/)
+
+# Minibinder Model
+## Overview
+Deformed Wing Virus (DWV) has become a major contributor to honey bee colony losses due to its transmission by Varroa mites. Lambert iGEM developed de novo minibinders to inhibit viral entry into the host cells. A hardware system was created that would deliver the minibinder concentration in a powdered form mixed with sucrose solution to serve as a delivery mechanism. However, the effectiveness of this therapeutic approach depends on delivering a sufficient concentration of minibinders to bees through the sucrose feeding system. To predict the minibinder dose that our hardware would deliver, Lambert iGEM created a linked model spanning molecular binding, bee-scale, and pharmacokinetics. The model predicts 15,821 mg/L of binder in 1:1 sucrose syrup, backed by the spanning of the models (Table X).
+
+| Module                           |   |
+|----------------------------------|---|
+| M1- Compartment Model            |   |
+| M2 - Refill Schedule             |   |
+| M3 - Concentration to powder     |   |
+| M4 - Prevention dose-response    |   |
+| M5 - Stochastic Establishment    |   |
+| M6 - Sensitivity and Uncertainty |   |
+| M7 - Affinity to dose            |   |
+| M8 - Minibinder vs IgY Antibody  |   |
+
+<center>*Table X - The model stack and what each module returns*</center>
+
+## Development
+The model stack was developed in three layers with each answering a question that progressed the development further.
+Layer 1- x
+Layer 2- x
+Layer 3- x
+
+## Parameters
+Rate constants and degradation rates were inputted into our models. Parameters were determined by four methods with scaled levels of certainty. Parameters were sourced by existing literature and experimentally measured where possible. As exact rate values within the bee pathophysiology is often limited by lack of existing research and measurement, using existing analogue-derived values and source parameter studies, some parameters were estimated through pooling each parameter’s soiree studies with a random effects estimator and coupled with a hierarchical Bayesian model that recovers heterogeneity. All modules draw from a parameter file holding variables measured. Of the list, using sensitivity analysis testing determined 17 parameters with the highest effect on the modeled amount (Table X).
+
+| Variable        | Meaning | Values | Units | Citation |
+|-----------------|---------|--------|-------|----------|
+| k_on            |         |        |       |          |
+| k_off           |         |        |       |          |
+| K_d             |         |        |       |          |
+| MW_binder       |         |        |       |          |
+| k_cx_clear      |         |        |       |          |
+| c_clear         |         |        |       |          |
+| k_syrup_deg     |         |        |       |          |
+| k_empty         |         |        |       |          |
+| k_gut_transit   |         |        |       |          |
+| k_prot          |         |        |       |          |
+| f_abs           |         |        |       |          |
+| t_half_hem      |         |        |       |          |
+| V_hem_adult     |         |        |       |          |
+| q_intake        |         |        |       |          |
+| p_prod          |         |        |       |          |
+| delta_I         |         |        |       |          |
+| f_reachable (φ) |         |        |       |          |
+| P_field         |         |        |       |          |
+| N₀              |         |        |       |          |
+| N_A conv        |         |        |       |          |
+
+<center>*Table X. Minibinder signaling pathway species and descriptions.*</center>
+
+## Assumptions
+(Combine all assumptions form mini models)
+
+## Model 1
+### Overview
+To predict how much minibinder reaches the site at which it must act, Lambert iGEM developed a compartmental model tracking protein from the feeder to the viral capsid. This pathway follows four main steps:
+1. Degradation: Protein dissolved in sucrose syrup degrades in the feeder across the refill interval.
+2. Ingestion: Foraging bees swallow the syrup, carrying protein into the crop.
+3. Transit: The crop empties into the midgut, where proteolysis and transit compete with absorption.
+4. Absorption: Intact protein crosses the midgut epithelium into the haemolymph, where it is cleared and where it binds free virions.
+
+### Development
+To simulate the progression of the delivery pathway, our team utilized a system of ODEs describing each compartment. Our model tracks amounts in nanomoles per bee rather than concentrations, which allows gut volume to be left unspecified and makes mass conservation an exact identity rather than a numerical tolerance. Because of this, oral bioavailability is produced as an output of the model rather than entered as an input. Binding to the viral capsid was represented as a reversible second-order association followed by irreversible clearance of the complex, using rate constants measured on our own construct.
+
+Binding is carried as a reversible second-order association with irreversible clearance of the complex, parameterised from our own BLI data.
+
+### Species and Reactions
+We mapped out the full delivery pathway using the Law of Mass Action, which simulates basic collisions of reactants (see Fig. 1). The pathway begins with minibinder dissolved in sucrose solution at the feeder and ends in one of five terminal sinks: degraded in the syrup, digested in the gut, excreted, cleared from the haemolymph, or cleared as a neutralised complex.
+
+#### Species
+| Species | Compartment                        | Initial Value | Units    |
+|---------|------------------------------------|---------------|----------|
+| S       | Feeder Syrup                       |               | nM       |
+| C       | Crop                               |               | nmol/bee |
+| G       | Midgut                             |               | nmol/bee |
+| H       | hemolymph                          |               | nmol/bee |
+| MBV     | Bound to VPe                       |               | nM       |
+| V       | Free virions delivered at the bite |               |          |
+
+<center>*Table X. Initial minibinder wetlab reagent values and units.*</center>
+
+#### Reactions
+| # | Reaction | Description |
+|---|----------|-------------|
+| 1 |          |             |
+| 2 |          |             |
+
+<center>*Table X. Minibinder biochemical reactions and descriptions.*</center>
+
+### Equations
+(insert)
+
+### Assumptions
+Our compartmental ODE model assumes that all rate constants and parameters remain constant, disregarding external environmental factors. The model assumes that absorption across the midgut epithelium is linear, which is justified because the concentrations our schedule produces sit below the reported transport constant, where linear and saturable forms are not distinguishable. The model also assumes that protein reaching the hemolymph is intact and functional.
+
+### Results
+After developing a complete set of ODEs, we simulated all four compartments over four refill cycles at the adopted loading (see Fig. X). The bee reaches its periodic steady state within approximately one refill cycle, which indicates that protection does not accumulate with continued dosing.
+
+[Figure X - four state trajectory over four refill cycles]
+
+Our model predicts that of the protein placed in the feeder, 61.9% survives a 24 hour refill in warm syrup, and 0.300% of what is swallowed reaches the hemolymph as intact functional protein. The 15 µL of hemolymph it enters clears it with a half-life of 4.5 hours. The product of these losses determines the required dose (see Table X).
+
+[insert table x]
+
+The periodic cycle closing to 6.21 × 10⁻²² indicates that the periodic steady state is exact rather than approximate. The agreement between the emergent and closed-form values of oral bioavailability confirms that the compartmental structure is internally consistent.
+
+## Model 2
+### Overview
+Our dose criterion evaluates a single circulating concentration, which requires the concentration profile between refills to remain flat. To achieve this, Lambert iGEM modeled the feeder volume and refill interval together, sizing the feeder so that drain time equals the refill interval exactly.
+
+### Development
+A feeder that empties before the next refill leaves the colony without protein for part of every cycle, producing a deep trough and requiring a much higher peak concentration to compensate. Rather than treat this as a biological constraint, our team treated feeder volume as a design variable and solved for the volume at which drain time matches the refill interval. The colony draw rate was modeled at the colony level from standard practice guidance for a strong colony, and was deliberately not decomposed into a per-bee rate.
+
+### Assumptions
+Our refill schedule model assumes that the residual batch is replaced rather than topped up at each refill, which is the conservative convention because it discards whatever active protein remains. The model also assumes that syrup is drawn uniformly by the colony at the modeled rate throughout the interval.
+
+### Results
+We simulated haemolymph binder concentration across four refill cycles beginning from an empty bee (see Fig. X). The peak-to-trough ratio is 1.128, indicating that the remaining ripple is the refill cycle itself rather than a swing the criterion must average over. Concentration rises while the bee drinks and falls as protein clears with a 4.5 hour half-life, and each cycle returns to the same value.
+
+[Figure X]
+
+The adopted schedule parameters and their basis are listed below (see Table 9).
+
+[Table X]
+
+The 24 hour interval was taken from the only published experiment that fed an anti-DWV protein to bees in syrup, which replaced feed daily. The feeder volume was not measured but chosen, so that the feeder drains in exactly one interval and the flat profile our criterion requires is maintained.
+
+## Model 3
+### Overview
+The circulating concentration is the quantity the bee experiences, but the mass of powder is the quantity a beekeeper must weigh out. To convert between them, our team inverted the delivery model to obtain the syrup concentration that holds the required haemolymph level, then multiplied by feeder volume and refill count to obtain the hive-scale figure.
+
+### Development
+Because the delivery cascade is linear, the inversion admits a closed form, so our team derived one rather than solving numerically. The closed form is checked against an independent root-find on each model run. If that check were to fail, the delivery model would no longer be linear and every mass figure would be invalid. Molecular weight and reconstitution recovery enter the inversion as exact linear multipliers, which allows the mass figure to be rescaled without re-running the model if the construct changes.
+
+### Assumptions
+Our inversion model assumes that reconstitution recovery remains constant across batches, and that syrup is shared uniformly across the colony at the modeled draw rate.
+
+### Results
+We traced the mass of protein through each stage from weighed powder to absorbed protein (see Fig. X). The overall reduction across the cascade is a factor of 634, and each contributing multiplier is accounted for separately (see Table X).
+
+[Figure X]
+
+[Table x]
+
+Inverting the delivery model at the required haemolymph level gives a syrup concentration of 15.82 mg/mL, equivalent to 1.582% w/v, which corresponds to 82.4 g of powder per hive per week (see Table 11). At this concentration the formulation is an ordinary sucrose syrup, which is the condition our hardware was designed to handle.
+
+[Table X]
+
+## Model 4
+### Overview
+The quantity our platform must improve is not the amount of virus destroyed, but the frequency with which a mite bite fails to start an infection. Field measurements report that 39.8% of mites induce an overt infection in an untreated bee. To predict how circulating minibinder changes that frequency, Lambert iGEM developed a dose-response model relating syrup concentration to the probability that a single bite establishes an infection.
+
+### Development
+Our team derived the establishment probability in closed form from the number of particles delivered per bite. A mite delivers a countable number of effective genome equivalents, each of which either starts a productive infection or is neutralised before it can. Circulating binder changes the probability that any individual particle escapes neutralization, and the probability of establishment per bite follows by compounding that escape probability across the delivered inoculum. Sweeping syrup concentration across the deliverable range then produces the full dose-response relationship.
+
+### Assumptions
+Our dose-response model assumes that the criterion applies per encounter rather than per season, as the model carries no mite encounter rate. The model also assumes that the reported field establishment probability combines the likelihood that a mite was infectious at all with the likelihood that an infection established, so the binder is credited in part for mites carrying no infectious virus.
+
+### Results
+We simulated the reduction in new infections across syrup concentrations spanning the deliverable range (see Fig. 5). The adopted concentration of 15.82 mg/mL produces a 74.9% reduction in new infections, with a half-maximal concentration of 5.34 mg/mL and a ceiling of 87.5%.
+
+[FIGURE 5 — PLACEHOLDER: prevention dose-response curve]
+
+Figure X
+
+The syrup concentration and weekly hive mass required for each target reduction are listed below 
+(see Table X).
+
+Above a reduction of 87.5% the limiting constraint ceases to be concentration and becomes the fraction of virus the binder can physically reach, so the curve approaches a vertical asymptote rather than approaching complete prevention. Our team therefore specified a target within the attainable range rather than quoting a reduction the chemistry cannot deliver.
+
+## Model 5
+### Overview
+Our deterministic models treat virus as a continuous concentration, but a mite does not deliver a concentration. It delivers a countable handful of infectious particles, and each one either starts a productive infection or is cleared beforehand. At these particle numbers the outcome is governed by chance, so an average concentration is not an appropriate description. To address this, Lambert iGEM developed a stochastic model of establishment using the Gillespie algorithm.
+
+### Development
+The Gillespie algorithm simulates the exact sequence of discrete events in the system, drawing the waiting time to each event from its own rate: one particle infects a cell, another is cleared, an infected cell bursts. Running the simulation many times produces the probability that an infection establishes rather than an average viral load. Our team then compared that simulated probability against the closed-form branching calculation. Because the two are derived by completely different methods, agreement between them indicates that the establishment threshold is a real property of the system rather than an artefact of either approach.
+
+### Assumptions
+Our stochastic model assumes that each delivered particle acts independently of the others, and that the branching process is evaluated at the initial availability of target cells.
+
+### Results
+We simulated establishment probability across a grid of delivered particle counts and compared the result against the closed-form branching probability (see Fig. 6). The two methods agree to within 3.46 standard errors, and the branching identity closes to 4.46 × 10⁻¹⁶.
+
+[Figure X]
+
+These results indicate that the deterministic threshold and the stochastic threshold describe the same property of the system, reached by two independent derivations.
+
+## Model 6
+### Overview
+To determine which parameters control the required loading and how much the answer could move given what remains unmeasured, Lambert iGEM performed two complementary sensitivity analyses and one joint uncertainty propagation. Elasticity analysis measures how far the answer moves per unit change in a single parameter. Sobol analysis measures how much of the total variance in the answer each parameter is responsible for when all parameters vary together, including through their interactions.
+
+### Development
+The elasticities were derived analytically from the closed form of the delivery chain rather than estimated from samples, which is why several values fall at exactly plus or minus one. The Sobol indices were computed from 24,576 model evaluations with every declared parameter bracket swept simultaneously. A third analysis propagated all declared brackets jointly across 3,000 draws to produce a distribution of required loading.
+
+### Assumptions
+Our sensitivity analyses assume that Sobol indices are conditional on the ranges sampled, so a parameter may score low either because it has little effect or because its range is already narrow. The joint uncertainty band assumes the declared brackets contain the true values, and is a prior-predictive distribution over those ranges rather than a posterior, because no pharmacokinetic measurement in bees is available to condition on.
+
+### Results
+Perturbing each of the 114 scalars on the live model showed that 17 can move the required loading and 97 cannot. The elasticity of each is listed below (see Table 14), where an elasticity of plus one indicates that the required dose is exactly proportional to that parameter.
+
+[Table X]
+
+The total-order Sobol indices are listed below (see Table 15). First-order indices account for 96.7% of the total variance, indicating that the response is close to additive and that interactions between parameters carry only a small remainder.
+
+[Table X]
+
+The two tables must be interpreted together. The dissociation constant scores near zero in the Sobol analysis but almost exactly plus one in the elasticity analysis. Sobol indices attribute variance, so a parameter whose range is already narrow contributes little variance regardless of how strong its effect is. The sampled range of the dissociation constant spans roughly 1.2 times, while the haemolymph half-life spans three times. The elasticity analysis is therefore the correct table for reading effect size.
+
+Propagating every declared bracket simultaneously across 3,000 draws gives a 5th to 95th percentile span of 14.0 times, from 0.462% to 6.45% w/v (see Fig. 9). The adopted loading sits at the 47.9th percentile of that distribution, near its middle rather than at an optimistic edge.
+
+## Model 7
+### Overview
+To establish how much an improvement in binding affinity would reduce the required material, Lambert iGEM modeled the relationship between the dissociation constant of the construct and the syrup concentration needed to meet the criterion.
+
+### Development
+Our team derived the relationship from the closed form of the requirement rather than fitting it, and the required dose was found to be exactly linear in the dissociation constant. This linearity is asserted in our test suite on each model run. We then mapped the resulting relationship against the field and laboratory concentrations of a registered dsRNA product for Varroa control, so that an affinity target could be expressed in terms of a product already in use.
+
+### Assumptions
+Our affinity model assumes that an improvement in affinity arrives without changing molecular weight or reconstitution recovery, both of which enter the required loading as independent linear multipliers.
+
+### Results
+We simulated required loading across a range of dissociation constants spanning two orders of magnitude (see Fig. 10). Because the relationship is exactly linear, a stated fold improvement in affinity produces exactly that fold reduction in required material, which makes the improvement path a specification rather than an estimate (see Table 16).
+
+[FIGURE 10 — PLACEHOLDER: required loading vs binding affinity]
+
+Table X
+
+## Model 8
+### Overview
+To evaluate our construct against an existing alternative, Lambert iGEM compared the minibinder to the only anti-DWV protein that has been fed to bees in syrup and published. The comparison was made on mass concentration in haemolymph, which removes both the delivery chain and molecular weight as confounding factors and asks how much viral load reduction each protein produces per unit of mass actually present in the blood.
+
+### Development
+The antibody values are experimental measurements from the published study, while the minibinder curve is a prediction from our model at the measured dissociation constant. The published study reports two doses, and our team fitted an implied potency curve to each dose separately rather than averaging them, because the two did not fall on a single curve.
+
+### Assumptions
+Our comparison model assumes that both proteins act by the same neutralization mechanism, which is what makes a comparison on mass concentration meaningful.
+
+### Results
+We plotted predicted viral load reduction against protein mass in haemolymph for both molecules (see Fig. 11). The two published antibody doses imply effective association rates 6.05 times apart, which indicates that the potency of the antibody is not identifiable from that data, so both implied curves were carried through the comparison.
+
+[FIGURE 11 — PLACEHOLDER: viral load reduction vs haemolymph protein mass]
+
+The advantage of the minibinder per unit mass depends on which implied curve is used as the reference because the advantage straddles parity, no potency-derived advantage can be quoted, and our test suite asserts this result so that no single fold value can be reintroduced into the claim. The published study also reports that a tenfold increase in dose produced only 2.24 times more reduction, which is considerably more sublinear than any of our models predict, with absorption saturation the most likely explanation.
+
+Two further quantities separate the two molecules (see Table 18). Neither protein reaches the concentration at which viral load stops growing: our model places that concentration at 3.87 × 10⁵ nM for the minibinder and 3.65 × 10⁴ nM for the antibody, against the 56.1 nM actually measured in the published study. Separately, the two projects evaluate different endpoints. At our criterion the required concentration is 15.82 mg/mL, while at the published study's own endpoint it is 1.661 mg/mL. That factor of 9.53 reflects the choice of endpoint rather than a difference in performance, and our team reports it so the two concentrations are not compared directly.
+
+The quantity that holds across both reference curves is the measured molecular weight ratio of 19.15 times. Per binding site delivered, the minibinder carries that much less protein mass. This is the comparison our team reports, because it rests on two measured molecular weights rather than on a fitted potency.
+
