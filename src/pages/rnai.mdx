@@ -7,9 +7,64 @@ tabLinks: ["rnai", "rnai-design", "rnai-experimentation"]
 ---
 
 import Wip from "../components/md_components/Wip";
+import Image from "../components/md_components/Image";
+import Reference from "../components/md_components/Reference";
 
 <Wip />
 
-# Overview
+# RNA-interference
 
-Placeholder. The RNAi Overview write-up goes here.
+## RNAi Overview
+
+Ribonucleic acid interference (RNAi) silences specific genes by degrading specific messenger RNA (mRNA). Double-stranded RNA (dsRNA) is cleaved by the enzymes Drosha and DICER into small interfering RNA (siRNA), which is about 19-23 nucleotides long (Dana et al., 2017). The siRNA is incorporated into the RNA-induced silencing complex (RISC), where Argonaute removes the passenger strand and retains the guide strand. The guide strand directs RISC to the complementary mRNA, which Argonaute cleaves and degrades (Neumeier et al., 2021). As a result, the mRNA cannot be translated into protein (see Fig. 1).
+
+<Image
+src="REPLACE WITH IMAGE URL"
+caption="Figure 1. Animation of whole process, including Exportin 5"
+size="md"
+/>
+
+## Justification
+
+Lambert iGEM selected RNAi over other methods of gene silencing technologies due to its non-permanent gene silencing, noninvasive delivery, and scalability (see Table 1).
+
+| RNAi (RNA interference)<br />(Boettcher & McManus, 2015) | CRISPR<br />(Yang et al., 2020) | TALE<br />(Gaj et al., 2013) |
+|---|---|---|
+| Temporary gene knockdown without DNA modification<br />Oral delivery through sucrose syrup (Maori et al., 2009)<br />Scalable for large mite population<br />Simple dsRNA/siRNA design; natural RNAi pathway | Potentially permanent DNA edits<br />Requires specialized Cas9 delivery<br />Challenging to scale<br />Requires Cas9 and guide RNA | Potentially permanent DNA edits<br />Requires specialized nuclease delivery<br />Challenging to scale<br />Impractical for large populations<br />Requires target-specific protein engineering |
+
+<center>*Table 1. Comparison of characteristics between methods of genetic regulation.*</center>
+
+Following the selection of RNAi, Lambert iGEM compared double-stranded RNA (dsRNA) and short-hairpin RNA (shRNA) to determine the most suitable approach for our delivery system. We selected dsRNA based on its advantages for our proposed application (see Table 2).
+
+| dsRNA<br />(Garbian et al., 2012) | shRNA<br />(Moore et al., 2010) |
+|---|---|
+| Demonstrated gene silencing in Varroa mites<br />Can be administered directly without genetic modification<br />Simple target-specific sequence design<br />Easily multiplexed by combining multiple dsRNA sequences | Commonly used for intracellular gene silencing<br />Typically expressed from engineered DNA constructs<br />Requires hairpin and loop optimizations<br />Multiplexing requires additional expression design |
+
+<center>*Table 2. Comparison of dsRNA and shRNA for RNAi-mediated mite control.*</center>
+
+## Target Selection
+
+Varroa destructor relies on salivary enzymes to feed on honeybees, digesting host tissue externally before ingesting it (Ramsey et al., 2019). As a result, the mite's saliva carries Deformed Wing Virus (DWV): 9 DWV proteins have been identified in the mite's salivary secretome (Zhang & Han, 2019). Therefore, RNAi knockdown of a salivary enzyme gene can disrupt feeding and viral transmission while reducing mite survival by 40–50% (Becchimanzi et al., 2024).
+
+To select our target genes, we developed a set of criteria that ensure our RNAi system is effective and safe:
+
+- Targets encode for genes that are critical to the feeding function and survival of V. destructor
+- Sequence is consistent across mite species with low mutation rate
+- Minimal side effects to the health of the bee colony when our targets are silenced
+- Sequence is unique to V. destructor
+
+We accordingly applied these criteria to the genome of V. destructor, and considered several targets, eventually finalizing on the genes Vd-CHIsal, Peritrophin-A, and Vdav422 (see Table 3).
+
+| Gene of Interest | Function | Effect of Repression |
+|---|---|---|
+| Vd-CHIsal<br />(Becchimanzi et al., 2020) | A glycoside hydrolase in the mite's saliva that breaks down chitin in the bee's exoskeleton (see Fig. 2). | Impairs chitin degradation, reducing the mite's ability to penetrate the bee's exoskeleton and feed. |
+| Peritrophin-A<br />(Becchimanzi et al., 2024) | Anchors proteins that don't normally bind chitin to chitin-containing structures, with minimal damage (see Fig. 2). | Disrupts chitin-associated structures, impairing mite digestion and nutrient absorption. |
+| Vdav422<br />(Kim et al., 2026) | Keeps feeding wounds open, suppresses the host immune response, and helps the mite ingest nutrients (see Fig. 2). | Disrupts feeding-site maintenance and immune suppression, reducing nutrient uptake and mite survival. |
+
+<center>*Table 3. Target genes selected for RNAi knockdown in V. destructor.*</center>
+
+<Image
+src="REPLACE WITH IMAGE URL"
+caption="Figure 2. Graphic of mite utilizing its salivary chitinase to bind to structural components, Peritrophin-A attaching a protein to a chitin-containing structure, and Vdav422 keeping the wounds open in one major graphic."
+size="md"
+/>
