@@ -10,6 +10,78 @@ import Wip from "../components/md_components/Wip";
 
 <Wip />
 
-# Overview
+# Epidemiological Model
+## Overview
+As Deformed Wing Virus (DWV) has begun to rapidly disseminate throughout honeybee colonies worldwide, treatments aimed at targeting the virus’ main vector, the Varroa destructor, as well as the molecular structural integrity of the pathogen, are critical to effectively mitigating the efficacy of DWV and preventing the collapse of bee colonies globally. After developing a dual-based therapeutic addressing this concern for our project this year, we recognized the need for an exemplary model that predicts how our treatment platform performs at the scale of a colony and its surrounding environment to determine the scale at which our therapeutic decreases the DWV prevalence and demonstrates colony function preservation.
 
-Placeholder. The Epidemiological Model write-up goes here.
+To capture colony level behavior, we built an individual based model that would simulate the four processes on a daily time step:
+
+1. Colony Demography. Every adult bee is tracked as an individual with an age, a task (house bee or forager), and a DWV status. Brood is carried as daily cohorts through a fixed developmental delay.
+2. The Varroa cycle. Mites are tracked as individuals that invade brood cells at capping and reproduce inside a sealed cell, emerging with the adult bee.
+3. DWV transmission. The virus spreads through the mites transmitting the virus to adult bees, infected mites transmitting it to pupae inside sealed brood cells, and low-level transmission from outside the colony. 
+4. Delivery. Medicated sucrose syrup is fed on the beekeeper's real seasonal windows, and each bee's own syrup intake sets its own level of minibinder protection.
+
+The model was run for 20 paired weather seeds across 6 years with two locations(Atlanta, GA and Ithaca, NY) against a Varroa free reference colony with each component of our therapeutic. We simulated the therapeutic as a whole and with each of its two components alone to attribute colony level benefit to the minibinder and RNAi construct separately. Our model predicted that adding a therapeutic to an integrated pest management program retained crop pollination from 0.734 to 0.895 at Atlanta and from 0.877 to 0.939 at Ithaca.
+
+To make the model useful to the beekeepers who would administer the treatment, we reported its outputs in the units that are used in the field. Mite infestation is reported in mites per 100 adult bees with quantity a sugar roll returns and the model marks the Honey Bee Coalition action threshold of 3 mites per 100. Our model supports five of the United Nations Sustainable Development Goals (see Table X).
+
+| Goal                                       | Connection to the Model                                                     |
+|--------------------------------------------|-----------------------------------------------------------------------------|
+| 2. Zero Hunger                             | Quantifies retained pollination of crops dependent on managed colonies      |
+| 3. Good Health and Well-being              | Models an antiviral delivery strategy transferable to other managed species |
+| 8. Decent Work and Economic Growth         | Reports honey yield in kg per colony per year                               |
+| 12. Responsible Consumption and Production | Tests treatment schedules against withdrawal period constraints             |
+| 15. Life on Land                           | Predicts colony survival under parasite and pathogen pressure               |
+
+<center>*Table X. Connecting SDGs to the purpose of the Epidemiological Model.*</center>
+
+## Development
+The hive is modeled as two 10-frame Langstroth deeps, which places a fixed comb ceiling on brood rearing. Within that space, the individual variation in age and infection status determines the colony level outcomes so the treatment would produce a different age structure or mite load.
+
+To ensure that every component carried an established background and that the model’s behavior could be attributed to known biology, we assembled it from published Varroa, DWV, and honey bee colony models. Four model families supply the backbone:
+- **Sumpter & Martin 2004** supplies the DWV block - the in-cell and phoretic transmission routes, seasonal brood death, and the epidemic threshold the model is later tested against.
+- **Khoury, Myerscough & Barron 2011** supplies colony demography: the saturating egg-laying term N/(w+N), the house-bee-to-forager recruitment rule R = α − σF/N, and the social-inhibition route to collapse. **Betti, Wahl & Zamir 2014** supplies forager mortality on foraging days.
+- **BEEPOP/VarroaPop** (DeGrandi-Hoffman et al.) and **BEEHAVE** (Becher et al. 2014) supply the weather-driven structure: egg laying as a function of temperature, photoperiod and colony size, and a foraging-day threshold on daily maximum temperature.
+- **Vetharaniam & Stevens 2020, Martin 1998** and **Calis et al. 1999** supply the daily age-structured mite cycle, which was validated in those papers against field mite growth.
+Individual aspects are drawn from the studies that measured them (See Table X):
+
+(Table X)
+
+## Assumptions
+Our colony model relies on structural assumptions that are adopted to keep the simulation computationally tractable at the scale of individual bees and mites over six years. 
+
+1. We assume that mites attach to adult bees at random with respect to the task. Mites in the field attach to the nurse bees and this raises the probability that a mite reaches a brood cell.
+2. Mites enter the colony from surrounding apiaries at a constant daily rate in an invasion season.
+3. There is no horizontal bee to bee DWV transmission in the absence of a mite.
+4. Mites do not evolve resistance to the treatment and that the virus does not evolve over the years.
+5. Weather drives the colony through daily maximum temperature and that precipitation has no day to day persistence. 
+6. A fixed comb ceiling of two 10 frame Langstroth deeps and a beekeeper who feeds on schedule when a feeding window is open. 
+7. The queen is never lost, the colony never swarms, bees do not drift in or out, and no other treatments are applied. Treated and untreated colonies share the same starting conditions, parameters and weather, so any difference between them comes from the treatment.
+8. We only model adult bees and they have no age structure. Brood comes in only as daily emergence, which follows the queen’s seasonal egg laying and drops off in small colonies. Only mites carrying DWV reduce emergence, and the bees that do emerge are healthy.
+9. Infected bees only differ from healthy bees in mortality and infectiousness, and they never recover. Natural mortality and mortality from mites, crowding and DWV act independently and add together.
+10. Phoretic and reproductive mites are treated as one population. Mites only reproduce in capped broods and their numbers are limited to a set number per adult bee. They die naturally or are groomed off at a rate that saturates with colony size.
+11. DWV is the only pathogen in the model and it does not affect mite survival or reproduction. Mites are born without the virus, pick it up from infected bees at the same seasonal rate they pass it to bees, and can lose it again. Transmission depends on the proportions of healthy and infected bees, not on colony size.
+12. The dsRNA only affects mites. A bee is either protected or not, and mites respond to that rather than to how much the bee drank. Bees become protected at a constant rate while dsRNA syrup is available and protection wears off at a constant rate.
+13. Mites only get dsRNA by feeding on protected bees. They are disabled at a rate set by a Hill dose response, and once disabled they stop feeding and die.
+14. We assume parameters taken from different studies describe one representative temperate colony. Seasonal rates follow the same cycle every year, but the treatment parameters and a few of the colony parameters stay fixed no matter the season or weather.
+
+## Minibinder Pathway
+To predict the amount of protection the minibinder applies at the colony scale, we imported its measured molecular properties from the within-host model (see X) and applied them to each individual bee as a function of that bee’s syrup intake (See Table X). 
+
+The minibinder blocks mite to mite DWV transmission through the occupation of the virion surface so its colony level effects enters the model as a reduction in the per-bite probability that the feeding mite infects its host. This was anchored on the measured baseline that a single infected mite feeding on an uninfected adult and transmits DWV with a probability of 0.398 (Posada -Florez et al. 2019). The binder’s predicted measured blocking fraction is ρ = 0.5863 and the protection an individual bee receives scales under cumulative intake offered to the colony. 
+
+| Parameter            | Description                                | Value     | Provenance                            |
+|----------------------|--------------------------------------------|-----------|---------------------------------------|
+| ρ                    | Fraction of per-bite transmission blocked  | 0.5863    | Prediction from Minibinder model      |
+| per_bite_P_untreated | Baseline per-bite transmission probability | 0.398     | Measured (Posada-Flórez et al., 2019) |
+| K_d                  | Binder dissociation constant               | 603.45 nM | Adaptyv measured binding affinity     |
+| t_half               | Binder half-life in the bee                | 4.5 h     | From Minibinder model                 |
+| intake               | Mean per-bee syrup intake multiplier       | 1.6848    |                                       |
+| dose                 | Syrup concentration required               | 6–24 g/L  |                                       |
+
+<center>*Table X. Parameter values and descriptions for the Minibinder Epidemiological Model.*</center>
+
+To determine the maximum benefit the minibinder could provide, we simulated a perfect binder by removing the transmission route and comparing it against knockouts of each remaining route (see Table 10 in Results). Our model predicted that a perfect binder reduces DWV prevalence in year 2 from 0.80 to 0.20, a 74% reduction, but reduces the fraction of overtly symptomatic adults only from 6.8% to 5.7%.
+
+## RNAi Pathway
+## Results
