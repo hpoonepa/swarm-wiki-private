@@ -212,7 +212,9 @@
 
   .after { height: 40vh; }
 </style>
-<link rel="stylesheet" href="story.css?v=30f4c3e5d2f3">
+<link rel="stylesheet" href="story.css?v=3efd98288c0c">
+<link rel="stylesheet" href="ending.css?v=099015dbb426">
+<link rel="stylesheet" href="rnai-layout.css?v=31699a9aa666">
 </head>
 <body>
 <script src="cursor.js?v=a436bab094c0"></script>
@@ -346,7 +348,7 @@
       <div class="why-virus" id="dwv" data-embed data-preload aria-hidden="true"></div>
       <div class="dwv-story" aria-hidden="true" inert>
         <div class="disease-caption">
-          <article data-disease-beat="virus"><h2>Deformed wing<br>virus <span>(DWV).</span></h2><p>A virus that threatens honey bee health.</p></article>
+          <article data-disease-beat="virus"><h2>Deformed wing <br>virus <span>(DWV).</span></h2><p>A virus that threatens honey bee health.</p></article>
           <article data-disease-beat="bee" aria-hidden="true" inert><h2>Healthy wings.<br>A vulnerable bee.</h2><p>DWV can infect a bee even when there are no visible signs.</p></article>
           <article data-disease-beat="mite" aria-hidden="true" inert><h2>A tiny mite.<br>A route for DWV.</h2><p><em>Varroa</em> mites feed on bees and can transmit the virus.</p></article>
           <article data-disease-beat="wings" aria-hidden="true" inert><h2>Too damaged<br>to fly.</h2><p>Bees infected during development can emerge with crumpled wings and be unable to fly.</p><small>The animation illustrates effects during development.</small></article>
@@ -453,41 +455,41 @@
         <p>Small proteins designed to bind the virus.</p>
       </div>
   <div id="minibinders" class="journey-protein" aria-hidden="true" inert aria-label="Minibinder approach inside the bee">
-      <div class="binder-copy">
-        <p class="scene-eyebrow">Inside the bee</p>
-        <h2>A grip on the virus.</h2>
-        <p>Minibinders are small designed proteins. Ours targets VP3 on DWV’s outer shell. We’re studying whether this binding can help block infection.</p>
-      </div>
+    <figure class="gut-focus">
+      <svg viewBox="0 0 743 644" role="img" aria-label="A honey bee with a circular cutaway marking its gut. The organs are simplified, not to scale.">
+        <defs><clipPath id="gut-window"><circle cx="337" cy="416" r="94"/></clipPath></defs>
+        <image href="assets/journey/dwv-bee.svg" width="743" height="644"/>
+        <g clip-path="url(#gut-window)">
+          <circle cx="337" cy="416" r="94" fill="#fff6db" fill-opacity=".94"/>
+          <path d="M337 305 L337 351" stroke="#bb7039" stroke-width="13" stroke-linecap="round"/>
+          <path d="M337 347 C310 353 304 375 307 402 C309 427 313 453 337 463 C361 453 365 427 367 402 C370 375 364 353 337 347Z" fill="#e4a454" stroke="#a76332" stroke-width="3"/>
+          <path d="M314 375 Q337 385 360 375 M311 391 Q337 402 363 391 M313 409 Q337 420 361 409 M317 428 Q337 437 357 428" stroke="#fff0bd" stroke-width="5" stroke-linecap="round"/>
+          <path d="M337 462 C338 480 350 483 350 501 L345 519" stroke="#bc793e" stroke-width="13" fill="none" stroke-linecap="round"/>
+        </g>
+        <circle class="gut-focus__ring" cx="337" cy="416" r="99" fill="none" stroke="#b67527" stroke-width="4"/>
+        <circle cx="337" cy="416" r="106" fill="none" stroke="#fff8e9" stroke-width="2"/>
+      </svg>
+      <figcaption><strong>Inside the bee’s gut</strong><span>A closer look at where our approach begins. Schematic view.</span></figcaption>
+    </figure>
+    <div class="binder-board">
+      <img class="binder-board__art" src="assets/journey/minibinder-layout.svg" width="1440" height="849" alt="" aria-hidden="true">
+      <div class="binder-copy"><h2>Our minibinder, up close.</h2><p>A small designed protein that binds to the virus’s outer shell.</p></div>
       <div class="binder-panel">
-        <div class="protein-toolbar">
-          <div class="protein-title"><h3>3D binding model</h3><p>Predicted complex</p></div>
-          <div class="protein-key" aria-label="Molecular colors"><span><i class="binder-dot"></i>Our minibinder</span><span><i class="virus-dot"></i>DWV capsid protein (VP3)</span></div>
-          <button class="protein-reset" type="button" data-protein-reset aria-label="Reset the 3D model view">Reset view <span aria-hidden="true">↺</span></button>
-        </div>
-        <div class="protein-stage">
-      <figure class="bee-cutaway" aria-label="Schematic of the digestive tract inside a honey bee">
-        <svg viewBox="0 0 743 644" role="img" aria-label="The bee’s gut is highlighted in orange">
-          <image href="assets/journey/dwv-bee.svg" width="743" height="644" opacity=".3"/>
-          <g fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M339 152 C337 207 328 251 339 307 C346 343 309 346 307 375 C303 408 367 399 371 430 C375 459 315 451 312 479 C308 500 337 520 337 546" stroke="#fff8d6" stroke-width="35"/>
-            <path d="M339 152 C337 207 328 251 339 307 C346 343 309 346 307 375 C303 408 367 399 371 430 C375 459 315 451 312 479 C308 500 337 520 337 546" stroke="#bf693c" stroke-width="20"/>
-            <path d="M339 307 C346 343 309 346 307 375 C303 408 367 399 371 430" stroke="#efbd63" stroke-width="10"/>
-            <circle cx="336" cy="395" r="78" stroke="#9b552b" stroke-width="2" stroke-dasharray="5 7"/>
-          </g>
-        </svg>
-      </figure>
-      <div class="protein-view">
-        <div id="capsid-host" tabindex="0" role="img" aria-description="Teal: our minibinder. Gold: the viral P domain. Predicted complex. Drag or use arrow keys to rotate; press R to reset." aria-label="Predicted 3D structure of the SWARM minibinder l79_s469532_mpnn9 and the DWV VP3 P domain">
-          <div class="protein-viewport"></div>
-          <p class="model-fallback" role="status">Loading our minibinder structure…</p>
-        </div>
+        <div class="protein-key" aria-label="Molecular colors"><span><i class="binder-dot"></i>Our minibinder</span><span><i class="virus-dot"></i>DWV VP3</span></div>
+        <div class="protein-stage"><div class="protein-view">
+          <div id="capsid-host" tabindex="0" role="img" aria-description="Teal: our minibinder. Gold: the viral P domain. Predicted complex. Drag or use arrow keys to rotate; press R to reset." aria-label="Predicted 3D structure of the SWARM minibinder l79_s469532_mpnn9 and the DWV VP3 P domain">
+            <div class="protein-viewport"></div><p class="model-fallback" role="status">Loading our minibinder structure…</p>
+          </div>
+        </div></div>
+        <div class="protein-footer"><p class="protein-note">Predicted pose · Drag to rotate</p><button class="protein-reset" type="button" data-protein-reset aria-label="Reset the 3D model view">Reset view <span aria-hidden="true">↺</span></button></div>
       </div>
-        </div>
-        <div class="protein-footer">
-          <p class="protein-note">Drag to rotate <span aria-hidden="true">·</span> Arrow keys to turn</p>
-          <a href="../minibinder/">Explore our minibinders <span aria-hidden="true">↗</span></a>
-        </div>
-      </div>
+      <article class="binder-fact binder-fact--design"><h3>The design</h3><p>A 79-amino-acid minibinder.</p></article>
+      <article class="binder-fact binder-fact--target"><h3>The target</h3><p>VP3 on the virus’s shell.</p></article>
+      <article class="binder-fact binder-fact--evidence"><h3>The evidence</h3><p>Binding measured with BLI.</p></article>
+      <article class="binder-fact binder-fact--aim"><h3>The aim</h3><p>Block infection in bee cells.</p></article>
+      <svg class="binder-bee-marker" viewBox="0 0 1440 849" aria-hidden="true"><circle cx="1174" cy="493" r="72" fill="#fff6db" fill-opacity=".25" stroke="#ad6828" stroke-width="3"/><path d="M1174 568 L1174 613" stroke="#ad6828" stroke-width="2"/></svg>
+      <div class="binder-bee-caption"><strong>The bee’s gut</strong><span>From the bee to the molecular scale.</span><a href="../minibinder/">Explore minibinders ↗</a></div>
+    </div>
   </div>
 
       <div id="mite" class="journey-copy journey-copy--mite journey-approach" aria-hidden="true" inert>
@@ -497,9 +499,15 @@
 
   <div id="rnai" class="journey-rna" data-theme="dark" aria-labelledby="rnai-title" aria-hidden="true" inert>
     <div class="cell-field cell-field--rna" data-cell-field aria-hidden="true"></div>
+    <figure class="rna-subject">
+      <div class="rna-subject__portrait"><img src="assets/journey/mite.svg" alt="Illustrated Varroa mite" width="186" height="184"></div>
+      <figcaption><span class="rna-subject__eyebrow">The second target</span><strong>The <em>Varroa</em> mite</strong><p>Targeting the genes it uses to feed.</p><a href="../rnai/">Explore RNAi <span aria-hidden="true">↗</span></a></figcaption>
+    </figure>
+    <div class="rna-panel-frame" aria-hidden="true"></div>
     <div id="rna-intro" class="rna-discovery" aria-hidden="true" inert>
       <div class="rna-discovery__copy">
-        <h2>Interrupt<br>the feeding.</h2>
+        <span class="rna-panel-kicker">Our approach</span>
+        <h2>Interrupt the feeding.</h2>
         <p>RNA interference (RNAi) reduces specific gene messages. We’re targeting three salivary genes in <em>Varroa</em> to interfere with feeding.</p>
       </div>
         <div class="rna-targets">
@@ -513,6 +521,7 @@
     </div>
     <div class="mechanism-stage rna-layout">
       <div class="mechanism-copy mechanism-copy--headline">
+        <span class="rna-panel-kicker">Inside a mite cell</span>
         <h2 id="rnai-title">How RNAi works</h2>
         <p class="rna-context">An RNA guide helps the cell find and break down a matching message.</p>
       </div>
@@ -539,23 +548,37 @@
     </div>
   </section>
 
-  <section id="together" class="together-story" aria-labelledby="together-title">
-    <div class="stage together-stage">
-      <div class="together-copy">
-        <h2 id="together-title">Protecting bees<br>from <span>DWV.</span></h2>
-        <p>SWARM is designed to target the virus inside the bee and the <em>Varroa</em> mite that spreads it. Our goal is to limit new infections and help bees already exposed to DWV.</p>
-        <p class="delivery-note">Bringing this into a hive will also mean testing how to deliver the treatment safely and effectively.</p>
-        <a class="together-safety" href="../safety/">How we assess safety <span aria-hidden="true">↗</span></a>
-        <nav class="together-links" aria-label="Explore our approach">
-          <a href="../description/">Our project <span aria-hidden="true">↗</span></a>
-          <a href="#minibinders">Minibinders <span aria-hidden="true">↗</span></a>
-          <a href="#rna-intro">RNAi <span aria-hidden="true">↗</span></a>
-        </nav>
+  <section id="together" class="together-story ending-story" aria-labelledby="together-title">
+    <div class="stage ending-stage">
+      <header class="ending-heading">
+        <h2 id="together-title">Protecting bees from <span>DWV.</span></h2>
+      </header>
+      <div class="ending-landscape">
+        <svg class="ending-routes" viewBox="0 0 1200 560" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <path class="ending-route ending-route--binder" d="M255 245C345 245 371 195 466 227"/>
+          <path class="ending-route ending-route--rna" d="M950 350C870 350 841 303 758 316"/>
+          <circle class="ending-route-dot ending-route-dot--binder" cx="466" cy="227" r="3"/>
+          <circle class="ending-route-dot ending-route-dot--rna" cx="758" cy="316" r="3"/>
+        </svg>
+        <a class="ending-note ending-note--binder" href="#minibinders" data-ending-approach="binder">
+          <span class="ending-number">01</span>
+          <h3>Minibinders <span aria-hidden="true">↗</span></h3>
+          <p>Designed proteins that bind to the virus’s shell.</p>
+        </a>
+        <div class="ending-garden">
+          <img class="ending-flower" src="https://static.igem.wiki/teams/6185/wiki/homepage/flower.svg" alt="" width="850" height="770">
+          <img class="ending-bee" src="https://static.igem.wiki/teams/6185/wiki/homepage/bee.svg" alt="Honey bee resting on a red flower" width="366" height="314">
+        </div>
+        <a class="ending-note ending-note--rna" href="#rna-intro" data-ending-approach="rna">
+          <span class="ending-number">02</span>
+          <h3>RNAi <span aria-hidden="true">↗</span></h3>
+          <p>RNA guides designed to interfere with mite feeding.</p>
+        </a>
       </div>
-      <div class="together-garden" aria-hidden="true">
-        <img class="together-flower" src="https://static.igem.wiki/teams/6185/wiki/homepage/flower.svg" alt="" width="850" height="770">
-        <img class="together-bee" src="https://static.igem.wiki/teams/6185/wiki/homepage/bee.svg" alt="" width="366" height="314">
-      </div>
+      <nav class="ending-signoff" aria-label="Project and safety">
+        <a href="../description/">Our project <span aria-hidden="true">↗</span></a>
+        <a href="../safety/">How we assess safety <span aria-hidden="true">↗</span></a>
+      </nav>
     </div>
   </section>
 
@@ -641,7 +664,8 @@
   <script src="menu.js?v=828e0c6b19dd"></script>
   <script src="ux.js?v=story1"></script>
   <script src="intro-bee.js?v=6" defer></script>
+  <script src="ending.js?v=823d932f9048"></script>
   <script src="flight.js?v=c4c4168e8890"></script>
-  <script type="module" src="mechanisms.js?v=2443029127de"></script>
+  <script type="module" src="mechanisms.js?v=b94d433fe5e2"></script>
 </body>
 </html>

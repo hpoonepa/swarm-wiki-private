@@ -1,5 +1,5 @@
 import { initRnaPlayer } from './vendor/rna-player.js?v=0ad76dc16e5c';
-import { initJourney, binderProgress, rnaProgress, rnaScroll } from './journey.js?v=558ed0b02251';
+import { initJourney, binderProgress, rnaProgress, rnaScroll } from './journey.js?v=d42a48b30f9f';
 
 initJourney();
 
@@ -48,7 +48,11 @@ function paintMini(p = displayedMini) {
   mini.dataset.phase = String(index);
   const zoom = reduced.matches ? Number(index > 0) : smoothMini((p - .10) / .17);
   mini.style.setProperty('--gut-zoom', zoom.toFixed(4));
-  mini.style.setProperty('--molecule-in', (reduced.matches ? Number(index > 0) : smoothMini((p - .17) / .12)).toFixed(4));
+  const molecular = reduced.matches ? Number(index > 0) : smoothMini((p - .25) / .15);
+  mini.style.setProperty('--molecule-in', molecular.toFixed(4));
+  const board = mini.querySelector('.binder-board'), cutaway = mini.querySelector('.gut-focus');
+  board.inert = molecular < .05; board.setAttribute('aria-hidden', String(molecular < .05));
+  cutaway.setAttribute('aria-hidden', String(molecular > .95));
   scene?.setProgress(reduced.matches ? [.05,.33,.52,.72,1][index] : p, { instant: reduced.matches });
 }
 // Each molecule stays in the same scene throughout. Explicit playback is optional;
