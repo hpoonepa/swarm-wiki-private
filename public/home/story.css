@@ -228,16 +228,21 @@ html.loading .honey-progress { visibility: hidden; }
 
 /* The bee rests on the flower while the project comes back into view. */
 .together-story { position: relative; z-index: 4; height: 160vh; background: var(--swarm-yellow); }
-.together-stage { background: var(--swarm-yellow); isolation: isolate; display: flex; align-items: center; }
-.together-copy { position: relative; z-index: 3; width: 45%; margin-left: 7%; padding-block: 40px; }
-.together-copy h2 { margin: 0 0 28px; font-size: clamp(44px,5.3vw,84px); font-weight: 750; letter-spacing: -.055em; line-height: 1.06; }
-.together-copy h2 span { color: #b64e1b; }
-.together-copy > p { max-width: 540px; margin: 0 0 24px; font-size: clamp(17px,1.5vw,22px); line-height: 1.6; color: #50695d; }
-.together-safety { display: inline-flex; align-items: center; gap: 16px; color: #153f36; font-size: 15px; text-underline-offset: 6px; text-decoration-thickness: 1px; }
-.together-links { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 46px; padding-top: 22px; max-width: 540px; border-top: 1px solid #153f3626; }
-.together-links a { display: inline-flex; gap: 10px; align-items: center; min-height: 34px; font-size: 14px; font-weight: 550; color: #153f36; text-decoration: none; }
-.together-links a:hover, .together-safety:hover { color: #a64d1e; text-decoration: underline; text-underline-offset: 6px; }
-.together-garden { position: absolute; right: 6%; top: 50%; width: min(42vw,72svh); aspect-ratio: 1; transform: translateY(-50%); }
+.together-stage { background: var(--swarm-yellow); isolation: isolate; display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1.6fr) minmax(0,1fr); grid-template-rows: auto minmax(0,1fr) auto; grid-template-areas: "heading heading heading" "binder garden rna" "links links links"; align-items: center; column-gap: 3%; row-gap: 24px; padding: 100px 7% 36px; box-sizing: border-box; }
+#together-title { grid-area: heading; margin: 0 auto; max-width: 1000px; text-align: center; font-size: clamp(32px,3.3vw,52px); font-weight: 750; letter-spacing: -.045em; line-height: 1.15; }
+#together-title span { color: #b64e1b; }
+.together-approach { position: relative; z-index: 3; }
+.together-approach--binder { grid-area: binder; }
+.together-approach--rna { grid-area: rna; }
+.together-label { display: block; width: fit-content; padding-bottom: 12px; border-bottom: 2px solid #c08a37; font-size: 14px; font-weight: 550; color: #50695d; }
+.together-approach h3 { margin: 22px 0 18px; font-size: clamp(28px,2.9vw,44px); line-height: 1.1; letter-spacing: -.045em; }
+.together-approach p { max-width: 28ch; margin: 0 0 24px; font-size: clamp(16px,1.3vw,20px); line-height: 1.55; color: #50695d; }
+.together-approach a, .together-links a { display: inline-flex; gap: 12px; align-items: center; min-height: 44px; color: #153f36; font-size: 15px; text-underline-offset: 6px; text-decoration-thickness: 1px; }
+.together-links { grid-area: links; display: flex; justify-content: center; flex-wrap: wrap; gap: 12px 36px; }
+.together-links a { font-size: 14px; }
+.together-links a:hover, .together-approach a:hover { color: #a64d1e; }
+.together-links a:focus-visible, .together-approach a:focus-visible { outline: 2px solid #153f36; outline-offset: 6px; border-radius: 2px; }
+.together-garden { grid-area: garden; position: relative; justify-self: center; width: min(100%,56svh); aspect-ratio: 1; }
 .together-flower { position: absolute; width: 100%; height: auto; left: 0; bottom: 0; }
 .together-bee { position: absolute; width: 58%; height: auto; left: 32%; top: 10%; transform: rotate(-8deg); transform-origin: 40% 85%; }
 .project-explore { position: relative; z-index: 4; padding: 100px 7vw 120px; background: var(--swarm-paper); }
@@ -270,14 +275,15 @@ html.loading .honey-progress { visibility: hidden; }
   .honey-progress__drop { width: 15px; height: 24px; }
   .rna-context { font-size: 12px; margin-top: 10px; }
   .together-story { height: auto; min-height: 100svh; }
-  .together-stage { position: relative; min-height: 100svh; height: auto; display: flex; flex-direction: column; align-items: flex-start; padding: 70px 17% 30px 7%; }
-  .together-copy { width: 100%; margin: 0; padding: 0; }
-  .together-copy h2 { font-size: clamp(37px,9.5vw,60px); margin-bottom: 22px; }
-  .together-copy > p { font-size: 15px; line-height: 1.6; }
-  .together-safety { font-size: 14px; }
-  .together-links { margin-top: 28px; padding-top: 15px; gap: 5px 18px; }
-  .together-links a { font-size: 12px; }
-  .together-garden { position: relative; width: min(100%,410px); right: auto; top: auto; align-self: center; margin: 14px 0 0; transform: none; flex-shrink: 0; }
+  .together-stage { position: relative; min-height: 100svh; height: auto; grid-template-columns: minmax(0,1fr) minmax(0,1fr); grid-template-rows: auto; grid-template-areas: "heading heading" "garden garden" "binder rna" "links links"; align-items: start; gap: 26px 22px; padding: 88px 22px 36px; }
+  #together-title { font-size: clamp(28px,7.5vw,40px); }
+  #together-title br { display: none; }
+  .together-garden { width: min(78vw,330px); }
+  .together-label { font-size: 14px; padding-bottom: 10px; }
+  .together-approach h3 { font-size: clamp(24px,6.6vw,32px); margin: 17px 0 12px; }
+  .together-approach p { font-size: 16px; line-height: 1.45; margin-bottom: 14px; }
+  .together-approach a { font-size: 14px; gap: 7px; }
+  .together-links { padding-top: 8px; gap: 8px 24px; }
   .project-explore { padding: 65px 7vw 80px; }
   .explore-heading { display: block; margin-bottom: 28px; }
   .explore-heading p { margin-top: 13px; font-size: 14px; }
@@ -620,7 +626,6 @@ html.loading .honey-progress { visibility: hidden; }
 .rna-targets h3 { font-size: 14px; color: #f7d7ce; letter-spacing: .06em; }
 .rna-targets dd { font-size: 16px; line-height: 1.45; color: #ffe4da; max-width: 32ch; }
 .rna-control { min-width: 44px; min-height: 44px; }
-.together-copy .delivery-note { font-size: 16px; line-height: 1.5; max-width: 42ch; }
 .wiki-footer, .project-card span { font-size: 14px; }
 .project-card p { font-size: 16px; }
 @media (max-width:760px) {
@@ -756,4 +761,75 @@ html.loading .honey-progress { visibility: hidden; }
   .journey-rna > .rna-layout { padding-top: 72px; padding-bottom: 16px; gap: 16px; }
   .journey-rna .rna-layout .mechanism-copy--headline h2 { font-size: 32px; }
   .journey-rna .rna-player { padding: 14px; }
+}
+
+/* DWV title sits above the centered capsid. */
+.dwv-story[data-beat="virus"] .disease-caption { left: 8%; top: 11%; width: 84%; transform: none; text-align: center; }
+.dwv-story[data-beat="virus"] .disease-caption article { top: 0; transform: none; }
+.dwv-story[data-beat="virus"] h2 { font-size: clamp(38px,4.6vw,70px); margin-bottom: 15px; }
+.dwv-story[data-beat="virus"] h2 br { display: none; }
+.dwv-story[data-beat="virus"] p { max-width: none; margin-inline: auto; font-size: clamp(18px,1.6vw,24px); }
+
+/* Group 53: one large molecular window, four floating notes, and the team's bee. */
+#minibinders.journey-protein { display: block; padding: 0; background: #ffe2cb; }
+.gut-focus { position: absolute; inset: 0; margin: 0; opacity: calc(1 - var(--molecule-in)); pointer-events: none; }
+.gut-focus > svg { position: absolute; width: min(55vw,72svh); height: auto; left: 50%; top: 46%; transform: translate(-50%,-50%) scale(calc(1 + .38 * var(--gut-zoom))); transform-origin: 46% 65%; }
+.gut-focus__ring { filter: drop-shadow(0 2px 5px #a66b3330); }
+.gut-focus figcaption { position: absolute; top: 80%; left: 12%; width: 76%; text-align: center; color: #244b3c; }
+.gut-focus figcaption strong { display: block; margin-bottom: 10px; font-size: clamp(23px,2.5vw,36px); letter-spacing: -.035em; }
+.gut-focus figcaption span { display: block; font-size: 16px; line-height: 1.5; }
+.binder-board { position: absolute; left: 50%; top: 54%; width: min(96vw,calc((100svh - 90px) * 1440 / 849)); aspect-ratio: 1440 / 849; transform: translate(-50%,-50%); opacity: var(--molecule-in); }
+.binder-board__art, .binder-bee-marker { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.binder-board .binder-copy { position: absolute; top: 3%; left: 8%; width: 59%; text-align: center; }
+.binder-board .binder-copy h2 { font-size: clamp(28px,3.3vw,48px); margin-bottom: 10px; }
+.binder-board .binder-copy > p:last-child { font-size: clamp(16px,1.35vw,20px); max-width: 50ch; line-height: 1.4; margin: 0 auto; }
+.binder-board .binder-panel { position: absolute; left: 10.5556%; top: 16.7256%; width: 51.1806%; height: 66.6667%; display: block; border: 0; background: transparent; box-shadow: none; border-radius: 10%; }
+.binder-board .protein-stage { position: absolute; inset: 12% 9% 15%; margin: 0; }
+.binder-board .protein-view { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 1; visibility: visible; }
+.binder-board .protein-key { position: absolute; top: 5%; left: 14%; width: 72%; justify-content: center; font-size: 14px; gap: 8px 18px; }
+.binder-board .protein-footer { position: absolute; bottom: 4%; left: 24%; width: 52%; border: 0; padding: 0; display: flex; flex-direction: column; align-items: center; gap: 7px; }
+.binder-board .protein-note { font-size: 14px; text-align: center; }
+.binder-board .protein-reset { padding: 4px 12px; min-height: 32px; border: 0; background: transparent; font-size: 14px; }
+.binder-fact { position: absolute; width: 15.8333%; height: 18.139%; border-radius: clamp(22px,3.4vw,50px); display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 16px; background: #fff; z-index: 3; }
+.binder-fact h3 { margin: 0 0 9px; font-size: clamp(16px,1.4vw,21px); letter-spacing: -.025em; color: #a85b2c; }
+.binder-fact p { margin: 0; font-size: clamp(14px,1.15vw,17px); line-height: 1.35; color: #2e4d3e; }
+.binder-fact--design { left: 2.6389%; top: 22.4971%; }
+.binder-fact--target { left: 5.2778%; top: 60.5418%; }
+.binder-fact--evidence { left: 52.2917%; top: 20.6125%; }
+.binder-fact--aim { left: 50%; top: 60.5418%; }
+.binder-bee-caption { position: absolute; top: 73.5%; left: 70%; width: 23%; text-align: center; }
+.binder-bee-caption strong { font-size: clamp(18px,1.7vw,26px); color: #244b3c; }
+.binder-bee-caption span { display: block; margin: 10px auto 16px; font-size: 16px; line-height: 1.4; max-width: 21ch; }
+.binder-bee-caption a { color: #965020; font-size: 14px; text-underline-offset: 4px; }
+@media (max-width:760px) {
+  .dwv-story[data-beat="virus"] .disease-caption { top: 13%; left: 7%; width: 86%; }
+  .dwv-story[data-beat="virus"] h2 { font-size: 36px; }
+  .gut-focus > svg { width: min(98vw,63svh); top: 45%; }
+  .gut-focus figcaption { top: 73%; left: 7%; width: 86%; }
+  .gut-focus figcaption strong { font-size: 27px; }
+  .gut-focus figcaption span { font-size: 16px; max-width: 28ch; margin: 0 auto; }
+  .binder-board { left: 16px; right: 16px; top: 80px; bottom: 18px; width: auto; aspect-ratio: auto; transform: none; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: auto minmax(220px,1fr) 104px 104px; gap: 10px; }
+  .binder-board__art, .binder-bee-marker, .binder-bee-caption { display: none; }
+  .binder-board .binder-copy { grid-column: 1 / -1; position: static; width: auto; text-align: center; }
+  .binder-board .binder-copy h2 { font-size: 28px; margin-bottom: 8px; }
+  .binder-board .binder-copy > p:last-child { font-size: 16px; line-height: 1.4; }
+  .binder-board .binder-panel { grid-column: 1 / -1; position: relative; inset: auto; width: 100%; height: 100%; border-radius: 32px; background: white; box-shadow: 0 5px 18px #92572b12; }
+  .binder-board .protein-key { top: 18px; left: 4%; width: 92%; font-size: 14px; }
+  .binder-board .protein-stage { inset: 45px 12px 57px; }
+  .binder-board .protein-footer { bottom: 10px; left: 10%; width: 80%; flex-direction: row; justify-content: space-between; gap: 4px; }
+  .binder-board .protein-note { font-size: 14px; text-align: left; max-width: 18ch; }
+  .binder-board .protein-reset { font-size: 14px; min-height: 44px; padding-inline: 6px; }
+  .binder-fact { position: static; width: auto; height: auto; padding: 14px; border-radius: 26px; box-shadow: 0 5px 18px #92572b12; }
+  .binder-fact h3 { font-size: 17px; margin-bottom: 6px; }
+  .binder-fact p { font-size: 14px; line-height: 1.35; }
+  .binder-fact--design { grid-row: 3; grid-column: 1; }
+  .binder-fact--evidence { grid-row: 3; grid-column: 2; }
+  .binder-fact--target { grid-row: 4; grid-column: 1; }
+  .binder-fact--aim { grid-row: 4; grid-column: 2; }
+}
+@media (max-width:760px) and (max-height:720px) {
+  .binder-board { top: 72px; bottom: 12px; gap: 8px; grid-template-rows: auto minmax(170px,1fr) 85px 85px; }
+  .binder-board .binder-copy h2 { font-size: 24px; }
+  .binder-board .binder-copy > p:last-child { font-size: 16px; }
+  .binder-fact { padding: 10px; }
 }

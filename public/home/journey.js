@@ -103,16 +103,17 @@ export function initJourney() {
     const virusAlpha = between(p,.235,.238)*(1-between(d,.27,.36))*(1-between(p,.295,.31));
     virus.classList.toggle('on',p > .235 && p < .31 && virusAlpha > .002);
     const base = Math.min(height*.90, width*.72);
-    const centerSize = Math.min(height*(mobile?.47:.70), width*(mobile?.9:.43));
+    const centerSize = Math.min(height*(mobile?.47:.60), width*(mobile?.9:.55));
     comparison.style.setProperty('--bee', `${Math.round(Math.min(height*(mobile?.47:.65), width*(mobile?.9:.43)))}px`);
-    const vx = mix(-base*.12,width*(mobile?.5:.69),rise);
-    const vy = mix(height+base*.12,height*(mobile?.64:.53),riseY);
+    const vx = mix(-base*.12,width*.5,rise);
+    const vy = mix(height+base*.12,height*(mobile?.64:.62),riseY);
     const size = mix(base,centerSize,rise)*(1-.12*between(d,.27,.36));
     if (base !== virusBase) { virusBase = base; virus.style.width = virus.style.height = `${base}px`; }   // resize only when it actually changes
     virus.style.transform = `translate3d(${vx-base/2}px,${vy-base/2}px,0) scale(${size/base})`;
     virus.style.opacity = virusAlpha.toFixed(4);
     layer(disease, between(d,.12,.21)*(1-depart));
     const beat = d < .35 ? 'virus' : d < .51 ? 'bee' : d < .75 ? 'mite' : 'wings';
+    disease.dataset.beat = beat;
     for (const caption of captions) layer(caption, Number(caption.dataset.diseaseBeat === beat));
     comparison.style.opacity = compare.toFixed(4);
     shrivel(between(d,.73,.97));
@@ -169,7 +170,7 @@ export function initJourney() {
     introBee.style.visibility = fly < .001 || beeLeave > .999 || (returnVisit && returnAlpha < .002) ? 'hidden' : 'visible';
     layer(beeCopy, between(p, .515, .555) * (1 - between(p, .69, .735)));
     // Let the bee clear the left side before bringing in the next heading.
-    layer(miteCopy, between(p, 1.39, 1.425) * (1 - between(p, 1.46, 1.515)));
+    layer(miteCopy, between(p, 1.39, 1.425) * (1 - between(p, 1.46, 1.49)));
     const focalX = 50, focalY = mobile ? 71 : 48;
     const radius = Math.hypot(width, height);
     layer(protein, clamp(modelIn * 8) * (1-modelOut));
@@ -178,8 +179,16 @@ export function initJourney() {
     protein.style.setProperty('--model-labels', between(p, .75, .79).toFixed(4));
     layer(rna, clamp(intoRNA * 8));
     rna.style.clipPath = reduced.matches ? 'none' : `circle(${radius * intoRNA}px at 50% 52%)`;
-    layer(rnaIntro, between(p, 1.475, 1.525) * (1-between(p, 1.77, 1.83)));
-    layer(rnaMechanism, between(p, 1.81, 1.85));
+    // The same right-hand panel changes from our targets to the RNA animation.
+    // A shared crossfade keeps the panel present throughout the handoff.
+    const rnaHandoff = between(p, 1.77, 1.85);
+    layer(rnaIntro, between(p, 1.475, 1.525) * (1-rnaHandoff));
+    layer(rnaMechanism, rnaHandoff);
+    rnaIntro.inert = rnaHandoff >= .5 || intoRNA < .05;
+    rnaIntro.setAttribute('aria-hidden', String(rnaIntro.inert));
+    rnaMechanism.inert = rnaHandoff < .5;
+    rnaMechanism.setAttribute('aria-hidden', String(rnaMechanism.inert));
+    rna.style.setProperty('--subject-enter', between(p, 1.475, 1.555).toFixed(4));
     rna.querySelector('.rna-stage').style.transform = reduced.matches ? 'none' : `translate3d(${width * (mobile ? 0 : .07) * (1-intoRNA)}px,${height * .03 * (1-intoRNA)}px,0) scale(${mix(.88, 1, intoRNA)})`;
   }
   function tick(now) {

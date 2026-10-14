@@ -1,0 +1,88 @@
+/* A mirrored companion to the minibinder board: mite left, mechanism right. */
+#rnai.journey-rna { --rna-cream: #fff1db; --rna-muted: #ecd0c5; --rna-panel-left: 33%; --rna-panel-right: 7%; --rna-panel-top: 11%; --rna-panel-bottom: 6%; background: #490c1b; color: var(--rna-cream); }
+.rna-panel-frame { position: absolute; inset: var(--rna-panel-top) var(--rna-panel-right) var(--rna-panel-bottom) var(--rna-panel-left); border: 1px solid #bd6b705c; border-radius: clamp(32px,4vw,62px); background: #62202d; box-shadow: 0 18px 55px #22080a24; }
+.rna-subject { position: absolute; left: 3.5%; top: 23%; width: 27%; margin: 0; text-align: center; z-index: 2; opacity: var(--subject-enter,1); transform: translateY(calc(22px * (1 - var(--subject-enter,1)))); }
+.rna-subject__portrait { position: relative; isolation: isolate; width: 94%; aspect-ratio: 1; margin: 0 auto 22px; display: grid; place-items: center; }
+.rna-subject__portrait::after { content: ""; position: absolute; z-index: -1; inset: -23%; border-radius: 50%; background: radial-gradient(ellipse, #ffc39a61 0%, #f48c7652 32%, #d74b6530 50%, #d74b6500 72%); filter: blur(clamp(12px,2vw,28px)); pointer-events: none; }
+.rna-subject__portrait::before { content: ""; position: absolute; inset: 9%; border-radius: 48% 52% 45% 55%; background: #f0bba3; transform: rotate(-12deg); box-shadow: 0 0 0 13px #e6a2860e; }
+.rna-subject__portrait img { position: relative; display: block; width: 100%; height: auto; transform: rotate(-13deg); filter: drop-shadow(0 12px 9px #2c0b1735); }
+.rna-subject__eyebrow, .rna-panel-kicker { display: block; font-size: 14px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #efb6a7; }
+.rna-subject figcaption strong { display: block; margin-top: 12px; font-size: clamp(24px,2.3vw,35px); line-height: 1.15; letter-spacing: -.035em; color: var(--rna-cream); }
+.rna-subject figcaption strong em { font-weight: inherit; }
+.rna-subject figcaption p { margin: 12px auto 20px; max-width: 22ch; font-size: 17px; line-height: 1.5; color: var(--rna-muted); }
+.rna-subject figcaption a { color: var(--rna-cream); font-size: 15px; text-decoration-thickness: 1px; text-underline-offset: 6px; }
+.rna-subject figcaption a span { padding-left: 8px; }
+#rnai > .rna-discovery, #rnai > .rna-layout { position: absolute; inset: var(--rna-panel-top) var(--rna-panel-right) var(--rna-panel-bottom) var(--rna-panel-left); width: auto; height: auto; padding: clamp(24px,3vw,48px); background: transparent; border: 0; border-radius: clamp(32px,4vw,62px); transform: none; }
+#rnai > .rna-discovery { display: flex; flex-direction: column; justify-content: center; gap: clamp(20px,4svh,38px); }
+#rnai .rna-discovery__copy { width: auto; }
+#rnai .rna-discovery__copy h2 { font-size: clamp(34px,3.6vw,56px); line-height: 1.07; letter-spacing: -.045em; margin: 12px 0 20px; color: var(--rna-cream); }
+#rnai .rna-discovery__copy p { max-width: 54ch; margin: 0; font-size: clamp(17px,1.4vw,21px); line-height: 1.5; color: var(--rna-muted); }
+#rnai .rna-targets { width: auto; }
+#rnai .rna-targets h3 { margin: 0 0 8px; font-size: 14px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #efb6a7; }
+#rnai .rna-targets dl { margin: 0; }
+#rnai .rna-targets dl > div { display: grid; grid-template-columns: minmax(142px,.8fr) 1.4fr; align-items: center; gap: 24px; padding: clamp(15px,2.2svh,22px) 0; border-top: 1px solid #edb8a52b; border-bottom: 0; }
+#rnai .rna-targets dt { font-size: clamp(22px,2.1vw,32px); line-height: 1.15; letter-spacing: -.03em; color: #ffe2bd; }
+#rnai .rna-targets dd { margin: 0; font-size: clamp(16px,1.2vw,18px); line-height: 1.5; color: var(--rna-muted); }
+#rnai > .rna-layout { display: grid; grid-template-columns: minmax(0,1fr); grid-template-rows: auto minmax(0,1fr); gap: 12px; }
+#rnai .rna-layout .mechanism-copy--headline { position: static; width: auto; transform: none; }
+#rnai .rna-layout .mechanism-copy--headline h2 { margin: 10px 0 10px; font-size: clamp(32px,3.2vw,48px); line-height: 1.08; color: var(--rna-cream); }
+#rnai .rna-context { max-width: 55ch; margin: 0; font-size: 17px; line-height: 1.45; color: var(--rna-muted); }
+#rnai .rna-player { position: relative; inset: auto; display: grid; grid-template-rows: minmax(0,1fr) 100px 46px; gap: 8px; width: 100%; height: 100%; min-height: 0; padding: 0; border: 0; border-radius: 0; background: transparent; transform: none; }
+#rnai .rna-stage { position: relative; inset: auto; width: 100%; height: 100%; min-height: 0; aspect-ratio: auto; overflow: hidden; border-radius: 20px; }
+#rnai .rna-player__copy { position: relative; inset: auto; display: block; width: 100%; max-width: none; min-height: 0; margin: 0; padding-top: 14px; border-top: 1px solid #edb8a52b; font-size: 17px; line-height: 1.5; color: var(--rna-cream); }
+#rnai .rna-player__copy p { inset: 14px 0 auto; }
+#rnai .rna-player__controls { position: static; margin: 0; padding: 0; border: 0; justify-content: flex-end; gap: 10px; }
+#rnai .rna-control { flex-shrink: 0; width: 44px; height: 44px; border: 1px solid #e2af9a80; background: #7c3b43; color: var(--rna-cream); }
+#rnai .rna-control:hover { background: #97505a; }
+#rnai .rna-control:focus-visible, .rna-subject a:focus-visible { outline: 2px solid #ffe2bd; outline-offset: 5px; }
+@media (max-width: 760px) {
+  #rnai.journey-rna { --rna-panel-left: 16px; --rna-panel-right: 16px; --rna-panel-top: 25%; --rna-panel-bottom: 20px; }
+  .rna-subject { left: 22px; top: 7%; width: calc(100% - 44px); height: 17%; display: flex; align-items: center; gap: 14px; text-align: left; }
+  .rna-subject__portrait { width: clamp(80px,15svh,130px); height: auto; aspect-ratio: 1; flex: 0 0 clamp(80px,15svh,130px); min-width: 0; margin: 0; }
+  .rna-subject__portrait img { height: auto; width: 100%; }
+  .rna-subject__portrait::before { box-shadow: none; }
+  .rna-subject__eyebrow { font-size: 12px; }
+  .rna-subject figcaption strong { font-size: 24px; margin-top: 6px; }
+  .rna-subject figcaption p { font-size: 14px; line-height: 1.4; margin: 8px 0 0; }
+  .rna-subject figcaption a { display: none; }
+  .rna-panel-frame, #rnai > .rna-discovery, #rnai > .rna-layout { border-radius: 30px; }
+  #rnai > .rna-discovery, #rnai > .rna-layout { padding: 24px; }
+  #rnai > .rna-discovery { gap: 22px; }
+  #rnai .rna-panel-kicker { font-size: 12px; }
+  #rnai .rna-discovery__copy h2 { font-size: 33px; margin: 10px 0 15px; }
+  #rnai .rna-discovery__copy p { font-size: 16px; line-height: 1.45; }
+  #rnai .rna-targets dl > div { grid-template-columns: 1fr; gap: 5px; padding: 13px 0; }
+  #rnai .rna-targets dt { font-size: 23px; }
+  #rnai .rna-targets dd { font-size: 16px; line-height: 1.4; }
+  #rnai .rna-layout .mechanism-copy--headline h2 { font-size: 30px; margin: 8px 0 10px; }
+  #rnai .rna-context { font-size: 16px; line-height: 1.4; }
+  #rnai .rna-player { grid-template-rows: minmax(0,1fr) 142px 44px; gap: 4px; }
+  #rnai .rna-player__copy { font-size: 16px; line-height: 1.45; }
+  #rnai .rna-player__controls { justify-content: flex-start; }
+}
+@media (min-width: 761px) and (max-height: 740px) {
+  #rnai.journey-rna { --rna-panel-top: 12%; --rna-panel-bottom: 4%; }
+  #rnai > .rna-discovery, #rnai > .rna-layout { padding: 25px 32px; }
+  #rnai > .rna-discovery { gap: 18px; }
+  #rnai .rna-discovery__copy h2 { font-size: 36px; margin: 9px 0 12px; }
+  #rnai .rna-discovery__copy p, #rnai .rna-context { font-size: 16px; }
+  #rnai .rna-targets dl > div { padding: 13px 0; }
+  #rnai .rna-layout .mechanism-copy--headline h2 { font-size: 33px; }
+  #rnai .rna-player { grid-template-rows: minmax(0,1fr) 84px 44px; }
+  #rnai .rna-player__copy { font-size: 16px; }
+  .rna-subject { top: 18%; }
+  .rna-subject__portrait { width: 80%; margin-bottom: 12px; }
+}
+@media (max-width: 760px) and (max-height: 740px) {
+  .rna-subject { top: 11%; height: 12%; }
+  #rnai.journey-rna { --rna-panel-top: 24%; --rna-panel-bottom: 12px; }
+  #rnai > .rna-discovery, #rnai > .rna-layout { padding: 18px; }
+  #rnai > .rna-discovery { gap: 13px; }
+  #rnai .rna-panel-kicker { display: none; }
+  #rnai .rna-discovery__copy h2 { font-size: 28px; margin: 0 0 10px; }
+  #rnai .rna-targets dl > div { padding: 9px 0; }
+  #rnai .rna-targets dt { font-size: 21px; }
+  #rnai .rna-player { grid-template-rows: minmax(80px,1fr) 140px 44px; }
+  #rnai .rna-layout .mechanism-copy--headline h2 { font-size: 28px; margin-top: 0; }
+  .rna-subject__eyebrow { display: none; }
+}
