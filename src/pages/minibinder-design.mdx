@@ -27,18 +27,16 @@ Lambert iGEM selected de novo design because large-scale library screening excee
 
 We utilized three computational protein design frameworks, **Mosaic**, **BindCraft**, and **BoltzGen**, to generate minibinders targeting the VP3 P-domain. Each utilizes a different approach to protein generation:
 
-- **Mosaic:** A modular protein design framework that combines structural and sequence-based optimization objectives to generate candidate binders with favorable predicted interactions.
-- **BindCraft:** Uses AlphaFold2-based hallucination, iteratively optimizing amino acid sequences to generate protein structures predicted to bind a target (Pacesa et al., 2025).
-- **BoltzGen:** Uses an all-atom diffusion model to jointly generate protein sequences and three-dimensional structures while accounting for their predicted interactions with the target (Stark et al., 2025).
-
-We incorporated binding hotspots identified using our software PRINCE to guide design toward selected regions of VP3 (See [Software](https://2026.igem.wiki/lambert-ga/software/)).
-
-
 | Framework | Approach | Reference |
 |:-------------|:---------|:----------|
 | Mosaic | Modular framework combining structural and sequence-based optimization objectives | Escalante Bio |
 | BindCraft | AlphaFold2-based hallucination with iterative sequence optimization | Pacesa et al., 2025 |
 | BoltzGen | All-atom diffusion model that jointly generates sequence and structure | Stark et al., 2025 |
+
+We incorporated binding hotspots identified using our software PRINCE to guide design toward selected regions of VP3 (See [Software](https://2026.igem.wiki/lambert-ga/software/)).
+
+
+
 
 <Image
 src="https://static.igem.wiki/teams/5612/xxx"
