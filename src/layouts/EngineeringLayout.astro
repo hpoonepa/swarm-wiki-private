@@ -1,0 +1,82 @@
+---
+import InformationLayout from './InformationLayout.astro';
+import { parseCycles } from '../components/engineering/parse-cycles.mjs';
+import '../components/engineering/engineering.css';
+
+const { frontmatter } = Astro.props;
+const { groups, preamble } = parseCycles(await Astro.slots.render('default'));
+const phases = ['Design', 'Build', 'Test', 'Learn'];
+const trackNames = ['Minibinders', 'Colony model'];
+// Rounded DBTL wheel, adapted from https://2025.igem.wiki/mcgill/engineering.
+const wheelPaths = ["M208.857 2.39172C230.268 21.3935 227.333 52.5997 203.45 67.9402C252.02 75.8653 292.418 116.047 299.71 164.957C302.182 181.58 297.964 196.596 313.026 208.723C331.843 223.863 360.098 214.563 365.768 191.22C369.398 176.235 364.254 148.381 360.052 133.18C341.205 64.8504 279.627 10.5177 208.857 2.39172Z", "M363.204 209.867C351.942 219.754 343.754 223.647 328.104 222.195C315.575 221.036 306.275 212.524 299.154 202.93C289.313 257.495 246.922 294.293 192.249 300.102C181.373 301.261 175.148 298.99 165.075 306.096C143.463 321.328 147.526 355.207 172.367 363.951C186.889 369.064 218.496 363.503 233.713 359.285C299.988 340.886 355.387 281.085 363.976 212.168C364.439 210.515 364.192 209.743 363.204 209.851V209.867Z", "M158.695 364.105C141.331 348.394 139.431 322.116 155.883 304.999L164.102 298.573C115.223 290.277 74.0057 248.843 67.7335 199.346C66.1732 187.034 68.4442 176.621 61.6159 165.359C45.7965 139.297 3.37465 149.2 1.22729 180.128C0.238586 194.511 2.41684 210.376 5.6456 224.373C22.5309 297.692 83.8928 354.157 158.695 364.105Z", "M2.80305 158.176C16.2588 143.623 36.2647 138.772 53.9688 149.076C60.3491 152.784 63.6705 157.434 68.3824 162.81C78.2386 111.057 120.846 71.1072 173.696 66.3645C177.403 66.0246 181.528 66.7043 185.297 66.3799C223.981 63.182 227.488 9.80711 191.894 1.18679C175.07 -2.89164 140.991 4.4001 124.322 10.0697C59.8702 32.0068 11.4543 90.4643 2.78763 158.176H2.80305Z"];
+// Rounded tails make Design and Test asymmetric; follow each segment's
+// angular center instead of placing those labels on the quadrant diagonals.
+const labels = [
+  { degrees: -34, angle: 56 },
+  { degrees: 45, angle: -45 },
+  { degrees: 147, angle: 57 },
+  { degrees: 225, angle: -45 },
+].map(({ degrees, angle }) => ({
+  x: 184 + 150 * Math.cos(degrees * Math.PI / 180),
+  y: 184 + 150 * Math.sin(degrees * Math.PI / 180),
+  angle,
+}));
+---
+<InformationLayout frontmatter={{ ...frontmatter, noTOC: true }}>
+  <div class="engineering-studio wide" data-engineering>
+    <div class="eng-intro">
+      <p>Each test changed what we built next. Follow the iterations behind our VP3 minibinders and colony model.</p>
+      <button type="button" class="eng-reading-toggle eng-interactive" data-reading-toggle aria-pressed="false" hidden><span aria-hidden="true">☷</span> Read full writeup</button>
+    </div>
+    <div class="eng-tracks eng-interactive" role="tablist" aria-label="Engineering tracks" hidden>
+      {groups.map((group, i) => <button type="button" role="tab" id={`eng-track-${i}`} aria-controls={group.id} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} data-track={i}>
+        <span class="eng-track-number">0{i + 1}</span><span>{trackNames[i] ?? group.title}</span><small>{group.cycles.length} iterations</small><span class="eng-track-arrow" aria-hidden="true">↗</span>
+      </button>)}
+    </div>
+    <div class="eng-workspace">
+      <aside class="eng-navigator eng-interactive" aria-label="Choose a step in the engineering cycle" hidden>
+        <div class="eng-wheel" data-phase="0">
+          <svg viewBox="0 0 368 368" role="group" aria-label="Design, Build, Test and Learn" focusable="false">
+            {phases.map((phase, i) => <g class="eng-wheel-control" role="button" tabindex="0" data-phase-select={i} aria-label={`Show ${phase} step`} aria-pressed={i === 0 ? 'true' : 'false'}>
+              <path class={`eng-wheel-piece eng-wheel-piece--${i}`} data-wheel-piece={i} d={wheelPaths[i]} />
+              <text x={labels[i].x} y={labels[i].y} text-anchor="middle" dominant-baseline="middle" transform={`rotate(${labels[i].angle} ${labels[i].x} ${labels[i].y})`}>{phase}</text>
+            </g>)}
+          </svg>
+        </div>
+      </aside>
+      <div class="eng-document">
+        {groups.map((group, gi) => <section class="eng-track-panel" id={group.id} data-track-panel={gi} aria-labelledby={`eng-track-heading-${gi}`}>
+          <h2 class="eng-track-title" id={`eng-track-heading-${gi}`}>{trackNames[gi] ?? group.title}</h2>
+          {group.cycles.map((cycle, ci) => <section class="eng-cycle" id={cycle.id} data-cycle-panel={ci} aria-labelledby={`${cycle.id}-title`}>
+            <header class="eng-cycle-header">
+              <button class="eng-cycle-arrow eng-interactive" type="button" data-cycle-prev aria-label="Previous iteration" hidden>←</button>
+              <h3 id={`${cycle.id}-title`}>Iteration {cycle.number}: {cycle.title}</h3>
+              <button class="eng-cycle-arrow eng-interactive" type="button" data-cycle-next aria-label="Next iteration" hidden>→</button>
+            </header>
+            {cycle.intro.trim() && <div class="eng-copy" set:html={cycle.intro} />}
+            <div class="eng-phases eng-interactive" role="tablist" aria-label={`Iteration ${cycle.number} steps`} hidden>{phases.map((phase, pi) => <button type="button" role="tab" id={`${cycle.id}-tab-${pi}`} data-phase-tab={pi} aria-controls={cycle.phases[pi].id} aria-selected={pi === 0 ? 'true' : 'false'} tabindex={pi === 0 ? 0 : -1}>{phase}</button>)}</div>
+            {cycle.phases.map((phase, pi) => <section class="eng-phase" id={phase.id} data-phase-panel={pi} aria-labelledby={`${phase.id}-heading`}>
+              <h4 id={`${phase.id}-heading`}>{phase.title}</h4>
+              <div class="eng-copy" set:html={phase.html.trim() || '<p class="eng-pending">This section is still being written.</p>'} />
+            </section>)}
+            {cycle.tail.trim() && <div class="eng-references eng-copy" set:html={cycle.tail} />}
+          </section>)}
+        </section>)}
+        <p class="eng-announcement" data-step-status aria-live="polite" aria-atomic="true"></p>
+      </div>
+    </div>
+    <div class="eng-iterations eng-interactive" hidden>
+      {groups.map((group, gi) => <nav class="eng-cycle-list" data-cycle-list={gi} aria-label={`${trackNames[gi] ?? group.title} iterations`}>
+        {group.cycles.map((cycle, ci) => <button type="button" data-cycle-select={ci} data-cycle-track={gi} aria-current={ci === 0 && gi === 0 ? 'step' : undefined}><span class="eng-cycle-number">{cycle.number}</span><span>{cycle.title}</span></button>)}
+      </nav>)}
+    </div>
+    <div class="eng-background-notes">
+      {groups.map((group, gi) => <details class="eng-group-description" data-track-description={gi}><summary>About {trackNames[gi]?.toLowerCase() ?? group.title}</summary><div class="eng-copy" set:html={group.intro} /></details>)}
+    </div>
+    <div class="eng-draft-note" set:html={preamble} />
+  </div>
+</InformationLayout>
+<script>
+  import { mountEngineering } from '../components/engineering/engineering';
+  document.querySelectorAll<HTMLElement>('[data-engineering]').forEach(mountEngineering);
+</script>

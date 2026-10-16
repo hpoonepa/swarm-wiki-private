@@ -19,7 +19,8 @@ export function initJourney() {
   const map = section.querySelector('.map-view'), stats = section.querySelector('.geo-copy');
   const hiveCopy = section.querySelector('.journey-copy--hive'), beeCopy = section.querySelector('.journey-copy--bee');
   const miteCopy = section.querySelector('.journey-copy--mite');
-  const protein = document.getElementById('minibinders'), proteinView = protein.querySelector('.protein-view');
+  const returnCopy = section.querySelector('.journey-copy--return');
+  const protein = document.getElementById('minibinders');
   const rna = document.getElementById('rnai');
   const rnaIntro = document.getElementById('rna-intro'), rnaMechanism = rna.querySelector('.rna-layout');
   const virus = document.getElementById('dwv'), disease = section.querySelector('.dwv-story');
@@ -54,11 +55,17 @@ export function initJourney() {
     comparison.style.setProperty('--sev', sev.toFixed(4));
 
   }
-  let width = 1, height = 1, miteAnchorX = 0, miteAnchorY = 0;
+  let width = 1, height = 1;
   const introBee = section.querySelector('.intro-bee'), introScene = section.querySelector('.intro-scene');
   const introMite = section.querySelector('.intro-mite');
-  let beeAnchorX = 0, beeAnchorY = 0;
   const introHive = section.querySelector('.intro-hive'), introTitle = hiveCopy.querySelector('h2');
+  // Each complete scene slides as one window, including its title and artwork.
+  const overview = document.createElement('div');
+  overview.className = 'journey-window journey-window--overview';
+  introScene.before(overview);
+  overview.append(introScene, hiveCopy, returnCopy);
+  protein.classList.add('journey-window');
+  rna.classList.add('journey-window');
   let titleMid = 0;
   let shown = journeyProgress(), shownDisease = window.earthScroll().disease, shownIntro = window.earthScroll().intro, frame = 0, previous = performance.now(), visible = false;
   function layer(element, opacity) {
@@ -71,15 +78,18 @@ export function initJourney() {
   }
   function paint(raw, diseaseProgress, introProgress) {
     let p = raw, d = diseaseProgress, i = introProgress;
-    if (reduced.matches) p = raw < .35 ? raw : raw < .49 ? .46 : raw < .69 ? .59 : raw < 1.105 ? .90 : raw < 1.30 ? 1.245 : raw < 1.49 ? 1.38 : raw < 1.82 ? 1.67 : 1.86;
     if (reduced.matches) d = d <= 0 ? 0 : d < .28 ? .22 : d < .50 ? .42 : d < .73 ? .66 : .96;
     if (reduced.matches) i = i > .02 ? 1 : 0;
     const mobile = width <= 760;
-    const enter = between(p, .655, .75);
-    const returning = between(p, 1.085, 1.27), towardMite = between(p, 1.30, 1.46);
-    const intoRNA = between(p, 1.455, 1.53);
-    const modelIn = between(p, .69, .76), modelOut = between(p, 1.085, 1.17);
-    const sceneName = raw < .325 ? diseaseProgress > .15 ? 'dwv' : 'earth' : raw < .49 ? 'hive' : raw < .69 ? 'bee' : raw < 1.085 ? 'minibinders' : raw < 1.285 ? 'return-hive' : raw < 1.49 ? 'mite' : raw < 1.82 ? 'rna-intro' : 'rnai';
+    const slideProgress = (start, end) => {
+      const t = clamp((p-start)/(end-start));
+      return t*t*(3-2*t);
+    };
+    const toBee = slideProgress(.50, .76), toMiddle = slideProgress(1.085, 1.26);
+    const toMite = slideProgress(1.31, 1.53);
+    const sceneName = raw < .325 ? diseaseProgress > .15 ? 'dwv' : 'earth'
+      : toMite >= .5 ? raw < 1.82 ? 'rna-intro' : 'rnai'
+      : toMiddle >= .5 ? 'cross-hive' : toBee >= .5 ? 'minibinders' : 'hive';
     section.dataset.journey = sceneName;
     section.dataset.journeyProgress = raw.toFixed(3);
     section.dataset.diseaseProgress = diseaseProgress.toFixed(3);
@@ -129,73 +139,64 @@ export function initJourney() {
     // grows in beside it, then the hive pops up from below and lifts the title to the top.
     const word = between(i, 0, .08), logo = between(i, .08, .27), lift = between(i, .27, .58);
     const popT = clamp((i - .27) / .32), pop = smooth(popT);
-    // After the pause the camera pushes in on the bee: the hive and title fall away and the
-    // bee ends on the focal point, where the Minibinders scene opens out of it.
-    const zoomIn = between(p, .345, .61), sceneOut = between(p, .725, .76), leave = between(p, .36, .5);
-    const beeZ = reduced.matches ? 1 : Math.exp(Math.log(mobile ? 3.2 : 4.2) * zoomIn + Math.log(1.25) * enter);
-    const beeTX = mix(beeAnchorX, width * .5, zoomIn) - beeAnchorX * beeZ;
-    const beeTY = mix(beeAnchorY, height * (mobile ? .71 : .48), zoomIn) - beeAnchorY * beeZ;
-    // Return to the same hive and hovering bee, then focus on the mite.
-    const returnVisit = p >= 1.085;
-    const returnAlpha = between(p, 1.085, 1.18) * (1 - intoRNA);
-    introScene.style.willChange = returnVisit ? 'auto' : 'transform';
-    if (returnVisit) {
-      const miteZoom = Math.min(height * .62, width * .72) / Math.max(1, introMite.offsetWidth);
-      const z = reduced.matches ? 1 : mix(1.4, 1, returning) * Math.exp(Math.log(miteZoom) * towardMite);
-      const anchorX = mix(width * .5, miteAnchorX, towardMite);
-      const anchorY = mix(height * .52, miteAnchorY, towardMite);
-      const tx = (1-z) * anchorX + (width * .5 - anchorX) * towardMite;
-      const ty = (1-z) * anchorY + (height * .52 - anchorY) * towardMite;
-      introScene.style.transform = reduced.matches ? 'none' : `translate3d(${tx.toFixed(1)}px,${ty.toFixed(1)}px,0) scale(${z.toFixed(4)})`;
-      introScene.style.opacity = returnAlpha.toFixed(4);
-    } else {
-      introScene.style.transform = reduced.matches ? 'none' : `translate3d(${beeTX.toFixed(1)}px,${beeTY.toFixed(1)}px,0) scale(${beeZ.toFixed(4)})`;
-      introScene.style.opacity = '1';
+    // The bee window enters from the left. Return to the centered hive and
+    // pause there before the mite window enters from the right.
+    function slide(element, offset, active) {
+      const shown = reduced.matches ? active : p >= .325 && Math.abs(offset) < 1;
+      layer(element, Number(shown));
+      element.style.clipPath = 'none';
+      element.style.transform = reduced.matches || Math.abs(offset) < .00001 ? 'none'
+        : `translate3d(${(offset * width).toFixed(3)}px,0,0)`;
+      element.inert = !shown || (!reduced.matches && Math.abs(offset) > .015);
     }
-    layer(hiveCopy, word * (1 - between(p, .335, .38)));
+    const returning = toMiddle > 0;
+    const overviewActive = p >= .325 && (toBee < .5 || (toMiddle >= .5 && toMite < .5));
+    const binderActive = toBee >= .5 && toMiddle < .5;
+    const rnaActive = toMite >= .5;
+    const hiveOffset = toMite > 0 ? -toMite : toMiddle > 0 ? 1-toMiddle : toBee;
+    slide(overview, hiveOffset, overviewActive);
+    slide(protein, toMiddle > 0 ? -toMiddle : toBee-1, binderActive);
+    slide(rna, 1-toMite, rnaActive);
+    const rnaVisible = rna.dataset.active === 'true';
+    introScene.style.transform = 'none';
+    introScene.style.opacity = '1';
+    introScene.style.setProperty('--overview-labels', (returning ? 1 : between(i,.64,.84)).toFixed(4));
+    layer(hiveCopy, returning ? 0 : word);
     hiveCopy.style.setProperty('--logo', logo.toFixed(4));
     hiveCopy.style.setProperty('--subtitle', lift.toFixed(4));
     introTitle.style.transform = reduced.matches ? 'none' : `translate3d(0,${((height / 2 - titleMid) * (1 - lift)).toFixed(1)}px,0) scale(${mix(mix(mobile ? 1.9 : 2.3, mobile ? 1.12 : 1.6, logo), 1, lift).toFixed(4)})`;
-    introHive.style.setProperty('--rise', returnVisit ? '1' : pop.toFixed(4));
-    introHive.style.setProperty('--leave', returnVisit ? '0' : leave.toFixed(4));
-    const hiveAlpha = returnVisit ? 1 - between(p, 1.325, 1.405) : 1 - leave;
-    introHive.style.opacity = hiveAlpha.toFixed(4);
-    introHive.style.visibility = (returnVisit ? returnAlpha < .002 || hiveAlpha < .002 : popT < .001 || leave > .999) ? 'hidden' : 'visible';
-    const miteAlpha = returnVisit ? Number(returnAlpha > .002) : between(i, .64, .84) * (1 - leave);
-    layer(introMite, miteAlpha);
-    const fly = returnVisit ? 1 : between(i, .57, .82);
-    const beeLeave = returnVisit ? 1 - hiveAlpha : sceneOut;
+    introHive.style.setProperty('--rise', returning ? '1' : pop.toFixed(4));
+    introHive.style.setProperty('--leave', '0');
+    introHive.style.opacity = '1';
+    introHive.style.visibility = returning || popT > .001 ? 'visible' : 'hidden';
+    layer(introMite, returning ? 1 : between(i, .64, .84));
+    const fly = returning ? 1 : between(i, .57, .82);
     introBee.style.setProperty('--fly', fly.toFixed(4));
-    introBee.style.setProperty('--leave', beeLeave.toFixed(4));
-    introBee.style.visibility = fly < .001 || beeLeave > .999 || (returnVisit && returnAlpha < .002) ? 'hidden' : 'visible';
-    layer(beeCopy, between(p, .515, .555) * (1 - between(p, .69, .735)));
-    // Let the bee clear the left side before bringing in the next heading.
-    layer(miteCopy, between(p, 1.39, 1.425) * (1 - between(p, 1.46, 1.49)));
-    const focalX = 50, focalY = mobile ? 71 : 48;
-    const radius = Math.hypot(width, height);
-    layer(protein, clamp(modelIn * 8) * (1-modelOut));
-    protein.style.clipPath = reduced.matches || p >= 1.085 ? 'none' : `circle(${radius * modelIn}px at ${focalX}% ${focalY}%)`;
-    proteinView.style.transform = reduced.matches ? 'none' : `scale(${mix(.86, 1, modelIn) * mix(1, .72, modelOut)})`;
-    protein.style.setProperty('--model-labels', between(p, .75, .79).toFixed(4));
-    layer(rna, clamp(intoRNA * 8));
-    rna.style.clipPath = reduced.matches ? 'none' : `circle(${radius * intoRNA}px at 50% 52%)`;
+    introBee.style.setProperty('--leave', '0');
+    introBee.style.visibility = fly < .001 ? 'hidden' : 'visible';
+    layer(returnCopy, Number(returning));
+    layer(beeCopy, 0);
+    layer(miteCopy, 0);
+    protein.querySelector('.protein-view').style.transform = 'none';
+    protein.style.setProperty('--model-labels', '1');
     // The same right-hand panel changes from our targets to the RNA animation.
     // A shared crossfade keeps the panel present throughout the handoff.
     const rnaHandoff = between(p, 1.77, 1.85);
-    layer(rnaIntro, between(p, 1.475, 1.525) * (1-rnaHandoff));
+    layer(rnaIntro, 1-rnaHandoff);
     layer(rnaMechanism, rnaHandoff);
-    rnaIntro.inert = rnaHandoff >= .5 || intoRNA < .05;
+    rnaIntro.inert = rnaHandoff >= .5 || !rnaVisible;
     rnaIntro.setAttribute('aria-hidden', String(rnaIntro.inert));
-    rnaMechanism.inert = rnaHandoff < .5;
+    rnaMechanism.inert = rnaHandoff < .5 || !rnaVisible;
     rnaMechanism.setAttribute('aria-hidden', String(rnaMechanism.inert));
-    rna.style.setProperty('--subject-enter', between(p, 1.475, 1.555).toFixed(4));
-    rna.querySelector('.rna-stage').style.transform = reduced.matches ? 'none' : `translate3d(${width * (mobile ? 0 : .07) * (1-intoRNA)}px,${height * .03 * (1-intoRNA)}px,0) scale(${mix(.88, 1, intoRNA)})`;
+    rna.style.setProperty('--subject-enter', '1');
+    rna.querySelector('.rna-stage').style.transform = 'none';
   }
   function tick(now) {
     frame = 0;
     if (!visible || document.hidden) return;
     const goal = journeyProgress(), diseaseGoal = window.earthScroll().disease, introGoal = window.earthScroll().intro, dt = Math.min(.05, (now - previous) / 1000); previous = now;
-    shown = reduced.matches ? goal : shown + (goal - shown) * (1 - Math.exp(-dt * 6));
+    const response = goal >= .325 ? 9 : 6;
+    shown = reduced.matches ? goal : shown + (goal - shown) * (1 - Math.exp(-dt * response));
     shownDisease = reduced.matches ? diseaseGoal : shownDisease + (diseaseGoal-shownDisease)*(1-Math.exp(-dt*4));   // DWV section glides rather than steps
     if (Math.abs(goal - shown) < .0001) shown = goal;
     shownIntro = reduced.matches ? introGoal : shownIntro + (introGoal-shownIntro)*(1-Math.exp(-dt*4.5));
@@ -207,14 +208,10 @@ export function initJourney() {
   function kick() { if (!frame && visible && !document.hidden) { previous = performance.now(); frame = requestAnimationFrame(tick); } }
   function resize() {
     height = stage.clientHeight; width = stage.clientWidth;
-    miteAnchorX = introMite.offsetLeft + introMite.offsetWidth * .5;
-    miteAnchorY = introMite.offsetTop + introMite.offsetHeight * .5;
     titleMid = hiveCopy.offsetTop + introTitle.offsetTop + introTitle.offsetHeight / 2;
     // how far "Introducing" sits from the centre once the logo is beside it
     const wordmark = introTitle.querySelector('.swarm-wordmark');
     hiveCopy.style.setProperty('--shift', `${((wordmark.offsetWidth + parseFloat(getComputedStyle(introTitle).columnGap || 0)) / 2).toFixed(1)}px`);
-    beeAnchorX = introBee.offsetLeft + introBee.offsetWidth * .66;   // the bee's thorax, where the zoom lands
-    beeAnchorY = introBee.offsetTop + introBee.offsetHeight * .52;
     paint(shown,shownDisease,shownIntro); kick();
   }
   new IntersectionObserver(([entry]) => {

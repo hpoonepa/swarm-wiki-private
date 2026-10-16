@@ -440,7 +440,7 @@ html.loading .honey-progress { visibility: hidden; }
 .geo-stage .map-view { inset: 0; width: 100%; height: 100%; }
 @media (max-width:760px) { .geo-stage .map-view { mask-image: linear-gradient(to bottom,transparent 35%,#000 48%); } }
 
-#honeycomb-earth { height: 1855vh; height: 1855svh; }
+#honeycomb-earth { height: calc(var(--journey-screens, 17.6375) * 100vh); height: calc(var(--journey-screens, 17.6375) * 100svh); }
 
 /* The artwork leads the introduction; approach names arrive with each zoom. */
 .journey-copy--hive { left: 10%; top: 1%; width: 80%; transform: none; text-align: center; }
@@ -797,7 +797,7 @@ html.loading .honey-progress { visibility: hidden; }
 /* Group 53: one large molecular window, four floating notes, and the team's bee. */
 #minibinders.journey-protein { display: block; padding: 0; background: #ffe2cb; }
 .gut-focus { position: absolute; inset: 0; margin: 0; opacity: calc(1 - var(--molecule-in)); pointer-events: none; }
-.gut-focus > svg { position: absolute; width: min(55vw,72svh); height: auto; left: 50%; top: 46%; transform: translate(-50%,-50%) scale(calc(1 + .38 * var(--gut-zoom))); transform-origin: 46% 65%; }
+.gut-focus > svg { position: absolute; width: min(55vw,72svh); height: auto; left: 50%; top: 46%; transform: translate(-50%,-50%) ; transform-origin: 46% 65%; }
 .gut-focus__ring { filter: drop-shadow(0 2px 5px #a66b3330); }
 .gut-focus figcaption { position: absolute; top: 80%; left: 12%; width: 76%; text-align: center; color: #244b3c; }
 .gut-focus figcaption strong { display: block; margin-bottom: 10px; font-size: clamp(23px,2.5vw,36px); letter-spacing: -.035em; }
@@ -857,3 +857,31 @@ html.loading .honey-progress { visibility: hidden; }
   .binder-board .binder-copy > p:last-child { font-size: 16px; }
   .binder-fact { padding: 10px; }
 }
+
+/* Bee at left, hive at centre, mite at right: one world for the two camera visits. */
+.intro-bee { right: auto; left: 10%; top: calc(58% - min(20vw,270px) * .4522); width: min(20vw,270px); }
+.intro-mite { left: 77%; top: calc(58% - min(12vw,170px) * .4946); width: min(12vw,170px); }
+.journey-landmark { position: absolute; z-index: 4; top: 77%; margin: 0; transform: translateX(-50%); opacity: var(--overview-labels,0); color: #294c3c; font-size: clamp(15px,1.6vw,24px); font-weight: 650; white-space: nowrap; }
+.journey-landmark--bee { left: 22%; }
+.journey-landmark--mite { left: 83%; }
+.journey-copy--bee { left: 69%; top: 34%; width: 27%; }
+.journey-copy--mite { left: 5%; top: 36%; width: 27%; }
+.journey-copy--bee h2, .journey-copy--mite h2 { font-size: clamp(32px,3.7vw,62px); }
+.journey-copy--return { left: 15%; top: 12%; width: 70%; transform: none; text-align: center; }
+.journey-copy--return h2 { font-size: clamp(30px,3.4vw,50px); margin: 0; }
+@media (max-width:760px) {
+  .intro-hive { --hh: min(68svh,85vw); top: 34%; bottom: auto; }
+  .intro-bee { left: 2%; top: calc(58% - 30vw * .4522); width: 30vw; }
+  .intro-mite { left: 77%; top: calc(58% - 19vw * .4946); width: 19vw; }
+  .journey-landmark { top: 73%; font-size: 14px; }
+  .journey-landmark--bee { left: 20%; }
+  .journey-landmark--mite { left: 83%; }
+  .journey-copy--bee, .journey-copy--mite { left: 7%; top: 15%; width: 86%; }
+  .journey-copy--return { top: 18%; }
+}
+
+/* Whole scenes slide horizontally like windows; reading positions stay still. */
+.journey-window { overflow: clip; will-change: transform; }
+.journey-window--overview { position: absolute; inset: 0; z-index: 2; background: var(--swarm-paper); }
+.journey-window .intro-scene { transform-origin: center; }
+@media (prefers-reduced-motion: reduce) { .journey-window { will-change: auto; } }

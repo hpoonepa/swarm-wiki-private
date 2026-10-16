@@ -22,8 +22,12 @@ for(const file of ['nav-data.js','navmap.js','search.js']) {
   navbar=navbar.replace(pattern,'./'+file+'?v='+hash(file));
 }
 writeFileSync(root+'static/home/navbar.js',navbar);
+for(const file of ['menu.js','section-nav.js']) {
+  const text=readFileSync(root+'static/home/'+file,'utf8').replace(/\.\/journey-stops\.js(?:\?v=[^']*)?(?=')/g,'./journey-stops.js?v='+hash('journey-stops.js'));
+  writeFileSync(root+'static/home/'+file,text);
+}
 let html=readFileSync(root+'static/home/index.html','utf8');
-for(const file of ['story.css','rnai-layout.css','ending.css','ending.js','globe.js','earth-scroll.js','colony-loss.js','dwv-virus.js','menu.js','navbar.js','mechanisms.js','flight.js','cursor.js']) {
+for(const file of ['story.css','rnai-layout.css','ending.css','ending.js','globe.js','earth-scroll.js','colony-loss.js','dwv-virus.js','menu.js','navbar.js','mechanisms.js','flight.js','cursor.js','section-nav.css','section-nav.js']) {
   html=html.replace(new RegExp(file.replaceAll('.','\\.')+'\\?v=[^"\\s]+','g'),file+'?v='+hash(file));
 }
 writeFileSync(root+'static/home/index.html',html);

@@ -212,8 +212,9 @@
 
   .after { height: 40vh; }
 </style>
-<link rel="stylesheet" href="story.css?v=c0a2a0c0d348">
+<link rel="stylesheet" href="story.css?v=7d6250b5b327">
 <link rel="stylesheet" href="ending.css?v=099015dbb426">
+<link rel="stylesheet" href="section-nav.css?v=2a67c9055550">
 <link rel="stylesheet" href="rnai-layout.css?v=31699a9aa666">
 </head>
 <body>
@@ -403,8 +404,10 @@
         </div>
       </div>
       <div class="intro-scene">
+      <p class="journey-landmark journey-landmark--bee" aria-hidden="true">1. Minibinders</p>
+      <p class="journey-landmark journey-landmark--mite" aria-hidden="true">2. RNAi</p>
       <img class="intro-hive" src="assets/journey/commercial-hive.png" alt="" width="560" height="1400" aria-hidden="true">
-      <img class="intro-mite" src="assets/journey/mite.svg" alt="Varroa mite on the hive" width="186" height="184" aria-hidden="true">
+      <img class="intro-mite" src="assets/journey/mite.svg" alt="Varroa mite beside the hive" width="186" height="184" aria-hidden="true">
       <div class="intro-bee" aria-hidden="true"><div class="intro-bee__hover"><svg viewBox="200 40 690 600" aria-hidden="true" focusable="false">
 <g class="bee-legs bee-legs--far" fill="none" stroke="#4a1230" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"><path data-hip="666,418"/><path data-hip="698,428"/><path data-hip="728,422"/></g>
 <g class="bee-wing bee-wing--back" transform="rotate(-6 690 335) translate(440 147) scale(2)"><g class="bee-wing__flap">
@@ -450,6 +453,7 @@
         <h2><span class="swarm-introducing">Introducing</span><img class="swarm-wordmark" src="https://static.igem.wiki/teams/6185/wiki/homepage/swarm-wordmark.avif" alt="SWARM" width="866" height="813"></h2>
         <p class="swarm-subtitle">Two approaches. One goal: protect bees from DWV.</p>
       </div>
+      <div class="journey-copy journey-copy--return" id="return-hive" aria-hidden="true" inert><h2>Back at the hive.</h2></div>
       <div class="journey-copy journey-copy--bee journey-approach" id="bee" aria-hidden="true" inert>
         <h2><span>1.</span> Minibinders</h2>
         <p>Small proteins designed to bind the virus.</p>
@@ -721,18 +725,19 @@
   <script src="vendor/three.min.js"></script>
   <script src="assets/landmask.js"></script>
   <script src="assets/landmask-hi.js"></script>
-  <script src="earth-scroll.js?v=a7b061453341"></script>
+  <script src="earth-scroll.js?v=2047d64508f4"></script>
   <script src="colony-loss.js?v=845977d85632"></script>
   <script src="globe.js?v=ceeb178ed295"></script>
   <script src="dwv-virus.js?v=79949ffefc10"></script>
   <script src="statement.js?v=smooth1"></script>
   <script src="food.js?v=4"></script>
   <script type="module" src="navbar.js?v=f482af4b7f04"></script>
-  <script src="menu.js?v=828e0c6b19dd"></script>
+  <script type="module" src="menu.js?v=e8bc927d0ff0"></script>
+  <script type="module" src="section-nav.js?v=fbe31478a9ad"></script>
   <script src="ux.js?v=story1"></script>
   <script src="intro-bee.js?v=6" defer></script>
   <script src="ending.js?v=823d932f9048"></script>
   <script src="flight.js?v=c4c4168e8890"></script>
-  <script type="module" src="mechanisms.js?v=b94d433fe5e2"></script>
+  <script type="module" src="mechanisms.js?v=8189f15de6be"></script>
 </body>
 </html>
