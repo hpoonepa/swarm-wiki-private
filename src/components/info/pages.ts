@@ -4,6 +4,7 @@ const pages = [
   ['team', 'Team', 'Team', 1550, 1250],
   ['attributions', 'Attributions', 'Team', 1000, 700],
   ['description', 'Project Description', 'Project', 1550, 1250],
+  ['judging', 'Project judging', 'Project', 1550, 1250],
   ['contribution', 'Contribution', 'Project', 1550, 1250],
   ['engineering', 'Engineering Success', 'Project', 1550, 1250],
   ['implementation', 'Implementation', 'Project', 1550, 1250],

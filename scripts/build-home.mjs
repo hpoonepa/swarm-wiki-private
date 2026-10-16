@@ -13,8 +13,11 @@ for(const file of ['vendor/capsid-engine.js','vendor/rna-player.js','journey.js'
   controller=controller.replace(pattern,'./'+file+'?v='+hash(file));
 }
 writeFileSync(root+'static/home/mechanisms.js',controller);
+let search=readFileSync(root+'static/home/search.js','utf8');
+search=search.replace(/\.\/nav-data\.js(?:\?v=[^']*)?(?=')/g,'./nav-data.js?v='+hash('nav-data.js'));
+writeFileSync(root+'static/home/search.js',search);
 let navbar=readFileSync(root+'static/home/navbar.js','utf8');
-for(const file of ['nav-data.js','navmap.js']) {
+for(const file of ['nav-data.js','navmap.js','search.js']) {
   const pattern=new RegExp("\\./"+file.replaceAll('.','\\.')+"(?:\\?v=[^']*)?(?=')",'g');
   navbar=navbar.replace(pattern,'./'+file+'?v='+hash(file));
 }

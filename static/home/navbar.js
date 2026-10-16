@@ -1,5 +1,6 @@
-import { groups, sections } from './nav-data.js?v=9fe18f639b5c';
+import { groups, sections } from './nav-data.js?v=3ae2556f1170';
 import { mapStyles, mountMap } from './navmap.js?v=951a75de8fa3';
+import { searchStyles, searchTrigger, mountSearch } from './search.js?v=cebc92946ac0';
 const styles = `
   :host { position: fixed; inset: 0; z-index: 70; font-family: 'Space Grotesk Variable', 'Space Grotesk', 'Inter', sans-serif; color: #1a322a; pointer-events: none; }
   :host([data-dark]) { color: #fff9e9; }
@@ -18,6 +19,9 @@ const styles = `
   .glass::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: rgba(255, 253, 246, .5); border: 1px solid rgba(255, 255, 255, .78); box-shadow: 0 0 0 1px rgba(26, 50, 42, .06), inset 0 1px 0 rgba(255, 255, 255, .9), inset 0 -1px 0 rgba(26, 50, 42, .05), 0 1px 2px rgba(26, 50, 42, .04), 0 14px 34px rgba(26, 50, 42, .1); backdrop-filter: blur(18px) saturate(150%) brightness(1.04); -webkit-backdrop-filter: blur(18px) saturate(150%) brightness(1.04); }
   :host([data-dark]) .glass::before { background: rgba(17, 70, 57, .36); border-color: rgba(255, 248, 224, .34); box-shadow: 0 0 0 1px rgba(10, 36, 28, .14), inset 0 1px 0 rgba(255, 255, 255, .22), inset 0 -1px 0 rgba(0, 0, 0, .14), 0 14px 34px rgba(10, 36, 28, .2); backdrop-filter: blur(22px) saturate(140%) brightness(1.06); -webkit-backdrop-filter: blur(22px) saturate(140%) brightness(1.06); }
   @media (prefers-reduced-transparency: reduce) { .glass::before { background: #fffdf6; backdrop-filter: none; -webkit-backdrop-filter: none; } :host([data-dark]) .glass::before { background: #153f36; } }
+  .navigation-shell { display: flex; align-items: center; gap: 2px; border-radius: 999px; padding: 7px; }
+  .navigation-shell > nav { padding: 0; }
+  .navigation-shell > nav.glass::before { display: none; }
   nav { pointer-events: auto; border-radius: 999px; padding: 7px; }
   .items { display: flex; align-items: center; gap: 2px; }
   .group { position: relative; }
@@ -69,12 +73,14 @@ const styles = `
   :host([data-homepage][data-map-open]) .honey-toggle:focus-visible { transform: translateY(-2px) scale(1.12); }
   :host([data-homepage][data-map-open]) .honey-toggle:active { transform: scale(.96); }
   :host([data-homepage][data-map-open]) .honey-toggle svg { transform: rotate(30deg); }
+  @media (max-width: 1250px) { .bar { gap: 12px; } }
   @media (max-width: 1100px) {
-    .bar { top: 16px; width: calc(100% - 32px); padding-right: 72px; }
+    .bar { top: 16px; width: calc(100% - 32px); padding-right: 72px; gap: 12px; }
     .brand { height: 50px; } .brand img { height: 48px; }
-    .mobile-toggle { display: flex; }
-    nav.glass { display: none; position: absolute; top: 64px; right: 0; width: min(380px,100%); max-height: calc(100dvh - 98px); overflow-y: auto; border-radius: 24px; padding: 12px; }
-    nav.glass::before { background: rgba(255,253,246,.94); }
+    .navigation-shell { padding: 3px; }
+    .mobile-toggle { display: flex; min-height: 44px; }
+    nav.glass { display: none; position: absolute; top: 64px; right: -72px; width: min(380px,calc(100vw - 32px)); max-height: calc(100dvh - 98px); overflow-y: auto; border-radius: 24px; padding: 12px; }
+    .navigation-shell > nav.glass::before { display: block; background: rgba(255,253,246,.94); }
     :host([data-dark]) nav.glass::before { background: rgba(21,63,54,.95); }
     .dropdown::before { display: none; }
     nav.expanded { display: block; }
@@ -83,10 +89,11 @@ const styles = `
     .dropdown { position: static; min-width: 0; width: auto !important; margin: 4px 0 10px; padding: 4px 8px 4px 13px; border: 0; border-radius: 0; background: transparent; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
     .dropdown a { padding-block: 11px; }
   }
-  @media (max-width: 760px) { .bar { padding-right: 62px; } .honey-toggle { top: 8px; right: 6px; width: 56px; height: 62px; } }
+  @media (max-width: 760px) { .bar { padding-right: 62px; } nav.glass { right: -62px; } .honey-toggle { top: 8px; right: 6px; width: 56px; height: 62px; } }
   @media (max-width: 600px) { :host([data-homepage]) .honey-label { right: calc(100% + 4px); padding: 8px 11px; } .honey-label__full { display: none; } .honey-label__short { display: inline; } }
   @media (prefers-reduced-motion: reduce) { *, *::after { transition: none !important; } .honey-toggle { transform: none !important; } }
   ${mapStyles}
+  ${searchStyles}
 `;
 if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
   customElements.define('swarm-nav', class extends HTMLElement {
@@ -104,10 +111,11 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
         : `<a href="/lambert-ga/${destination}/"${destination===slug?' aria-current="page"':''}>${title}</a>`).join('');
       root.innerHTML=`<style>${styles}</style><div class="bar">
         <a class="brand" href="/lambert-ga/home/" aria-label="SWARM home"><img src="${logo.src}" alt="SWARM" width="${logo.width}" height="${logo.height}" decoding="async"></a>
-        <button class="mobile-toggle glass" aria-expanded="false" aria-controls="wiki-links"><span>Menu</span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
+        <div class="navigation-shell glass">
+        <button class="mobile-toggle" aria-expanded="false" aria-controls="wiki-links"><span>Menu</span><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 6h14M3 10h14M3 14h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
         <nav class="glass" id="wiki-links" aria-label="Main"><div class="items">
         ${groups.map(([title,items])=>`<details class="group"><summary>${title}</summary><div class="dropdown glass">${links(items)}</div></details>`).join('')}
-        </div></nav></div>
+        </div></nav>${searchTrigger}</div></div>
         <button class="honey-toggle" aria-label="${isHomepage?'Explore the wiki menu':'Open the project map'}" aria-expanded="false" aria-haspopup="dialog" title="${isHomepage?'Explore the wiki':'Project map'}"><span class="honey-label" aria-hidden="true"><span class="honey-label__full">Explore the wiki</span><span class="honey-label__short">Menu</span></span><svg viewBox="0 0 48 52" aria-hidden="true"><path d="m24 2 10 6v12l-10 6-10-6V8Z" fill="#ffd75c" stroke="#c58a1c" stroke-width="1.6"/><path d="m14 20 10 6v12l-10 6-10-6V26Z" fill="#fbc438" stroke="#c58a1c" stroke-width="1.6"/><path d="m34 20 10 6v12l-10 6-10-6V26Z" fill="#f4b324" stroke="#c58a1c" stroke-width="1.6"/><path d="m24 8 5 3v6l-5 3-5-3v-6Zm-10 18 5 3v6l-5 3-5-3v-6Zm20 0 5 3v6l-5 3-5-3v-6Z" fill="none" stroke="#fff1b3" stroke-width="1.4"/></svg></button>`;
       const nav=root.querySelector('#wiki-links'), toggle=root.querySelector('.mobile-toggle'), bar=root.querySelector('.bar'), honeyToggle=root.querySelector('.honey-toggle');
       const close=()=>{
@@ -125,11 +133,14 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
         root.querySelector('.honey-label__short').textContent=open?'Close':'Menu';
         if(!open)honeyToggle.focus({preventScroll:true});
       }});
-      honeyToggle.addEventListener('click',()=>{if(map.isOpen())map.close();else{close();map.open();}});
+      const search=mountSearch(root,{beforeOpen:()=>{close();if(map.isOpen())map.close();}});
+      this.search=search;
+      honeyToggle.addEventListener('click',()=>{search.close();if(map.isOpen())map.close();else{close();map.open();}});
       toggle.addEventListener('click',()=>{const open=!nav.classList.contains('expanded');close();nav.classList.toggle('expanded',open);toggle.setAttribute('aria-expanded',String(open));});
       root.querySelectorAll('.group').forEach(group=>group.addEventListener('toggle',()=>{if(group.open)root.querySelectorAll('.group').forEach(other=>{if(other!==group)other.open=false;});}));
       root.addEventListener('keydown',event=>{
         if(event.key!=='Escape')return;
+        if(search.isOpen()){search.close();event.stopPropagation();return;}
         if(map.isOpen()){map.close();event.stopPropagation();return;}
         const active=root.activeElement, group=active?.closest('.group');
         if(group?.open){group.open=false;group.querySelector('summary').focus();}
@@ -145,6 +156,7 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
       let lastY=scrollY, hidden=false;
       this.syncScroll=()=>{
         const y=scrollY, dy=y-lastY; lastY=y;
+        if(search.isOpen())return;
         if(y<80)hidden=false;else if(dy>6)hidden=true;else if(dy<-6)hidden=false;
         if(darkOver){const surface=document.querySelector(darkOver);this.toggleAttribute('data-dark',!!surface&&surface.getBoundingClientRect().bottom>90);}
         if(this.hasAttribute('data-hidden')===hidden)return;
@@ -158,6 +170,7 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
       addEventListener('scroll',this.syncScroll,{passive:true});this.syncScroll();
     }
     disconnectedCallback() {
+      this.search?.destroy();
       document.removeEventListener('pointerdown',this.dismiss);
       document.removeEventListener('focusin',this.dismissFocus);
       removeEventListener('scroll',this.syncScroll);

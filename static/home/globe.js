@@ -173,7 +173,7 @@
   const projected = new T.Vector3();
   /* ---------- where colonies were lost, year by year ----------
      One circle per state on the globe, its area proportional to the colonies that state lost in January-March of the
-     year shown (USDA NASS, colony-loss.js). A small bar at the top right plays through the years while the United
+     year shown (USDA NASS, colony-loss.js). A compact card below the globe plays through the years while the United
      States step is on screen; circles ease between years so nothing jumps. */
   const LOSS = window.COLONY_LOSS;
   const CENTRES = { California: [37.2, -119.5], Florida: [28.6, -82.4], Georgia: [32.7, -83.4], Idaho: [44.4, -114.6],
@@ -197,7 +197,7 @@
     lossDots.mats = [dotMat, rimMat];
   }
   const yearsBar = section.querySelector('.loss-years');
-  if (yearsBar) document.body.appendChild(yearsBar);              // top level, so it sits above the site-wide bee flight line
+  // Keep the card inside the sticky globe stage so it leaves with this scene.
   const yearLabel = yearsBar && yearsBar.querySelector('.ly-year'), yearTotal = yearsBar && yearsBar.querySelector('.ly-total');
   // the years follow the scroll: the section holds on the United States step while the reader scrolls through
   // 2016 -> 2026 (window.earthScroll in index.html); yearsShown eases toward it like the rest of the globe
@@ -215,11 +215,11 @@
       yearsBar.style.opacity = usOn.toFixed(3);
       yearsBar.style.visibility = usOn < .02 ? 'hidden' : 'visible';
       yearsBar.inert = usOn < .02; yearsBar.setAttribute('aria-hidden', String(usOn < .02));
-      yearsBar.style.setProperty('--t', (yf / (N - 1)).toFixed(4));          // fill grows from a pill-sized stub to the full track
+      yearsBar.style.setProperty('--t', (yf / (N - 1)).toFixed(4));          // timeline fills as the scroll advances through the years
       if (shown !== shownYear) {
         shownYear = shown;
         yearLabel.textContent = LOSS.years[shown];
-        yearTotal.textContent = LOSS.states['United States'].lost[shown].toLocaleString('en-US') + ' colonies';
+        yearTotal.textContent = LOSS.states['United States'].lost[shown].toLocaleString('en-US');
       }
     }
   }
@@ -270,9 +270,10 @@
     const entranceTurn=(popAt===null?1.6:1.6*Math.exp(-3.2*pt))*(1-toUSA);
     spin.rotation.y=-Math.PI/2-longitude*radians+(idleTurn-entranceTurn)*(1-toUSA);
     world.position.y=mix(world.position.y,0,toUSA);
-    camera.position.z=worldDistance;
+    const mobileUsLayout=mobile ? toUSA*(1-toAtlanta) : 0;
+    camera.position.z=worldDistance*mix(1,1.18,mobileUsLayout);
     const centred=toAtlanta;
-    camera.setViewOffset(width,height,mobile?0:-width*.20*(1-centred),mobile?-height*.20:height*.01,width,height);
+    camera.setViewOffset(width,height,mobile?0:-width*.20*(1-centred),mobile?-height*mix(.20,.10,mobileUsLayout):height*.01,width,height);
     // The colony-loss outline belongs to the United States step only.
     const usOn=ease((p-.1)/.04)*(1-ease((p-.215)/.03));
     uniforms.uUsAmt.value=usOn;

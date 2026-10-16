@@ -1,0 +1,106 @@
+---
+import InformationLayout from '../layouts/InformationLayout.astro';
+const frontmatter = {
+  title: 'Project judging',
+  description: 'A guide to SWARM’s project documentation, organized around iGEM’s medal criteria.',
+};
+const headings = [
+  { depth: 2, slug: 'bronze', text: 'Bronze medal criteria' },
+  { depth: 2, slug: 'silver', text: 'Silver medal criteria' },
+  { depth: 2, slug: 'gold', text: 'Gold medal criteria' },
+  { depth: 3, slug: 'best-model', text: 'Best Model' },
+  { depth: 3, slug: 'best-sustainable-development-impact', text: 'Best Sustainable Development Impact' },
+  { depth: 3, slug: 'best-hardware', text: 'Best Hardware' },
+];
+const bronze = [
+  { title: 'Competition deliverables', text: 'Our wiki documents how we developed SWARM, from choosing targets in DWV and Varroa to designing minibinders, RNAi, models, and hardware. The writeups bring together our methods, results, and design decisions, with the website source available in our iGEM GitLab repository. This documentation supports our presentation, judging form, and judging session.', links: [['Explore the wiki', 'home'], ['Wiki repository', 'https://gitlab.igem.org/2026/lambert-ga']] },
+  { title: 'Project attributions', text: 'SWARM combines work in minibinder design, RNAi, modeling, hardware, software, and human practices. We are documenting who contributed to each part, including experimental work, computational analysis, outreach, and the wiki. Our attributions will distinguish student work from the advice, materials, and experimental support provided by mentors and collaborators.', links: [['Attributions', 'attributions'], ['Meet the team', 'team']] },
+  { title: 'Project description', text: 'SWARM addresses both deformed wing virus and the Varroa mite that spreads it. We designed minibinders to bind the viral VP3 capsid protein and multiplexed RNAi to target three mite salivary genes. Our proposed hive-top feeder delivers both through sucrose solution, with the aim of addressing infection in bees and reducing transmission by mites.', links: [['Project description', 'description'], ['Minibinders', 'minibinder'], ['RNAi', 'rnai']] },
+  { title: 'Contribution', text: 'We developed PRINCE to help teams prioritize binding sites before investing in minibinder design and testing. Our other contributions include a computationally designed GFP minibinder for further validation, the low-cost VAPOR-X dryer, and a seven-part modeling video series with a MATLAB ODE template. These resources share the tools and lessons from our own development process.', links: [['Contribution', 'contribution'], ['Software', 'software'], ['Modeling tutorials', 'model-instructional']] },
+];
+const silver = [
+  { title: 'Engineering success', text: 'Our first minibinder campaign produced no detectable binding to VP3 despite promising computational scores. We revised the workflow by using PRINCE to select new binding sites and SolubleMPNN to improve predicted solubility. A second experimental screen identified a VP3-binding candidate. This cycle shows how an unsuccessful test changed our design process and led to a measurable result.', links: [['Engineering', 'engineering'], ['Minibinder experiments', 'minibinder-experimentation'], ['Software', 'software']] },
+  { title: 'Human practices', text: 'Conversations with beekeepers and researchers shaped both our project goals and technical choices. Beekeepers highlighted the persistent burden of Varroa, while protein researchers helped us reconsider nanobodies and the difficulty of choosing binding sites. This feedback informed our move toward minibinders and literature-informed epitope selection. We also discussed the ecological implications of targeting Varroa with an entomologist.', links: [['Integrated human practices', 'human-practices'], ['Project decisions', 'description'], ['Expert feedback', 'software'], ['Safety', 'safety']] },
+];
+const gold = [
+  { id: 'best-model', title: 'Best Model', text: 'Our models connect molecular behavior to the whole colony. The minibinder model explores how binding affinity, dose, and feeding schedules affect protection, while the RNAi model links siRNA activity to a dual-luciferase assay. Our colony simulation then compares predicted infection, survival, pollination, and honey yield across treatment schedules and weather conditions to examine when the combined approach could help.', links: [['Minibinder model', 'model-minibinder'], ['RNAi model', 'model-rnai'], ['Colony model', 'model-epidemiological']] },
+  { id: 'best-sustainable-development-impact', title: 'Best Sustainable Development Impact', text: 'We connect pollinator health to food production, beekeeper livelihoods, and biodiversity. Our colony model examines predicted pollination, honey yield, and survival, linking these outcomes to SDGs 2, 8, and 15. Treatment schedules also account for withdrawal periods, supporting our consideration of responsible production under SDG 12. These measures help us assess the wider potential impact of SWARM alongside its biological performance.', links: [['Sustainable development', 'sustainability'], ['SDGs in our colony model', 'model-epidemiological'], ['Project description', 'description']] },
+  { id: 'best-hardware', title: 'Best Hardware', text: 'We built VAPOR-X, a low-cost vacuum-assisted dryer intended to prepare biological samples for storage and delivery. The prototype combines a vacuum pump, controlled heating, temperature and pressure sensing, and a Pico W controller in a custom enclosure. Its local display, controls, and automatic shutdown features support practical use, while our writeup explains the circuitry and control logic for teams adapting the design.', links: [['VAPOR-X hardware', 'hardware'], ['Hardware contribution', 'contribution']] },
+];
+const href = (slug: string) => slug.startsWith('https://') ? slug : `/lambert-ga/${slug}/`;
+---
+<InformationLayout frontmatter={frontmatter} headings={headings}>
+  <div class="judging-guide wide">
+    <p class="judging-intro">How our work on SWARM connects to each medal criterion and our three selected special awards.</p>
+    <nav class="judging-jumps" aria-label="Medal criteria">
+      <a href="#bronze"><span class="medal-token medal-token--bronze" aria-hidden="true">B</span>Bronze</a>
+      <a href="#silver"><span class="medal-token medal-token--silver" aria-hidden="true">S</span>Silver</a>
+      <a href="#gold"><span class="medal-token medal-token--gold" aria-hidden="true">G</span>Gold</a>
+    </nav>
+    {[{ id: 'bronze', name: 'Bronze', rows: bronze }, { id: 'silver', name: 'Silver', rows: silver }].map(section => (
+      <section class={`judging-section judging-section--${section.id}`} aria-labelledby={section.id}>
+        <header class="judging-section-heading"><span class={`medal-token medal-token--${section.id}`} aria-hidden="true">{section.name[0]}</span><h2 id={section.id}>{section.name} medal criteria</h2></header>
+        <div class="judging-table">
+          {section.rows.map(row => (
+            <div class="judging-row">
+              <h3>{row.title}</h3>
+              <div class="judging-evidence"><p>{row.text}</p><nav class="judging-links" aria-label={`${row.title} documentation`}>{row.links.map(([label, slug]) => <a href={href(slug)}>{label}<span aria-hidden="true">↗</span></a>)}</nav></div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+    <section class="judging-section judging-section--gold" aria-labelledby="gold">
+      <header class="judging-section-heading"><span class="medal-token medal-token--gold" aria-hidden="true">G</span><h2 id="gold">Gold medal criteria</h2></header>
+      <div class="judging-gold-intro"><p>We are pursuing Best Model, Best Sustainable Development Impact, and Best Hardware. Each brings together a different part of SWARM: predicting how it could work, assessing its wider impact, and building tools to support its delivery.</p></div>
+      <div class="judging-table">
+        {gold.map(row => <div class="judging-row"><h3 id={row.id}>{row.title}</h3><div class="judging-evidence"><p>{row.text}</p><nav class="judging-links" aria-label={`${row.title} documentation`}>{row.links.map(([label, slug]) => <a href={href(slug)}>{label}<span aria-hidden="true">↗</span></a>)}</nav></div></div>)}
+      </div>
+    </section>
+    <nav class="judging-reference" aria-label="Official judging guidance"><a href="https://competition.igem.org/judging/medals">iGEM medal criteria <span aria-hidden="true">↗</span></a><a href="https://competition.igem.org/judging/special-prizes">Special award criteria <span aria-hidden="true">↗</span></a></nav>
+  </div>
+</InformationLayout>
+
+<style>
+  .judging-guide { --judging-ink: #183f34; --judging-line: #dedbcc; color: var(--judging-ink); }
+  .judging-intro { margin: 0; max-width: 52ch; font-size: 18px; line-height: 1.65; color: #52665b; }
+  .judging-jumps { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0 56px; }
+  .judging-jumps a { display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px 10px 12px; border: 1px solid var(--judging-line); border-radius: 999px; color: var(--judging-ink); text-decoration: none; font-size: 16px; font-weight: 600; background: #fffcf5; }
+  .judging-jumps a:hover { background: #f9edcc; border-color: #c1a56a; }
+  .medal-token { display: inline-grid; place-items: center; flex: none; width: 46px; height: 50px; clip-path: polygon(50% 0,94% 25%,94% 75%,50% 100%,6% 75%,6% 25%); color: #54402e; font-size: 18px; font-weight: 700; }
+  .judging-jumps .medal-token { width: 28px; height: 32px; font-size: 13px; }
+  .medal-token--bronze { background: #dfb993; }
+  .medal-token--silver { background: #d6dfd9; color: #40554a; }
+  .medal-token--gold { background: #f0ce70; }
+  .judging-section { margin-bottom: 64px; }
+  .judging-section-heading { display: flex; align-items: center; gap: 17px; margin-bottom: 23px; }
+  .judging-section-heading h2 { margin: 0; font-size: clamp(26px,3vw,38px); font-weight: 650; line-height: 1.2; letter-spacing: -.04em; scroll-margin-top: 115px; }
+  .judging-table { border-top: 2px solid #b49166; border-bottom: 1px solid var(--judging-line); }
+  .judging-section--silver .judging-table { border-top-color: #819b8d; }
+  .judging-section--gold .judging-table { border-top-color: #c29a39; }
+  .judging-row { display: grid; grid-template-columns: minmax(150px,.8fr) minmax(0,2fr); border-bottom: 1px solid var(--judging-line); }
+  .judging-row:last-child { border-bottom: 0; }
+  .judging-row > h3 { margin: 0; padding: 25px 22px; background: #f8f2e6; color: #5e513b; font-size: 18px; font-weight: 650; line-height: 1.5; scroll-margin-top: 115px; }
+  .judging-section--silver .judging-row > h3 { background: #eff3ee; color: #38594a; }
+  .judging-section--gold .judging-row > h3 { background: #fbf3da; }
+  .judging-evidence { padding: 24px 26px; }
+  .judging-evidence p { margin: 0 0 12px; font-size: 16px; line-height: 1.7; color: #52665b; }
+  .judging-links { display: flex; flex-wrap: wrap; gap: 2px 22px; }
+  .judging-links a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; color: var(--judging-ink); font-size: 15px; font-weight: 600; text-decoration: underline; text-underline-offset: 5px; }
+  .judging-links a:hover, .judging-reference a:hover { color: #9f541e; }
+  .judging-links a span { color: #a87323; font-size: 20px; }
+  .judging-gold-intro { max-width: 65ch; margin-bottom: 32px; }
+  .judging-gold-intro p { margin: 0; color: #52665b; font-size: 16px; line-height: 1.7; }
+  .judging-reference { display: flex; flex-wrap: wrap; gap: 8px 24px; padding-top: 22px; border-top: 1px solid var(--judging-line); }
+  .judging-reference a { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-size: 14px; color: #53675b; text-decoration: underline; }
+  @media (max-width:760px) {
+    .judging-jumps { gap: 8px; margin-bottom: 38px; }
+    .judging-jumps a { padding: 8px 12px 8px 8px; font-size: 14px; gap: 6px; }
+    .judging-row { grid-template-columns: 1fr; }
+    .judging-row > h3 { padding: 15px 18px; font-size: 17px; }
+    .judging-evidence { padding: 16px 18px 19px; }
+    .judging-section { margin-bottom: 44px; }
+    .judging-section-heading { gap: 11px; }
+    .judging-section-heading .medal-token { width: 36px; height: 40px; }
+  }
+</style>
