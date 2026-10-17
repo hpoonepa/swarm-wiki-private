@@ -1,4 +1,4 @@
-import { getDestination } from './journey-stops.js?v=969bfd2c4a31';
+import { getDestination } from './journey-stops.js?v=1234e48119ea';
 
 function followHash() {
   const top = getDestination(location.hash.slice(1));

@@ -29,9 +29,9 @@ export const HOME_STOPS = Object.freeze([
   { id: 'usa', label: 'Colony losses', target: () => at(.18), start: () => at(.115) },
   { id: 'dwv', label: 'Deformed wing virus', target: () => pause('disease', .23), start: () => at(.235) },
   { id: 'hive', label: 'Introducing SWARM', target: () => pause('intro', .96), start: () => at(.32) },
-  { id: 'minibinders', label: 'Minibinders', target: () => at(STORY_STOPS.minibinders), start: () => at(.63) },
-  { id: 'rna-intro', label: 'RNAi and the mite', target: () => at(STORY_STOPS.rnaIntro), start: () => at(1.42) },
-  { id: 'rnai', label: 'How RNAi works', target: () => at(STORY_STOPS.rnaMechanism), start: () => at(1.82) },
+  { id: 'minibinders', label: 'Minibinders', target: () => at(STORY_STOPS.minibinders), start: () => at(.58) },
+  { id: 'rna-intro', label: 'RNAi and the mite', target: () => at(STORY_STOPS.rnaIntro), start: () => at(1.36) },
+  { id: 'rnai', label: 'How RNAi works', target: () => at(STORY_STOPS.rnaMechanism), start: () => at(1.81) },
   { id: 'together', label: 'Protecting bees', target: () => {
     const el = document.getElementById('together');
     return el ? elementTop('together') + Math.max(0, el.offsetHeight - innerHeight) * .55 : undefined;
