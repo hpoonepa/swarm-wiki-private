@@ -8,6 +8,108 @@ import Wip from "../components/md_components/Wip";
 
 <Wip />
 
+
 # Overview
 
-Placeholder. The Safety write-up goes here.
+Throughout every step of SWARM, from experimentation to hardware, Lambert iGEM has actively considered the safety of both our team and the external community. This page serves as a complete documentation of the safety measures we’ve implemented.
+
+# Team Precautions
+
+We followed safety procedures set by Ta et al. to guide our work within the lab [1].
+
+- Wash your hands when entering and leaving the lab.
+- Protect your eyes, mucous membranes, open cuts, and wounds from biohazard materials.
+- Do not eat or drink in the lab.
+- Always wear gloves and splash-proof goggles.
+- Keep long or loose hair tied back.
+- Before starting work, disinfect all surfaces with 70% ethanol.
+- Soak disposable tips, glassware, and tubes in a 10% bleach solution for 20 minutes before disposing of them in regular waste.
+- Dispose of growth plates in a biohazard container that will be autoclaved.
+- Check that all equipment is in good condition, with no chips, torn cords, or cracks.
+- Report any problems to an instructor immediately.
+- When pipetting, avoid touching the tip to the side of the container.
+- Don’t place tube caps upside down.
+- After working, clean your area with 70% ethanol.
+- Ensure all glassware and lab equipment are cleaned before leaving.
+- Keep walkways clear by placing backpacks and stools to the side.
+- Always be aware of the proper disposal procedures for lab materials.
+
+# Project Safety
+
+## General
+
+Deformed Wing Virus and *Varroa* mites are among the biggest concerns of beekeepers in the U.S. today. In response, we introduced our synthetic Vp3 minibinder and multiplexed RNAi system. To address the safety concerns with introducing a foreign protein to an agricultural system, we spoke to professors, beekeepers, and policy makers across the country, and received their input on the potential biological implications of SWARM within bee cells. The general consensus was that there was no significant biological risk to SWARM’s application within bee colonies, and that it’d be perfectly safe to eliminate *Varroa* within bee colonies (*see iHP–Dr. Jeff Pettis*).
+
+## Wetlab
+
+When working on our wetlab experimentation, we followed basic safety precautions including wearing personal protective equipment at all times. In addition, we made sure to keep our workplaces neat by promptly disposing of waste and cleaning surfaces with a 70% ethanol solution.
+
+## Minibinder
+
+When initially developing our minibinder proteins, we were faced with concerns about the possible adverse effects of introducing a foreign protein into the bee gut. In response, we contacted Dr. Lewis Bartlett at the University of Georgia, who explained that bees lack an adaptive immune system and would be unlikely to respond to our minibinders (*see iHP–Prof. Lewis Bartlett*).
+
+In our own experimentation, we avoided using bee cells or Deformed Wing Virus directly. Instead, we developed both our minibinders and the Vp3 protein in a cell-free system before testing for binding.
+
+## RNAi
+
+The primary concern with our RNAi system was the potential biological implications of eliminating *Varroa* mites entirely. However, stakeholders such as Dr. Jeff Pettis highlighted that the *Varroa* mite is an invasive parasite in the U.S., and that there would be no negative implications (*see iHP–Jeff Pettis*). During our experimentation, we never used live *Varroa* mites or mite cells directly—instead, we tested using an Sf9 insect cell line, and ordered our DNA and target gene fragments from IDT. These targets are also specific to *Varroa* mites and not found in humans or bees.
+
+When physically experimenting with RNAi, we had to follow additional safety precautions due to our use of SF9 cells. In addition to cleaning our workspaces with ethanol, we also used the Virkon® disinfectant to ensure maximum sterility.
+
+## Drylab
+
+### Vapor-X
+
+In order to maximize user safety when developing our hardware, we built a series of overrides into our Raspberry Pi Pico W system (*see Hardware—Programming*). If any of the following conditions are met, Vapor-X immediately shuts itself down to reduce the risk of overheating:
+
+1. The raw voltage after converting to a corresponding digital value is less than or equal to 150, or greater than or equal to 65,385. These constraints represent the measurable range of the voltage, and any value outside of them is considered a short or open circuit.
+2. The calculated resistance is less than or equal to 0—this is physically impossible in our circuit and is consequently considered an invalid reading.
+3. The measured temperature is outside the range of -20 ℃ to 180 ℃.
+
+Additionally, Vapor-X has a built-in early warning system to alert users of unexpected conditions. If the pressure within the system fails to decrease as intended, the system displays a warning of potential air leaks, sealing issues, or vacuum-pump malfunctions. Similarly, if the temperature reading fails, the user is prevented from starting the drying process.
+
+If any of these conditions reads true, the system plays an audible beep to alert the user of potential issues as promptly as possible.
+
+### PRINCE
+
+The primary concern of epitope predictors such as PRINCE is immune invasion, the process where pathogens infiltrate tissues and suppress the host’s immune responses. However, PRINCE only predicts—it doesn’t generate binder sequences or anything orderable from a vendor. To further address concerns, we spoke to Professor Tatsuhiko Kadowaki, who validated PRINCE’s efficacy and safety (*see iHP–Prof. Tatsuhiko Kadowaki*).
+
+Additionally, we treated PRINCE’s accuracy as a safety matter, as tools that overstate themselves send researchers to the bench with misplaced confidence. We built PRINCE using public PDB structures after removing any duplicates that would overestimate accuracy. For our ranking system, we validated against epitopes already experimentally determined in published structures.
+
+### Electronic Devices
+
+When working with any form of electronic device, we maintained similar precautions to our wetlab experimentation, including but not limited to wearing protective equipment and keeping equipment well-maintained.
+
+In designing our hardware system, we followed MIT Makerspace (EHS) safety protocols whenever handling electronic equipment [2]. For instance, we placed all Arduino boards and other similar devices on antistatic surfaces during use. We also inspected our devices for any damage before use, and maintained a work environment clear of foods and liquids. Team members worked in a well-ventilated, isolated environment, and powered down all electronic devices after use.
+
+### 3D Printer
+
+Many of the parts we used for Vapor-X were 3D printed to ensure maximum specificity and functionality. Because 3D printers pose a risk of overheating, we had a team member or the PI oversee all printing processes. Additionally, the model we used—the Bambu Lab A1 Combo—has several built-in safety features:
+
+- **Build Plate Detection:** Sensors detect if the build plate is missing or misaligned.
+- **Nozzle Clumping Detection:** Monitors for filament blockages and alerts the user if one is present.
+- **Filament Tangle Monitoring:** Sensors detect filament jams or tangles and stop the printer if any are present.
+- **Cybersecurity Compliance:** Meets standards for secure firmware updates.
+
+## Human Practices
+
+For each of our Human Practices initiatives, especially those designed for younger or more vulnerable demographics, we made sure to prioritize the safety and security of our participants. For instance, we had workshop attendees follow the same precautions we do when performing experimentation.
+
+We obtained IRB approval prior to the distribution of all our surveys, and made clear to respondents that they could quit answering at any time. Additionally, we confirmed photo release permission before taking pictures of initiatives and posting them to our social media.
+
+For our partnership with *Flowers for the Future International* in particular, protecting the privacy of our Afghan students was our top priority. We had them keep their cameras off for all meetings, collected no information from them other than their emails, and allowed them to use pseudonyms throughout the entirety of the course.
+
+# Citations
+
+<Reference>
+[1] Ta, L., Gosa, L., & Nathanson, D. A. (2019). Biosafety and Biohazards: Understanding Biosafety Levels and Meeting Safety Requirements of a Biobank. *Methods in Molecular Biology*. https://doi.org/10.1007/978-1-4939-8935-5_19
+</Reference>
+
+<Reference>
+[2] EHS-0076. (n.d.). *Shop and makerspace safety*. https://ehs.mit.edu/wp-content/uploads/EHS_0076.pdf
+</Reference>
+
+
+
+
+
