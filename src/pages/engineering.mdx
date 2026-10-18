@@ -11,25 +11,23 @@ import Image from "../components/md_components/Image";
 
 # Cycle 1 – Minibinder Creation and Expression
 
-
-
 The overall goal of this cycle was to develop and validate a system of expression by producing VP3 protein and de novo minibinders through plasmid cloning, cell-free expression, and Ni-NTA purification.
 
 ## Iteration 1.1 – Initial Minibinder Creation
 
 ### Design
 
-Our initial approach focused on generating minibinders capable of binding the VP3 P-domain of DWV, potentially interfering with viral attachment to honey bee cells. We utilized existing computational design pipelines, including Mosaic, BindCraft, and BoltzGen, to generate novel minibinder structures and sequences targeting VP3.
+Our initial approach focused on generating minibinders capable of binding the VP3 P-domain of DWV (Shubnik et al., 2017), potentially interfering with viral attachment to honey bee cells. We utilized existing computational design pipelines, including Mosaic (Escalante Bio, 2025), BindCraft (Pacesa 2025), and BoltzGen (Stark 2025), to generate novel minibinder structures and sequences targeting VP3.
 
 ### Build
 
-Using the three-dimensional structure of VP3, we generated minibinder candidates through our computational pipelines. We subsequently evaluated these designs using Protenix and Boltz-2, examining interface predicted template modeling scores (ipTM) and interface predicted aligned error (iPAE) to assess predicted structural confidence and binding interface quality.
+Using the three-dimensional structure of VP3, we generated minibinder candidates through our computational pipelines. We subsequently evaluated these designs using Protenix (ByteDance Protenix Team, 2026) and Boltz-2 (Passaro 2025), examining interface predicted template modeling scores (ipTM) and interface predicted aligned error (iPAE) to assess predicted structural confidence and binding interface quality.
 
-Based on these evaluations, we selected promising candidates for experimental validation through our partnership with Adaptyv Bio.
+Based on these evaluations, we selected promising candidates for experimental validation through our partnership with Adaptyv Bio (Adaptyv Bio, 2026).
 
 ### Test
 
-Through our sponsorship with Adaptyv Bio, we experimentally screened our initial minibinder candidates against VP3. Despite favorable computational predictions, none of the tested minibinders demonstrated detectable binding under the assay conditions.
+Through our sponsorship with Adaptyv Bio (Adaptyv Bio, 2026), we experimentally screened our initial minibinder candidates against VP3. Despite favorable computational predictions, none of the tested minibinders demonstrated detectable binding under the assay conditions.
 
 {/* 
 <Image
@@ -45,21 +43,53 @@ The unsuccessful first batch revealed that favorable computational predictions d
 
 These findings motivated us to refine our computational workflow by improving hotspot identification and incorporating additional sequence optimization before experimental testing.
 
+### References
+
+<Reference>
+Adaptyv bio — The automated lab for agentic biology. (2026). Adaptyvbio.Com. https://www.adaptyvbio.com/
+</Reference>
+
+<Reference>
+ByteDance Protenix Team. (2026). Protenix-v1: Toward high-accuracy open-source biomolecular structure prediction. bioRxiv. https://doi.org/10.64898/2026.02.05.703733
+</Reference>
+
+<Reference>
+Escalante Bio. (2025). Mosaic: A functional framework for multi-objective protein design [Computer software]. GitHub. https://github.com/escalante-bio/mosaic
+</Reference>
+
+<Reference>
+Pacesa, M., et al. (2025). One-shot design of functional protein binders with BindCraft. Nature. https://doi.org/10.1038/s41586-025-09429-6
+</Reference>
+
+<Reference>
+Passaro, S., et al. (2025). Boltz-2: Towards accurate and efficient binding affinity prediction. bioRxiv. https://doi.org/10.1101/2025.06.14.659707
+</Reference>
+
+<Reference>
+Škubník, K., Nováček, J., Füzik, T., Přidal, A., Paxton, R. J., & Plevka, P. (2017). Structure of deformed wing virus, a major honey bee pathogen. Proceedings of the National Academy of Sciences, 114(12), 3210–3215. https://doi.org/10.1073/pnas.1615695114
+</Reference>
+
+<Reference>
+Stark, H., et al. (2025). BoltzGen: Toward universal binder design. bioRxiv. https://doi.org/10.1101/2025.11.20.689494
+</Reference>
+
 ## Iteration 1.2 – Epitope Selection and Solubility Optimization
 
 ### Design
 
 Following the unsuccessful first batch, we revised our computational design approach to address potential limitations in epitope selection and solubility.
 
-To improve hotspot selection, we incorporated PRINCE, our software that combines computational structural analysis with literature-based evidence to identify promising binding regions (see [Software](/lambert-ga/software)). This allowed us to target alternative epitopes on the VP3 P-domain rather than relying on the initial binding regions.
+To improve hotspot selection, we incorporated PRINCE, our software that combines computational structural analysis with literature-based evidence to identify promising binding regions (See [Software](https://2026.igem.wiki/lambert-ga/software/)). This allowed us to target alternative epitopes on the VP3 P-domain rather than relying on the initial binding regions.
 
-We also incorporated SolubleMPNN, a protein sequence-design model that favors amino acid sequences with characteristics associated with soluble protein expression. By combining improved epitope selection with sequence optimization, we aimed to generate minibinders with more favorable predicted binding interactions and expression properties.
+
+We also incorporated SolubleMPNN (Adaptyv Bio, n.d.), a protein sequence-design model that favors amino acid sequences with characteristics associated with soluble protein expression. By combining improved epitope selection with sequence optimization, we aimed to generate minibinders with more favorable predicted binding interactions and expression properties.
 
 ### Build
 
-Using PRINCE, we identified two new binding hotspots on the VP3 P-domain and generated a second batch of minibinders through our computational design pipelines.
+Using PRINCE, we identified two new binding hotspots on the VP3 P-domain and generated a second batch of minibinders through our computational design pipelines (See software).
 
-We evaluated the resulting designs using Protenix and Boltz-2, analyzing ipTM and iPAE to assess predicted interface confidence. We additionally used SolubleMPNN to redesign amino acid sequences with the goal of improving solubility while preserving their intended structures and binding interactions. These evaluations allowed us to prioritize promising candidates for a second round of experimental screening.
+We evaluated the resulting designs using Protenix and Boltz-2, analyzing ipTM and iPAE to assess predicted interface confidence. We additionally used SolubleMPNN  to redesign amino acid sequences with the goal of improving solubility while preserving their intended structures and binding interactions (Adaptyv Bio, n.d.; Dauparas et al., 2022). These evaluations allowed us to prioritize promising candidates for a second round of experimental screening.
+
 
 ### Test
 
@@ -81,11 +111,23 @@ The second iteration demonstrated improved experimental outcomes following modif
 
 These findings highlighted the importance of evaluating not only predicted binding confidence but also the selection of appropriate epitopes and sequence properties relevant to protein expression. Although the improved outcome cannot be attributed to PRINCE or SolubleMPNN independently, the results support the effectiveness of our revised design workflow.
 
+### References
+<Reference>
+Adaptyv bio — The automated lab for agentic biology. (2026). Adaptyvbio.Com. https://www.adaptyvbio.com/ 
+</Reference>
+<Reference>
+Adaptyv Bio. (n.d.). SolubleMPNN. Adaptyv Bio Documentation. Retrieved October 18, 2026, from https://docs.adaptyvbio.com/wiki/models/solublempnn
+</Reference>
+<Reference>
+Dauparas, J., et al. (2022). Robust deep learning–based protein sequence design using ProteinMPNN. Science, 378(6615), 49–56. https://doi.org/10.1126/science.add2187
+</Reference>
+
+
 ## Iteration 1.3 – Creating a System of Expression
 
 ### Design
 
-To establish a reliable production workflow, our goal for this iteration was to develop an expression system in order to validate the efficacy of our de novo minibinders. We based our approach to expression on the pipeline established by Fei et al., 2022 for the expression of the VP3 protein. However, because standard expression protocols often result in low yields, we believed that this would pose problems for our engineered minibinders (Rosano & Ceccarelli, 2014). In order to prevent this, we added a miniprep step to create plasmids encoded for our desired proteins. This allowed us to incorporate a cell-free protein synthesis step to enhance the expression efficacy and ensure sufficient yield for purification (Katzen et al., 2005).
+Our goal for this iteration was to develop a system of expression to validate the efficacy of our de novo minibinders. We adjusted our approach to expression based on the pipeline established by Fei et al., 2022 for the expression of the VP3 protein. However, because standard expression protocols often result in low yields, we believed that that would pose problems for our engineered minibinders (Rosano & Ceccarelli, 2014). In order to prevent this, we incorporated and added a miniprep step to create plasmids encoded for our desired proteins. This allowed us to incorporate a cell-free protein synthesis step to enhance the expression efficacy and ensure sufficient yield for purification (Katzen et al., 2005). 
 
 As a result, we decided to apply the following expression protocol:
 
@@ -102,7 +144,7 @@ Negative controls included samples containing standalone GFP and nanobody to est
 
 ### Build
 
-Bacteria transformed with GFP and anti-GFP nanobody expression vectors were purchased from [company name][productname].
+Bacteria transformed with GFP (pCMV-GFP)(419570) and anti-GFP nanobody (pOPINE GFP nanobody:Halo:His6)(111090) expression vectors were purchased from Addgene.
 
 Liquid cultures were inoculated following the protocol detailed below.
 
@@ -110,13 +152,13 @@ Liquid cultures were inoculated following the protocol detailed below.
 |:--------|:---|:-----------|:--------------|
 | Volume | 5 mL | 5 µL | 1 colony |
 
-High-purity plasmid DNA was isolated via [productname][companyname].
+High-purity plasmid DNA was isolated via GeneJET Plasmid Miniprep Kit (K0502) from Thermo Fisher Scientific.
 
 | Reagent | Resuspension Solution | Lysis Solution | Neutralization Solution | Wash Solution | Elution Solution |
 |:--------|:----------------------|:---------------|:------------------------|:--------------|:-----------------|
 | Volume | 250 µL | 250 µL | 350 µL | 1000 µL | 50 µL |
 
-In vitro protein synthesis was executed using the [product name][company name].
+In vitro protein synthesis was executed using the myTXTL Pro Kit from Arbor Biosciences.
 
 | Component | 12 µL reaction | 50 µL reaction | V µL reaction |
 |:----------|:---------------|:---------------|:--------------|
@@ -132,7 +174,7 @@ In vitro protein synthesis was executed using the [product name][company name].
 | Master Mix (9 µL) | Master Mix (9 µL) | Master Mix (9 µL) |
 | Helper Plasmid (0.5 µL) | Helper Plasmid (0.5 µL) | Helper Plasmid (0.5 µL) |
 
-Purification of desired proteins was performed via [product name][company name].
+Purification of desired proteins was performed via HisPur Ni-NTA Spin Purification Kit (88228) from Thermo Fisher Scientific.
 
 | Equilibration Buffer | Wash Buffer 1 | Wash Buffer 2 | Elution Buffer |
 |:---------------------|:--------------|:--------------|:---------------|
@@ -161,14 +203,21 @@ Dot blot analysis verified the presence of reaction products from purification.
 From our initial experimentation, we concluded that due to the size of the anti-GFP nanobody complex, standard baseline imidazole buffer concentrations caused the nanobody to wash off prematurely during initial wash steps rather than being held by the nickel affinity column.
 
 ### References
-
+<Reference>
 Fei, D., Guo, Y., Fan, Q., Li, M., Sun, L., Ma, M., & Li, Y. (2020). Codon optimization, expression in escherichia coli, and immunogenicity analysis of deformed wing virus (DWV) structural protein. *PeerJ*, 8, e8750–e8750. https://doi.org/10.7717/peerj.8750
+</Reference>
 
+<Reference>
 Katzen, F., Chang, G., & Kudlicki, W. (2005). The past, present and future of cell-free protein synthesis. *Trends in Biotechnology*, 23(3), 150-156. https://doi.org/10.1016/j.tibtech.2005.01.003
+</Reference>
 
+<Reference>
 Kirchhofer, A., Helma, J., Schmidthals, K., Frauer, C., Cui, S., Karcher, A., Pellis, M., Muyldermans, S., Casas-Delucchi, C. S., Cardoso, M. C., Leonhardt, H., Hopfner, K.-P., & Rothbauer, U. (2010). Modulation of protein properties in living cells using nanobodies. *Nature Structural & Molecular Biology*, 17(1), 133-138. https://doi.org/10.1038/nsmb.1727
+</Reference>
 
+<Reference>
 Rosano, G. L., & Ceccarelli, E. A. (2014). Recombinant protein expression in Escherichia coli: Advances and challenges. *Frontiers in Microbiology*, 5, Article 172. https://doi.org/10.3389/fmicb.2014.00172
+</Reference>
 
 ## Iteration 1.4 – Perfecting our System
 
@@ -186,7 +235,7 @@ Buffers were prepared with tailored imidazole concentrations to resolve the prem
 | 50 µL 2M imidazole | No imidazole | 250 µL 2M imidazole | 1,250 µL 2M imidazole |
 | 8.95 mL water | 8.875 mL water | 8.875 mL water | 7.75 mL water |
 
-Bacteria transformed with GFP and anti-GFP nanobody expression vectors were purchased from [company name][productname].
+Bacteria transformed with GFP (pCMV-GFP)(419570) and anti-GFP nanobody (pOPINE GFP nanobody:Halo:His6)(111090) expression vectors were purchased from Addgene.
 
 Liquid cultures were inoculated following the protocol detailed below.
 
@@ -194,13 +243,13 @@ Liquid cultures were inoculated following the protocol detailed below.
 |:--------|:---|:-----------|:--------------|
 | Volume | 5 mL | 5 µL | 1 colony |
 
-High-purity plasmid DNA was isolated via [productname][companyname].
+High-purity plasmid DNA was isolated via GeneJET Plasmid Miniprep Kit (K0502) from Thermo Fisher Scientific.
 
 | Reagent | Resuspension Solution | Lysis Solution | Neutralization Solution | Wash Solution | Elution Solution |
 |:--------|:----------------------|:---------------|:------------------------|:--------------|:-----------------|
 | Volume | 250 µL | 250 µL | 350 µL | 1000 µL | 50 µL |
 
-In vitro protein synthesis was executed using the [product name][company name].
+In vitro protein synthesis was executed using the myTXTL Pro Kit from Arbor Biosciences.
 
 | Component | 12 µL reaction | 50 µL reaction | V µL reaction |
 |:----------|:---------------|:---------------|:--------------|
@@ -216,7 +265,7 @@ In vitro protein synthesis was executed using the [product name][company name].
 | Master Mix (9 µL) | Master Mix (9 µL) | Master Mix (9 µL) |
 | Helper Plasmid (0.5 µL) | Helper Plasmid (0.5 µL) | Helper Plasmid (0.5 µL) |
 
-Purification of desired proteins was performed via [product][company name].
+Purification of desired proteins was performed via HisPur Ni-NTA Spin Purification Kit (88228) from Thermo Fisher Scientific.
 
 | | Minibinder | VP3 | Minibinder + VP3 |
 |:--|:-----------|:----|:-----------------|
@@ -261,13 +310,13 @@ Liquid cultures were inoculated following the protocol detailed below.
 |:--------|:---|:-----------|:--------------|
 | Volume | 5 mL | 5 µL | 1 colony |
 
-High-purity plasmid DNA was isolated via [productname][companyname].
+High-purity plasmid DNA was isolated via GeneJET Plasmid Miniprep Kit (K0502) from Thermo Fisher Scientific.
 
 | Reagent | Resuspension Solution | Lysis Solution | Neutralization Solution | Wash Solution | Elution Solution |
 |:--------|:----------------------|:---------------|:------------------------|:--------------|:-----------------|
 | Volume | 250 µL | 250 µL | 350 µL | 1000 µL | 50 µL |
 
-In vitro protein synthesis was executed using the [product name][company name].
+In vitro protein synthesis was executed using the myTXTL Pro Kit from Arbor Biosciences.
 
 | Component | 12 µL reaction | 50 µL reaction | V µL reaction |
 |:----------|:---------------|:---------------|:--------------|
@@ -283,7 +332,7 @@ In vitro protein synthesis was executed using the [product name][company name].
 | Master Mix (9 µL) | Master Mix (9 µL) | Master Mix (9 µL) |
 | Helper Plasmid (0.5 µL) | Helper Plasmid (0.5 µL) | Helper Plasmid (0.5 µL) |
 
-Purification of desired proteins was performed via [product name][company name].
+Purification of desired proteins was performed via HisPur Ni-NTA Spin Purification Kit (88228) from Thermo Fisher Scientific.
 
 | | Minibinder | VP3 | Minibinder + VP3 |
 |:--|:-----------|:----|:-----------------|
@@ -328,13 +377,13 @@ Liquid cultures were inoculated following the protocol detailed below.
 |:--------|:---|:-----------|:--------------|
 | Volume | 5 mL | 5 µL | 1 colony |
 
-High-purity plasmid DNA was isolated via [productname][companyname].
+High-purity plasmid DNA was isolated via GeneJET Plasmid Miniprep Kit (K0502) from Thermo Fisher Scientific.
 
 | Reagent | Resuspension Solution | Lysis Solution | Neutralization Solution | Wash Solution | Elution Solution |
 |:--------|:----------------------|:---------------|:------------------------|:--------------|:-----------------|
 | Volume | 250 µL | 250 µL | 350 µL | 1000 µL | 50 µL |
 
-In vitro protein synthesis was executed using the [product name][company name].
+In vitro protein synthesis was executed using the myTXTL Pro Kit from Arbor Biosciences.
 
 | Component | 12 µL reaction | 50 µL reaction | V µL reaction |
 |:----------|:---------------|:---------------|:--------------|
@@ -350,7 +399,7 @@ In vitro protein synthesis was executed using the [product name][company name].
 | Master Mix (9 µL) | Master Mix (9 µL) | Master Mix (9 µL) |
 | Helper Plasmid (0.5 µL) | Helper Plasmid (0.5 µL) | Helper Plasmid (0.5 µL) |
 
-Purification of desired proteins was performed via [product name][company name].
+Purification of desired proteins was performed via HisPur Ni-NTA Spin Purification Kit (88228) from Thermo Fisher Scientific.
 
 | | Minibinder | VP3 | Minibinder + VP3 |
 |:--|:-----------|:----|:-----------------|
@@ -368,6 +417,7 @@ Purification of desired proteins was performed via [product name][company name].
 In our binding assay, the minibinder failed to bind to VP3. Additionally, there was not a significant decrease in fluorescence.
 
 ### Learn
+
 
 # Modeling
 
