@@ -8,7 +8,6 @@ tabLinks: ["rnai", "rnai-design", "rnai-experimentation"]
 
 import Wip from "../components/md_components/Wip";
 import Image from "../components/md_components/Image";
-import ImageRow from "../components/md_components/ImageRow";
 import Reference from "../components/md_components/Reference";
 
 <Wip />
@@ -44,41 +43,29 @@ size="md"
 Moreover, the Sf9 cells were cultured in complete Grace's Insect Medium (supplemented with 10% Fetal Bovine Serum), and incubated at 28 °C in a non-CO2 incubator. Gas exchange was maintained by using vented cap T-flasks. Medium was renewed every 48 hours, and cells were passaged twice weekly until reaching 80-90% confluence (Expression Systems, 2016).
 
 
-
-
 ## siRNA Delivery and Reporter-Based Knockdown Evaluation
 
 
 ### Co-transfection of Plasmid DNA and siRNA
 
 
-Sf9 cells were seeded from culture flasks into tissue culture-treated 24 well plates, where all transfections were performed. We used Fugene 4K for plasmid DNA delivery and Cellfectin II for siRNA delivery, preparing the complexes separately in Grace’s unsupplemented Insect medium (see Fig. 4). These DNA reagent complexes were added dropwise to Sf9 cultures (5 x 10⁶ cells/mL) and incubated at 37°C for 24-72 hours before evaluating transfection efficiency (Yeasen Biotechnology, 2025).
+Sf9 cells were seeded from culture flasks into tissue culture-treated 24 well plates, where all transfections were performed. We used Fugene 4K for plasmid DNA delivery and Cellfectin II for siRNA delivery, preparing the complexes separately in Grace’s unsupplemented Insect medium (see Fig. 3). These DNA reagent complexes were added dropwise to Sf9 cultures (5 x 10⁶ cells/mL) and incubated at 37°C for 24-72 hours before evaluating transfection efficiency (Yeasen Biotechnology, 2025).
 
-
-<ImageRow
-images={[
- { src: "REPLACE WITH IMAGE URL"},
- { src: "REPLACE WITH IMAGE URL"},
- { src: "REPLACE WITH IMAGE URL"},
- { src: "REPLACE WITH IMAGE URL"}
-]}
-size={120}
+<Image
+src="https://static.igem.wiki/teams/6185/wiki/rnai-experimentation/img-5808-1.avif"
+caption="Figure 3. Plasmid DNA and siRNA co-transfection into Sf9 cells"
+size="md"
 />
- 
- 
-<center>
-*Figure 4. Plasmid DNA and siRNA co-transfection into Sf9 cells*
-</center>
- 
+
 ### psiCHECK-2 Design and Signal Measurement
 
 
-We evaluated RNAi knockdown in Sf9 cells using a modified psiCHECK-2 reporter containing each target sequence downstream of Renilla luciferase. We replaced the SV40 promoter driving Renilla with HSV-TK to support reporter expression in insect cells (Deng et al., 2022). Following transfection in tissue culture-treated 24 well plates, samples from each well were transferred into triplicate wells of white 96-well plates for luminescence measurement using Promega’s Dual-Glo Luciferase Assay System. For each well divided Renilla luminescence by firefly luminescence to account for differences in transfection efficiency; a lower ratio relative to the control indicated stronger knockdown (Promega Corporation, 2016; see Fig. 5).
+We evaluated RNAi knockdown in Sf9 cells using a modified psiCHECK-2 reporter containing each target sequence downstream of Renilla luciferase. We replaced the SV40 promoter driving Renilla with HSV-TK to support reporter expression in insect cells (Deng et al., 2022). Following transfection in tissue culture-treated 24 well plates, samples from each well were transferred into triplicate wells of white 96-well plates for luminescence measurement using Promega’s Dual-Glo Luciferase Assay System. For each well divided Renilla luminescence by firefly luminescence to account for differences in transfection efficiency; a lower ratio relative to the control indicated stronger knockdown (Promega Corporation, 2016; see Fig. 4).
 
 
 <Image
 src="REPLACE WITH IMAGE URL"
-caption="Figure 5. Modified psiCHECK-2 plasmid reporter assay for RNAi knockdown. (A) Vector design. (B) siRNA-guided cleavage of the target-containing transcript. (C) Reduced Renilla luminescence, normalized to firefly, indicates reporter knockdown relative to the control."
+caption="Figure 4. Modified psiCHECK-2 plasmid reporter assay for RNAi knockdown. (A) Vector design. (B) siRNA-guided cleavage of the target-containing transcript. (C) Reduced Renilla luminescence, normalized to firefly, indicates reporter knockdown relative to the control."
 size="md"
 />
 
@@ -86,12 +73,12 @@ size="md"
 ### siRNA Luminescence Assay
 
 
-We tested our six siRNA candidates across three target genes to evaluate optimal knockdown efficiency. We measured the suppression level of each candidate relative to the untreated negative control to evaluate the percent ratio between the renilla and firefly luciferase light intensities (see Fig. 6). Include numbers w/specific ratios and which specific siRNA was optimal. Then, we compared the reductions in experimental target depression with those produced by our Renilla siRNA positive control, which targets Renilla luciferase mRNA, to assess relative knockdown efficiency. Stronger siRNA activity directly results in greater target strand silencing, yielding a steeper drop in recorded light intensity (Muntaabski, 2025).
+We tested our six siRNA candidates across three target genes to evaluate optimal knockdown efficiency. We measured the suppression level of each candidate relative to the untreated negative control to evaluate the percent ratio between the renilla and firefly luciferase light intensities (see Fig. 5). Include numbers w/specific ratios and which specific siRNA was optimal. Then, we compared the reductions in experimental target depression with those produced by our Renilla siRNA positive control, which targets Renilla luciferase mRNA, to assess relative knockdown efficiency. Stronger siRNA activity directly results in greater target strand silencing, yielding a steeper drop in recorded light intensity (Muntaabski, 2025).
 
 
 <Image
 src="REPLACE WITH IMAGE URL"
-caption="Figure 6. Bar graph of siRNA luminescence screening"
+caption="Figure 5. Bar graph of siRNA luminescence screening"
 size="md"
 />
 
@@ -102,12 +89,12 @@ By comparing the residual luminescence levels within each gene group, we success
 ## Multiplexing
 
 
-Using (siRNA #1), (siRNA #2), and (siRNA #3), which showed the greatest luminescence, we plan to test 6 siRNA combinations to identify the strongest multiplexed combination. Through multiplexing, we plan to deliver a single dsRNA rather than three separate siRNAs, which is inefficient and hard on host cells (see Fig. 7). This allows the host cells to stay significantly healthier and efficiently silence the mite’s genes (Wang et al., 2024).
+Using (siRNA #1), (siRNA #2), and (siRNA #3), which showed the greatest luminescence, we plan to test 6 siRNA combinations to identify the strongest multiplexed combination. Through multiplexing, we plan to deliver a single dsRNA rather than three separate siRNAs, which is inefficient and hard on host cells (see Fig. 6). This allows the host cells to stay significantly healthier and efficiently silence the mite’s genes (Wang et al., 2024).
 
 
 <Image
 src="REPLACE WITH IMAGE URL"
-caption="Figure 7. Multiplexed strand of 3 polycistronic siRNAs"
+caption="Figure 6. Multiplexed strand of 3 polycistronic siRNAs"
 size="md"
 />
 
@@ -153,3 +140,6 @@ YeasenMarketing. (2025, November 3). Cell Transfection | Sf9 Insect Ovarian Cell
 <Reference>
 Zhongyuan, Deng, et al. 'A Dual-luciferase Reporter System for Characterization of Small RNA Target Genes in Both Mammalian and Insect Cells - Deng - 2022 - Insect Science - Wiley Online Library.' Insect Science, onlinelibrary.wiley.com/doi/10.1111/1744-7917.12945. Accessed 11 Oct. 2026.
 </Reference>
+ 
+
+
