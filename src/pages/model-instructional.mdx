@@ -10,6 +10,170 @@ import Wip from "../components/md_components/Wip";
 
 <Wip />
 
-# Overview
+# Modeling Instructional Series
 
-Placeholder. The Modeling Instructional write-up goes here.
+## Overview
+
+Lambert iGEM created a seven-video instructional series to help students and iGEM teams with limited modeling experience translate wetlab protocols into computational models. The series follows a four-stage workflow covering model development in MATLAB SimBiology and data visualization. Using two models from Lambert’s 2025 LANCET project, we walk viewers through individual protocols to demonstrate how wetlab workflows inform computational models and how model predictions help refine experimental designs. 
+
+This connects modeling education directly to engineering by helping teams predict system behavior and refine, providing students with a practical starting point for applying modeling to their own projects. Overall, by making a modeling tool kit that others can learn from, adapt, and build upon, we are supporting broader participation in synthetic biology.
+
+## Modeling Video Library
+
+### Video 1: Introduction to Modeling
+
+<div style={{ maxWidth: '900px', margin: '0 auto' }}>
+  <iframe
+    title="Introduction to Modeling"
+    src="https://video.igem.org/videos/embed/cToLe46xRDsoEwuzS7TCEY"
+    allow="fullscreen"
+    sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+    loading="lazy"
+    style={{
+      display: 'block',
+      width: '100%',
+      height: 'auto',
+      aspectRatio: '16 / 9',
+      border: '0px',
+      marginBottom: '2rem',
+    }}
+  ></iframe>
+</div>
+
+We introduce how to select a modeling question, identify relevant reaction steps and variables, and use predictions to guide experimental design before committing lab time and materials. Building on the LANCET example, we connect reagent interactions to changes in protein concentration and fluorescence output over time. We explain how MATLAB, ordinary differential equations, and data from scientific literature can be used to model biological reactions.
+
+### Video 2: Getting Started with MATLAB SimBiology
+
+<div style={{ maxWidth: '900px', margin: '0 auto' }}>
+  <iframe
+    title="Getting Started with MATLAB SimBiology"
+    src="https://video.igem.org/videos/embed/uaErMemKMd6ZgRn4jxFJo1"
+    allow="fullscreen"
+    sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+    loading="lazy"
+    style={{
+      display: 'block',
+      width: '100%',
+      height: 'auto',
+      aspectRatio: '16 / 9',
+      border: '0px',
+      marginBottom: '2rem',
+    }}
+  ></iframe>
+</div>
+
+Through a guided demonstration, we introduce how to use MATLAB’s SimBiology Model Builder. We explain how to review protocols and literature, sketch a reaction pathway, and define specific components in MATLAB. We also emphasize how computational models can connect a project to its broader context. These examples give beginners a practical foundation for understanding both reaction, simulations, and models that support both wet lab and human practices for a cohesive project.
+
+### Video 3: Biochemical Reactions and Rate Laws
+
+<div style={{ maxWidth: '900px', margin: '0 auto' }}>
+  <iframe
+    title="Biochemical Reactions and Rate Laws"
+    src="https://video.igem.org/videos/embed/8AHYR4pCFCwNPd3QLrGFgc"
+    allow="fullscreen"
+    sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+    loading="lazy"
+    style={{
+      display: 'block',
+      width: '100%',
+      height: 'auto',
+      aspectRatio: '16 / 9',
+      border: '0px',
+      marginBottom: '2rem',
+    }}
+  ></iframe>
+</div>
+
+We introduce biochemical reactions, three major classes of ordinary differential equations (ODEs), and key parameters used in wet-lab models. We use practice examples to guide viewers in selecting appropriate equations for biochemical reactions, building a foundation for developing their own models.
+
+### Video 4: Building a Model in SimBiology
+
+<div style={{ maxWidth: '900px', margin: '0 auto' }}>
+  <iframe
+    title="Building a Model in SimBiology"
+    src="https://video.igem.org/videos/embed/tHG8KXXKaLivXQgu8eQ6v3"
+    allow="fullscreen"
+    sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+    loading="lazy"
+    style={{
+      display: 'block',
+      width: '100%',
+      height: 'auto',
+      aspectRatio: '16 / 9',
+      border: '0px',
+      marginBottom: '2rem',
+    }}
+  ></iframe>
+</div>
+
+We demonstrate how to build reaction pathways in MATLAB SimBiology using species and reaction components, customize their properties, and enter parameter values to represent molecular kinetics. We also explore features for modeling more complex processes, such as pharmaceutical degradation in bee hemolymph, helping viewers build predictive models for their wet-lab experiments.
+
+### Video 5: Case Study: PDL — Building the Pathway
+
+<div style={{ maxWidth: '900px', margin: '0 auto' }}>
+  <iframe
+    title="Case Study: PDL — Building the Pathway"
+    src="https://video.igem.org/videos/embed/nHmT9oEkBqC24C96s9mfji"
+    allow="fullscreen"
+    sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+    loading="lazy"
+    style={{
+      display: 'block',
+      width: '100%',
+      height: 'auto',
+      aspectRatio: '16 / 9',
+      border: '0px',
+      marginBottom: '2rem',
+    }}
+  ></iframe>
+</div>
+
+In the first of this two-part guide, we use Proximity-Dependent Ligation (PDL) to demonstrate how to translate a wet-lab protocol into a reaction pathway in MATLAB SimBiology. We explain how to plan the pathway, select reaction components, and model their interactions and kinetics, giving viewers a worked example to guide their own model development.
+
+### Video 6: Case Study: PDL — Parameters and Simulation
+
+<div style={{ maxWidth: '900px', margin: '0 auto' }}>
+  <iframe
+    title="Case Study: PDL — Parameters and Simulation"
+    src="https://video.igem.org/videos/embed/gs94vnzsZjjyTGZKfbGEXq"
+    allow="fullscreen"
+    sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+    loading="lazy"
+    style={{
+      display: 'block',
+      width: '100%',
+      height: 'auto',
+      aspectRatio: '16 / 9',
+      border: '0px',
+      marginBottom: '2rem',
+    }}
+  ></iframe>
+</div>
+
+In the second part of this guide, we demonstrate how to select equations for each reaction, enter parameter values, and set initial conditions. We also show how to estimate missing parameters and troubleshoot values using supplementary data from scientific literature. Finally, we export model results to Google Sheets and customize graph colors, fonts, titles, and axis labels to show the clear presentation on a project’s wiki.
+
+### Video 7: Case Study: RPA — Amplification Dynamics
+
+<div style={{ maxWidth: '900px', margin: '0 auto' }}>
+  <iframe
+    title="Case Study: RPA — Amplification Dynamics"
+    src="https://video.igem.org/videos/embed/avxu19J5M6W4tjHfqhuHLk"
+    allow="fullscreen"
+    sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+    loading="lazy"
+    style={{
+      display: 'block',
+      width: '100%',
+      height: 'auto',
+      aspectRatio: '16 / 9',
+      border: '0px',
+      marginBottom: '2rem',
+    }}
+  ></iframe>
+</div>
+
+Our final video demonstrates how to build and refine LANCET’s Recombinase Polymerase Amplification (RPA) model in MATLAB SimBiology using biological literature. We highlight stakeholder feedback to identify calculation errors, sensitivity analysis to identify the inputs with the greatest effect on predictions, and experimental evidence to guide model refinement.
+
+## Feedback Loop
+
+Feedback from our first student viewers found the videos “lengthy” and difficult to apply the modeling concepts to their own projects, prompting us to shorten videos from 20–30 to 10–15 minutes, clarify modeling’s purpose, and use LANCET examples to demonstrate adaptable MATLAB workflows. Follow-up review showed greater engagement with the shorter videos, and students reported that they were more useful for applying modeling concepts. To further support students in applying these concepts to their own projects, we added a seventh video introducing a different type of model.
