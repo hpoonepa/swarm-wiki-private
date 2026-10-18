@@ -119,11 +119,6 @@
   @media (prefers-reduced-motion: reduce) { .scroll-cue svg { animation: none; } }
   /* ---------- quiet bee touches ---------- */
   ::selection { background: rgba(252, 196, 47, .45); color: inherit; }
-  /* ---------- required wiki footer ---------- */
-  .wiki-footer { position: relative; z-index: 2; background: #153F36; color: rgba(255, 255, 255, .85); text-align: center;
-    padding: 18px 20px 20px; font-size: 12px; font-weight: 600; line-height: 1.7; }
-  .wiki-footer p { margin: 0; }
-  .wiki-footer a { color: #fff; text-decoration: underline; }
   .pwing { transform-box: fill-box; transform-origin: 50% 100%; animation: pflap .12s ease-in-out infinite alternate; }
   .pw2 { animation-delay: -.06s; }
   @keyframes pflap { to { transform: scaleY(.55); } }
@@ -212,10 +207,12 @@
 
   .after { height: 40vh; }
 </style>
-<link rel="stylesheet" href="story.css?v=6ce27ad542fd">
+<link rel="stylesheet" href="story.css?v=48bb70c7cab8">
 <link rel="stylesheet" href="section-nav.css?v=2a67c9055550">
 <link rel="stylesheet" href="rnai-layout.css?v=4cc7ca49f5b7">
 <link rel="stylesheet" href="project-overview.css?v=d598eea91a36">
+<link rel="stylesheet" href="food-layout.css?v=8b7bbbbde534">
+<link rel="stylesheet" href="site-footer.css?v=e2327e788183">
 </head>
 <body>
 <script src="cursor.js?v=d226b130b92d"></script>
@@ -761,9 +758,48 @@
 
   <button class="to-top" type="button">Back to top ↑</button>
   <swarm-nav dark-over=".hero"></swarm-nav>
-  <!-- iGEM requirement: license notice + repository link on every page (same wording as src/components/Footer.tsx) -->
+  <!-- Shared footer template and homepage references are combined by build:home. -->
   </main>
-  <footer class="wiki-footer">
+  <footer class="swarm-footer" id="site-footer" aria-label="Lambert iGEM contact and sponsors">
+  <div class="swarm-footer__inner">
+    <div class="swarm-footer__top">
+      <div class="swarm-footer__identity">
+        <a class="swarm-footer__brand" href="/lambert-ga/" aria-label="SWARM — Lambert iGEM homepage">
+          <svg class="swarm-footer__mark" viewBox="0 0 72 76" fill="none" aria-hidden="true"><path d="m36 3 18 10v21L36 44 18 34V13Z" fill="#F2C453"/><path d="m18 33 18 10v21L18 74 0 64V43Z" fill="#E8AC36"/><path d="m54 33 18 10v21L54 74 36 64V43Z" fill="#E9B942"/><path d="m36 11 11 6v13l-11 6-11-6V17Zm-18 30 11 6v13l-11 6-11-6V47Zm36 0 11 6v13l-11 6-11-6V47Z" stroke="#FFF9DF" stroke-width="2.6"/></svg>
+          <span>SWARM<span class="swarm-footer__team">Lambert iGEM · 2026</span></span>
+        </a>
+        <address class="swarm-footer__contact">
+          <span>805 Nichols Road, Suwanee, GA 30024</span>
+          <a href="mailto:igem.lamb@gmail.com">igem.lamb@gmail.com <span aria-hidden="true">↗</span></a>
+        </address>
+      </div>
+      <div class="swarm-footer__connect">
+        <nav class="swarm-footer__social" aria-label="Connect with Lambert iGEM">
+          <a href="https://www.instagram.com/lambertigem/" target="_blank" rel="noopener noreferrer" aria-label="Lambert iGEM on Instagram (opens in a new tab)" title="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.5" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg></a>
+          <a href="https://x.com/lamberths_igem" target="_blank" rel="noopener noreferrer" aria-label="Lambert iGEM on X (opens in a new tab)" title="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m4 3 16 18h-5L3 3Zm16 0L4 21"/></svg></a>
+          <a href="mailto:igem.lamb@gmail.com" aria-label="Email Lambert iGEM" title="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="2.5" y="4.5" width="19" height="15" rx="2"/><path d="m3 6 9 7 9-7"/></svg></a>
+          <a href="https://gitlab.igem.org/2026/lambert-ga" target="_blank" rel="noopener noreferrer" aria-label="View our wiki source on GitLab (opens in a new tab)" title="Wiki source"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 6-6 6 6 6m10-12 6 6-6 6m-3-15-4 18"/></svg></a>
+        </nav>
+        <nav class="swarm-footer__links" aria-label="About SWARM">
+          <a href="/lambert-ga/team/">Our team</a>
+          <a href="/lambert-ga/description/">Our project</a>
+          <a href="/lambert-ga/attributions/">Attributions</a>
+        </nav>
+      </div>
+    </div>
+    <div class="swarm-footer__support">
+      <p class="swarm-footer__eyebrow">With support from</p>
+      <ul class="swarm-footer__sponsors" aria-label="Our sponsors">
+        <li><a href="https://bhamla.com/" target="_blank" rel="noopener noreferrer">Bhamla Lab</a></li>
+        <li><a href="https://www.twistbioscience.com/" target="_blank" rel="noopener noreferrer">Twist <span>Bioscience</span></a></li>
+        <li><a href="https://www.addgene.org/" target="_blank" rel="noopener noreferrer">Addgene</a></li>
+        <li><a href="https://www.genscript.com/" target="_blank" rel="noopener noreferrer">GenScript</a></li>
+        <li><a href="https://www.promega.com/" target="_blank" rel="noopener noreferrer">Promega</a></li>
+        <li><a href="https://www.adaptyvbio.com/" target="_blank" rel="noopener noreferrer">Adaptyv</a></li>
+        <li><a href="https://boltz.com/" target="_blank" rel="noopener noreferrer">Boltz</a></li>
+        <li><a href="https://nebius.com/" target="_blank" rel="noopener noreferrer">Nebius</a></li>
+      </ul>
+    </div>
     <details class="home-references">
       <summary>References &amp; artwork</summary>
       <ul>
@@ -787,9 +823,12 @@
         <li>SWARM logo and bee, honeycomb, and mite composition supplied by the team.</li>
       </ul>
     </details>
-    <p>© 2026 - Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC Attribution 4.0 International</a>.</p>
-    <p>Repository: <a href="https://gitlab.igem.org/2026/lambert-ga" target="_blank" rel="noreferrer">https://gitlab.igem.org/2026/lambert-ga</a></p>
-  </footer>
+    <div class="swarm-footer__legal">
+      <p>© 2026 Lambert-GA. Content licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC Attribution 4.0 International</a>.</p>
+      <a href="https://gitlab.igem.org/2026/lambert-ga" target="_blank" rel="noopener noreferrer">Wiki source on GitLab <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+</footer>
   <script src="vendor/three.min.js"></script>
   <script src="assets/landmask.js"></script>
   <script src="assets/landmask-hi.js"></script>

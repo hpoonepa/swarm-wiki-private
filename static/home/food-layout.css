@@ -1,0 +1,27 @@
+/* Keep the tall strawberry horizontal, with its tip reaching into the page.
+   The almond keeps its down-left orientation; cherries sit below the berry. */
+#statement .food .f-berry {
+  right: -4%;
+  top: 14%;
+  width: 54%;
+  --food-angle: 82deg;
+}
+
+#statement .food .f-cherries {
+  right: -36%;
+  top: 48%;
+  width: 118%;
+}
+
+@media (max-width: 720px) {
+  #statement .food .f-berry {
+    right: -7%;
+    top: 20%;
+    width: 52%;
+  }
+
+  #statement .food .f-cherries {
+    top: 52%;
+    width: 112%;
+  }
+}

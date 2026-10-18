@@ -650,7 +650,7 @@ html.loading .honey-progress { visibility: hidden; }
 .rna-targets h3 { font-size: 14px; color: #f7d7ce; letter-spacing: .06em; }
 .rna-targets dd { font-size: 16px; line-height: 1.45; color: #ffe4da; max-width: 32ch; }
 .rna-control { min-width: 44px; min-height: 44px; }
-.wiki-footer, .project-card__eyebrow { font-size: 14px; }
+.project-card__eyebrow { font-size: 14px; }
 .project-card p { font-size: 16px; }
 @media (max-width:760px) {
   .geo-copy { left: 7%; top: 12%; height: 35%; width: 86%; }
