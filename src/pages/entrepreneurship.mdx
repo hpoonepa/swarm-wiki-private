@@ -7,222 +7,398 @@ description: 'Business plan, market analysis, and financial projections for SWAR
 import Image from "../components/md_components/Image";
 import Reference from "../components/md_components/Reference";
 
-# SDG 8: Decent Work and Economic Growth
-
-SWARM aligns with United Nations Sustainable Development Goal 8, which promotes sustained, inclusive, and sustainable economic growth. Honey bee colony losses threaten the livelihoods of commercial beekeepers and the agricultural industries dependent on pollination services. By developing an innovative approach to managing Varroa mites and Deformed Wing Virus, SWARM aims to improve colony productivity and strengthen the economic stability of beekeeping operations. Through biotechnology innovation and strategic industry partnerships, SWARM also seeks to support sustainable growth within the agricultural sector.
-
-# 1. Executive Summary
-
-Honey bee populations face growing threats from *Varroa destructor* mites and Deformed Wing Virus (DWV), which contribute to widespread colony losses, reduced agricultural productivity, and financial challenges for commercial beekeepers. Existing treatment methods primarily target Varroa infestations, but increasing chemical resistance and the lack of direct DWV antiviral treatments leave a significant gap in colony protection. To address this issue, Lambert iGEM developed SWARM, a dual-action biotechnology platform combining engineered minibinders designed to inhibit DWV infection with multiplexed RNA interference (RNAi) targeting essential functions in Varroa mites. By addressing both the parasite and the virus it transmits, SWARM aims to provide a more comprehensive approach to honey bee health management.
-
-SWARM enters a global apiculture market projected to reach approximately \$13.11 billion in 2026, with an initial focus on commercial beekeepers supporting high-value agricultural pollination. Our business-to-business (B2B) model prioritizes licensing agreements with established agricultural biotechnology and bee-treatment manufacturers, leveraging their existing production capabilities and distribution networks. In addition to SWARM, our team developed Vapor-X, a compact, low-cost vacuum-assisted drying system with less than \$80 in initial component expenses, presenting a separate commercialization opportunity for educational and research laboratories.
-
-Our financial projections estimate a selling price of \$18 per hive treatment, with material costs of approximately \$5.70 per unit and a long-term production target of one million annual treatments by 2033. At this volume, SWARM could generate \$18 million in annual product sales before operating expenses and licensing arrangements. Our four-year development strategy emphasizes experimental validation, product optimization, regulatory preparation, field testing, and strategic partnerships. Through this phased approach, Lambert iGEM aims to establish SWARM as a commercially viable bee-health technology that supports sustainable beekeeping, strengthens agricultural pollination, and addresses an increasingly urgent environmental challenge.
-
-# 2. Problem and Solution
-
-## 2.1 Issue
-
+# Entrepreneurship
+ 
+SWARM aligns with the United Nations Sustainable Development Goal 8, which promotes sustained, inclusive, and sustainable economic growth. Honey bee colony losses threaten the livelihoods of commercial beekeepers and the agricultural industries dependent on pollination services. By developing an innovative approach to managing Varroa mites and Deformed Wing Virus, SWARM aims to improve colony productivity and strengthen the economic stability of beekeeping operations. Through biotechnology innovation and strategic industry partnerships, SWARM also seeks to support sustainable growth within the agricultural sector.
+ 
+## 1. Executive Summary
+ 
+Honey bee populations face persistent threats from *Varroa destructor* mites and Deformed Wing Virus (DWV), which contribute to colony losses and substantial economic challenges for commercial beekeepers. Existing treatments primarily target Varroa infestations, leaving limited options for directly addressing DWV infection. Lambert iGEM developed SWARM, a dual-action biotechnology platform combining engineered minibinders designed to inhibit DWV with multiplexed RNA interference (RNAi) targeting essential functions in Varroa mites.
+ 
+SWARM targets commercial beekeepers experiencing significant DWV-related challenges, particularly those supplying pollination services to high-value agricultural operations. Our business-to-business licensing model would allow established agricultural biotechnology manufacturers to produce and distribute SWARM through existing commercial networks. Separately, Vapor-X, our low-cost vacuum-assisted drying system, offers an additional licensing opportunity for educational and research laboratories.
+ 
+At a proposed retail price of **\$39.99 per hive treatment** and an estimated mature manufacturing cost of **\$25.00**, SWARM is positioned as a specialized, premium bee-health product. Our commercialization model projects **300,000 annual treatments by 2034**, generating approximately **\$12 million in retail sales** and **\$525,000 in licensing royalties** under an illustrative 5% royalty agreement. Our long-term goal is one million annual treatments. Through experimental validation, regulatory development, and manufacturing partnerships, SWARM aims to establish a scalable biotechnology platform supporting colony health and agricultural productivity.
+ 
+## 2. Problem and Solution
+ 
+### 2.1 Issue
+ 
 <Image
   src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-14-at-15-31-08.avif"
   caption="Figure 1. Varroa mites attached to a honey bee larva."
   size="md"
 />
-
-The Varroa mite (see Figure 1), a parasite that spreads Deformed Wing Virus (DWV), is one of the greatest threats to honey bees. DWV weakens the colonies that beekeepers and farmers rely on for income and crop pollination, and it is spread by Varroa mites that feed on developing and adult honey bees. The virus can impair wing development, shorten bee lifespans, and weaken colonies. Together, Varroa and DWV can contribute to severe colony decline and even collapse (see Figure 2).
-
+ 
+Varroa mites (see Figure 1), parasites that spread Deformed Wing Virus (DWV), are one of the greatest threats to honey bees. DWV weakens the colonies that beekeepers and farmers rely on for income and crop pollination, and it is spread by Varroa mites that feed on developing and adult honey bees. The virus can impair wing development, shorten bee lifespans, and weaken colonies. Together, Varroa and DWV can contribute to severe colony decline and even collapse (see Figure 2).
+ 
 <Image
-  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-14-at-14-57-26.avif"
+  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-18-at-14-52-36.avif"
   caption="Figure 2. Feedback loop of honey bee colony collapse."
-  size="lg"
+  size="md"
 />
-
+ 
 This critical issue is the focus of SWARM because beekeepers must manage Varroa throughout the year rather than through a single treatment. Mite populations can recover after treatment, and untreated populations can grow quickly within a colony. Beekeepers therefore monitor mite levels and apply treatments at different points in the season to keep populations below damaging levels.
-
-## 2.2 Burden of Varroa Mites
-
-Lambert iGEM identified Varroa mites and Deformed Wing Virus (DWV) as a persistent challenge because beekeepers must manage both an aggressive parasite and the viruses it spreads. U.S. beekeepers lost an estimated 44.6% of managed honey bee colonies during the 2024–2024 season, the highest annual loss recorded by the national survey at that time (Giacobino et al., 2024).
-
-Current control methods also face growing limitations because repeated chemical use can select for resistant Varroa populations and reduce treatment effectiveness over time (Bertola & Mutinelli, 2024). At the same time, DWV can remain in infected bees without obvious physical symptoms, allowing the virus to spread before beekeepers recognize a problem (Gauthier et al., 2007). Varroa further intensifies this issue by acting as a major vector for DWV transmission between honey bees (Martin & Brettell, 2019). Together, treatment resistance, hidden viral spread, and continued colony loss create a clear gap in current Varroa and DWV management.
-
-## 2.3 Solution
-
-Varroa mites are one of the leading causes of colony loss, creating recurring costs for beekeepers, and current solutions face resistance and inconsistent effectiveness. To address this gap, we created SWARM, a dual-sided platform combining a minibinder therapeutic targeting Deformed Wing Virus with RNAi designed to disrupt critical functions in Varroa salivary glands. By targeting both the mite itself and one of the major viruses it transmits, SWARM approaches the problem from two directions, aiming to reduce Varroa-related damage and improve long-term colony health. Since Varroa control requires seasonal treatment, the approach supports sustained demand and long-term profitability.
-
-# 3. Market Analysis
-
-## 3.1 Market Size
-
-The global apiculture market is valued at approximately \$9.7 billion in 2024 and is projected to reach \$11.8 billion by 2030, growing at a compound annual growth rate of about 4.0%. Asia-Pacific currently represents the largest regional market, accounting for roughly 34.6% of global revenue. However, SWARM's potential market extends beyond beekeeping products because commercial honey bees are essential infrastructure for agriculture. In the United States alone, growers spent more than \$400 million on commercial pollination services in 2024, while honey bee pollination contributes more than \$18 billion in additional crop revenue annually. This creates a large downstream agricultural market in which maintaining healthier colonies can directly affect crop production, pollination availability, and beekeeper profitability.
-
-We identified two distinct target markets for SWARM and Vapor-X, each addressing different needs within the biotechnology and agricultural industries. For SWARM, our primary target market consists of established agricultural biotechnology companies, animal health manufacturers, and commercial bee-treatment producers seeking to expand their portfolios with innovative pest and disease management technologies. Rather than distributing SWARM directly to individual beekeepers, our business model prioritizes business-to-business (B2B) partnerships, allowing manufacturers to license, produce, and commercialize our dual-sided technology through their existing manufacturing capabilities and distribution networks, following the necessary testing and regulatory approvals. SWARM's combination of RNA interference (RNAi) targeting Varroa mites and engineered minibinders targeting Deformed Wing Virus (DWV) presents an opportunity for companies developing next-generation pollinator health products.
-
-## 3.2 TAM-SAM-SOM
-
-### SWARM
-
+ 
+### 2.2 Burden of Varroa Mites
+ 
+Varroa mites and Deformed Wing Virus present a persistent challenge to commercial beekeeping because infestation can reduce colony productivity, increase management expenses, and threaten pollination operations. According to the Apiary Inspectors of America, U.S. beekeepers lost an estimated 55.1% of managed honey bee colonies between April 2023 and April 2024 [1], illustrating the scale of the broader colony-health problem. These losses arise from multiple interacting factors, including parasites, pathogens, nutrition, and environmental stressors.
+ 
+Varroa mites further intensify colony-health challenges by transmitting DWV and weakening infected honey bees. Although existing miticides can reduce mite populations, resistance and persistent viral infections remain important management concerns. SWARM addresses these interconnected threats through a combined approach targeting mite feeding functions and DWV infection, with the aim of improving colony health and reducing the economic burden associated with colony losses.
+ 
+### 2.3 Solution
+ 
+Varroa mites are one of the leading causes of colony loss, creating recurring costs for beekeepers, and current solutions show resistance and inconsistent effectiveness. To address this gap, we created SWARM, a dual-sided platform combining a minibinder therapeutic targeting Deformed Wing Virus with RNAi designed to disrupt critical functions in Varroa salivary glands. By targeting both the mite itself and one of the major viruses it transmits, SWARM approaches the problem from two directions, aiming to reduce Varroa-related damage and improve long-term colony health. Since Varroa control requires seasonal treatment, the approach supports sustained demand and long-term profitability.
+ 
+## 3. Market Analysis
+ 
+### 3.1 Market Size
+ 
+The global apiculture market was valued at approximately \$12.41 billion in 2025 and is projected to reach \$21.10 billion by 2034, growing at a compound annual growth rate of about 6.13% [2]. Asia-Pacific currently represents the largest regional market, accounting for roughly 36.12% of global revenue [2]. However, SWARM's potential market extends beyond beekeeping products because commercial honey bees are essential infrastructure for agriculture. In the United States alone, growers spent more than \$400 million on commercial pollination services in 2024, while honey bee pollination contributes more than \$18 billion in additional crop revenue annually [3]. This creates a large downstream agricultural market in which maintaining healthier colonies can directly affect crop production, pollination availability, and beekeeper profitability.
+ 
+SWARM's primary business customers are agricultural biotechnology manufacturers, animal-health companies, and established bee-treatment producers seeking advanced biological treatment technologies. Our licensing model would allow these companies to manufacture and commercialize SWARM through existing distribution networks. Its initial end users would be commercial beekeepers managing significant DWV-related challenges, particularly pollination service providers whose colony health directly affects agricultural income.
+ 
+### 3.2 TAM-SAM-SOM
+ 
+#### Total Addressable Market (TAM)
+ 
+The USDA reported approximately 2.81 million managed honey bee colonies in operations with five or more colonies as of January 2026 [4]. If every colony purchased one annual SWARM treatment, the theoretical U.S. market would represent approximately \$112.37 million in annual retail sales. This establishes the broadest domestic market within our initial geographic scope, rather than assuming that every colony requires treatment.
+ 
+#### Serviceable Addressable Market (SAM)
+ 
+SWARM's serviceable market consists of commercial colonies that could be reached through licensed manufacturing and distribution partners, particularly operations experiencing significant DWV-related challenges. For preliminary financial modeling, we assume distribution access to 60% of the national colony base, equivalent to approximately 1.69 million colonies and \$67.42 million in potential annual retail sales. This is a distribution-coverage assumption, not a measured estimate of DWV prevalence or confirmed treatment demand. Further beekeeper research and field data would be necessary to establish the actual clinically relevant market.
+ 
+#### Serviceable Obtainable Market (SOM)
+ 
+SWARM's projected obtainable market focuses on commercial beekeepers managing significant DWV-related challenges, particularly those serving high-value agricultural pollination operations. To account for the adoption barriers associated with introducing a premium biotechnology treatment, we developed multiple commercialization scenarios. Our base-case projection estimates 150,000 annual treatments by 2034, equivalent to approximately \$6 million in retail sales and 8.9% of our modeled serviceable market. Our more ambitious target of 300,000 annual treatments would generate approximately \$12 million in retail sales, representing 17.8% market penetration. Reaching this higher target would require demonstrated treatment effectiveness, regulatory approval, established manufacturing partnerships, and sustained beekeeper adoption. These scenarios will be refined through customer research and pilot sales data.
+ 
 <Image
-  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-14-at-14-59-58.avif"
+  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-18-at-14-52-01.avif"
   caption="Figure 3. TAM-SAM-SOM visualization for SWARM."
-  size="lg"
+  size="md"
 />
-
-#### Total Addressable Market (TAM): \$13.11 billion
-
-The TAM for SWARM is the global apiculture market, which is projected to be approximately \$13.11 billion in 2026. Because SWARM addresses Deformed Wing Virus, Varroa-associated colony decline, and honey bee health, the global apiculture market represents the broadest possible market that could benefit from this technology. However, because this market spans the globe, SWARM would initially focus on a smaller, more attainable launch market.
-
-#### Serviceable Addressable Market (SAM): \$400 million+
-
-The SAM for SWARM is the portion of the market that our project could realistically serve after regulatory approval and product validation. In our case, this would be the United States commercial pollination and beekeeping market, especially beekeepers who provide pollination services to agricultural producers. The USDA reported that U.S. producers spent more than \$400 million on pollination services in 2024, making this a strong initial market for a bee-health product designed to reduce colony loss and improve pollination reliability.
-
-#### Serviceable Obtainable Market (SOM): \$364 million
-
-The SOM represents the market SWARM could realistically capture first, given its current development stage, manufacturing limits, regulatory review, and adoption barriers. For SWARM, the most realistic early customer base would be commercial beekeepers serving the Pacific Southwest, especially California almond pollination operations, because this region has the highest pollination demand and the greatest financial incentive to protect colony health. The USDA reported that the total value of all pollination in Regions 6 & 7, which include the Pacific Southwest, reached \$364 million in 2024.
-
-### Vapor-X
-
+ 
+### 3.3 Market Competition
+ 
+Existing bee-health treatments primarily manage *Varroa destructor* through chemical or biological methods. Established products such as Apivar and Formic Pro reduce mite infestations, while Norroa introduces an RNAi-based approach to mite control [5]. However, these treatments do not directly inhibit Deformed Wing Virus (DWV) infection, leaving a significant gap in colony protection. SWARM addresses this limitation through a dual-action formulation combining RNAi targeting essential Varroa functions with engineered minibinders designed to inhibit DWV infection. Its integrated approach distinguishes it from conventional miticides by targeting both the parasite and the virus it transmits. As the EPA emphasizes the importance of rotating Varroa treatments to manage resistance [5], SWARM could offer an additional biological treatment option while introducing direct antiviral capabilities currently absent from established commercial products.
+ 
+Norroa, an established RNAi-based competitor, is currently listed by Mann Lake at \$22 per treatment or approximately \$19 when purchased in a six-treatment package. Each treatment covers one brood box, meaning larger hive configurations may require multiple treatments. At \$39.99 per hive treatment, SWARM occupies a premium market position while introducing an additional DWV-targeting minibinder component. This distinction supports its positioning as a specialized treatment for beekeepers facing significant DWV-related challenges, rather than a conventional mite-control product.
+ 
 <Image
-  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-14-at-15-00-08.avif"
-  caption="Figure 4. TAM-SAM-SOM visualization for Vapor-X."
+  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-18-at-14-52-45.avif"
+  caption="Figure 4. SWARM competitor list."
   size="lg"
 />
-
-#### Total Addressable Market (TAM): \$6.97 million
-
-The TAM for Vapor-X represents the potential United States educational laboratory market for affordable vacuum-assisted drying equipment. According to the National Center for Education Statistics (NCES), the United States had approximately 17,622 regular public high schools and 4,686 Title IV postsecondary institutions during the 2023–2024 academic year. Together, these 23,308 institutions represent a broad potential customer base for Vapor-X. Assuming a retail price of \$299 per unit, the theoretical market reaches approximately \$6.97 million. Although our direct customers would be laboratory equipment manufacturers, these educational institutions represent the end users that manufacturers could reach through their existing distribution networks.
-
-#### Serviceable Addressable Market (SAM): \$697,000
-
-The SAM for Vapor-X represents the portion of the educational laboratory market that our technology could realistically serve based on equipment needs, institutional budgets, and distribution accessibility. Our primary focus is on underfunded high school science programs, community colleges, and smaller university laboratories that require affordable drying equipment but cannot justify the cost of commercial systems. Assuming approximately 10% of the identified institutions have suitable drying applications and could be reached through manufacturing partners, our serviceable market would include approximately 2,331 institutions, representing \$697,000 in potential equipment sales.
-
-#### Serviceable Obtainable Market (SOM): \$34,000
-
-The SOM represents the portion of the market Vapor-X could realistically capture during its initial commercialization period, considering manufacturing capacity, competition, product validation, and adoption barriers. Our proposed strategy involves licensing Vapor-X to an established laboratory equipment manufacturer that would produce and distribute the device to budget-constrained educational institutions. Assuming an initial three-year market penetration of 4% within our serviceable market, Vapor-X could reach approximately 117 institutions, generating around \$34,000 in retail equipment sales. This initial market would provide an opportunity to establish product demand before expanding distribution to additional educational and independent research laboratories.
-
-## 3.3 Market Competition
-
-The current market for SWARM is mostly made up of Varroa mite-control products, not DWV antiviral treatments (see Figure 5). These products can reduce mite populations, but they do not directly block the virus from entering bee cells or stop the DWV infection cycle itself. SWARM provides a dual-sided advantage by targeting both DWV infection and Varroa-mediated virus transmission. The Environmental Protection Agency (EPA) also notes that rotating Varroa products is important because resistance can develop, which makes SWARM's biological, multi-target strategy especially valuable (EPA, n.d.).
-
+ 
+### 3.4 SWOT Analysis
+ 
 <Image
-  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-14-at-14-57-38.avif"
-  caption="Figure 5. SWARM competitor list."
+  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-18-at-14-53-13.avif"
+  caption="Figure 5. SWOT analysis for SWARM."
   size="lg"
 />
-
-The current market for lab-grade vacuum dryers is vast, with prices ranging from \$400 for small laboratory benchtop units to \$118,800+ for large or specialized industrial machinery. However, small laboratories struggle to afford vacuum dryers: the least expensive options range from basic vacuum desiccators (around \$100 to \$250) for room-temperature moisture removal to compact benchtop vacuum drying ovens (starting around \$1,000 to \$1,300) for heat-assisted drying. These competitors (see Figure 6) provide advanced features such as precise temperature control, larger drying capacities, and specialized sample preservation capabilities. Vapor-X differentiates itself through its low-cost prototype design, with less than \$80 in initial component expenses, combined with automated temperature regulation, pressure monitoring, and a compact footprint. Although Vapor-X cannot perform conventional freeze-drying, its proposed value lies in providing accessible vacuum-assisted drying for suitable applications. Through manufacturing partnerships, Lambert iGEM aims to develop an affordable commercial product that addresses laboratory needs without requiring the investment associated with larger specialized systems.
-
-<Image
-  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-14-at-14-57-45.avif"
-  caption="Figure 6. Vapor-X competitor list."
-  size="lg"
-/>
-
-## 3.4 SWOT Analysis
-
-<Image
-  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-14-at-14-59-28.avif"
-  caption="Figure 7. SWOT chart visualization."
-  size="lg"
-/>
-
-# 4. Distribution and Marketing Strategy
-
-## 4.1 AIDA Model
-
+ 
+## 4. Distribution & Marketing Strategy
+ 
+### 4.1 AIDA Model
+ 
 <Image
   src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-14-at-14-58-24.avif"
-  caption="Figure 8. AIDA model for SWARM."
+  caption="Figure 6. AIDA model for SWARM."
   size="lg"
 />
-
-## 4.2 Potential Customers
-
-We would sell SWARM through existing bee-health suppliers and beekeeping associations. Since beekeepers already buy hive treatments and Varroa products through these channels, this would make SWARM easier to access and adopt.
-
-Our initial target market is large commercial beekeepers and pollination service providers serving high-value crops like almonds and blueberries, where reducing colony losses offers the greatest value.
-
-We would also introduce SWARM through university extension programs and state agriculture departments. These partners could help with education and testing, as well as developing the product to fit the next generation of beekeepers.
-
-## 4.3 Sales Funnel
-
-SWARM's sales funnel begins by building awareness through beekeeping associations, extension programs, and pollinator-health networks (see Figure 9). Interested beekeepers would then enter pilot trials, where field data and product performance could build trust before commercial purchase. Since Varroa and DWV management is a recurring seasonal need, successful users could become repeat customers through annual treatment purchases.
-
+ 
+SWARM's marketing strategy follows the Attention, Interest, Desire, and Action (AIDA) framework (see Figure 6), focusing on both manufacturing partners and commercial beekeepers. Initial awareness would be developed through agricultural biotechnology conferences, beekeeper associations, research publications, and industry partnerships. Technical demonstrations and experimental results would establish interest among manufacturers seeking advanced biological treatment technologies.
+ 
+As SWARM progresses through validation, evidence of DWV-targeting activity, mite control, and commercial feasibility would strengthen manufacturer interest in licensing the technology. The final stage would involve negotiating development and licensing agreements, followed by commercial distribution to beekeepers after the necessary regulatory approvals.
+ 
+### 4.2 Potential Customers
+ 
+SWARM's direct business customers would be established bee-treatment manufacturers and agricultural biotechnology companies capable of producing and distributing biological formulations. Its intended end users would be commercial beekeepers, particularly those supplying pollination services to high-value agricultural industries. Operations facing significant DWV-related challenges represent a priority customer segment because SWARM's additional antiviral technology offers a distinct function beyond conventional Varroa control.
+ 
+University extension programs, beekeeper associations, and agricultural research institutions would also play an important role in supporting product education, field validation, and adoption. Their involvement would help connect SWARM's scientific development with the practical requirements of commercial apiary management.
+ 
+### 4.3 Commercialization and Customer Retention
+ 
+SWARM's commercialization funnel would begin with identifying potential manufacturing partners, followed by technical evaluation, product-development discussions, pilot validation, and licensing negotiations. Once regulatory requirements are satisfied, manufacturing partners would distribute SWARM through established agricultural supply channels.
+ 
+Long-term customer retention would depend on demonstrated treatment performance, accessible application methods, and reliable supply. Because Varroa and DWV management involves ongoing colony monitoring, successful treatment outcomes could support repeat purchases among commercial beekeepers. Adoption and retention rates would be measured through pilot programs and commercial sales rather than assumed in advance.
+ 
+### 4.4 Sales Funnel
+ 
+SWARM's sales funnel begins by building awareness through beekeeping associations, extension programs, and pollinator-health networks (see Figure 7). Interested beekeepers would then enter pilot trials, where field data and product performance could build trust before commercial purchase. Since Varroa and DWV management is a recurring seasonal need, successful users could become repeat customers through annual treatment purchases.
+ 
 <Image
-  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-14-at-14-58-10.avif"
-  caption="Figure 9. Funnel of retention visualization."
-  size="lg"
+  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-18-at-14-52-53.avif"
+  caption="Figure 7. Sales and retention funnel for SWARM."
+  size="md"
 />
-
-# 5. Financial Analysis
-
-## 5.1 Cost Analysis
-
-For a full SWARM hive treatment, we researched material costs, but on top of these, there are other costs, including R&D, regulatory, marketing, administrative, manufacturing, and distribution costs (see [Implementation](/lambert-ga/implementation/)). To calculate total costs and revenue, we set our end goal to produce one million treatments a year by 2033. We plan to begin production in 2029 and scale by 200,000 treatments every year. SWARM would cost \$18 per hive treatment, which includes 4.0 g of multiplexed dsRNA targeting Varroa feeding genes and 0.5 g of the DWV minibinder, delivered in a sucrose matrix in a single peel-open pouch.
-
-## 5.2 Revenue
-
-SWARM's revenue is based on the number of treatments sold at \$18 per hive treatment, increasing by \$3,600,000 per year for the first five years and then peaking at \$18,000,000 after reaching our target production of 1,000,000 treatments a year (see Figure 10).
-
+ 
+## 5. Financial Analysis
+ 
+### 5.1 Pricing and Production Costs
+ 
+SWARM's proposed retail price is \$39.99 per hive treatment, based on its specialized biological formulation and associated manufacturing expenses. Our estimated production cost is \$25.00 per treatment, consisting of \$23.00 in materials and \$2.00 in additional manufacturing expenses at mature production capacity (see Figure 8). These costs reflect the development of two active biological components, with engineered minibinders accounting for the largest share of production expenses.
+ 
+Its premium price targets beekeepers managing significant DWV-related challenges rather than routine treatment of every colony.
+ 
 <Image
-  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-14-at-14-56-07.avif"
-  caption="Figure 10. Estimated yearly expenses and earnings."
+  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-18-at-15-02-49.avif"
+  caption="Figure 8. Estimated SWARM production costs at mature manufacturing capacity."
   size="lg"
 />
-
-## 5.3 Production Costs
-
-Pure material costs for our product come out to \$5.70 (see [Implementation](/lambert-ga/implementation/)). Full material costs are \$6.10, but due to bulk orders, we estimate a 40-cent discount. The two active ingredients account for most of this, at \$4.00 for the dsRNA and \$1.00 for the minibinder, with the remainder covering the sucrose matrix, stabilizer, pouch, and label. We estimate manufacturing costs to come out to roughly \$2 million per year, which accounts for facility space, utilities, packaging, quality release testing, and labor costs associated with production at our peak of 1 million treatments a year.
-
-## 5.4 Miscellaneous Costs
-
-In addition to manufacturing costs, there are other costs that must be paid either annually or once. To obtain the equipment and regulatory clearance necessary to produce our product, we estimate a necessary initial investment of \$5 million. This accounts for every necessary piece of equipment and for EPA registration as a new biochemical active ingredient, including but not limited to fermentation and purification equipment, lyophilizers, fill-and-seal lines, toxicology and non-target studies, and multi-site field efficacy trials. To remain competitive and grow our market share, we also need to invest in marketing, distribution, general administrative support, state registration renewals, and legal fees. This is estimated to cost \$1 million a year and will help us grow production by 200,000 treatments a year until we reach one million treatments every year.
-
-## 5.5 Break-even Analysis
-
+ 
+Production costs are expected to decrease as manufacturing efficiency improves, declining from an estimated \$29.00 per treatment in 2030 to \$25.00 by 2034. These estimates are preliminary and will require confirmation through commercial manufacturing trials.
+ 
+### 5.2 Beekeeper Return on Investment
+ 
+For commercial beekeepers, SWARM's financial value extends beyond conventional mite control. Its engineered minibinders are designed to directly target DWV, providing a specialized capability absent from established commercial Varroa treatments.
+ 
+To evaluate whether this additional protection could justify SWARM's premium price, we compared treatment expenses with the economic consequences of colony loss and reduced pollination income. Compared with a conventional treatment costing \$10 per hive [6], SWARM would require an additional investment of \$29,990. USDA data indicate an average nucleus colony purchase price of \$130 in 2025 and an average almond pollination fee of \$209 per colony in major almond-producing regions [7]. Based on replacement expenses alone, SWARM would need to prevent approximately 231 additional colony losses to recover its price premium. If both replacement costs and otherwise lost pollination revenue were avoidable, this threshold would decrease to approximately 89 colonies.
+ 
+### 5.3 Revenue and Sales Forecast
+ 
+SWARM will operate through a business-to-business licensing model, partnering with established agricultural biotechnology manufacturers responsible for production, marketing, and distribution. Although the retail price is \$39.99, we estimate manufacturers will receive approximately \$35.00 per treatment after commercial discounts. Under a proposed 5% royalty agreement, SWARM's technology rights holder would receive \$1.75 per treatment sold.
+ 
+Our financial projections assume an initial commercial launch of 10,000 treatments in 2030, increasing to 300,000 annually by 2034. This gradual expansion allows manufacturers to establish demand before committing to larger production volumes. Our long-term objective is to reach one million annual treatments following broader market adoption.
+ 
 <Image
-  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-14-at-14-55-56.avif"
-  caption="Figure 11. Cumulative earnings in USD at the end of each calendar year."
+  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-18-at-15-27-56.avif"
+  caption="Figure 9. Five-year projected sales and licensing revenue, assuming successful regulatory approval and commercialization."
   size="lg"
 />
-
-Using our calculations of each year's cumulative earnings, we aim to break even in October 2031, less than three years after beginning production (see Figure 11).
-
-# 6. Four-Year Business Plan
-
-Lambert iGEM developed a four-year business plan to guide SWARM through experimental research and commercial implementation (see Figure 12). Our strategy prioritizes scientific validation, regulatory compliance, and partnerships with established agricultural biotechnology companies, allowing SWARM to enter the beekeeping market without requiring an independent manufacturing and distribution network.
-
-## Year 1 (2027): Research and Development
-
-Our initial focus will be validating the biological components of SWARM, including the ability of engineered minibinders to inhibit Deformed Wing Virus (DWV) entry and RNA interference (RNAi) to disrupt essential *Varroa destructor* functions. We will also refine our sugar-based delivery formulation and evaluate the performance of our automated dispenser and Vapor-X drying system. Initial funding will be directed toward laboratory materials, prototype improvements, and technical validation.
-
-## Year 2 (2028): Product Optimization and Regulatory Preparation
-
-Following successful preliminary testing, we will optimize SWARM's formulation, stability, delivery efficiency, and production costs. We plan to collaborate with university laboratories, apiculture researchers, and beekeepers to evaluate product feasibility and safety. In parallel, we will begin identifying the regulatory requirements for commercial use and assessing potential intellectual property protection. Vapor-X will undergo additional performance testing to evaluate its potential for separate licensing to laboratory equipment manufacturers.
-
-## Year 3 (2029): Field Validation and Industry Partnerships
-
-We aim to advance SWARM into controlled apiary trials, subject to regulatory authorization and successful safety testing. These studies will evaluate mite reduction, DWV outcomes, colony health, and practical application under varying environmental conditions. Alongside these trials, we will explore pilot-scale manufacturing and approach established bee-health and agricultural biotechnology companies regarding licensing or collaborative development agreements.
-
-## Year 4 (2030): Commercialization and Market Expansion
-
-Our primary objective will be to secure a licensing or technology-transfer agreement with an established bee-treatment manufacturer. Through this partnership, SWARM could benefit from existing production facilities, distribution networks, and regulatory expertise. Initial revenue may come from licensing fees and development milestones, with royalties beginning after authorized commercial sales. Market introduction will depend on demonstrated product safety, effectiveness, and the completion of applicable regulatory approvals.
-
+ 
+By 2034, SWARM could generate approximately \$12 million in annual retail sales, while the technology rights holder would receive an estimated \$525,000 in royalties. These projections represent a successful commercialization scenario rather than confirmed sales.
+ 
+### 5.4 Manufacturing and Operating Expenses
+ 
+Under our licensing model, manufacturing partners would cover production, distribution, and commercial operating expenses, while SWARM's technology rights holder would manage intellectual property, licensing agreements, legal services, and technical coordination.
+ 
+To account for manufacturing expansion, we estimate that production costs will gradually decrease as sales volume increases. Manufacturers would also incur approximately \$2.50 per treatment in fulfillment expenses, alongside fixed operating costs associated with commercial support and regulatory maintenance.
+ 
+<Image
+  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-18-at-15-06-22.avif"
+  caption="Figure 10. Estimated manufacturer expenses during initial commercialization and subsequent expansion."
+  size="lg"
+/>
+ 
+Separately, SWARM's technology licensing entity would maintain a smaller operating budget, beginning at approximately \$50,000 annually and increasing to \$150,000 by 2034. This structure avoids the expense of constructing and maintaining independent manufacturing facilities while allowing established industry partners to manage commercial production.
+ 
+### 5.5 Profitability and Break-Even Analysis
+ 
+SWARM's financial projections follow the expected development pattern of an early commercialization business, with initial operating losses followed by positive operating results as treatment sales increase. Under our proposed licensing structure, manufacturers would finance production and distribution while the technology rights holder receives royalties from commercial sales. This division reduces the licensing entity's fixed operating expenses and allows each organization to focus on its primary commercial responsibilities.
+ 
+Our model projects that the technology rights holder would first achieve a positive annual operating result in 2031, while the manufacturing partner would first achieve positive annual operating results in 2032. Cumulative operating results would become positive in 2032 for the licensing entity and in 2033 for the manufacturing partner. By 2034, projected annual operating results would reach approximately \$375,000 for the licensing entity and \$1.325 million for the manufacturer, before taxes and recovery of pre-commercial investment.
+ 
+<Image
+  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-18-at-14-52-22.avif"
+  caption="Figure 11. Projected cumulative operating results from 2030 to 2034, excluding taxes and pre-commercial development investments."
+  size="lg"
+/>
+ 
+### 5.6 Initial Investment and Long-Term Growth
+ 
+Before commercialization, SWARM will require additional funding for biological validation, formulation development, safety testing, regulatory approval, and intellectual property protection. We plan to pursue research grants and commercial development partnerships to finance these activities, with investment responsibilities established through negotiated agreements.
+ 
+Our long-term financial strategy focuses on increasing production efficiency, reducing minibinder manufacturing costs, and expanding access through established agricultural suppliers. Reaching one million annual treatments would represent approximately \$40 million in retail sales at the proposed price, although this remains a longer-term objective dependent on demonstrated effectiveness and customer demand.
+ 
+SWARM's dual-action technology establishes a distinct competitive advantage by addressing both Varroa mites and Deformed Wing Virus, a critical gap in existing bee-health treatments. By targeting commercial beekeepers facing significant DWV-related challenges, SWARM positions itself within a specialized, high-value market where advanced colony protection offers substantial economic potential. Through strategic manufacturing partnerships and scalable production, SWARM aims to expand its market presence while supporting beekeeper profitability and agricultural productivity.
+ 
+## 6. 4-Year Business Plan
+ 
+SWARM's four-year commercialization roadmap (see Figure 12) outlines its transition from an experimental biotechnology platform to a market-ready bee-health treatment. Rather than establishing its own production infrastructure, Lambert iGEM plans to collaborate with established manufacturers that can bring the technology to commercial beekeepers. This approach allows our team to concentrate on advancing SWARM's biological capabilities while creating a practical route toward widespread agricultural adoption.
+ 
+### 6.1 Year 1 (2027): Research and Development
+ 
+Our initial focus will be validating the effectiveness of SWARM's engineered minibinders and RNAi system. Experimental studies will evaluate minibinder binding and antiviral activity, RNAi-mediated gene silencing, and the feasibility of delivering both components through a sucrose-based formulation. These results will inform candidate selection and establish the technical requirements for further development.
+ 
+### 6.2 Year 2 (2028): Product Optimization and Safety
+ 
+Following successful preliminary validation, we will optimize SWARM's formulation, storage stability, dosage, and manufacturing efficiency. Laboratory studies will examine potential effects on honey bees and relevant non-target organisms. We will also consult researchers, beekeepers, and regulatory specialists to refine the treatment's application requirements and identify the studies necessary for commercialization.
+ 
+### 6.3 Year 3 (2029): Field Validation and Partnerships
+ 
+Subject to successful laboratory results and appropriate regulatory authorization [8], SWARM will advance toward controlled apiary trials. These studies will evaluate Varroa reduction, DWV viral load, colony survival, and treatment performance under practical beekeeping conditions. Alongside experimental validation, we will pursue manufacturing partnerships, investigate intellectual property protection, and establish preliminary licensing terms.
+ 
+### 6.4 Year 4 (2030): Commercialization Preparation
+ 
+Our final development stage will prioritize securing a manufacturing and licensing agreement, completing required regulatory submissions, and preparing for commercial production. An initial sales target of 10,000 treatments would follow successful authorization and manufacturing validation. This stage would establish the foundation for expanding annual treatment sales toward 300,000 by 2034, with one million treatments remaining our long-term commercial objective.
+ 
 <Image
   src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-14-at-14-55-38.avif"
   caption="Figure 12. Business plan timeline."
-  size="lg"
+  size="xl"
 />
-
-# 7. Risk Management
-
-The successful commercialization of SWARM depends on addressing potential scientific and operational challenges. As an emerging biotechnology-based treatment, SWARM faces uncertainties associated with experimental efficacy, formulation stability, and widespread adoption by beekeepers. To anticipate these challenges, we developed a risk management framework identifying potential obstacles, evaluating their likelihood and impact, and establishing mitigation strategies to support long-term commercial viability (see Figure 13).
-
+ 
+## 7. Risk Management
+ 
+The successful commercialization of SWARM depends on addressing potential scientific and operational challenges. As an emerging biotechnology-based treatment, SWARM faces uncertainties associated with experimental efficacy, formulation stability, and widespread adoption by beekeepers. To anticipate these challenges, we developed a risk management framework (see Figure 13) identifying potential obstacles, evaluating their likelihood and impact, and establishing mitigation strategies to support long-term commercial viability.
+ 
 <Image
   src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-14-at-5-22-53-pm.avif"
-  caption="Figure 13. Chart visualizing risk factors."
+  caption="Figure 13. Risk factors, likelihood, impact, and mitigation strategies."
+  size="xl"
+/>
+ 
+## 8. Stakeholders and Team
+ 
+### 8.1 Stakeholder Input
+ 
+Throughout SWARM's development, Lambert iGEM consulted beekeepers, agricultural researchers, biotechnology specialists, and government representatives to evaluate the project's scientific feasibility and commercial potential. Our discussions with Peter Helfrich, President of the Metro Atlanta Beekeepers Association, and Olivia Menard, a UGA Master Beekeeper, highlighted limitations in existing Varroa treatments, including resistance, brood health concerns, and declining colony productivity. Their feedback reinforced the need for a treatment addressing both Varroa mites and Deformed Wing Virus (DWV), while prioritizing safety and practical application.
+ 
+Our conversations also helped evaluate SWARM's commercial viability. John James, a hobbyist beekeeper, emphasized that an effective dual-action treatment would represent a worthwhile investment:
+ 
+> "If there were an effective treatment that could eliminate both varroa and dwv like your project, I think that would be a good investment." — John James, hobbyist beekeeper
+ 
+His feedback reinforced the importance of affordability and convenient administration, supporting our sucrose-based delivery strategy and pricing considerations.
+ 
+Beyond beekeepers, we consulted researchers and industry specialists to refine SWARM's technology and commercialization approach. Dr. Jamie Ellis, Director of the University of Georgia Bee Program, supported our RNAi design:
+ 
+> "Multiplexing is the better approach. The more targets you can attack at once, the better." — Dr. Jamie Ellis, University of Georgia Bee Program
+ 
+His guidance reinforced our multi-target strategy and highlighted the regulatory testing required before commercialization. Discussions with a GreenLight Biosciences representative further informed our understanding of RNAi delivery, treatment resistance, and commercial development.
+ 
+### 8.2 Team and Industry Partnerships
+ 
+Lambert iGEM's interdisciplinary team integrates synthetic biology, computational modeling, hardware engineering, outreach, and entrepreneurship to advance SWARM. Our research team develops minibinders and RNAi constructs, while our hardware and computational teams support delivery systems, protein design, and modeling. Our entrepreneurship and outreach efforts connect these technologies with stakeholder needs, market feasibility, and potential manufacturing partnerships.
+ 
+Our long-term business strategy prioritizes licensing agreements with established agricultural biotechnology manufacturers capable of managing commercial production, regulatory requirements, and distribution. By combining our team's research with the expertise of beekeepers, scientists, and industry professionals, SWARM's development remains grounded in practical agricultural needs and responsible commercialization.
+ 
+## 9. Long-Term Impacts
+ 
+### 9.1 Environmental and Agricultural Impact
+ 
+SWARM's long-term impact centers on improving honey bee colony health by addressing both Varroa infestations and DWV infection. By developing a biological treatment targeting two interconnected threats, SWARM seeks to reduce colony losses and support more reliable agricultural pollination. Improved colony health could benefit commercial beekeepers and agricultural producers while supporting the pollination services essential to many crop production systems. Its targeted RNAi approach also presents an opportunity to diversify existing Varroa management strategies, although environmental safety and effects on non-target organisms will require experimental evaluation.
+ 
+### 9.2 Economic Impact and Scalability
+ 
+SWARM's commercialization strategy supports Sustainable Development Goal 8, Decent Work and Economic Growth, by addressing the financial consequences of colony losses for beekeepers and pollination-dependent agricultural industries. Our proposed B2B licensing model would allow established manufacturers to expand production through existing facilities and distribution networks. With a projected 300,000 annual treatments by 2034 and a long-term objective of one million treatments annually, SWARM aims to establish a specialized market for dual-action bee-health technologies. Improved colony survival could reduce replacement expenses, protect pollination income, and strengthen the economic stability of commercial beekeeping operations.
+ 
+### 9.3 Technological Accessibility and Future Research
+ 
+Beyond SWARM's biological treatment, Vapor-X extends our project's potential impact into laboratory accessibility. Its low-cost design offers an opportunity to make vacuum-assisted drying technologies more accessible to educational institutions and smaller research laboratories. Through manufacturer licensing or the publication of open-source construction procedures, Vapor-X could support future iGEM teams and independent researchers working with limited laboratory resources.
+ 
+SWARM's computational minibinder design and RNAi development workflows also provide a foundation for continued research into biological pest management and antiviral technologies. Future teams could adapt these approaches to investigate additional molecular targets and agricultural challenges. By combining commercial development with accessible research methods, Lambert iGEM aims to extend the project's contributions beyond a single treatment and support further innovation in agricultural biotechnology.
+ 
+## 10. Vapor-X: Commercialization and Accessibility
+ 
+### 10.1 Product Overview
+ 
+Alongside SWARM's biological treatment platform, Lambert iGEM developed Vapor-X, a low-cost vacuum-assisted drying system intended to increase access to laboratory drying technologies. The device incorporates a Raspberry Pi Pico W microcontroller, vacuum pump, heating element, and environmental sensors to support controlled drying processes. With initial prototype component expenses below \$85, Vapor-X was developed as an affordable alternative for laboratories with limited equipment budgets.
+ 
+Although Vapor-X was originally designed to support SWARM's research and formulation development, its applications extend beyond our biological project. Unlike the Varroa and DWV treatment, Vapor-X can be developed and distributed as an independent laboratory technology. We identified two potential pathways for expanding its accessibility: licensing the design to an established laboratory equipment manufacturer or publishing its construction procedures and technical documentation for future research teams.
+ 
+### 10.2 Target Market
+ 
+Vapor-X targets laboratory equipment manufacturers supplying educational and research institutions. Its primary end users include underfunded high school science programs, community colleges, smaller university laboratories, and independent research teams requiring affordable equipment for suitable vacuum-assisted drying applications.
+ 
+Our initial commercialization strategy would focus on educational institutions with limited access to specialized laboratory equipment. Rather than competing directly with industrial freeze-dryers, Vapor-X is intended to provide a lower-cost option for smaller-scale drying applications where advanced freeze-drying capabilities are unnecessary.
+ 
+### 10.3 Market Size: TAM, SAM, and SOM
+ 
+According to the National Center for Education Statistics (NCES), the United States had approximately 17,622 regular public high schools and 5,686 Title IV postsecondary institutions during the 2023–2024 academic year [9]. Together, these 23,308 institutions represent a theoretical educational market for accessible laboratory technologies.
+ 
+<Image
+  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-18-at-15-32-23.avif"
+  caption="Figure 14. Preliminary Vapor-X market estimates based on a proposed $299 retail price."
   size="lg"
 />
-
-# 8. Conclusion
-
-Despite its major impact on honey bee colony loss, Deformed Wing Virus still lacks a strong and direct antiviral solution. Current treatments mainly manage Varroa mites, but they do not directly stop DWV from entering bee cells, leaving beekeepers with an incomplete solution. SWARM addresses this gap through a dual-sided platform combining DWV-blocking minibinders and a multiplex RNAi system targeting Varroa/DWV transmission. With a projected \$13.11 billion global apiculture market, over \$400 million in U.S. pollination services, and a \$364 million early regional market in high-value pollination areas, SWARM has clear commercial potential. If sold at \$10 per hive treatment, reaching 400,000 hives would generate \$4 million in annual revenue. With high market need and established beekeeper distribution channels, SWARM is positioned to become a scalable bee-health platform that protects colonies while supporting commercial agriculture.
+ 
+The total addressable market assumes one device per institution and represents the theoretical maximum within the selected educational market. Our serviceable market focuses on institutions with suitable drying applications and accessible purchasing channels. Initial market penetration of approximately 117 units would generate nearly \$35,000 in retail sales over three years. These percentages are preliminary modeling assumptions and require validation through institutional surveys and manufacturer feedback.
+ 
+### 10.4 Cost Analysis and Market Competition
+ 
+Vapor-X was designed around inexpensive, accessible electronic components, reducing the initial hardware investment compared with specialized laboratory drying equipment. Commercial vacuum desiccators can cost several hundred dollars, while laboratory vacuum drying ovens frequently exceed \$1,000. However, these products vary substantially in capacity, temperature control, vacuum performance, and safety features.
+ 
+Vapor-X's proposed advantage is the integration of vacuum-assisted drying controls into a compact, affordable system. Its intended applications differ from those of industrial drying equipment, and it is not a replacement for conventional freeze-drying.
+ 
+### 10.5 Prototype Cost Breakdown
+ 
+<Image
+  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-18-at-15-32-53.avif"
+  caption="Figure 15. Illustrative prototype component budget, consistent with the project's reported component cost below $85."
+  size="md"
+/>
+ 
+The estimated prototype component cost does not necessarily represent the cost of a complete, commercially qualified drying system. Additional expenses may include an appropriately vacuum-rated chamber, electrical protection, enclosure fabrication, calibration, and safety testing. For commercial development, we propose a preliminary retail price of \$299 for a validated modular system intended for use with a compatible vacuum-rated chamber.
+ 
+### 10.6 Commercial Manufacturing Costs
+ 
+For manufacturer licensing, we modeled additional expenses associated with assembly, quality control, packaging, and customer support.
+ 
+<Image
+  src="https://static.igem.wiki/teams/6185/wiki/human-practices/entreprenuership/screenshot-2026-10-18-at-15-32-53.avif"
+  caption="Figure 16. Illustrative commercial unit costs, excluding the cost of a separate vacuum-rated chamber, fixed development expenses, and manufacturer overhead."
+  size="md"
+/>
+ 
+Assuming a manufacturer receives approximately \$239.20 per unit after a 20% distribution discount, and pays a hypothetical 5% licensing royalty on those net sales, approximately \$72.24 per unit would remain after the modeled unit expenses and royalty payment. This contribution would support the manufacturer's fixed operating expenses and profit. Final pricing would depend on supplier quotations, product testing, and the features included in the commercial device.
+ 
+### 10.7 Commercialization Through Manufacturer Licensing
+ 
+Our first proposed commercialization pathway involves licensing Vapor-X to an established laboratory equipment manufacturer. Under this model, Lambert iGEM would provide the underlying technical design, while a manufacturing partner would assume responsibility for product refinement, safety validation, assembly, packaging, and commercial distribution.
+ 
+The manufacturer could integrate Vapor-X into an existing educational laboratory equipment portfolio, allowing the product to reach institutions through established purchasing channels. This arrangement would reduce the financial burden of independent production while supporting broader distribution.
+ 
+Potential licensing agreements could include an initial technology-transfer payment and subsequent royalties based on product sales. Under the illustrative 5% royalty model, 117 sales at an average manufacturer price of \$239.20 would generate approximately \$1,400 in licensing income over the initial three-year sales period. The relatively small initial market emphasizes the importance of securing a manufacturing partner that can incorporate Vapor-X into existing production and distribution operations.
+ 
+### 10.8 Open-Source Contribution to Future Research Teams
+ 
+As an alternative to commercial licensing, Lambert iGEM could publish Vapor-X as an open-source hardware contribution for future iGEM teams, educational laboratories, and independent researchers. This pathway prioritizes accessibility and scientific collaboration rather than direct financial returns.
+ 
+Our proposed documentation would include a bill of materials, circuit diagrams, assembly instructions, microcontroller code, operating procedures, and relevant calibration and safety guidance. By making this information publicly accessible, future teams could reproduce the design, modify its functionality, and adapt it to their own research requirements.
+ 
+This approach would be particularly valuable for high school iGEM teams and laboratories with limited funding. Instead of purchasing specialized equipment for every drying application, researchers could investigate a documented, lower-cost system built from commonly available electronic components. Any construction or use would still require suitable equipment, appropriate supervision, and verification of safe vacuum and heating conditions.
+ 
+Open-source publication would also allow future teams to improve Vapor-X through modifications to its sensors, automation, and drying controls. Sharing these developments could extend the value of our hardware project beyond SWARM while encouraging practical engineering contributions within the synthetic biology community.
+ 
+### 10.9 Future Development and Impact
+ 
+Vapor-X presents an independent opportunity to expand the accessibility of laboratory technologies. Its commercialization pathway would prioritize manufacturing partnerships, product validation, and affordable distribution, while an open-source pathway would allow future research teams to build upon Lambert iGEM's hardware development.
+ 
+Before selecting either approach, we plan to evaluate drying performance, reproducibility, equipment safety, and demand among educational institutions. Commercial licensing would require an agreement defining ownership and permitted use of the design. Alternatively, a documented open-source release would prioritize broad research access, although unrestricted publication could reduce opportunities for exclusive licensing.
+ 
+By developing Vapor-X independently from SWARM's biological treatment, Lambert iGEM extends the impact of its project beyond agricultural biotechnology. Through either commercial manufacturing or open-source dissemination, Vapor-X aims to reduce barriers to laboratory equipment access and support continued innovation among educational and research teams.
+ 
+## 11. Conclusion
+ 
+SWARM introduces a specialized biotechnology approach to honey bee health by combining Varroa-targeting RNAi with engineered minibinders designed to inhibit Deformed Wing Virus. While conventional treatments primarily focus on mite management, SWARM's dual-action formulation addresses an additional gap in commercially available antiviral treatment options. Its proposed \$39.99 price reflects this advanced technology, with initial commercialization directed toward beekeepers facing significant DWV-related challenges.
+ 
+Through a B2B licensing model, SWARM aims to establish partnerships with agricultural biotechnology manufacturers capable of supporting large-scale production and distribution. Our financial projections target 300,000 annual treatments by 2034, representing approximately \$12 million in retail sales and \$525,000 in licensing royalties under the modeled agreement. With a long-term objective of one million annual treatments, SWARM presents a potential opportunity to expand biological bee-health technologies while supporting commercial beekeeping, agricultural productivity, and sustainable economic growth.
+ 
+---
+ 
+## References
+ 
+<Reference>
+[1] Apiary Inspectors of America. (2024). *2023–2024 survey results*. https://apiaryinspectors.org/US-beekeeping-survey-23-24
+</Reference>
+<Reference>
+[2] Fortune Business Insights. (2026, September 21). *Apiculture market size, share & industry analysis, by type (honey, beeswax, and royal jelly), by application (food & beverage, pharmaceuticals, personal care & cosmetics, and others) and regional forecast, 2026–2034*. https://www.fortunebusinessinsights.com/apiculture-market-108593
+</Reference>
+<Reference>
+[3] Yeh, D. A., & Abadam, V. (2025, June 18). *Pollination services valued at \$400 million on 1.7 million acres*. U.S. Department of Agriculture, Economic Research Service. https://ers.usda.gov/data-products/charts-of-note/112782
+</Reference>
+<Reference>
+[4] U.S. Department of Agriculture, National Agricultural Statistics Service. (2026). *Honey bee colonies*. https://esmis.nal.usda.gov/sites/default/release-files/796006/hcny0726.pdf
+</Reference>
+<Reference>
+[5] U.S. Environmental Protection Agency. (2025). *EPA provides new tool to protect honey bees, ensuring safe and abundant food supply*. https://www.epa.gov/pesticides/epa-provides-new-tool-protect-honey-bees-ensuring-safe-and-abundant-food-supply
+</Reference>
+<Reference>
+[6] Oregon State University Extension Service. (n.d.). *Honey bee colony maintenance expenses: Supplemental feed, requeening and medication*. https://extension.oregonstate.edu/catalog/pub/pnw-745-honey-bee-colony-maintenance-expenses-supplemental-feed-requeening-medication
+</Reference>
+<Reference>
+[7] U.S. Department of Agriculture, National Agricultural Statistics Service. (2026). *Cost of pollination*. https://www.nass.usda.gov/Publications/Todays_Reports/reports/cospol25.pdf
+</Reference>
+<Reference>
+[8] U.S. Environmental Protection Agency. (n.d.). *Pesticide registration manual: Chapter 12 – Applying for an experimental use permit*. https://www.epa.gov/pesticide-registration/pesticide-registration-manual-chapter-12-applying-experimental-use-permit
+</Reference>
+<Reference>
+[9] National Center for Education Statistics. (n.d.). *Number of regular operational public schools by school level and state or jurisdiction: School year 2023–24*. https://nces.ed.gov/ccd/tables/202324_summary_4.asp
+</Reference>
+<Reference>
+[10] U.S. Department of Agriculture, National Agricultural Statistics Service. (2026). *Honey*. https://www.nass.usda.gov/Publications/Todays_Reports/reports/hony0326.pdf
+</Reference>
+<Reference>
+[11] OpenAI. (2026). *ChatGPT* [Large language model]. https://chatgpt.com/
+</Reference>
