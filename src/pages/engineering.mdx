@@ -531,4 +531,62 @@ The stress tests also show that the treatment remains effective across a wide ra
 
 For beekeepers, one of the most important findings is the difference in colony survival. Across 1,000 simulations, approximately one fifth of untreated colonies collapsed, most during the second spring. In comparison, only one treated colony collapsed. No treated colonies collapsed in any of the six stress tests.
 
+## RNAi Model
+
+Our goal was to predict the Renilla:Firefly ratio returned by the Dual-Glo assay for each condition our wet lab planned to run, so that every plate could be read against a stated expectation. By simulating single siRNA designs, combinations, and the multiplexed dsRNA construct in the same order the experiments are performed, we aimed to determine which comparisons the assay would be able to resolve.
+
+### Iteration 1 – Initial RNAi modeling
+
+#### Design
+
+In the first iteration, we constructed an ODE network capturing siRNA loading, RISC formation, transcript cleavage, and reporter expression for a single siRNA design. This version prioritized representing the sequential flow from delivered siRNA, through Argonaute-2 binding, to the Renilla:Firefly output, which forms the foundation of the RNAi simulation.
+
+#### Build
+
+During implementation, we defined degradation rates for unprocessed dsRNA and free siRNA in the parameter tables but did not write the corresponding reactions into the network. As a result, the two species persisted throughout the simulation. Dicer-2 also appeared as a participant in the dicing reaction without entering its rate law, which meant the enzyme could not influence the reaction it catalyzed.
+
+#### Test
+
+When we simulated the network in SimBiology, silencing was established and never relaxed, since free siRNA was never cleared and continued to load onto Argonaute-2 for the duration of the run. The predicted ratio showed no response to the delivered concentration, returning near-complete silencing at every level tested.
+
+#### Learn
+
+The first issue was resolved by adding the four missing degradation reactions and introducing a reference term that linked the Dicer-2 concentration to the dicing rate, which allowed both species to turn over and the enzyme to affect its own reaction. Switching to an effective cellular rate then produced a sigmoidal dose-response curve and established a realistic baseline for later iterations.
+
+### Iteration 2 – Adding further siRNA designs
+
+#### Design
+
+In the second iteration, we expanded the ODE framework to include more siRNA designs, enabling simulation of multiplexed RNAi against several target sites. This allowed us to examine how multiple guide-target interactions behave within the same system.
+
+#### Build
+
+We implemented independent loading pathways for each siRNA design and assigned each species and complex to its target site. Each design's reactions were modeled in parallel within the same reaction network, allowing the system to account for binding at every target site.
+
+#### Test
+
+When compared against the single-design condition, the initial simulations predicted far less silencing than anticipated. The predicted ratio moved only from 2.346 to 2.298, and the third test showed no significant further change. Free Argonaute-2 fell close to zero across every combination condition.
+
+#### Learn
+
+This discrepancy revealed that our assumption of unlimited Argonaute-2 availability was incorrect. At the concentration our wet lab supplies, a single design already delivers more siRNA than the cell has Argonaute-2 to bind, so any additional guides would have to compete for the same limited pool.
+
+### Iteration 3 – Editing parameter coefficients and sampling for experimental conditions
+
+#### Design
+
+In the third iteration, we refined the multiplex model to account for the potential testing trials our RNAi experimentation would encompass, adding variants that simulate each specific trial that would be used to validate the siRNA designs.
+
+#### Build
+
+Using experimental luminescence data from calibration curves and measured initial concentrations, our model generated luminescence curves and identified ratios for each stage of the planned testing workflow: six independent siRNA designs, multiplexed experimentation, and the multiplexed dsRNA construct.
+
+#### Test
+
+The result demonstrated the typical Renilla:Firefly behavior expected when the target mRNA is successfully cleaved. When cross-referenced with papers using the psiCHECK-2 vector, the modeled decrease in ratio was below the expected amount.
+
+#### Learn
+
+This iteration successfully created a prediction that would guide the future RNAi experimentation workflow, accounting for the expected Renilla decrease relative to initial values and measured parameters.
+
 ### References
