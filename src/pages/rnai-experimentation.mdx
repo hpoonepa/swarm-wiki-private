@@ -14,7 +14,7 @@ import Reference from "../components/md_components/Reference";
 
 # RNAi Experimentation
 ## Sf9 Cells
-Lambert iGEM is using Spodoptera frugiperda (Sf9) insect cells to screen six small interfering RNA (siRNA) sequences. Our target was to evaluate two siRNAs for each of our three target genes (see Fig. 1). Through this screening process, we identified the single most effective siRNA for each gene, resulting in a final set of three optimized sequences for multiplexing through a double-stranded RNA (siRNA) construct.
+Lambert iGEM is using Spodoptera frugiperda (Sf9) insect cells to screen six small interfering RNA (siRNA) sequences. We evaluated two siRNAs for each of our three target genes (see Fig. 1). Through this screening process, we identified the single most effective siRNA for each gene, resulting in a final set of three optimized sequences for multiplexing in a double-stranded RNA (siRNA) construct.
 
 
 <Image
@@ -28,7 +28,7 @@ size="md"
 
 
 ### siRNAs
-To create our six siRNAs (Positive control, Renilla, Vd 5.80, Vd 1.64, Vd 4.45, and Vd 1.03) we used in vitro transcription (IVT) facilitated by the T7 RiboMAX™ Express RNAi System. First, we annealed complementary ssDNA strands to form a double-stranded DNA template for siRNA production. Following the purification of our siRNAs, we diluted the solution to 1:20, and performed a gel electrophoresis in a 3% agarose gel to verify that our DNA successfully transformed into siRNA (see Fig. 2).
+To create our six siRNAs (Positive control, Renilla, Vd 5.80, Vd 1.64, Vd 4.45, and Vd 1.03), we used in vitro transcription (IVT) facilitated by the T7 RiboMAX™ Express RNAi System. First, we annealed complementary ssDNA strands to form a double-stranded DNA template for siRNA production. After purifying our siRNAs, we diluted the solution 1:20 and ran it on a 3% agarose gel to confirm that the DNA successfully converted to siRNA (see Fig. 2).
 
 <Image
 src="https://static.igem.wiki/teams/6185/wiki/rnai-experimentation/screenshot-2026-10-11-at-5-03-22-pm.avif"
@@ -49,7 +49,7 @@ Moreover, the Sf9 cells were cultured in complete Grace's Insect Medium (supplem
 ### Co-transfection of Plasmid DNA and siRNA
 
 
-Sf9 cells were seeded from culture flasks into tissue culture-treated 24 well plates, where all transfections were performed. We used Fugene 4K for plasmid DNA delivery and Cellfectin II for siRNA delivery, preparing the complexes separately in Grace’s unsupplemented Insect medium (see Fig. 3). These DNA reagent complexes were added dropwise to Sf9 cultures (5 x 10⁶ cells/mL) and incubated at 37°C for 24-72 hours before evaluating transfection efficiency (Yeasen Biotechnology, 2025).
+Sf9 cells were seeded from culture flasks into tissue culture-treated 24-well plates, where all transfections were performed. We used Fugene 4K for plasmid DNA delivery and Cellfectin II for siRNA delivery, preparing the complexes separately in Grace’s unsupplemented Insect medium (see Fig. 3). These DNA reagent complexes were added dropwise to Sf9 cultures (5 x 10⁶ cells/mL) and incubated at 37°C for 24-72 hours before evaluating transfection efficiency (Yeasen Biotechnology, 2025).
 
 <Image
 src="https://static.igem.wiki/teams/6185/wiki/rnai-experimentation/img-5808-1.avif"
@@ -60,7 +60,7 @@ size="md"
 ### psiCHECK-2 Design and Signal Measurement
 
 
-We evaluated RNAi knockdown in Sf9 cells using a modified psiCHECK-2 reporter containing each target sequence downstream of Renilla luciferase. We replaced the SV40 promoter driving Renilla with HSV-TK to support reporter expression in insect cells (Deng et al., 2022). Following transfection in tissue culture-treated 24 well plates, samples from each well were transferred into triplicate wells of white 96-well plates for luminescence measurement using Promega’s Dual-Glo Luciferase Assay System. For each well divided Renilla luminescence by firefly luminescence to account for differences in transfection efficiency; a lower ratio relative to the control indicated stronger knockdown (Promega Corporation, 2016; see Fig. 4).
+We evaluated RNAi knockdown in Sf9 cells using a modified psiCHECK-2 reporter containing each target sequence downstream of Renilla luciferase. We replaced the SV40 promoter driving Renilla with HSV-TK to support reporter expression in insect cells (Deng et al., 2022). Following transfection in tissue culture-treated 24-well plates, samples from each well were transferred into triplicate wells of white 96-well plates for luminescence measurement using Promega’s Dual-Glo Luciferase Assay System. For each well, Renilla luminescence was divided by firefly luminescence to account for differences in transfection efficiency; a lower ratio relative to the control indicated stronger knockdown (Promega Corporation, 2016; see Fig. 4).
 
 
 <Image
@@ -73,7 +73,7 @@ size="md"
 ### siRNA Luminescence Assay
 
 
-We tested our six siRNA candidates across three target genes to evaluate optimal knockdown efficiency. We measured the suppression level of each candidate relative to the untreated negative control to evaluate the percent ratio between the renilla and firefly luciferase light intensities (see Fig. 5). Include numbers w/specific ratios and which specific siRNA was optimal. Then, we compared the reductions in experimental target depression with those produced by our Renilla siRNA positive control, which targets Renilla luciferase mRNA, to assess relative knockdown efficiency. Stronger siRNA activity directly results in greater target strand silencing, yielding a steeper drop in recorded light intensity (Muntaabski, 2025).
+We tested our six siRNA candidates across three target genes to evaluate optimal knockdown efficiency. We measured the suppression level of each candidate relative to the untreated negative control to evaluate the percent ratio between the Renilla and firefly luciferase light intensities (see Fig. 5). Include numbers w/specific ratios and which specific siRNA was optimal. Then, we compared the reductions in experimental target depression with those produced by our Renilla siRNA positive control, which targets Renilla luciferase mRNA, to assess relative knockdown efficiency. Stronger siRNA activity directly results in greater target strand silencing, yielding a steeper drop in recorded light intensity (Muntaabski, 2025).
 
 
 <Image
@@ -83,13 +83,13 @@ size="md"
 />
 
 
-By comparing the residual luminescence levels within each gene group, we successfully identified the most optimal siRNA sequence for each target. Lastly, these top three siRNAs were used for downstream multiplexed silencing (Betz, 2005).
+By comparing residual luminescence levels within each gene group, we identified the optimal siRNA sequence for each target. Lastly, these top three siRNAs were used for downstream multiplexed silencing (Betz, 2005).
 
 
 ## Multiplexing
 
 
-Using (siRNA #1), (siRNA #2), and (siRNA #3), which showed the greatest luminescence, we plan to test 6 siRNA combinations to identify the strongest multiplexed combination. Through multiplexing, we plan to deliver a single dsRNA rather than three separate siRNAs, which is inefficient and hard on host cells (see Fig. 6). This allows the host cells to stay significantly healthier and efficiently silence the mite’s genes (Wang et al., 2024).
+Using (siRNA #1), (siRNA #2), and (siRNA #3), which showed the greatest luminescence, we plan to test 6 siRNA combinations to identify the strongest multiplexed combination. Through multiplexing, we plan to deliver a single dsRNA rather than three separate siRNAs, which is inefficient and stressful for host cells (see Fig. 6). This approach keeps host cells healthier while efficiently silencing the mite’s genes (Wang et al., 2024).
 
 
 <Image
