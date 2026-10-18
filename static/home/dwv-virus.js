@@ -5,7 +5,7 @@
 (function () {
   const host = document.getElementById('dwv');
   if (!host || !window.THREE) return;
-  const T = THREE, BASE = host.dataset.src || 'assets/protein/';
+  const T = THREE, BASE = host.dataset.src || 'https://static.igem.wiki/teams/6185/wiki/lastmin/protein-';
   // Embedded models follow the section's scroll-driven transform. Their internal
   // scale stays constant so moving the model to the centre does not restart a pop.
   const embed = 'embed' in host.dataset;
@@ -91,9 +91,13 @@
   if (loading) return; loading = true;
   Promise.all([
     asset('dwv-protomer.json', 'json'),
-    asset('dwv-protomer.bin', 'arrayBuffer'),
+    asset('dwv-protomer-mesh.json', 'json'),
     asset('symmetry.json', 'json'),
-  ]).then(([meta, bin, sym]) => {
+  ]).then(([meta, payload, sym]) => {
+    if (payload.format !== 'swarm-mesh-buffer-v1' || payload.encoding !== 'base64') throw new Error('Unsupported mesh buffer format');
+    const raw = atob(payload.data);
+    if (raw.length !== payload.byteLength) throw new Error('Incomplete mesh buffer');
+    const bin = Uint8Array.from(raw, character => character.charCodeAt(0)).buffer;
     const vcount = meta.chains.reduce((n, c) => Math.max(n, c.vertexStart + c.vertexCount), 0);
     const q = new Int16Array(bin, meta.bytes.positions[0], vcount * 3);
     const pos = new Float32Array(vcount * 3);

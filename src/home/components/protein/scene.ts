@@ -72,8 +72,8 @@ const VP3_CLEAR = (14 * Math.PI) / 180;
 
 export interface SceneOptions {
   mode: Mode;
-  /** Base URL of the swarm-mesh-v1 files, ending in '/'. */
-  srcBase: string;
+  /** Uploaded filename prefix; defaults to the team's iGEM asset folder. */
+  srcBase?: string;
   forceWebGL?: boolean;
   reduced: boolean;
   /** Progress applied (instantly) at mount. */
@@ -286,10 +286,11 @@ type Built = SceneHandle & { readonly backend: Backend };
  */
 export async function mountScene(host: HTMLElement, opts: SceneOptions): Promise<SceneHandle> {
   // Start the downloads while the renderer initialises.
+  const srcBase = opts.srcBase ?? 'https://static.igem.wiki/teams/6185/wiki/lastmin/protein-';
   const data: Promise<SceneData> = Promise.all([
-    loadMesh(opts.srcBase, opts.mode === 'pdomain' ? 'pdomain' : 'dwv-protomer'),
-    opts.mode !== 'pdomain' ? loadMesh(opts.srcBase, 'binder-placeholder') : null,
-    opts.mode === 'capsid' ? loadSymmetry(opts.srcBase) : null,
+    loadMesh(srcBase, opts.mode === 'pdomain' ? 'pdomain' : 'dwv-protomer'),
+    opts.mode !== 'pdomain' ? loadMesh(srcBase, 'binder-placeholder') : null,
+    opts.mode === 'capsid' ? loadSymmetry(srcBase) : null,
   ]);
   data.catch(() => {}); // an init failure below must not leave this rejection unhandled
 

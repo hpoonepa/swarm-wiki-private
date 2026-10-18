@@ -2,40 +2,109 @@
 import InformationLayout from '../layouts/InformationLayout.astro';
 const frontmatter = {
   title: 'Modeling',
-  description: 'Computational models supporting SWARM.',
-  tabLabels: ['Overview', 'Minibinder Design', 'RNAi Model', 'Minibinder Dose Model', 'Epidemiological Model', 'Instructional'],
-  tabLinks: ['model', 'model-design', 'model-rnai', 'model-minibinder', 'model-epidemiological', 'model-instructional'],
+  description: 'Connecting protein design, delivery, and bee health.',
+  noTOC: true,
+  tabLabels: ['Overview', 'Minibinder Design', 'Minibinder Dosing', 'RNAi Model', 'Epidemiological Model', 'Instructional'],
+  tabLinks: ['model', 'model-design', 'model-minibinder', 'model-rnai', 'model-epidemiological', 'model-instructional'],
 };
-const headings = [
-  { depth: 1, slug: 'overview', text: 'Overview' },
-  { depth: 1, slug: 'minibinder-design', text: 'Minibinder Design' },
-  { depth: 1, slug: 'minibinder-dose-model', text: 'Minibinder Dose Model' },
-  { depth: 1, slug: 'rnai-model', text: 'RNAi Model' },
-  { depth: 1, slug: 'epidemiological-model', text: 'Epidemiological Model' },
-  { depth: 1, slug: 'instructional', text: 'Instructional' },
-];
 ---
-<InformationLayout frontmatter={frontmatter} headings={headings}>
-  <h1 id="overview">Overview</h1>
-  <p>SWARM's modeling work examines protein design, delivery, and potential colony-level effects. The following writeups describe the questions, assumptions, methods, and results of each model.</p>
+<InformationLayout frontmatter={frontmatter}>
+  <div class="model-intro">
+    <p>Modeling helps us connect SWARM’s molecular work with questions about delivery and bee health. Our minibinder design work examines predicted protein structures alongside experimental binding results, while our minibinder dosing model explores how binding and delivery affect the amount of minibinder available to a bee.</p>
+    <p>We extend that view with RNAi modeling for the mite-focused part of our project and epidemiological modeling at the colony scale. Together, these four models connect our work across scales. Each writeup explains the assumptions, methods, and results behind that part of SWARM.</p>
+  </div>
 
-  <h1 id="minibinder-design">Minibinder Design</h1>
-  <p>Our protein-modeling work connects computational analysis to experimental binding measurements across two design campaigns. The writeup includes the predicted structure of the confirmed minibinder and an expandable table of all 35 submitted designs.</p>
-  <p><a href="/lambert-ga/model-design/">Read the Minibinder Design writeup</a>.</p>
+  <nav class="model-grid wide" aria-label="Explore our four models">
+    <a class="model-card model-card--design model-card--featured" href="/lambert-ga/model-design/">
+      <span class="model-card__eyebrow">01 · Protein modeling</span>
+      <h2>Minibinder<br />Design</h2>
+      <p>From predicted structures to measured binding.</p>
+      <svg class="model-card__art" viewBox="0 0 220 200" aria-hidden="true" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 135C76 169 39 31 104 46S47 142 119 151S190 69 142 63S130 175 204 157" stroke="#39765f" stroke-width="16" />
+        <path d="M48 176C111 181 78 106 133 109S159 20 200 35" stroke="#c88a29" stroke-width="13" />
+      </svg>
+      <span class="model-card__arrow" aria-hidden="true">↗</span>
+    </a>
 
-  <h1 id="minibinder-dose-model">Minibinder Dose Model</h1>
-  <p>The dose model examines the relationship between molecular binding, delivery, and the concentration of minibinder available to a bee.</p>
-  <p><a href="/lambert-ga/model-minibinder/">Read the Minibinder Dose Model writeup</a>.</p>
+    <a class="model-card model-card--dosing model-card--featured" href="/lambert-ga/model-minibinder/">
+      <span class="model-card__eyebrow">02 · Delivery modeling</span>
+      <h2>Minibinder<br />Dosing</h2>
+      <p>Connecting binding, delivery, and availability in bees.</p>
+      <svg class="model-card__art" viewBox="0 0 220 200" aria-hidden="true" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M28 28V170H205" stroke="#6c8a80" stroke-width="3" />
+        <path d="M35 150C66 151 60 105 95 103S127 110 140 70S180 46 200 32" stroke="#286858" stroke-width="9" />
+        <path d="M35 157C83 158 86 151 117 129S163 115 200 91" stroke="#d6a53b" stroke-width="6" stroke-dasharray="3 13" />
+        <circle cx="96" cy="103" r="8" fill="#f2d57d" />
+        <circle cx="156" cy="48" r="8" fill="#f2d57d" />
+      </svg>
+      <span class="model-card__arrow" aria-hidden="true">↗</span>
+    </a>
 
-  <h1 id="rnai-model">RNAi Model</h1>
-  <p>The RNAi model describes the modeling work supporting the RNAi component of SWARM.</p>
-  <p><a href="/lambert-ga/model-rnai/">Read the RNAi Model writeup</a>.</p>
+    <a class="model-card model-card--rnai" href="/lambert-ga/model-rnai/">
+      <span class="model-card__eyebrow">03 · RNA modeling</span>
+      <h2>RNAi</h2>
+      <p>The modeling behind our approach to the Varroa mite.</p>
+      <svg class="model-card__art model-card__art--rna" viewBox="0 0 220 250" aria-hidden="true" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M55 15C185 65 35 110 165 160S35 220 70 245" stroke="#286858" stroke-width="12" />
+        <path d="M165 15C35 65 185 110 55 160S185 220 150 245" stroke="#bc654f" stroke-width="12" />
+        <path d="M75 24H145M92 47H128M75 76H145M75 106H145M94 132H126M80 160H140M93 187H127M73 217H147M74 242H146" stroke="#f4cb67" stroke-width="7" />
+      </svg>
+      <span class="model-card__arrow" aria-hidden="true">↗</span>
+    </a>
 
-  <h1 id="epidemiological-model">Epidemiological Model</h1>
-  <p>The epidemiological model connects assumptions at the individual-bee level to questions about colony-level outcomes.</p>
-  <p><a href="/lambert-ga/model-epidemiological/">Read the Epidemiological Model writeup</a>.</p>
-
-  <h1 id="instructional">Instructional</h1>
-  <p>The instructional page provides educational material accompanying our modeling work.</p>
-  <p><a href="/lambert-ga/model-instructional/">Read the modeling instructional</a>.</p>
+    <a class="model-card model-card--epidemiology" href="/lambert-ga/model-epidemiological/">
+      <span class="model-card__eyebrow">04 · Colony modeling</span>
+      <h2>Epidemiological<br />Modeling</h2>
+      <p>From individual bees to outcomes across the colony.</p>
+      <svg class="model-card__art" viewBox="0 0 220 200" aria-hidden="true" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M47 46L112 86L179 40M112 86L175 152M112 86L47 155M47 46L47 155M179 40L175 152" stroke="#7c8f80" stroke-width="4" />
+        <path d="M47 155Q109 180 175 152" stroke="#9b8f9f" stroke-width="4" stroke-dasharray="3 10" />
+        <circle cx="47" cy="46" r="17" fill="#39765f" />
+        <circle cx="179" cy="40" r="14" fill="#39765f" />
+        <circle cx="47" cy="155" r="14" fill="#39765f" />
+        <circle cx="175" cy="152" r="20" fill="#39765f" />
+        <circle cx="112" cy="86" r="25" fill="#e8bb54" />
+        <circle cx="112" cy="86" r="10" fill="#fff4cc" />
+      </svg>
+      <span class="model-card__arrow" aria-hidden="true">↗</span>
+    </a>
+  </nav>
 </InformationLayout>
+
+<style>
+  .model-intro { padding-top: .5rem; }
+  .model-intro p { margin: 0; }
+  .model-intro p + p { margin-top: 1.25rem; }
+  .model-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 42px; }
+  .model-card { position: relative; display: block; min-height: 350px; padding: 30px 30px 160px; border-radius: 20px; overflow: hidden; isolation: isolate; color: #153f36; text-decoration: none; transition: transform .25s ease, box-shadow .25s ease; }
+  .model-card--featured { min-height: 410px; }
+  .model-card--design { background: #efd782; }
+  .model-card--dosing { background: #d5dfd3; }
+  .model-card--rnai { background: #e6b9b3; }
+  .model-card--epidemiology { background: #d6d5e4; }
+  .model-card__eyebrow { display: block; position: relative; z-index: 1; font-size: 14px; font-weight: 600; line-height: 1.4; }
+  .model-card h2 { position: relative; z-index: 1; margin: 18px 0 14px; color: #153f36; font-size: clamp(28px, 3.2vw, 42px); font-weight: 700; letter-spacing: -.045em; line-height: 1.08; overflow-wrap: normal; }
+  .model-card--featured h2 { font-size: clamp(34px, 4vw, 50px); }
+  .model-card p { position: relative; z-index: 1; margin: 0; max-width: 29ch; font-size: 17px; line-height: 1.5; }
+  .model-card__art { position: absolute; z-index: 0; width: 42%; height: 145px; right: 20px; bottom: 14px; pointer-events: none; transition: transform .4s ease; }
+  .model-card--featured .model-card__art { height: 160px; }
+  .model-card__art--rna { transform: rotate(22deg); }
+  .model-card__arrow { position: absolute; bottom: 28px; left: 30px; font-size: 40px; line-height: 1; transition: transform .25s ease; }
+  .model-card:hover { transform: translateY(-4px); box-shadow: 0 12px 25px #123b2f12; }
+  .model-card:hover .model-card__arrow { transform: translate(3px, -3px); }
+  .model-card:focus-visible { outline: 3px solid #153f36; outline-offset: 5px; }
+  @media (max-width: 650px) {
+    .model-grid { grid-template-columns: 1fr; gap: 18px; margin-top: 30px; }
+    .model-card { min-height: 330px; padding: 26px 26px 150px; }
+    .model-card--featured { min-height: 365px; }
+    .model-card h2 { font-size: clamp(29px, 7.4vw, 38px); }
+    .model-card--featured h2 { font-size: 40px; }
+    .model-card p { font-size: 16px; }
+    .model-card__arrow { left: 26px; bottom: 24px; }
+    .model-card__art, .model-card--featured .model-card__art { height: 135px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .model-card, .model-card__art, .model-card__arrow { transition: none; }
+    .model-card:hover, .model-card:hover .model-card__arrow { transform: none; }
+  }
+</style>

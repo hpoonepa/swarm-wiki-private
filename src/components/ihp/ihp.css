@@ -1,4 +1,4 @@
-@font-face{font-family:IhpHand;src:url('/lambert-ga/fonts/mansalva-regular.ttf') format('truetype');font-style:normal;font-weight:400;font-display:swap}
+@font-face{font-family:IhpHand;src:url('https://static.igem.wiki/teams/6185/wiki/lastmin/font-mansalva-regular.ttf') format('truetype');font-style:normal;font-weight:400;font-display:swap}
 #ihp-main{--ihp-ink:#75471f;--ihp-honey:#ffb522;--ihp-muted:#7c826d;overflow:hidden;overflow-wrap:normal;font-family:var(--font-sans,Inter,sans-serif)}
 #ihp-main h2::before{content:none}
 #ihp-main *,#ihp-main *::before,#ihp-main *::after{box-sizing:border-box}

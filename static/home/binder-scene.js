@@ -17,7 +17,7 @@ function loadLibrary() {
 
 export async function mountBinderScene(host, { progress = 0, reduced = false } = {}) {
   const [mol, response] = await Promise.all([
-    loadLibrary(), fetch(new URL('./assets/protein/l79_s469532_mpnn9.pdb', import.meta.url))
+    loadLibrary(), fetch(new URL('https://static.igem.wiki/teams/6185/wiki/lastmin/protein-l79_s469532_mpnn9.pdb', import.meta.url))
   ]);
   if (!response.ok) throw new Error('The predicted minibinder structure could not load.');
   const pdb = await response.text();

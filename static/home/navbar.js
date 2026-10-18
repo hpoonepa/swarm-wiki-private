@@ -105,7 +105,7 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
       this.toggleAttribute('data-homepage',isHomepage);
       const logo=isHomepage
         ? {src:'https://static.igem.wiki/teams/6185/wiki/homepage/logo.webp',width:1202,height:1354}
-        : {src:'/lambert-ga/brand/swarm-logo.svg',width:488,height:550};
+        : {src:'https://static.igem.wiki/teams/6185/wiki/lastmin/swarm-logo.svg',width:488,height:550};
       const links=items=>items.map(([title,destination])=>Array.isArray(destination)
         ? `<details class="subgroup"><summary>${title}</summary><div>${links(destination)}</div></details>`
         : `<a href="/lambert-ga/${destination}/"${destination===slug?' aria-current="page"':''}>${title}</a>`).join('');

@@ -1,0 +1,115 @@
+---
+const base = 'https://static.igem.wiki/teams/6185/wiki/lastmin/';
+const flowers = [
+  { id: 'general', name: 'General', color: 'purple', initiatives: [
+    { title: 'iGEM collaboration call', lines: ['iGEM', 'collaboration'], anchor: 'igem-human-practices-collaboration-call--sdg-4-17' },
+    { title: 'Webinars', lines: ['Webinars'], anchor: 'webinars--sdg-2-4-8-11-15-17' },
+    { title: 'Concrete Jungle workshop', lines: ['Concrete', 'Jungle'], anchor: 'concrete-jungle-workshop--sdg-2-4-8-11-15-17' },
+    { title: 'STEM for Tomorrow forum', lines: ['STEM', 'forum'], anchor: 'nwga-resa-stem-for-tomorrow-forum--sdg-4-8-17' },
+    { title: "Gardener’s Handbook", lines: ['Gardener’s', 'Handbook'], anchor: 'gardeners-handbook--sdg-2-4-11-15' },
+    { title: 'Social media', lines: ['Social', 'media'], anchor: 'social-media--sdg-2-4-5-8-11-15-17' },
+    { title: 'Mentorship', lines: ['Mentorship'], anchor: 'mentorship--sdg-4-17' },
+    { title: 'Bee PSA', lines: ['Bee PSA'], anchor: 'bee-psa--sdg-4-11-15' },
+  ] },
+  { id: 'elementary', name: 'Elementary', color: 'orange', initiatives: [
+    { title: 'Sharon Bees workshop', lines: ['Sharon Bees', 'workshop'], anchor: 'sharon-bees-workshop--sdg-4-11-15-17' },
+    { title: 'Children’s Book', lines: ['Children’s', 'Book'], anchor: 'childrens-book--sdg-4-15' },
+  ] },
+  { id: 'middle', name: 'Middle school', color: 'blue', initiatives: [
+    { title: 'Riverwatch workshops', lines: ['Riverwatch', 'workshops'], anchor: 'riverwatch-workshops--sdg-4-15-17' },
+    { title: 'Biotech Bootcamp', lines: ['Biotech', 'Bootcamp'], anchor: 'biotech-bootcamp--sdg-4-15-17' },
+  ] },
+  { id: 'high', name: 'High school', color: 'pink', initiatives: [
+    { title: 'Pollinator presentations', lines: ['Pollinator', 'presentations'], anchor: 'pollinator-presentations--sdg-2-4-11-15' },
+    { title: 'Connectivity Night', lines: ['Connectivity', 'Night'], anchor: 'connectivity-night--sdg-4-17' },
+  ] },
+];
+---
+
+<nav class="education-garden wide" aria-label="Explore our education initiatives">
+  <p class="garden-intro">Pick a petal to explore an initiative.</p>
+  <div class="garden-flowers">
+    {flowers.map((flower) => {
+      const art = `${base}education-flower-${flower.color}.avif`;
+      const general = flower.id === 'general';
+      const count = general ? 8 : 6;
+      return (
+        <div class={`garden-flower garden-flower--${flower.id}`}>
+          <svg viewBox="55 225 420 610" role="group" aria-label={flower.name}>
+            <defs>
+              <clipPath id={`petal-${flower.id}`}><path d="M194 242H338V386H194Z" /></clipPath>
+              <clipPath id={`center-${flower.id}`}><circle cx="264" cy="433" r="67" /></clipPath>
+              <clipPath id={`stem-${flower.id}`}><path d="M170 782H360V1020H170Z" /></clipPath>
+            </defs>
+            <g transform="translate(0 -200)" aria-hidden="true">
+              <image href={art} width="1920" height="1080" clip-path={`url(#stem-${flower.id})`} />
+            </g>
+            {Array.from({ length: count }, (_, index) => {
+              const angle = index * 360 / count;
+              const initiative = general ? flower.initiatives[index] : index === 1 ? flower.initiatives[1] : index === 5 ? flower.initiatives[0] : null;
+              const x = 264 + Math.sin(angle * Math.PI / 180) * 132;
+              const y = 433 - Math.cos(angle * Math.PI / 180) * 132;
+              const petal = (
+                <g transform={`rotate(${angle} 264 433)`}>
+                  <image href={art} width="1920" height="1080" clip-path={`url(#petal-${flower.id})`} />
+                  <path class="petal-hit" d="M232 378C210 352 194 309 203 279C212 241 306 241 322 270C345 310 317 357 297 378Z" />
+                </g>
+              );
+              return initiative ? (
+                <a href={`#${initiative.anchor}`} aria-label={`${flower.name}: ${initiative.title}`}>
+                  <title>{initiative.title} — read the writeup</title>
+                  {petal}
+                  <text x={x} y={y - (initiative.lines.length - 1) * 9 + 5} text-anchor="middle">
+                    {initiative.lines.map((line, lineIndex) => <tspan x={x} dy={lineIndex ? 18 : 0}>{line}</tspan>)}
+                  </text>
+                </a>
+              ) : <g aria-hidden="true">{petal}</g>;
+            })}
+            <image href={art} width="1920" height="1080" clip-path={`url(#center-${flower.id})`} aria-hidden="true" />
+            <text class="flower-name" x="264" y={flower.name.includes(' ') ? 429 : 440} text-anchor="middle" aria-hidden="true">
+              {flower.name.split(' ').map((line, index) => <tspan x="264" dy={index ? 23 : 0}>{line}</tspan>)}
+            </text>
+          </svg>
+        </div>
+      );
+    })}
+  </div>
+  <p class="garden-inclusivity">Explore our <a href="#inclusivity">inclusive education resources</a>, too.</p>
+</nav>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('.education-garden a[href^="#"]').forEach(link => {
+    link.addEventListener('click', event => {
+      const target = document.getElementById(link.hash.slice(1));
+      if (!target) return;
+      event.preventDefault();
+      history.pushState(null, '', link.hash);
+      target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+      target.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
+      target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true });
+    });
+  });
+</script>
+
+<style>
+  .education-garden { margin-block: 24px 38px; }
+  .education-garden .garden-intro { text-align: center; margin: 0 0 16px; color: #516449; }
+  .garden-flowers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 20px; align-items: end; }
+  .garden-flower { width: 100%; max-width: 400px; justify-self: center; }
+  .garden-flower--elementary { transform: rotate(2deg); }
+  .garden-flower--middle { transform: rotate(-2deg); }
+  .garden-flower svg { display: block; width: 100%; overflow: visible; }
+  .garden-flower image, .garden-flower text { pointer-events: none; }
+  .garden-flower text { fill: #273b2f; font: 600 15px 'Space Grotesk Variable', sans-serif; }
+  .garden-flower .flower-name { fill: #273b2f; font-size: 19px; font-weight: 700; }
+  .petal-hit { fill: transparent; stroke: transparent; stroke-width: 4; transition: fill .15s, stroke .15s; }
+  .garden-flower a { cursor: pointer; outline: none; }
+  .garden-flower a:hover .petal-hit { fill: #fff7d936; stroke: #43684d; }
+  .garden-flower a:focus-visible .petal-hit { fill: #fff7d955; stroke: #153f36; stroke-width: 5; }
+  .education-garden .garden-inclusivity { margin: 8px 0 0; text-align: center; font-size: .9em; }
+  @media (max-width: 620px) {
+    .garden-flowers { grid-template-columns: 1fr; gap: 4px; }
+    .garden-flower { max-width: 360px; }
+  }
+</style>

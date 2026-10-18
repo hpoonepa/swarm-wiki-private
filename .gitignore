@@ -32,3 +32,6 @@ CLAUDE.md
 AGENTS.md
 LOCAL-CHANGES.md
 .agent-logs/
+
+# Generated deployment output (rebuilt by the Pages job)
+/public/

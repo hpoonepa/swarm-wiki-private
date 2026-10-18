@@ -117,7 +117,7 @@ const regions = [
         const [imported, response] = await Promise.all([
           // @ts-expect-error The browser bundle has no declaration; its API is typed through the package below.
           import('3dmol/build/3Dmol.js'),
-          fetch('/lambert-ga/binder-models/design-02.json', { credentials: 'omit', signal: AbortSignal.timeout(20000) }),
+          fetch('https://static.igem.wiki/teams/6185/wiki/lastmin/binder-design-02.json', { credentials: 'omit', signal: AbortSignal.timeout(20000) }),
         ]);
         if (!response.ok) throw new Error('Target structure could not be loaded. The epitope table is still available below.');
         const payload = await response.json();

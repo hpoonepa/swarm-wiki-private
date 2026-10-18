@@ -21,5 +21,5 @@ export const designs: BinderDesign[] = [
 ];
 
 export function modelUrl(file: string): string {
-  return '/lambert-ga/binder-models/' + encodeURIComponent(file);
+  return 'https://static.igem.wiki/teams/6185/wiki/lastmin/binder-' + encodeURIComponent(file);
 }

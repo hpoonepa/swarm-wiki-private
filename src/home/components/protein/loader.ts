@@ -122,11 +122,23 @@ async function fetchOk(url: string): Promise<Response> {
   return res;
 }
 
-/** Fetches and decodes `<base><name>.json` + `.bin` (same-origin, base-aware URL from the element). */
+/** Decode the lossless JSON envelope used by iGEM's asset uploader. */
+export function decodeMeshBuffer(payload: { format: string; encoding: string; byteLength: number; data: string }): ArrayBuffer {
+  if (payload.format !== 'swarm-mesh-buffer-v1' || payload.encoding !== 'base64') {
+    throw new Error('Unsupported mesh buffer format');
+  }
+  const raw = atob(payload.data);
+  if (raw.length !== payload.byteLength) throw new Error('Incomplete mesh buffer');
+  const bytes = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
+  return bytes.buffer;
+}
+
+/** Fetches metadata and its lossless JSON mesh buffer from the uploaded asset prefix. */
 export async function loadMesh(base: string, name: string): Promise<{ meta: MeshMeta; mesh: DecodedMesh }> {
   const [meta, buf] = await Promise.all([
     fetchOk(`${base}${name}.json`).then((r) => r.json() as Promise<MeshMeta>),
-    fetchOk(`${base}${name}.bin`).then((r) => r.arrayBuffer()),
+    fetchOk(`${base}${name}-mesh.json`).then((r) => r.json()).then(decodeMeshBuffer),
   ]);
   return { meta, mesh: decodeMesh(meta, buf) };
 }
