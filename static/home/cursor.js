@@ -8,7 +8,10 @@
 .story-cursor svg { position: relative; width: 100%; height: 100%; filter: drop-shadow(0 1px 1px #29213724); transition: transform .12s; }
 .story-cursor[data-link="true"] span { opacity: .42; transform: scale(.85); }
 .story-cursor[data-pressed="true"] svg { transform: scale(.87); transform-origin: 3px 4px; }
-@media (hover:hover) and (pointer:fine) { html.has-story-cursor, html.has-story-cursor * { cursor: none !important; } }
+@media (hover:hover) and (pointer:fine) {
+  html.has-story-cursor:not(:has(dialog:modal)), html.has-story-cursor:not(:has(dialog:modal)) * { cursor: none !important; }
+  html:has(dialog:modal) .story-cursor { visibility: hidden; }
+}
 @media (prefers-reduced-motion:reduce) { .story-cursor span,.story-cursor svg { transition: none; } }
 `;
   document.head.append(style);
@@ -50,7 +53,9 @@
   function paint() {
     frame = 0;
     const target = document.elementFromPoint(x, y);
-    if (!fine.matches || !inside || document.hidden || !target || target.closest('input,textarea,select,[contenteditable="true"],iframe') || document.documentElement.classList.contains('honey-scrubbing')) {
+    // Modal dialogs occupy the browser's top layer, above any document z-index.
+    // Use the native pointer there so it stays visible over both paper and backdrop.
+    if (!fine.matches || !inside || document.hidden || document.querySelector('dialog:modal') || !target || target.closest('input,textarea,select,[contenteditable="true"],iframe') || document.documentElement.classList.contains('honey-scrubbing')) {
       hide(); return;
     }
     const nav = target.closest('swarm-nav');
@@ -60,6 +65,11 @@
     show();
   }
   function kick() { if (!frame) frame = requestAnimationFrame(paint); }
+  new MutationObserver(records => {
+    if (!records.some(record => record.target instanceof HTMLDialogElement)) return;
+    if (document.querySelector('dialog:modal')) hide();
+    else kick();
+  }).observe(document.documentElement, { subtree: true, attributes: true, attributeFilter: ['open'] });
   function move(event) {
     if (event.pointerType === 'touch') { inside = false; hide(); return; }
     x = event.clientX; y = event.clientY; inside = true;

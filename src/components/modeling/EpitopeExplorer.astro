@@ -1,0 +1,234 @@
+---
+interface Props { princeRegion?: string }
+const { princeRegion } = Astro.props;
+// These are the five regions in the supplied writeup, not newly predicted sites.
+const regions = [
+  { id: 'initial', name: 'Initial C-terminal region', short: 'Initial region', color: '#a5523e', residues: [405, 408], labels: 'I405, F408', observation: 'Favorable geometry in the isolated domain; this region was unresolved in the analyzed assembled-capsid structure.', history: 'The first campaign investigated this region using the isolated-domain structure. Comparison with the larger assembly exposed uncertainty that was not apparent from the isolated model.', outcome: 'Round 1: no confirmed binding hit among 15 submissions.' },
+  { id: 'ep1', name: 'EP-1', short: 'EP-1', color: '#38749a', residues: [302, 359, 395], labels: 'I302, Y359, R395', observation: 'Alternative candidate region. Cropping affected the apparent exposure of parts of this surface.', history: 'EP-1 was included in the computational comparison of alternative regions. Its record illustrates why a surface exposed in a cropped target needs to be interpreted in the context of the larger structure.', outcome: 'Computationally evaluated; no confirmed binding hit mapped to this region in the supplied writeup.' },
+  { id: 'ep2', name: 'EP-2', short: 'EP-2', color: '#81619b', residues: [322, 325, 346], labels: 'V322, Q325, Y346', observation: 'Alternative region that overlaps QP / A-ridge at Q325.', history: 'The writeup records EP-2 as part of the alternative-region investigation. It overlaps the region associated with the confirmed candidate, but the full three-residue group was not independently established as an experimental binding epitope.', outcome: 'Supported further investigation of the overlapping region; not a separately validated epitope.' },
+  { id: 'qp', name: 'QP / A-ridge', short: 'QP / A-ridge', color: '#287d60', residues: [325, 326], labels: 'Q325, P326', observation: 'Reported as resolved and exposed in the assembly comparison. Associated with the confirmed candidate’s predicted pose.', history: 'The Round 2 records assign l79_s469532_mpnn9 to the QP / A-ridge campaign. This 79-amino-acid BindCraft candidate was evaluated computationally and then tested by BLI. Its combined measured affinity was 603.6 nM across two replicates.', outcome: 'Confirmed binder associated with this region. BLI confirms binding to the tested construct; it does not establish residue-level contacts.' },
+  { id: 'triad', name: 'Alternative triad region', short: 'Alternative triad', color: '#b38227', residues: [277, 278, 294], labels: 'H277, S278, D294', observation: 'A historically proposed region; the catalytic interpretation was not supported by the later evidence review.', history: 'Four submitted designs were assigned to this arm. The subsequent evidence review distinguished the existence of the structural region from an unproven functional interpretation. The term “triad” is retained here to match the campaign record.', outcome: 'Four Round 2 submissions; no confirmed binding hit. No function-blocking claim is supported.' },
+];
+---
+
+<div class="ep-explorer wide" id="epitope-explorer">
+  <figure class="ep-figure" aria-labelledby="ep-map-title">
+    <div class="ep-heading">
+      <div><h3 id="ep-map-title">VP3 epitope map</h3><p>Five regions from our writeup, shown on the target.</p></div>
+      <button class="ep-reset" type="button" disabled>Reset view</button>
+    </div>
+    <div class="ep-stage">
+      <div class="ep-canvas" tabindex="0" role="region" aria-label="Interactive VP3 target. Drag or use arrow keys to rotate; plus and minus to zoom."></div>
+      <div class="ep-markers" aria-label="Select a region on the target" hidden>
+        <svg class="ep-leaders" aria-hidden="true">{regions.map(region => <line data-leader={region.id} stroke={region.color} />)}</svg>
+        {regions.map((region, index) => <a class="ep-marker" href={`#epitope-${region.id}`} data-region={region.id} style={`--ep-color:${region.color}`} aria-label={`${region.name}: read design history and outcome`} title={`${region.name} · ${region.labels}`}><span>{index + 1}</span><span class="ep-marker-label">{region.short}<small>{region.labels}</small></span></a>)}
+      </div>
+      <p class="ep-status" role="status">Loading the target structure…</p>
+      <p class="ep-gesture">Drag to rotate · Scroll to zoom · Select a numbered region</p>
+    </div>
+    <div class="ep-controls">
+      <label><input class="ep-binder-toggle" type="checkbox" disabled /> Show the confirmed minibinder’s predicted pose</label>
+      <label>View <select class="ep-representation" disabled><option value="surface">Surface</option><option value="cartoon">Cartoon</option></select></label>
+    </div>
+    <p class="ep-readout" role="status" aria-live="polite">Select a numbered site to see its name, residues, and table record.</p>
+    <nav class="ep-legend" aria-label="Epitope regions">
+      {regions.map((region, index) => <a href={`#epitope-${region.id}`} data-region={region.id} style={`--ep-color:${region.color}`}><span class="ep-number">{index + 1}</span><span>{region.short}{region.id === princeRegion && <small>PRINCE evidence review</small>}{region.id === 'qp' && <small>Confirmed binder</small>}</span></a>)}
+    </nav>
+    <figcaption>Figure 1. Reported candidate regions on the VP3 P-domain target from the existing predicted complex. Numbers link to the corresponding table row. Residue labels use the writeup’s numbering (260–416); the model file uses 1–157. EP-2 and QP overlap at Q325, shown in the QP color when all sites are displayed. This is a domain view, not an assembled-capsid accessibility map.</figcaption>
+  </figure>
+
+  <div class="ep-table-wrap" role="region" aria-label="Epitope comparison and design history" tabindex="0">
+    <table class="ep-table">
+      <caption>Table 1. Candidate regions, their reported rationale, and experimental outcomes. Select a region on the target to open its design history.</caption>
+      <thead><tr><th scope="col">Region</th><th scope="col">Reported residues</th><th scope="col">Rationale and design history</th><th scope="col">Outcome</th></tr></thead>
+      <tbody>{regions.map((region, index) => <tr id={`epitope-${region.id}`} data-ep-row={region.id} data-residues={region.residues.join(',')} data-color={region.color} tabindex="-1" style={`--ep-color:${region.color}`}>
+        <th scope="row"><span class="ep-region-title"><span class="ep-number">{index + 1}</span>{region.name}</span>{region.id === princeRegion && <span class="ep-badge ep-badge-prince">PRINCE evidence review</span>}{region.id === 'qp' && <span class="ep-badge">Confirmed binder</span>}<a class="ep-back" href="#epitope-explorer" data-show-region={region.id}>Show on target ↑</a></th>
+        <td class="ep-residues">{region.labels}</td>
+        <td><p>{region.observation}</p><details class="ep-history"><summary>Design history</summary><p>{region.history}</p>{region.id === princeRegion && <p>The retained PRINCE evidence table reviews this region and distinguishes a proposed function from experimental support. This label identifies that documented review, not a successful binding outcome. <a href="/lambert-ga/software/">Read the PRINCE writeup</a>.</p>}</details></td>
+        <td><p>{region.outcome}</p>{region.id === 'qp' && <a href="#structure">Experimental measurements ↓</a>}</td>
+      </tr>)}</tbody>
+    </table>
+  </div>
+  <noscript><p>The complete epitope table is available above. Enable JavaScript to rotate the target and select regions on its structure.</p></noscript>
+</div>
+
+<script>
+  import type { AtomSpec, GLViewer } from '3dmol';
+
+  const root = document.querySelector<HTMLElement>('#epitope-explorer');
+  if (root) {
+    const canvas = root.querySelector<HTMLElement>('.ep-canvas')!;
+    const status = root.querySelector<HTMLElement>('.ep-status')!;
+    const markerLayer = root.querySelector<HTMLElement>('.ep-markers')!;
+    const binderToggle = root.querySelector<HTMLInputElement>('.ep-binder-toggle')!;
+    const representation = root.querySelector<HTMLSelectElement>('.ep-representation')!;
+    const reset = root.querySelector<HTMLButtonElement>('.ep-reset')!;
+    const readout = root.querySelector<HTMLElement>('.ep-readout')!;
+    const regions = [...root.querySelectorAll<HTMLElement>('[data-ep-row]')].map(row => ({
+      id: row.dataset.epRow!, row, color: row.dataset.color!,
+      // Explicit mapping from the existing viewer export; no sequence alignment or site prediction.
+      residues: row.dataset.residues!.split(',').map(value => Number(value) - 259),
+      marker: root.querySelector<HTMLElement>(`.ep-marker[data-region="${row.dataset.epRow}"]`)!,
+      name: row.querySelector<HTMLElement>('.ep-region-title')!.textContent!.trim().replace(/^\d+\s*/, ''),
+      labels: row.querySelector<HTMLElement>('.ep-residues')!.textContent!.trim(),
+    }));
+    let viewer: GLViewer | undefined;
+    let selected = '';
+    let redraw: (() => void) | undefined;
+    let initialView: number[] | undefined;
+    let starting = false;
+
+    function choose(id: string, destination: 'table' | 'viewer' | 'none') {
+      const region = regions.find(item => item.id === id);
+      if (!region) return;
+      selected = id;
+      readout.textContent = `${region.name} · ${region.labels}${id === 'qp' ? ' · Confirmed binder associated with this region' : ''}`;
+      for (const item of regions) {
+        item.row.classList.toggle('is-selected', item.id === id);
+        for (const link of root!.querySelectorAll<HTMLElement>(`[data-region="${item.id}"]`)) {
+          if (item.id === id) link.setAttribute('aria-current', 'true');
+          else link.removeAttribute('aria-current');
+        }
+      }
+      redraw?.();
+      if (destination === 'table') {
+        region.row.querySelector<HTMLDetailsElement>('details')!.open = true;
+        region.row.focus({ preventScroll: true });
+        region.row.scrollIntoView({ behavior: 'instant', block: 'start' });
+        history.replaceState(null, '', `#epitope-${id}`);
+      } else if (destination === 'viewer') {
+        canvas.focus({ preventScroll: true });
+        root!.scrollIntoView({ behavior: 'instant', block: 'start' });
+        history.replaceState(null, '', '#epitope-explorer');
+      }
+    }
+
+    root.querySelectorAll<HTMLAnchorElement>('[data-region]').forEach(link => link.addEventListener('click', event => {
+      event.preventDefault(); choose(link.dataset.region!, 'table');
+    }));
+    root.querySelectorAll<HTMLAnchorElement>('[data-show-region]').forEach(link => link.addEventListener('click', event => {
+      event.preventDefault(); choose(link.dataset.showRegion!, 'viewer');
+    }));
+
+    async function start() {
+      if (starting) return;
+      starting = true;
+      try {
+        const [imported, response] = await Promise.all([
+          // @ts-expect-error The browser bundle has no declaration; its API is typed through the package below.
+          import('3dmol/build/3Dmol.js'),
+          fetch('/lambert-ga/binder-models/design-02.json', { credentials: 'omit', signal: AbortSignal.timeout(20000) }),
+        ]);
+        if (!response.ok) throw new Error('Target structure could not be loaded. The epitope table is still available below.');
+        const payload = await response.json();
+        if (payload.format !== 'pdb' || typeof payload.data !== 'string') throw new Error('The target file has an unsupported format.');
+        const lib = (imported.default || imported) as typeof import('3dmol');
+        lib.setSyncSurface(true);
+        const view = lib.createViewer(canvas, { backgroundColor: '#fbf8ef', antialias: true });
+        viewer = view;
+        view.setProjection('orthographic');
+        const model = view.addModel(payload.data, 'pdb', { keepH: false });
+        type PositionedResidue = AtomSpec & { resi: number; x: number; y: number; z: number };
+        const target = model.selectedAtoms({ chain: 'B', atom: 'CA' }).filter((atom): atom is PositionedResidue =>
+          [atom.resi, atom.x, atom.y, atom.z].every(value => typeof value === 'number' && Number.isFinite(value)));
+        const centers = regions.map(region => {
+          const atoms = target.filter(atom => region.residues.includes(atom.resi));
+          if (atoms.length !== region.residues.length) throw new Error('A region is missing from the target model. Use the table below.');
+          return { x: atoms.reduce((n, a) => n + a.x, 0) / atoms.length, y: atoms.reduce((n, a) => n + a.y, 0) / atoms.length, z: atoms.reduce((n, a) => n + a.z, 0) / atoms.length };
+        });
+        const colors: Record<string, string> = Object.fromEntries(target.map(atom => [String(atom.resi), '#c4cabc']));
+        // QP is later than EP-2 so their shared residue keeps the confirmed-candidate region's color.
+        for (const region of regions) for (const resi of region.residues) colors[String(resi)] = region.color;
+        const surface = await view.addSurface(lib.SurfaceType.MS, { opacity: .9, colorscheme: { prop: 'resi', map: colors } }, { chain: 'B' });
+        const positionMarkers = () => {
+          // 3Dmol projects into document coordinates; the overlay uses local CSS pixels.
+          const bounds = canvas.getBoundingClientRect();
+          const originX = bounds.left + window.scrollX - document.documentElement.clientLeft;
+          const originY = bounds.top + window.scrollY - document.documentElement.clientTop;
+          const points = (view.modelToScreen(centers) as { x: number; y: number }[])
+            .map(point => ({ x: point.x - originX, y: point.y - originY }));
+          const width = canvas.clientWidth, height = canvas.clientHeight;
+          const placed: { x: number; y: number }[] = [];
+          points.forEach((point, index) => {
+            const marker = regions[index].marker;
+            const line = markerLayer.querySelector<SVGLineElement>(`[data-leader="${regions[index].id}"]`)!;
+            const offscreen = point.x < 0 || point.x > width || point.y < 0 || point.y > height;
+            marker.hidden = offscreen;
+            line.style.display = offscreen ? 'none' : '';
+            if (offscreen) return;
+            const x = point.x;
+            let y = point.y;
+            for (let attempt = 0; attempt < regions.length; attempt++) {
+              if (!placed.some(other => Math.hypot(other.x - x, other.y - y) < 42)) break;
+              y += y > height / 2 ? -44 : 44;
+            }
+            placed.push({ x, y });
+            marker.style.left = `${x}px`; marker.style.top = `${y}px`;
+            line.setAttribute('x1', String(point.x)); line.setAttribute('y1', String(point.y));
+            line.setAttribute('x2', String(x)); line.setAttribute('y2', String(y));
+          });
+        };
+        redraw = () => {
+          const solid = representation.value === 'surface';
+          const active = regions.find(region => region.id === selected);
+          const displayColors = { ...colors };
+          if (active) for (const resi of active.residues) displayColors[String(resi)] = active.color;
+          view.setSurfaceMaterialStyle(surface, { opacity: solid ? .9 : 0, colorscheme: { prop: 'resi', map: displayColors } });
+          model.setStyle({}, {});
+          model.setStyle({ chain: 'B' }, { cartoon: { color: '#9aa994', opacity: solid ? .2 : 1 } });
+          for (const region of regions) {
+            model.setStyle({ chain: 'B', resi: region.residues }, { cartoon: { color: region.color }, stick: { color: region.color, radius: region.id === selected ? .38 : .2 } });
+          }
+          if (active) model.setStyle({ chain: 'B', resi: active.residues }, { cartoon: { color: active.color }, stick: { color: active.color, radius: .38 }, sphere: { color: active.color, scale: .32 } });
+          if (binderToggle.checked) model.setStyle({ chain: 'A' }, { cartoon: { color: '#dca52d' } });
+          view.render(); positionMarkers();
+        };
+        for (const region of regions) model.setClickable({ chain: 'B', resi: region.residues }, true, (atom: AtomSpec) => {
+          if (typeof atom.resi !== 'number') return;
+          // The shared residue follows the selected site, otherwise its QP table association.
+          const matching = regions.filter(item => item.residues.includes(atom.resi!));
+          choose(matching.find(item => item.id === selected)?.id || matching.at(-1)!.id, 'table');
+        });
+        view.setViewChangeCallback(positionMarkers);
+        view.zoomTo({ chain: 'B' }); view.rotate(25, 'y'); view.rotate(-15, 'x'); view.zoom(1.3);
+        initialView = view.getView();
+        redraw();
+        new ResizeObserver(() => { view.resize(); positionMarkers(); }).observe(canvas);
+        status.hidden = true;
+        markerLayer.hidden = false;
+        binderToggle.disabled = representation.disabled = reset.disabled = false;
+        representation.addEventListener('change', () => redraw?.());
+        binderToggle.addEventListener('change', () => {
+          redraw?.();
+          view.zoomTo(binderToggle.checked ? {} : { chain: 'B' });
+          view.zoom(1.2); view.render(); positionMarkers();
+        });
+        reset.addEventListener('click', () => {
+          if (initialView) view.setView(initialView);
+          binderToggle.checked = false; selected = '';
+          readout.textContent = 'All five reported regions are shown. Select a numbered site to open its record.';
+          regions.forEach(region => region.row.classList.remove('is-selected'));
+          root!.querySelectorAll('[aria-current]').forEach(link => link.removeAttribute('aria-current'));
+          redraw?.();
+        });
+      } catch (error) {
+        status.textContent = error instanceof Error ? error.message : 'The 3D viewer is unavailable. Use the epitope table below.';
+      }
+    }
+
+    canvas.addEventListener('keydown', event => {
+      if (!viewer || !['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', '+', '=', '-'].includes(event.key)) return;
+      event.preventDefault();
+      if (event.key.startsWith('Arrow')) viewer.rotate(event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -8 : 8, event.key === 'ArrowLeft' || event.key === 'ArrowRight' ? 'y' : 'x');
+      else viewer.zoom(event.key === '-' ? .9 : 1.1);
+      viewer.render();
+    });
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) { observer.disconnect(); void start(); }
+    }, { rootMargin: '350px' });
+    observer.observe(root);
+    const requested = window.location.hash.replace('#epitope-', '');
+    if (regions.some(region => region.id === requested)) choose(requested, 'table');
+    else choose('qp', 'none');
+  }
+</script>

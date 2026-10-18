@@ -1,13 +1,39 @@
 ---
-import ContentLayout from '../layouts/ContentLayout.astro';
+import InformationLayout from '../layouts/InformationLayout.astro';
 import IhpPage from '../components/ihp/IhpPage.astro';
 const frontmatter = { title: 'Integrated Human Practices', noTOC: true };
 ---
-<ContentLayout frontmatter={frontmatter}>
+<InformationLayout frontmatter={frontmatter}>
+  <header slot="hero" class="ihp-page-header">
+    <h1>Integrated Human Practices</h1>
+  </header>
+  <IhpPage />
   <h2 id="abstract">Abstract</h2>
   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae ligula quis augue volutpat finibus. Curabitur sollicitudin, neque vitae faucibus facilisis, urna justo tincidunt erat, at consequat ipsum arcu vel purus.</p>
 
   <h2 id="introduction">Introduction</h2>
   <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent euismod orci sit amet lectus facilisis, in tincidunt justo interdum. Donec quis ante vitae augue fermentum suscipit. Mauris at nibh sed lorem porttitor tincidunt. Nunc in justo sit amet felis tincidunt consequat.</p>
-  <IhpPage />
-</ContentLayout>
+</InformationLayout>
+
+<style>
+  .ihp-page-header {
+    width: min(940px, 100% - 2 * var(--gutter));
+    margin-inline: auto;
+    padding-block: calc(var(--nav-h) + 24px) 16px;
+  }
+  .ihp-page-header h1 {
+    margin: 0;
+    font-size: clamp(26px, 3.2vw, 40px);
+    font-weight: 600;
+    line-height: 1.15;
+    letter-spacing: -.035em;
+  }
+  :global(.info-page:has(#ihp-main) .sheet) {
+    margin-block: 0;
+    padding-block-start: 0;
+    border-radius: 0;
+  }
+  :global(.info-page:has(#ihp-main) .longform) {
+    width: 100%;
+  }
+</style>

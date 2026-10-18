@@ -15,11 +15,28 @@ import '../styles/global.css';
     <link rel="icon" href="/lambert-ga/favicon.svg" type="image/svg+xml" />
     <link rel="icon" href="/lambert-ga/favicon-32.png" type="image/png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/lambert-ga/apple-touch-icon.png" />
+    <script is:inline>
+      if (new URLSearchParams(location.search).get('embed') === '1') document.documentElement.dataset.binderEmbed = '';
+    </script>
   </head>
   <body class="binder-page">
     <a class="bv-skip" href="#binder-main">Skip to the structure viewer</a>
-    <Nav client:load />
+    <div class="bv-page-navigation"><Nav client:load /></div>
     <BinderViewer />
-    <Footer />
+    <div class="bv-page-footer"><Footer /></div>
   </body>
 </html>
+
+<style is:global>
+  html[data-binder-embed] { background: #fff8e7; }
+  html[data-binder-embed] .binder-page { background: #fff8e7; }
+  html[data-binder-embed] :is(.bv-page-navigation,.bv-page-footer,.bv-header,.bv-designs,.bv-settings,.bv-sequence-panel,.bv-prediction-note) { display: none; }
+  html[data-binder-embed] .bv-main { max-width: none; margin: 0; padding: 0 14px; }
+  html[data-binder-embed] .bv-workspace { display: block; border: 0; }
+  html[data-binder-embed] .bv-view { padding: 0; }
+  html[data-binder-embed] .bv-view-heading { min-height: 65px; padding: 10px 5px; border: 0; border-radius: 0; background: transparent; }
+  html[data-binder-embed] .bv-stage { height: calc(100svh - 112px); min-height: 300px; border: 0; border-radius: 0; }
+  html[data-binder-embed] .bv-under-stage { padding: 8px 6px; min-height: 34px; }
+  html[data-binder-embed] .bv-stage-legend { left: 6px; top: 10px; }
+  html[data-binder-embed] .bv-toolbar { gap: 1px; }
+</style>

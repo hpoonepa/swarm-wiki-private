@@ -1,16 +1,10 @@
 ---
-interface Props { photo?: string; flower?: boolean }
-const { photo, flower = false } = Astro.props;
+interface Props { photo?: string; name: string }
+const { photo, name } = Astro.props;
+const initials = name.split(' ').map(part => part[0]).slice(0, 2).join('');
 ---
-<span class:list={['hive-portrait', { 'hive-portrait--flower': flower }]} aria-hidden="true">
-  {flower && <svg class="hive-petals" viewBox="0 0 240 240" fill="currentColor" focusable="false">
-    {Array.from({ length: 8 }, (_, i) => <ellipse cx="120" cy="53" rx="34" ry="49" transform={`rotate(${i * 45} 120 120)`} />)}
-  </svg>}
+<span class="hive-portrait" aria-hidden="true">
   <span class="hive-portrait__border"><span class="hive-portrait__surface">
-    {photo ? <img src={photo} alt="" width="360" height="420" loading="lazy" decoding="async" /> : <svg class="hive-portrait__placeholder" viewBox="0 0 160 180" fill="none" focusable="false">
-      <circle cx="80" cy="66" r="24" fill="currentColor" opacity=".28" />
-      <path d="M24 155c0-34 21-56 56-56s56 22 56 56" fill="currentColor" opacity=".18" />
-      <path d="M55 66c0 15 11 26 25 26 15 0 25-11 25-26M31 148c2-28 20-44 49-44s47 16 49 44" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".38" />
-    </svg>}
+    {photo ? <img src={photo} alt="" width="360" height="540" loading="lazy" decoding="async" /> : <span class="hive-portrait__initials">{initials}</span>}
   </span></span>
 </span>

@@ -393,7 +393,7 @@ html.loading .honey-progress { visibility: hidden; }
 .dwv-story { position: absolute; inset: 0; z-index: 3; opacity: 0; visibility: hidden; pointer-events: none; }
 .bee-comparison { position: absolute; inset: 0; opacity: 0; --compare: 0; --sev: 0; --mite-arrival: 0; --mite-visible: 0; --bite: 0; }
 .dwv-bee { position: absolute; left: 71%; top: 53%; width: var(--bee, 520px); margin: 0; text-align: center; transform: translate(-50%, -50%) translateY(calc((1 - var(--compare)) * 26px)); }
-.dwv-bee svg { display: block; width: 100%; height: auto; overflow: visible; }
+.dwv-bee > svg:not(.dwv-mite) { display: block; width: 100%; height: auto; overflow: visible; }
 .dwv-wing { fill: #dce5e2; fill-opacity: .74; stroke: #a0ada4; stroke-opacity: calc(.25 + var(--sev) * .45); stroke-width: 2; stroke-linejoin: round; }
 .bee-comparison h3 { margin: 0; font-size: 14px; font-weight: 500; letter-spacing: .01em; color: color-mix(in srgb, #963c39 calc(var(--sev) * 100%), #50695d); }
 .dwv-mite { position: absolute; z-index: 2; left: 46%; top: 54%; width: 18%; height: auto; opacity: var(--mite-visible); transform: translate3d(calc((1 - var(--mite-arrival)) * 280%), calc((1 - var(--mite-arrival)) * -210%), 0) rotate(calc(-22deg + (1 - var(--mite-arrival)) * 38deg)); transform-origin: 50% 50%; will-change: transform, opacity; }
@@ -408,35 +408,31 @@ html.loading .honey-progress { visibility: hidden; }
 @media(max-width:760px) and (max-height:700px) {
   .dwv-bee { top: 70%; }
 }
-/* The quarterly series stays attached to the globe, separate from the annual statistic. */
-.loss-years { position: absolute; z-index: 4; right: max(88px,7vw); bottom: 4.5%; left: auto; top: auto; width: clamp(300px,25vw,360px); max-width: calc(100% - 40px); padding: 19px 20px 16px; border: 1px solid #ded8c7; border-radius: 18px; background: #fffdf7; color: #153f36; box-shadow: 0 8px 25px #153f360b; opacity: 0; visibility: hidden; --t: 0; }
-.ly-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px 14px; }
-.loss-years .ly-label { font-size: 14px; line-height: 1.4; font-weight: 650; color: #2e5546; }
-.loss-years .ly-period { color: #687467; font-size: 14px; line-height: 1.4; }
-.ly-reading { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin: 15px 0 12px; }
-.loss-years .ly-total { display: block; font-size: clamp(30px,2.6vw,38px); line-height: 1.05; letter-spacing: -.04em; font-weight: 750; font-variant-numeric: tabular-nums; white-space: nowrap; }
-.loss-years .ly-unit { display: block; margin-top: 5px; color: #566b5e; font-size: 14px; line-height: 1.3; }
-.loss-years .ly-year { display: block; padding: 8px 10px; border-radius: 9px; background: #f5e8bd; color: #705428; font-size: 22px; line-height: 1.2; font-weight: 650; letter-spacing: -.025em; font-variant-numeric: tabular-nums; }
-.loss-years .ly-scope { margin: 0 0 10px; color: #627265; font-size: 14px; line-height: 1.45; }
-.ly-footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-.loss-years .ly-source { display: inline-flex; align-items: center; gap: 7px; min-height: 28px; color: #355c4c; font-size: 14px; line-height: 1.4; text-underline-offset: 4px; }
-.ly-source:hover { color: #9b651e; }
-.ly-source:focus-visible { outline: 2px solid #b5872a; outline-offset: 4px; }
-.loss-years .ly-range { color: #6c776a; font-size: 14px; font-variant-numeric: tabular-nums; }
-.loss-years .ly-bar { position: relative; height: 5px; margin-top: 10px; overflow: hidden; border-radius: 4px; }
-.loss-years .ly-track, .loss-years .ly-fill { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: inherit; }
-.loss-years .ly-track { background: #ece5d3; }
-.loss-years .ly-fill { background: #c9962e; transform: scaleX(var(--t)); transform-origin: left; }
+/* Two measured DWV-B observations stay readable together beside the globe. */
+.dwv-evidence { position: absolute; z-index: 4; right: max(88px,7vw); bottom: 4.5%; width: clamp(310px,28vw,390px); max-width: calc(100% - 40px); box-sizing: border-box; padding: 22px 24px 18px; border: 1px solid #ded8c7; border-radius: 18px; background: #fffdf7; color: #153f36; box-shadow: 0 8px 25px #153f360b; opacity: 0; visibility: hidden; }
+.dwv-evidence__eyebrow { margin: 0 0 7px; color: #77613e; font-size: 14px; font-weight: 650; line-height: 1.4; }
+.dwv-evidence h3 { margin: 0 0 8px; font-size: clamp(23px,2.1vw,29px); font-weight: 700; letter-spacing: -.035em; line-height: 1.15; }
+.dwv-evidence__measure { margin: 0 0 15px; color: #526557; font-size: 14px; line-height: 1.4; }
+.dwv-evidence__samples { display: grid; gap: 12px; }
+.dwv-evidence__sample { display: grid; grid-template-columns: 42px 1fr 61px; align-items: center; gap: 10px; }
+.dwv-evidence__year { font-size: 14px; font-weight: 650; }
+.dwv-evidence__track { display: block; height: 12px; overflow: hidden; background: #eee7d5; border-radius: 3px; }
+.dwv-evidence__track i { display: block; height: 100%; width: var(--prevalence); background: #ca9225; border-radius: 3px; }
+.dwv-evidence__sample:last-child .dwv-evidence__track i { background: #aa4a29; }
+.dwv-evidence__value { text-align: right; font-size: 22px; font-weight: 750; font-variant-numeric: tabular-nums; letter-spacing: -.035em; }
+.dwv-evidence__note { margin: 15px 0 9px; color: #526557; font-size: 14px; line-height: 1.45; }
+.dwv-evidence__source { display: inline-flex; align-items: center; gap: 7px; min-height: 30px; color: #355c4c; font-size: 14px; line-height: 1.4; text-underline-offset: 4px; }
+.dwv-evidence__source:hover { color: #9b651e; }
+.dwv-evidence__source:focus-visible { outline: 2px solid #b5872a; outline-offset: 4px; }
 @media (max-width:760px) {
-  .loss-years { right: 16px; left: auto; bottom: max(16px,env(safe-area-inset-bottom)); width: calc(100% - 32px); max-width: 380px; padding: 13px 16px 12px; border-radius: 15px; }
-  .ly-reading { margin: 10px 0 8px; }
-  .loss-years .ly-total { font-size: 30px; }
-  .loss-years .ly-year { font-size: 21px; }
-  .loss-years .ly-scope { margin-bottom: 4px; }
-  .loss-years .ly-bar { margin-top: 7px; }
+  .dwv-evidence { right: 16px; bottom: max(16px,env(safe-area-inset-bottom)); width: calc(100% - 32px); max-width: 380px; padding: 16px 18px 13px; border-radius: 15px; }
+  .dwv-evidence h3 { font-size: 24px; }
+  .dwv-evidence__measure { margin-bottom: 10px; }
+  .dwv-evidence__samples { gap: 8px; }
+  .dwv-evidence__note { margin: 10px 0 5px; }
 }
-@media (min-width:601px) and (max-width:760px) { .loss-years { right: 64px; } }
-@media (min-width:761px) and (max-height:650px) { .loss-years { bottom: 18px; padding: 14px 18px 12px; } .ly-reading { margin-block: 10px; } }
+@media (min-width:601px) and (max-width:760px) { .dwv-evidence { right: 64px; } }
+@media (min-width:761px) and (max-height:650px) { .dwv-evidence { bottom: 18px; padding: 16px 20px 13px; } .dwv-evidence__note { margin-top: 10px; } }
 .geo-stage .map-view { inset: 0; width: 100%; height: 100%; }
 @media (max-width:760px) { .geo-stage .map-view { mask-image: linear-gradient(to bottom,transparent 35%,#000 48%); } }
 
@@ -859,23 +855,26 @@ html.loading .honey-progress { visibility: hidden; }
 }
 
 /* Bee at left, hive at centre, mite at right: one world for the two camera visits. */
-.intro-bee { right: auto; left: 10%; top: calc(58% - min(20vw,270px) * .4522); width: min(20vw,270px); }
-.intro-mite { left: 77%; top: calc(58% - min(12vw,170px) * .4946); width: min(12vw,170px); }
+.intro-scene { --overview-bee: min(23vw,34svh,330px); --overview-mite: min(12vw,20svh,170px); }
+/* Size the visible hive boxes to the viewport; the long stand continues below. */
+.intro-hive { top: 28%; bottom: auto; height: min(116svh,120vw); width: auto; }
+.intro-bee { right: auto; left: calc(21% - var(--overview-bee) / 2); top: calc(58% - var(--overview-bee) * .4348); width: var(--overview-bee); }
+.intro-mite { left: calc(81% - var(--overview-mite) / 2); top: calc(58% - var(--overview-mite) * .4947); width: var(--overview-mite); }
 .journey-landmark { position: absolute; z-index: 4; top: 77%; margin: 0; transform: translateX(-50%); opacity: var(--overview-labels,0); color: #294c3c; font-size: clamp(15px,1.6vw,24px); font-weight: 650; white-space: nowrap; }
-.journey-landmark--bee { left: 22%; }
-.journey-landmark--mite { left: 83%; }
+.journey-landmark--bee { left: 21%; }
+.journey-landmark--mite { left: 81%; }
 .journey-copy--bee { left: 69%; top: 34%; width: 27%; }
 .journey-copy--mite { left: 5%; top: 36%; width: 27%; }
 .journey-copy--bee h2, .journey-copy--mite h2 { font-size: clamp(32px,3.7vw,62px); }
 .journey-copy--return { left: 15%; top: 12%; width: 70%; transform: none; text-align: center; }
 .journey-copy--return h2 { font-size: clamp(30px,3.4vw,50px); margin: 0; }
 @media (max-width:760px) {
-  .intro-hive { --hh: min(68svh,85vw); top: 34%; bottom: auto; }
-  .intro-bee { left: 2%; top: calc(58% - 30vw * .4522); width: 30vw; }
-  .intro-mite { left: 77%; top: calc(58% - 19vw * .4946); width: 19vw; }
-  .journey-landmark { top: 73%; font-size: 14px; }
-  .journey-landmark--bee { left: 20%; }
-  .journey-landmark--mite { left: 83%; }
+  .intro-scene { --overview-bee: min(36vw,25svh); --overview-mite: min(18vw,14svh); }
+  .intro-hive { top: 31%; height: min(86svh,142vw); clip-path: inset(0 0 48% 0); }
+  .intro-bee { left: calc(19% - var(--overview-bee) / 2); top: calc(62% - var(--overview-bee) * .4348); }
+  .intro-mite { top: calc(62% - var(--overview-mite) * .4947); }
+  .journey-landmark { top: 74%; font-size: 16px; }
+  .journey-landmark--bee { left: 19%; }
   .journey-copy--bee, .journey-copy--mite { left: 7%; top: 15%; width: 86%; }
   .journey-copy--return { top: 18%; }
 }

@@ -300,6 +300,9 @@ async function loadDesign(id: string) {
     if (token !== request) return;
     installStructure(payload.data, payload.format, design.label, false, design.source);
     markDesign(id);
+    const url = new URL(window.location.href);
+    url.searchParams.set('design', id);
+    window.history.replaceState(null, '', url);
   } catch (error) {
     if (token !== request) return;
     const message = error instanceof Error ? error.message : 'The structure could not be loaded.';
@@ -384,7 +387,8 @@ async function start() {
     else viewer.zoom(e.key === '-' ? .9 : 1.1);
     viewer.render();
   });
-  await loadDesign(designs[0].id);
+  const requestedDesign = new URLSearchParams(window.location.search).get('design');
+  await loadDesign(designs.find(design => design.id === requestedDesign)?.id ?? designs[0].id);
 }
 
 void start().catch(() => status('The 3D viewer could not start. Check that WebGL is enabled, then reload this page.', true));

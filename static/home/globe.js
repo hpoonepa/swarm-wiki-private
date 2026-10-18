@@ -60,7 +60,7 @@
   }
   const noiseTex = bakeNoise(768, 384);
 
-  /* ---------- the United States, for the colony-loss highlight ----------
+  /* ---------- the United States, for the U.S. evidence highlight ----------
      A rough border polygon drawn into an equirectangular texture (same lat/lon layout as the land mask). It only
      needs to be right along the land borders: coasts overshoot into the sea and the shader trims them with the
      globe's own coastline, so the outline hugs exactly the coast that is drawn. */
@@ -122,10 +122,10 @@
         vec3 icc = shade(u_ice0, u_ice1, u_ice2, u_ice3, u_ice4, d, hl);
         vec3 c = mix(sea, mix(grn, mav, mauve), land);
         c = mix(c, icc, ice);
-        // colony loss: the United States washed in the site orange, with a bright honey outline along its edge
+        // U.S. survey context: the United States washed in the site orange, with a bright honey outline along its edge
         float us = min(texture2D(uUS, uv).r, smoothstep(.3, .7, coast));
         float inside = smoothstep(.45, .55, us);
-        c = mix(c, mix(c, vec3(.898, .463, .141), .36), inside * uUsAmt);   // light wash, so the loss circles read on top
+        c = mix(c, mix(c, vec3(.898, .463, .141), .36), inside * uUsAmt);   // light wash preserves the geographic illustration
         float edge = abs(us - .5) / max(fwidth(us), 1e-4);
         c = mix(c, vec3(.988, .768, .184), (1.0 - smoothstep(1.1, 2.6, edge)) * uUsAmt);
         gl_FragColor = vec4(c, 1.0);
@@ -171,57 +171,15 @@
   ring.quaternion.copy(pin.quaternion);spin.add(ring);
   const placeLabel = viewport.querySelector('.globe-location');
   const projected = new T.Vector3();
-  /* ---------- where colonies were lost, year by year ----------
-     One circle per state on the globe, its area proportional to the colonies that state lost in January-March of the
-     year shown (USDA NASS, colony-loss.js). A compact card below the globe plays through the years while the United
-     States step is on screen; circles ease between years so nothing jumps. */
-  const LOSS = window.COLONY_LOSS;
-  const CENTRES = { California: [37.2, -119.5], Florida: [28.6, -82.4], Georgia: [32.7, -83.4], Idaho: [44.4, -114.6],
-    Iowa: [42.07, -93.5], Louisiana: [31, -92], Michigan: [44.3, -85.4], Minnesota: [46.3, -94.3], Mississippi: [32.7, -89.7],
-    Montana: [47, -109.6], 'New York': [42.9, -75.5], 'North Carolina': [35.55, -79.4], 'North Dakota': [47.45, -100.47],
-    Ohio: [40.29, -82.79], Oregon: [43.9, -120.6], Pennsylvania: [40.9, -77.8], 'South Dakota': [44.4, -100.2],
-    Texas: [31.5, -99.3], Washington: [47.4, -120.5], Wisconsin: [44.6, -89.9] };
-  const lossDots = [];
-  if (LOSS) {
-    const peak = Math.max(...Object.entries(LOSS.states).filter(([s]) => CENTRES[s]).flatMap(([, v]) => v.lost));
-    const dotMat = new T.MeshBasicMaterial({ color: 0x8e1b2e, transparent: true, opacity: 0, depthWrite: false });
-    const rimMat = new T.MeshBasicMaterial({ color: 0xfff3d6, transparent: true, opacity: 0, depthWrite: false });
-    const disc = new T.CircleGeometry(1, 48), rim = new T.RingGeometry(1, 1.16, 48);
-    for (const [name, [la, lo]] of Object.entries(CENTRES)) {
-      const v = LOSS.states[name]; if (!v) continue;
-      const n = surfacePoint(la, lo), g = new T.Group();
-      g.add(new T.Mesh(rim, rimMat)); g.add(new T.Mesh(disc, dotMat));
-      g.position.copy(n).multiplyScalar(1.004); g.quaternion.setFromUnitVectors(new T.Vector3(0, 0, 1), n);
-      spin.add(g); lossDots.push({ g, r: v.lost.map(x => .068 * Math.sqrt(x / peak)) });
-    }
-    lossDots.mats = [dotMat, rimMat];
-  }
-  const yearsBar = section.querySelector('.loss-years');
-  // Keep the card inside the sticky globe stage so it leaves with this scene.
-  const yearLabel = yearsBar && yearsBar.querySelector('.ly-year'), yearTotal = yearsBar && yearsBar.querySelector('.ly-total');
-  // the years follow the scroll: the section holds on the United States step while the reader scrolls through
-  // 2016 -> 2026 (window.earthScroll in index.html); yearsShown eases toward it like the rest of the globe
-  const yearsGoal = () => window.earthScroll ? window.earthScroll().years : 0;
-  let yearsShown = yearsGoal(), shownYear = -1;
-  function paintYears(usOn) {
-    if (!LOSS || !lossDots.length) return;
-    const N = LOSS.years.length;
-    const yf = yearsShown * (N - 1);
-    const a = Math.floor(yf), b = Math.min(N - 1, a + 1), f = yf - a;
-    for (const d of lossDots) { const s = Math.max(.004, mix(d.r[a], d.r[b], f)); d.g.scale.set(s, s, s); }
-    lossDots.mats[0].opacity = .92 * usOn; lossDots.mats[1].opacity = .85 * usOn;
-    const shown = Math.round(yf);
-    if (yearsBar) {
-      yearsBar.style.opacity = usOn.toFixed(3);
-      yearsBar.style.visibility = usOn < .02 ? 'hidden' : 'visible';
-      yearsBar.inert = usOn < .02; yearsBar.setAttribute('aria-hidden', String(usOn < .02));
-      yearsBar.style.setProperty('--t', (yf / (N - 1)).toFixed(4));          // timeline fills as the scroll advances through the years
-      if (shown !== shownYear) {
-        shownYear = shown;
-        yearLabel.textContent = LOSS.years[shown];
-        yearTotal.textContent = LOSS.states['United States'].lost[shown].toLocaleString('en-US');
-      }
-    }
+  // Show two published observations together. Do not interpolate annual DWV
+  // counts or reuse all-cause colony-loss bubbles as a disease-prevalence map.
+  const evidenceCard = section.querySelector('.dwv-evidence');
+  function paintEvidence(usOn) {
+    if (!evidenceCard) return;
+    evidenceCard.style.opacity = usOn.toFixed(3);
+    evidenceCard.style.visibility = usOn < .02 ? 'hidden' : 'visible';
+    evidenceCard.inert = usOn < .02;
+    evidenceCard.setAttribute('aria-hidden', String(usOn < .02));
   }
   let mobile = innerWidth <= 760;
 
@@ -274,10 +232,10 @@
     camera.position.z=worldDistance*mix(1,1.18,mobileUsLayout);
     const centred=toAtlanta;
     camera.setViewOffset(width,height,mobile?0:-width*.20*(1-centred),mobile?-height*mix(.20,.10,mobileUsLayout):height*.01,width,height);
-    // The colony-loss outline belongs to the United States step only.
+    // The geographic highlight belongs to the United States step only.
     const usOn=ease((p-.1)/.04)*(1-ease((p-.215)/.03));
     uniforms.uUsAmt.value=usOn;
-    paintYears(usOn);
+    paintEvidence(usOn);
     const markerAlpha=ease((p-.24)/.05)*(1-ease((p-.335)/.055));
     pinMaterial.opacity=0;ringMaterial.opacity=0;
     renderer.render(scene, camera);
@@ -293,19 +251,17 @@
   function tick(now) {
     raf = 0;
     if (!visible || document.hidden) return;
-    const goal = progress(), yGoal = yearsGoal(), dt = Math.min(.05, (now - last) / 1000); last = now;
+    const goal = progress(), dt = Math.min(.05, (now - last) / 1000); last = now;
     if (reduced.matches) {
-      shown = goal; yearsShown = yGoal;
+      shown = goal;
       paint(goal < .115 ? 0 : goal < .235 ? .175 : .30, now);
       return;
     }
     shown += (goal - shown) * (1 - Math.exp(-dt * 5.5));          // softer follow so wheel steps glide
     if (Math.abs(goal - shown) < .0001) shown = goal;
-    yearsShown += (yGoal - yearsShown) * (1 - Math.exp(-dt * 5));
-    if (Math.abs(yGoal - yearsShown) < .0005) yearsShown = yGoal;
     paint(shown, now, dt);
     // keep turning gently while the whole globe is in view, not only while scrolling
-    if ((popAt !== null && goal < .2) || shown !== goal || yearsShown !== yGoal || (popAt !== null && now-popAt<1700)) raf = requestAnimationFrame(tick);
+    if ((popAt !== null && goal < .2) || shown !== goal || (popAt !== null && now-popAt<1700)) raf = requestAnimationFrame(tick);
   }
   function kick() { if (!raf && visible && !document.hidden) { last = performance.now(); raf = requestAnimationFrame(tick); } }
   function resize() {

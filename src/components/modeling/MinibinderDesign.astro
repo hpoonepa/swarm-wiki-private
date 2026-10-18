@@ -1,0 +1,127 @@
+---
+import InformationLayout from '../../layouts/InformationLayout.astro';
+import DesignResults from './DesignResults';
+import EpitopeExplorer from './EpitopeExplorer.astro';
+import './modeling.css';
+
+const frontmatter = {
+  title: 'Minibinder Design',
+  description: 'Computational modeling and experimental evaluation of DWV minibinders.',
+  tabLabels: ['Overview', 'Minibinder Design', 'RNAi Model', 'Minibinder Dose Model', 'Epidemiological Model', 'Instructional'],
+  tabLinks: ['model', 'model-design', 'model-rnai', 'model-minibinder', 'model-epidemiological', 'model-instructional'],
+};
+const headings = [
+  { depth: 1, slug: 'abstract', text: 'Abstract' },
+  { depth: 1, slug: 'introduction', text: 'Introduction' },
+  { depth: 1, slug: 'model-development', text: 'Model Development' },
+  { depth: 2, slug: 'structural-analysis', text: 'Structural Analysis and Epitope Selection' },
+  { depth: 2, slug: 'benchmarking', text: 'Benchmarking Protein-Design Methods' },
+  { depth: 2, slug: 'filtering-framework', text: 'Developing Our Filtering Framework' },
+  { depth: 2, slug: 'design-tools', text: 'Integrating Multiple Design Tools' },
+  { depth: 1, slug: 'iterative-modeling', text: 'Iterative Modeling and Results' },
+  { depth: 2, slug: 'initial-campaign', text: 'Initial Design Campaign' },
+  { depth: 2, slug: 'refined-campaign', text: 'Refined Design Campaign' },
+  { depth: 2, slug: 'structure', text: 'Experimental Validation' },
+  { depth: 2, slug: 'results', text: 'Submitted Minibinder Results' },
+  { depth: 1, slug: 'implications', text: 'Implications for SWARM' },
+  { depth: 1, slug: 'conclusion', text: 'Conclusion' },
+];
+---
+
+<InformationLayout frontmatter={frontmatter} headings={headings}>
+  <h1 id="abstract">Abstract</h1>
+  <p>For SWARM, we wanted to develop a de novo minibinder targeting the VP3 capsid protein of deformed wing virus (DWV), with the ultimate goal of neutralizing the virus. VP3 presented two major challenges: much of the protein is buried within the viral capsid, while its exposed P-domain has few well-characterized binding hotspots suitable for small proteins. We developed a computational approach combining structural analysis, multiple protein-design tools, benchmarking, and candidate evaluation.</p>
+  <p>We analyzed 5,721 experimentally labeled protein designs across 41 targets to examine the relationship between computational predictions and experimental outcomes. After an initial campaign produced no confirmed binding hit, a second campaign identified a 79-amino-acid minibinder with an experimentally measured dissociation constant of approximately 604 nM. This writeup describes the modeling work, its limitations, and the results from all 35 submitted designs.</p>
+
+  <h1 id="introduction">Introduction</h1>
+  <p>Advances in computational protein design have made it possible to generate many potential minibinders against a protein target. Identifying which designs will successfully express and bind experimentally remains difficult. Different programs use different approaches and confidence metrics, and a favorable prediction from one program does not necessarily translate into experimental binding.</p>
+  <p>For SWARM, VP3 presented an additional structural challenge. Because it forms part of a larger viral capsid, much of its structure is buried or constrained by neighboring proteins. A surface that appears favorable on an isolated structure may be inaccessible or structurally different within the assembled virus. Although the protruding P-domain provides a potentially accessible region, its surface geometry and uncertainty in local conformations complicate the evaluation of a small binding interface.</p>
+  <p>We therefore combined structural analysis, benchmarking, and multiple computational methods to evaluate candidates using more than a single confidence score. Experimental feedback from two campaigns allowed us to examine where those predictions agreed with measured binding and where they did not.</p>
+
+  <h1 id="model-development">Model Development</h1>
+  <h2 id="structural-analysis">1. Structural Analysis and Epitope Selection</h2>
+  <p>We compared the isolated VP3 P-domain with the assembled DWV capsid and examined surface accessibility, geometry, and predicted contacts. Some regions that appeared favorable in isolated or cropped structures could not be verified in the full viral assembly. These differences made biological context an important part of our structural review.</p>
+  <p>The initial campaign investigated a region with favorable isolated-domain geometry that was unresolved in the analyzed capsid structure. The campaign produced no confirmed binding hit. Subsequent work considered alternative regions and the uncertainty introduced by cropped structures. This analysis highlighted a limitation of interpreting a predicted complex without considering the surrounding assembly.</p>
+  <p>The figure and comparison table below bring together the five regions discussed in this investigation. Select a colored region on VP3 to open its design history and reported outcome. The QP / A-ridge entry is highlighted because the confirmed candidate belongs to that campaign; the other regions retain their own observations and experimental status.</p>
+  <EpitopeExplorer princeRegion="triad" />
+  <h3>PRINCE and Experimental Feedback</h3>
+  <p>We developed <a href="/lambert-ga/software/">PRINCE</a> to bring structural observations and literature evidence into the discussion of candidate regions. The retained PRINCE evidence table includes a reviewed example for the alternative “triad” region, highlighted in the figure and table above. That review separated a proposed catalytic interpretation from the evidence supporting it, including the distinction between observations in DWV and functional evidence from a related virus. The region's presence in a structure did not establish the proposed function.</p>
+  <p>This is the documented PRINCE evidence-review example, rather than evidence that PRINCE prospectively selected the successful binder. Four submitted designs belonged to this alternative-region arm, and none produced a confirmed binding hit. The record illustrates why a structural region, a proposed biological rationale, and an experimental result need to be evaluated separately.</p>
+  <p>The confirmed binder provides a separate experimental result. The campaign records associate <code>l79_s469532_mpnn9</code> with QP / A-ridge, and BLI measured binding to the tested target construct in two replicates. The predicted complex places the binder near this region. The exact contact residues remain a structural prediction: the binding assay did not independently map the epitope. Keeping these observations distinct allows us to describe what the computational investigation suggested and what the experiment established.</p>
+  <h3>Researcher Feedback</h3>
+  <p>Discussions with researchers complemented the structural analysis. Tudor Coțet at Adaptyv provided feedback relevant to computational design and experimental screening. Benjamin Lamp contributed biological context for the DWV P-domain, while Tatsuhiko Kadowaki encouraged investigation of multiple binding regions. These discussions helped frame the questions examined during subsequent campaigns.</p>
+
+  <h2 id="benchmarking">2. Benchmarking Protein-Design Methods</h2>
+  <p>To investigate which computational predictions were associated with measured binding, we examined 5,721 experimentally labeled designs across 41 targets, including 849 binders and 4,872 non-binders. The analysis considered structural-confidence metrics, predicted interface properties, and sequence characteristics.</p>
+  <table>
+    <caption>Table 2. Reported pooled predictive performance in the benchmarking dataset.</caption>
+    <thead><tr><th scope="col">Computational metric</th><th scope="col">Pooled ROC-AUC</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Minimum ipSAE</th><td>0.806</td></tr>
+      <tr><th scope="row">ipSAE</th><td>0.801</td></tr>
+      <tr><th scope="row">Boltz-2 ipTM</th><td>0.628</td></tr>
+      <tr><th scope="row">38-metric ensemble</th><td>0.541</td></tr>
+    </tbody>
+  </table>
+  <p>Minimum ipSAE performed better than ipTM in the pooled comparison. Its performance decreased when designs were evaluated within individual targets, indicating that pooled results can overestimate the usefulness of a metric for a particular protein. A naive ensemble of 38 metrics also performed below the strongest individual metrics. Combining additional scores did not automatically improve predictive performance.</p>
+  <p>These findings supported interpreting computational scores alongside structural and sequence-based evidence. The reported ROC-AUC values describe this benchmarking dataset; they do not establish a universal ranking rule or demonstrate that an individual candidate binds.</p>
+
+  <h2 id="filtering-framework">3. Developing Our Filtering Framework</h2>
+  <p>Our evaluation combined several types of evidence to assess whether a candidate formed a plausible complex and warranted experimental investigation.</p>
+  <h3>Structural Filtering</h3>
+  <p>Structural review considered folding, interface confidence, intermolecular contacts, steric compatibility, and agreement between predicted models. Assembly context was also considered when interpreting a proposed interface.</p>
+  <h3>Sequence Filtering</h3>
+  <p>Sequence review considered composition, hydrophobicity, aggregation-related properties, and sequence entropy. These properties provided information that was not captured by protein-complex confidence scores alone.</p>
+  <h3>Repeated Structural Predictions</h3>
+  <p>Predictions for the same design could vary between runs. One candidate produced minimum ipSAE values ranging from 0.000 to 0.676. Reporting only its highest-scoring prediction would have concealed that variability, so consistency between repeated predictions was considered during evaluation.</p>
+  <h3>Manual Structural Evaluation</h3>
+  <p>Manual inspection of predicted complexes helped identify questionable interfaces and unusual structural features that automated metrics could overlook. Together, these checks provided complementary evidence about each design.</p>
+
+  <h2 id="design-tools">4. Integrating Multiple Design Tools</h2>
+  <p>The project used Mosaic, BindCraft, and BoltzProt, with structural evaluation using Boltz and Protenix. We examined whether different methods explored distinct binding regions and structures in our candidate pool.</p>
+  <p>Across 1,176 pairwise comparisons, BindCraft and Mosaic candidates had a median interface Jaccard similarity of 0.000 and a median interface-center separation of approximately 42.9 Å. Within this pool, the tools explored substantially different regions. The second campaign included 103 computational candidate entries, of which 20 were submitted for experimental testing.</p>
+
+  <h1 id="iterative-modeling">Iterative Modeling and Results</h1>
+  <h2 id="initial-campaign">1. Initial Design Campaign</h2>
+  <p>The initial campaign submitted 15 designs and produced no confirmed binding hit. Nine designs received negative binding calls, while six did not yield a usable binding call. The distinction matters: a sample without a usable measurement cannot be interpreted as a confirmed negative.</p>
+  <p>One candidate had a reported ipSAE of 0.927 and ipTM of 0.958 despite the absence of a confirmed hit from the campaign. This discrepancy prompted a review of structural context, sequence properties, and the limitations of complex-level confidence. It demonstrated why favorable computational predictions required experimental evaluation.</p>
+
+  <h2 id="refined-campaign">2. Refined Design Campaign</h2>
+  <p>The second campaign incorporated additional structural evaluation, independent monomer assessment, and diversity between candidates. Twenty designs were submitted. One produced a confirmed binding hit, nine received negative binding calls, and ten did not yield a usable binding call.</p>
+  <p>The confirmed candidate, <code>l79_s469532_mpnn9</code>, was a 79-amino-acid BindCraft minibinder. It was not the highest-ranked design by minimum ipSAE alone, further illustrating the limits of selecting or interpreting candidates through a single score.</p>
+
+  <h2 id="structure">3. Experimental Validation</h2>
+  <p>The confirmed candidate was evaluated by biolayer interferometry (BLI). The combined fit across two experimental replicates gave a dissociation constant, K<sub>D</sub>, of 603.6 nM, with a 95% confidence interval of 497.1–733.3 nM. The individual replicate estimates were approximately 546 and 666 nM.</p>
+  <table>
+    <caption>Table 3. Computational metrics and measured affinity for <code>l79_s469532_mpnn9</code>.</caption>
+    <thead><tr><th scope="col">Measurement</th><th scope="col">Reported value</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Protenix ipTM</th><td>0.949</td></tr>
+      <tr><th scope="row">Boltz-2 ipTM</th><td>0.936</td></tr>
+      <tr><th scope="row">Minimum ipSAE</th><td>0.838</td></tr>
+      <tr><th scope="row">Monomer pLDDT</th><td>0.896</td></tr>
+      <tr><th scope="row">Self-consistency RMSD</th><td>1.826 Å</td></tr>
+      <tr><th scope="row">Combined BLI K<sub>D</sub></th><td>603.6 nM</td></tr>
+      <tr><th scope="row">95% confidence interval for K<sub>D</sub></th><td>497.1–733.3 nM</td></tr>
+    </tbody>
+  </table>
+  <p>The interactive viewer below shows the predicted complex for this candidate. The BLI measurements support moderate-affinity binding to the tested target construct; they do not validate every detail of the predicted pose or establish viral neutralization.</p>
+  <figure class="modeling-viewer wide">
+    <iframe src="/lambert-ga/minibinder-viewer/?embed=1&design=design-02" title="Interactive predicted structure of the confirmed minibinder and VP3" loading="lazy" allow="fullscreen" allowfullscreen></iframe>
+    <figcaption>Figure 2. Predicted complex of <code>l79_s469532_mpnn9</code> and the VP3 target. Drag to rotate the structure. <a href="/lambert-ga/minibinder-viewer/?design=design-02">Open the full minibinder viewer</a>.</figcaption>
+  </figure>
+
+  <h2 id="results">Submitted Minibinder Results</h2>
+  <p>The expandable table contains all 35 designs submitted across the two campaigns, with their reported computational scores and assay outcomes. In total, one design had confirmed binding, 18 received negative calls, and 16 did not yield a usable binding call. Missing scores remain unreported.</p>
+  <div class="wide"><DesignResults client:visible /></div>
+  <p>Search or filter the table to compare designs, select a column heading to sort, and expand a design row for additional metrics. Three submitted designs have matching structures in the viewer and link directly to those models. The viewer also contains other predicted complexes; a model's presence there does not establish experimental binding.</p>
+  <p>Assay outcomes come from the overall Round 1 and Round 2 BLI records. Computational metrics are matched by design ID to the campaign report, final 20-design record, consensus export, and validated panel. The combined assay fit is not counted as an additional replicate.</p>
+
+  <h1 id="implications">Implications for SWARM</h1>
+  <p>The modeling work supported the identification of an experimentally confirmed DWV-binding minibinder. It also exposed limitations that shaped our interpretation: biological assembly context matters, sequence properties require consideration, and repeated predictions can reveal uncertainty concealed by a single confidence score.</p>
+  <p>The measured binder provides a starting point for further characterization. Its binding affinity alone does not establish viral neutralization or colony-level protection. Those questions connect this work to <a href="/lambert-ga/minibinder-experimentation/">minibinder experimentation</a> and the <a href="/lambert-ga/model-minibinder/">minibinder dose model</a>.</p>
+
+  <h1 id="conclusion">Conclusion</h1>
+  <p>Across two campaigns, computational predictions and experimental measurements provided different but complementary evidence. The initial campaign showed that high confidence scores could coexist with unsuccessful experimental outcomes. The second campaign identified a 79-amino-acid minibinder with a measured K<sub>D</sub> of approximately 604 nM. Together, these results demonstrate the value of evaluating modeling decisions against experimental data while retaining the uncertainty and limitations of both.</p>
+  <p>This page is adapted from the team's <a href="/lambert-ga/modeling/main-protein-modeling.pdf" target="_blank" rel="noopener">Main Protein Modeling writeup (PDF)</a>, with submitted-design outcomes checked against the campaign records.</p>
+</InformationLayout>

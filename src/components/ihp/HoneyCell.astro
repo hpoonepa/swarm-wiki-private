@@ -1,19 +1,19 @@
 ---
 interface Props { title: string; phase?: string; shade?: number; }
 const { title, phase, shade = 0 } = Astro.props;
-const shapes = [
-  'M64 8 Q56 7 51 16 L10 85 Q4 96 10 107 L50 178 Q55 188 65 187 L157 185 Q166 184 171 176 L211 105 Q215 97 209 86 L168 16 Q163 7 152 8 Z',
-  'M64 10 Q55 10 50 19 L9 89 Q5 98 11 108 L52 180 Q57 188 67 187 L158 187 Q166 187 171 178 L211 108 Q216 99 210 88 L170 19 Q165 10 154 9 Z',
+const outlines = [
+  'M61 4 H159 Q166 4 170 11 L214 88 Q220 98 214 108 L170 185 Q166 192 159 192 H61 Q54 192 50 185 L6 108 Q0 98 6 88 L50 11 Q54 4 61 4 Z',
+  'M61 6 L158 3 Q166 3 170 12 L213 89 Q218 98 213 109 L169 184 Q165 191 157 192 L62 190 Q54 190 50 183 L7 108 Q2 98 7 88 L51 14 Q55 6 61 6 Z',
+  'M63 4 L158 6 Q165 6 170 14 L214 89 Q219 98 213 108 L169 184 Q165 191 157 190 L61 193 Q54 193 50 184 L7 108 Q1 98 7 87 L51 11 Q55 4 63 4 Z',
 ];
-const shape = shapes[shade % 2];
+const shape = outlines[Array.from(title).reduce((sum, character) => sum + character.charCodeAt(0), 0) % outlines.length];
 ---
 <span class:list={['ihp-cell', `ihp-cell--${shade % 3}`, { 'ihp-cell--phase': !!phase }]}>
   <svg class="ihp-cell__shape" viewBox="0 0 220 198" aria-hidden="true">
     <path class="ihp-cell__face" d={shape} />
-    <path class="ihp-cell__inner" d="M66 20 Q61 19 57 27 L20 90 Q16 97 21 105 L58 171 Q61 177 70 177 L153 175 Q160 175 164 167 L201 103 Q205 97 200 89 L162 26 Q158 19 150 20 Z" />
+    <path class="ihp-cell__inner" d="M66 15 H154 Q161 15 165 22 L205 91 Q209 98 205 105 L165 174 Q161 181 154 181 H66 Q59 181 55 174 L15 105 Q11 98 15 91 L55 22 Q59 15 66 15 Z" />
   </svg>
   <span class="ihp-cell__words">
     {phase ? <><span class="ihp-cell__phase-label">Phase</span><strong class="ihp-cell__phase-number">{Number(phase)}</strong></> : <strong class="ihp-cell__title">{title.split(' ').map(word => <span>{word}</span>)}</strong>}
   </span>
-  {!phase && <span class="ihp-cell__open" aria-hidden="true">+</span>}
 </span>

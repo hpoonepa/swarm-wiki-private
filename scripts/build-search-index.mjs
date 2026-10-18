@@ -81,6 +81,8 @@ for (const path of await htmlFiles(output)) {
   const group = slug === 'home' ? 'Home' : menuItem?.group || fallbackGroup(slug);
   const ids = allIds(doc);
   documents.set(href, ids);
+  // Keep moved routes valid as menu destinations without indexing their redirect pages.
+  if (/\bnoindex\b/i.test(attr(find(doc, node => node.tagName === 'meta' && attr(node, 'name') === 'robots') || {}, 'content') || '')) continue;
   const parts = [];
   const sections = [];
   let current;

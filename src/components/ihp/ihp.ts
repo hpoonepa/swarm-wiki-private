@@ -69,7 +69,6 @@ export function initIhp() {
         return;
       }
 
-      const origin = trigger.getBoundingClientRect();
       opener = trigger;
       show(index);
       dialog.showModal();
@@ -79,16 +78,12 @@ export function initIhp() {
       openingAnimation?.cancel();
 
       if (!reducedMotion.matches) {
-        const destination = dialog.getBoundingClientRect();
-        const x = Math.max(-150, Math.min(150, origin.left + origin.width / 2 - destination.left - destination.width / 2));
-        const y = Math.max(-80, Math.min(80, origin.top + origin.height / 2 - destination.top - destination.height / 2));
-        const rotation = x / 100;
         openingAnimation = dialog.animate(
           [
-            { opacity: 0, transform: `translate(${x}px, ${y}px) scale(.91) rotate(${rotation}deg)` },
-            { opacity: 1, transform: 'translate(0, 0) scale(1) rotate(0deg)' },
+            { opacity: 0, transform: 'translateY(8px)' },
+            { opacity: 1, transform: 'translateY(0)' },
           ],
-          { duration: 360, easing: 'cubic-bezier(.2,.8,.2,1)' },
+          { duration: 180, easing: 'ease-out' },
         );
       }
     });

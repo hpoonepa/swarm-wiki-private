@@ -5,7 +5,7 @@
 .rna-subject__portrait { position: relative; isolation: isolate; width: 94%; aspect-ratio: 1; margin: 0 auto 22px; display: grid; place-items: center; }
 .rna-subject__portrait::after { content: ""; position: absolute; z-index: -1; inset: -23%; border-radius: 50%; background: radial-gradient(ellipse, #ffc39a61 0%, #f48c7652 32%, #d74b6530 50%, #d74b6500 72%); filter: blur(clamp(12px,2vw,28px)); pointer-events: none; }
 .rna-subject__portrait::before { content: ""; position: absolute; inset: 9%; border-radius: 48% 52% 45% 55%; background: #f0bba3; transform: rotate(-12deg); box-shadow: 0 0 0 13px #e6a2860e; }
-.rna-subject__portrait img { position: relative; display: block; width: 100%; height: auto; transform: rotate(-13deg); filter: drop-shadow(0 12px 9px #2c0b1735); }
+.rna-subject__portrait img { position: relative; display: block; width: 100%; height: auto; aspect-ratio: 993 / 825; object-fit: contain; transform: rotate(-13deg); filter: drop-shadow(0 12px 9px #2c0b1735); }
 .rna-subject__eyebrow, .rna-panel-kicker { display: block; font-size: 14px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: #efb6a7; }
 .rna-subject figcaption strong { display: block; margin-top: 12px; font-size: clamp(24px,2.3vw,35px); line-height: 1.15; letter-spacing: -.035em; color: var(--rna-cream); }
 .rna-subject figcaption strong em { font-weight: inherit; }

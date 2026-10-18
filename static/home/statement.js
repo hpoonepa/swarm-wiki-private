@@ -58,7 +58,7 @@
     if (arts[1]) arts[1].style.setProperty('--w', ease(clamp((p - .58) / .2)).toFixed(3));
   }
 
-  // ---- timed food entrance: bread, then strawberry, then corn, each easing out over ~1.2 s ----
+  // ---- timed food entrance: almond, then strawberry, then cherries, each easing out over ~1.2 s ----
   let foodAt = null, foodOut = 0, foodArt = null, foodRAF = 0;
   const easeOut = t => 1 - Math.pow(1 - t, 4);                       // long, soft deceleration into place
   const FOOD = [['--vb', 0, 1.25], ['--vs', .16, 1.2], ['--vc', .32, 1.15]];   // var, delay s, duration s
@@ -71,7 +71,7 @@
       if (t >= 0 && t < delay + dur) done = false;
       const val = k * (1 - clamp(foodOut * (1 + i * .15)));
       foodArt.style.setProperty(v, val.toFixed(4));
-      const img = foodArt.querySelector(['.f-bread', '.f-berry', '.f-corn'][i]);
+      const img = foodArt.querySelector(['.f-almond', '.f-berry', '.f-cherries'][i]);
       if (img) img.style.opacity = clamp(val * 3).toFixed(3);
       if (val > .001) any = true;
     });

@@ -3,27 +3,44 @@ import { phases } from './ihp-data';
 import HoneyCell from './HoneyCell.astro';
 import ConversationPhoto from './ConversationPhoto.astro';
 import './ihp.css';
-// Each phase is its own small comb, with breathing room between conversations.
-const wideSlots = [[4, 1], [0, 1], [1, .5], [2, 0], [0, 2], [1, 1.5], [2, 1], [3, .5], [2, 2], [3, 1.5], [4, 2]];
-const smallSlots = [[2, 0], [0, 0], [1, .5], [0, 1], [2, 1], [1, 1.5], [0, 2], [2, 2], [1, 2.5], [0, 3], [2, 3]];
-function position(index: number) {
-  const layouts = [
-    { name: 'wide', slots: wideSlots, width: 920, height: 630 },
-    { name: 'small', slots: smallSlots, width: 582, height: 830 },
-  ];
-  return layouts.map(({ name, slots, width, height }) => {
+// Each comb grows in a different direction. The lattice keeps neighboring cells
+// together; open pockets and the occasional detached cell break up the outline.
+const combs = [
+  {
+    wide: { height: 710, slots: [[0, 0], [1, .5], [2, 0], [3, .5], [4, 1], [0, 1], [1, 1.5], [2, 1], [1, 2.5], [2, 2], [3, 2.5]] },
+    small: { height: 1000, slots: [[0, 0], [1, .5], [2, 0], [0, 1], [1, 1.5], [0, 2], [2, 2], [1, 2.5], [2, 3], [1, 3.5], [0, 4]] },
+    flight: 'M635 18 C835 -30 1000 77 929 241 S883 538 754 614 S788 732 930 738',
+    smallFlight: 'M460 12 C618 104 550 258 513 341 S577 603 547 748 S439 951 247 1026',
+  },
+  {
+    wide: { height: 760, slots: [[0, 1], [1, .5], [2, 0], [3, .5], [4, 0], [1, 1.5], [2, 1], [3, 1.5], [4, 1], [3, 2.5], [1.3, 2.8]] },
+    small: { height: 900, slots: [[0, 0], [1, .5], [2, 0], [2, 1], [0, 1], [1, 1.5], [2, 2], [0, 2], [1, 2.5], [2, 3], [.15, 3.45]] },
+    flight: 'M165 5 C-45 48 -92 306 22 515 S480 822 908 780',
+    smallFlight: 'M90 6 C-28 60 -12 280 16 448 S-60 695 115 829 S430 940 558 930',
+  },
+  {
+    wide: { height: 710, slots: [[1, .5], [0, 0], [0, 1], [0, 2], [1, 1.5], [1, 2.5], [2, 1], [2, 2], [3, .5], [3, 1.5], [4, 1]] },
+    small: { height: 900, slots: [[0, 1], [1, .5], [2, 0], [0, 2], [1, 1.5], [2, 1], [1, 2.5], [2, 2], [0, 3], [1, 3.5], [2, 3]] },
+  },
+];
+function position(phase: number, index: number) {
+  return (['wide', 'small'] as const).map(name => {
+    const { slots, height } = combs[phase][name];
+    const width = name === 'wide' ? 920 : 582;
     const [col, row] = slots[index];
-    return `--${name}-x:${(12 + col * 169) / width * 100}%;--${name}-y:${(12 + row * 202) / height * 100}%`;
-  }).join(';') + `;--cell-tilt:${[-.5, .4, -.3, .5][index % 4]}deg`;
+    return `--${name}-x:${(12 + col * 164) / width * 100}%;--${name}-y:${(12 + row * 190) / height * 100}%`;
+  }).join(';');
 }
 ---
 <div id="ihp-main" class="full">
   <div class="ihp-map" aria-label="Human practices conversations">
-    {phases.map((phase, i) => <section class="ihp-phase" id={phase.id} aria-labelledby={`${phase.id}-title`}>
-      <h2 id={`${phase.id}-title`} class="sr-only">Phase {Number(phase.number)}: {phase.name}</h2>
-      {i < phases.length - 1 && <svg class="ihp-flight" viewBox="0 0 920 740" preserveAspectRatio="none" aria-hidden="true"><path d="M565 12 C775 -44 963 74 904 241 S910 523 729 586 S442 600 380 728" /></svg>}
-      <div class="ihp-phase-cell" style={position(0)}><HoneyCell title={`Phase ${Number(phase.number)}`} phase={phase.number} shade={i} /></div>
-      {phase.entries.map((entry, j) => <button type="button" class="ihp-entry" data-ihp-entry={entry.id} aria-label={`Open ${entry.title} conversation, sample entry`} aria-haspopup="dialog" aria-expanded="false" aria-controls="ihp-dialog" style={position(j + 1)}>
+    {phases.map((phase, i) => <section class="ihp-phase" id={phase.id} aria-labelledby={`${phase.id}-title`} style={`--wide-height:${combs[i].wide.height};--small-height:${combs[i].small.height}`}>
+      {combs[i].flight && <>
+        <svg class="ihp-flight ihp-flight--wide" viewBox={`0 0 920 ${combs[i].wide.height}`} aria-hidden="true"><path d={combs[i].flight} /></svg>
+        <svg class="ihp-flight ihp-flight--small" viewBox={`0 0 582 ${combs[i].small.height}`} aria-hidden="true"><path d={combs[i].smallFlight} /></svg>
+      </>}
+      <h2 id={`${phase.id}-title`} class="ihp-phase-cell" aria-label={`Phase ${Number(phase.number)}: ${phase.name}`} style={position(i, 0)}><HoneyCell title={`Phase ${Number(phase.number)}`} phase={phase.number} shade={i} /></h2>
+      {phase.entries.map((entry, j) => <button type="button" class="ihp-entry" data-ihp-entry={entry.id} aria-label={`Open ${entry.title} conversation, sample entry`} aria-haspopup="dialog" aria-expanded="false" aria-controls="ihp-dialog" style={position(i, j + 1)}>
         <HoneyCell title={entry.title} shade={i + j + 1} />
       </button>)}
     </section>)}
@@ -31,7 +48,7 @@ function position(index: number) {
 
   <dialog id="ihp-dialog" class="ihp-dialog" aria-labelledby="ihp-dialog-title">
     <div class="ihp-dialog__paper">
-      <button type="button" class="ihp-dialog__close" data-ihp-close aria-label="Close conversation" autofocus><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button>
+      <button type="button" class="ihp-dialog__close" data-ihp-close aria-label="Close conversation" autofocus><span>Close</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg></button>
       <div class="ihp-dialog__content" data-ihp-content></div>
       <div class="ihp-dialog__nav">
         <button type="button" data-ihp-prev aria-label="Previous conversation"><span aria-hidden="true">←</span> Previous</button>
@@ -48,14 +65,13 @@ function position(index: number) {
         <p class="ihp-note-phase">Phase {Number(phase.number)} <span>·</span> {phase.name}</p>
         <h2 id="ihp-dialog-title">{entry.title}</h2>
         <p class="ihp-note-person">{entry.person}</p>
-        <p class="ihp-note-date">{entry.date}</p>
-        <span class="ihp-note-tag">Sample person</span>
+        <p class="ihp-note-date">{entry.date} <span class="ihp-note-sample">· Sample entry</span></p>
       </div>
     </header>
     <div class="ihp-note-body">
-      <section><h3>What they taught us</h3><p>{entry.takeaway}</p></section>
-      <section class="ihp-note-change"><h3>What changed in SWARM</h3><p>{entry.change}</p></section>
-      <section><h3>Following up</h3><p>{entry.followup}</p></section>
+      <section><h3>Discussion</h3><p>{entry.takeaway}</p></section>
+      <section><h3>Changes to the project</h3><p>{entry.change}</p></section>
+      <section><h3>Next steps</h3><p>{entry.followup}</p></section>
     </div>
   </template>))}
 </div>

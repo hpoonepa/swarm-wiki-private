@@ -1,0 +1,41 @@
+---
+import InformationLayout from '../layouts/InformationLayout.astro';
+const frontmatter = {
+  title: 'Modeling',
+  description: 'Computational models supporting SWARM.',
+  tabLabels: ['Overview', 'Minibinder Design', 'RNAi Model', 'Minibinder Dose Model', 'Epidemiological Model', 'Instructional'],
+  tabLinks: ['model', 'model-design', 'model-rnai', 'model-minibinder', 'model-epidemiological', 'model-instructional'],
+};
+const headings = [
+  { depth: 1, slug: 'overview', text: 'Overview' },
+  { depth: 1, slug: 'minibinder-design', text: 'Minibinder Design' },
+  { depth: 1, slug: 'minibinder-dose-model', text: 'Minibinder Dose Model' },
+  { depth: 1, slug: 'rnai-model', text: 'RNAi Model' },
+  { depth: 1, slug: 'epidemiological-model', text: 'Epidemiological Model' },
+  { depth: 1, slug: 'instructional', text: 'Instructional' },
+];
+---
+<InformationLayout frontmatter={frontmatter} headings={headings}>
+  <h1 id="overview">Overview</h1>
+  <p>SWARM's modeling work examines protein design, delivery, and potential colony-level effects. The following writeups describe the questions, assumptions, methods, and results of each model.</p>
+
+  <h1 id="minibinder-design">Minibinder Design</h1>
+  <p>Our protein-modeling work connects computational analysis to experimental binding measurements across two design campaigns. The writeup includes the predicted structure of the confirmed minibinder and an expandable table of all 35 submitted designs.</p>
+  <p><a href="/lambert-ga/model-design/">Read the Minibinder Design writeup</a>.</p>
+
+  <h1 id="minibinder-dose-model">Minibinder Dose Model</h1>
+  <p>The dose model examines the relationship between molecular binding, delivery, and the concentration of minibinder available to a bee.</p>
+  <p><a href="/lambert-ga/model-minibinder/">Read the Minibinder Dose Model writeup</a>.</p>
+
+  <h1 id="rnai-model">RNAi Model</h1>
+  <p>The RNAi model describes the modeling work supporting the RNAi component of SWARM.</p>
+  <p><a href="/lambert-ga/model-rnai/">Read the RNAi Model writeup</a>.</p>
+
+  <h1 id="epidemiological-model">Epidemiological Model</h1>
+  <p>The epidemiological model connects assumptions at the individual-bee level to questions about colony-level outcomes.</p>
+  <p><a href="/lambert-ga/model-epidemiological/">Read the Epidemiological Model writeup</a>.</p>
+
+  <h1 id="instructional">Instructional</h1>
+  <p>The instructional page provides educational material accompanying our modeling work.</p>
+  <p><a href="/lambert-ga/model-instructional/">Read the modeling instructional</a>.</p>
+</InformationLayout>

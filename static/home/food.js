@@ -1,4 +1,4 @@
-/* Mouse play for the bread / strawberry / corn on the first statement screen.
+/* Mouse play for the almond / strawberry / cherries on the first statement screen.
    Parallax toward the cursor by depth, springy lift + tilt on hover (true shape hit-testing via alpha),
    squishy pop on click. The statement layer is pointer-events:none, so everything listens on window. */
 (function () {
@@ -9,7 +9,7 @@
   const blueEl = sec.querySelector('.f-blue');
   const blueOn = () => blueEl && blueEl.style.visibility !== 'hidden' && +(blueEl.style.getPropertyValue('--vbl') || 0) > .9;
   // front to back; topCut = art is cropped at the top edge too, so it may only drift up
-  const items = [['.f-corn', 1, foodOn, false, food], ['.f-berry', .6, foodOn, false, food], ['.f-bread', .32, foodOn, false, food],
+  const items = [['.f-cherries', 1, foodOn, false, food], ['.f-berry', .6, foodOn, false, food], ['.f-almond', .32, foodOn, false, food],
                  ['.f-blue', .7, blueOn, true, sec]]
     .map(([sel, depth, on, topCut, root]) => ({ el: root.querySelector(sel), depth, on, topCut, mx: 0, my: 0, s: 1, sv: 0, r: 0, rv: 0, mask: null }))
     .filter(o => o.el);

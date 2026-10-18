@@ -1,5 +1,5 @@
 ---
-import { members, advisors } from './team-data';
+import { members, advisors, memberDetails, yearLabel } from './team-data';
 import Portrait from './Portrait.astro';
 import HoneycombWindow from '../info/HoneycombWindow.astro';
 import './team.css';
@@ -10,45 +10,48 @@ const everyone = [...members, ...advisors];
   <header class="hive-intro">
     <div class="hive-intro__copy">
       <h1>Team</h1>
+      <p>The people behind SWARM.</p>
     </div>
   </header>
   <section class="hive-roster" id="the-team" aria-labelledby="roster-title">
     <div class="hive-section-bar">
       <div class="hive-section-tabs"><h2 id="roster-title">{members.length} members</h2></div>
+      <span class="hive-roster-hint">Select a portrait to meet us</span>
     </div>
     <div class="hive-grid">
-      {members.map((member, i) => <button type="button" class="hive-member" data-profile={member.id} data-color={member.color} aria-haspopup="dialog" aria-controls="hive-profile" aria-label={`Meet ${member.name}, ${member.role}`}>
-        <span class="hive-member__art"><Portrait photo={member.photo} /><span class="hive-member__number" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span></span>
-        <span class="hive-member__name">{member.name}</span><span class="hive-member__role">{member.role}</span>
+      {members.map(member => <button type="button" class="hive-member" data-profile={member.id} data-color={member.color} aria-haspopup="dialog" aria-controls="hive-profile" aria-label={`Meet ${member.name}${memberDetails(member) ? `, ${memberDetails(member)}` : ''}`}>
+        <span class="hive-member__art"><Portrait photo={member.photo} name={member.name} /></span>
+        <span class="hive-member__name">{member.name}</span><span class="hive-member__role">{memberDetails(member)}</span>
       </button>)}
     </div>
   </section>
   <section class="hive-advisors" id="advisors" aria-labelledby="advisors-title">
-    <div class="hive-advisors__heading"><h2 id="advisors-title">Advisors</h2></div>
+    <div class="hive-advisors__heading"><h2 id="advisors-title">Our advisor</h2></div>
     <div class="hive-advisor-grid">
       {advisors.map(member => <button type="button" class="hive-member hive-member--advisor" data-profile={member.id} data-color={member.color} aria-haspopup="dialog" aria-controls="hive-profile" aria-label={`Meet ${member.name}`}>
-        <span class="hive-member__art"><Portrait photo={member.photo} flower /></span>
-        <span class="hive-member__name">{member.name}</span><span class="hive-member__role">{member.role}</span>
+        <span class="hive-member__art"><Portrait photo={member.photo} name={member.name} /></span>
+        <span class="hive-member__name">{member.name}</span><span class="hive-member__role">Advisor</span>
       </button>)}
     </div>
     <a class="hive-attributions" href="/lambert-ga/attributions/"><span>View attributions ↗</span></a>
   </section>
   <dialog class="hive-dialog" id="hive-profile" aria-labelledby="profile-name" aria-describedby="profile-bio">
     <div class="hive-dialog__shell">
-      <div class="hive-dialog__paper"></div>
-      <svg class="hive-dialog__outline" viewBox="0 0 600 800" preserveAspectRatio="none" aria-hidden="true"><path d="M300 8 577 75Q591 79 591 99v602q0 20-14 24L300 792 23 725Q9 721 9 701V99q0-20 14-24Z" /></svg>
-      <button class="hive-dialog__close" type="button" data-profile-close aria-label="Close profile" autofocus><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" /></svg></button>
+      <button class="hive-dialog__close" type="button" data-profile-close aria-label="Close profile" autofocus><span>Close</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" /></svg></button>
       <div class="hive-dialog__content" data-profile-content></div>
-      <div class="hive-dialog__nav"><button type="button" data-profile-prev aria-label="Previous profile">←</button><span data-profile-count></span><button type="button" data-profile-next aria-label="Next profile">→</button></div>
+      <div class="hive-dialog__nav"><button type="button" data-profile-prev aria-label="Previous profile">← <span>Previous</span></button><span data-profile-count></span><button type="button" data-profile-next aria-label="Next profile"><span>Next</span> →</button></div>
     </div>
   </dialog>
   {everyone.map(member => <template data-profile-template={member.id}>
-    <div class="hive-profile__portrait" data-color={member.color}><Portrait photo={member.photo} flower={member.advisor} /></div>
-    <h2 id="profile-name">{member.name}</h2><p class="hive-profile__role">{member.role}</p>
-    <div class="hive-profile__bio"><h3>Bio</h3><p id="profile-bio">{member.bio ?? 'Bio coming soon.'}</p></div>
-    <div class="hive-profile__details">
-      <div><h3>Interests</h3><p>{member.outside ?? 'To be added.'}</p></div>
-      <div class="hive-profile__flower"><svg viewBox="0 0 80 80" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.5">{Array.from({ length: 6 }, (_, i) => <ellipse cx="40" cy="22" rx="10" ry="16" transform={`rotate(${i * 60} 40 40)`} />)}<circle cx="40" cy="40" r="11" fill="#fff6dc" /></g></svg><h3>Favorite flower</h3><p>{member.flower ?? 'To be added.'}</p></div>
+    <div class="hive-profile__portrait" data-color={member.color}><Portrait photo={member.photo} name={member.name} /></div>
+    <div class="hive-profile__copy">
+      <p class="hive-profile__eyebrow">Lambert iGEM{member.advisor ? ' · Advisor' : ''}</p>
+      <h2 id="profile-name">{member.name}</h2>
+      {(member.grade || member.year) && <dl class="hive-profile__facts">
+        {member.grade && <div><dt>Grade</dt><dd>{member.grade}</dd></div>}
+        {member.year && <div><dt>On the team</dt><dd>{yearLabel(member.year)} in iGEM</dd></div>}
+      </dl>}
+      <p class="hive-profile__bio" id="profile-bio">{member.bio}</p>
     </div>
   </template>)}
 </main>

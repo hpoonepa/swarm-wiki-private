@@ -2,14 +2,6 @@
 interface Props { name: string; photo?: string }
 const { name, photo } = Astro.props;
 ---
-<figure class="ihp-note-photo">
-  <div class="ihp-note-photo__image">
-    {photo ? <img src={photo} alt={name} width="320" height="350" loading="lazy" /> : <svg viewBox="0 0 180 195" role="img" aria-label={`Portrait placeholder for ${name}`}>
-      <path d="M-8 159Q71 109 190 164V200H-8Z" fill="#dae3d0" />
-      <circle cx="92" cy="75" r="33" fill="#b0bca4" />
-      <path d="M31 185c0-43 24-70 61-70s60 27 60 70" fill="#b0bca4" />
-      <path d="M56 73c0 23 14 38 35 38s36-15 36-38M39 180c2-36 22-57 53-57s50 21 52 57" fill="none" stroke="#899975" stroke-width="2" stroke-linecap="round" />
-    </svg>}
-  </div>
-  <figcaption>{photo ? name : 'Photo placeholder'}</figcaption>
-</figure>
+{photo && <figure class="ihp-note-photo">
+  <img src={photo} alt={name} width="160" height="160" loading="lazy" />
+</figure>}

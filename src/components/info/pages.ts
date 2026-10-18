@@ -22,6 +22,7 @@ const pages = [
   ['experiments', 'Experiments', 'Wetlab', 2200, 1650],
   ['safety', 'Safety', 'Wetlab', 2200, 1650],
   ['model', 'Modeling Overview', 'Drylab', 1300, 300],
+  ['model-design', 'Minibinder Design', 'Drylab', 1300, 300],
   ['model-rnai', 'RNAi Model', 'Drylab', 1300, 300],
   ['model-minibinder', 'Minibinder Model', 'Drylab', 1300, 300],
   ['model-epidemiological', 'Epidemiological Model', 'Drylab', 1300, 300],
@@ -30,7 +31,6 @@ const pages = [
   ['hardware', 'Hardware', 'Drylab', 2380, 1100],
   ['education', 'Education', 'Human Practices', 1720, 380],
   ['human-practices', 'Integrated Human Practices', 'Human Practices', 1720, 380],
-  ['inclusivity', 'Inclusivity', 'Human Practices', 1720, 380],
   ['sustainability', 'Sustainability', 'Human Practices', 1720, 380],
   ['entrepreneurship', 'Entrepreneurship', 'Human Practices', 1720, 380],
 ] as const;

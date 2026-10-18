@@ -27,7 +27,7 @@ for(const file of ['menu.js','section-nav.js']) {
   writeFileSync(root+'static/home/'+file,text);
 }
 let html=readFileSync(root+'static/home/index.html','utf8');
-for(const file of ['story.css','rnai-layout.css','ending.css','ending.js','globe.js','earth-scroll.js','colony-loss.js','dwv-virus.js','menu.js','navbar.js','mechanisms.js','flight.js','cursor.js','section-nav.css','section-nav.js']) {
+for(const file of ['story.css','project-overview.css','rnai-layout.css','ending.css','ending.js','globe.js','earth-scroll.js','colony-loss.js','dwv-virus.js','menu.js','navbar.js','mechanisms.js','flight.js','cursor.js','section-nav.css','section-nav.js']) {
   html=html.replace(new RegExp(file.replaceAll('.','\\.')+'\\?v=[^"\\s]+','g'),file+'?v='+hash(file));
 }
 writeFileSync(root+'static/home/index.html',html);

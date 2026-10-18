@@ -1,15 +1,12 @@
 /* One scroll position drives the honey stream and the droplet at its tip. */
 (() => {
   const clamp = n => Math.max(0, Math.min(1, n));
-  const ease = n => { const t = clamp(n); return t*t*t*(t*(6*t-15)+10); };
   const layer = document.querySelector('.honey-progress');
   const track = layer.querySelector('.honey-progress__track');
   const control = layer.querySelector('.honey-progress__control');
   const drop = layer.querySelector('.honey-progress__drop');
-  const together = document.getElementById('together');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let maxScroll = 1, railX = 0, railTop = 0, railHeight = 1;
-  let landingStart = 0, landingDistance = 1;
   let shown = 0, frame = 0, previous = performance.now(), lastPercent = -1;
   let dragging = false, activePointer = null, grabOffset = 0;
   const progress = () => maxScroll > 0 ? clamp(scrollY / maxScroll) : 0;
@@ -37,10 +34,7 @@
       control.setAttribute('aria-valuetext', `${percent}% through the homepage`);
       lastPercent = percent;
     }
-    // The flower scene has its own bee; the marker continues to the footer.
-    const arrival = reduced.matches ? 1 : ease((scrollY - landingStart) / landingDistance);
-    together.dataset.arrived = String(arrival > 0);
-    together.style.setProperty('--bee-arrival', arrival.toFixed(4));
+
   }
 
   function tick(now) {
@@ -69,9 +63,6 @@
     track.style.transform = `translate3d(${railX}px,${railTop}px,0) translateX(-50%)`;
     control.style.height = `${railHeight + 24}px`;
     control.style.transform = `translate3d(${railX}px,${railTop - 12}px,0) translateX(-50%)`;
-    const togetherTop = together.getBoundingClientRect().top + scrollY;
-    landingStart = togetherTop - height * .12;
-    landingDistance = height * .5;
     shown = progress();
     paint();
     kick();

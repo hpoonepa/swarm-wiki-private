@@ -1,6 +1,6 @@
-import { groups, sections } from './nav-data.js?v=3ae2556f1170';
+import { groups, sections } from './nav-data.js?v=3dfdc3383d85';
 import { mapStyles, mountMap } from './navmap.js?v=951a75de8fa3';
-import { searchStyles, searchTrigger, mountSearch } from './search.js?v=cebc92946ac0';
+import { searchStyles, searchTrigger, mountSearch } from './search.js?v=03a8510bbb86';
 const styles = `
   :host { position: fixed; inset: 0; z-index: 70; font-family: 'Space Grotesk Variable', 'Space Grotesk', 'Inter', sans-serif; color: #1a322a; pointer-events: none; }
   :host([data-dark]) { color: #fff9e9; }
