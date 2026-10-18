@@ -8,6 +8,7 @@ tabLinks: ["rnai", "rnai-design", "rnai-experimentation"]
 
 import Wip from "../components/md_components/Wip";
 import Image from "../components/md_components/Image";
+import ImageRow from "../components/md_components/ImageRow";
 import Reference from "../components/md_components/Reference";
 
 <Wip />
@@ -90,17 +91,19 @@ By comparing residual luminescence levels within each gene group, we successfull
 
 Using (siRNA #1), (siRNA #2), and (siRNA #3), which showed the greatest luminescence, we plan to test 6 siRNA combinations to identify the strongest multiplexed combination. Through multiplexing, we plan to deliver a single dsRNA rather than three separate siRNAs, which is inefficient and stressful for host cells (see Fig. 6). This approach keeps host cells healthier while efficiently silencing the mite’s genes (Wang et al., 2024).
 
-<ImageRow 
+
+<ImageRow
 images={[ 
-{ src: "https://static.igem.wiki/teams/6185/wiki/rnai-experimentation/screenshot-2026-10-18-at-12-05-17-pm.avif", caption: “Before” }, 
-{ src: "REPLACE WITH AFTER IMAGE URL", caption: “After” }
+{ src: "https://static.igem.wiki/teams/6185/wiki/rnai-experimentation/screenshot-2026-10-18-at-12-05-17-pm.avif", caption: "Before" }, 
+{ src: "REPLACE WITH AFTER IMAGE URL", caption: "After" } 
 ]} 
 size={240} 
-/> 
+/>
 
 <center> 
 *Figure 6. Six screened siRNAs multiplexed into one polycistronic dsRNA.* 
 </center>
+
 
 
 # References
