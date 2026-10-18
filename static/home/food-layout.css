@@ -1,27 +1,56 @@
-/* Keep the tall strawberry horizontal, with its tip reaching into the page.
-   The almond keeps its down-left orientation; cherries sit below the berry. */
+/* Three separated silhouettes extend in from the right edge. Size from both
+   viewport dimensions so the artwork stays beside the statement. */
+#statement .food .cluster {
+  right: -10vw;
+  top: 0;
+  width: min(46vw, 72vh);
+  height: 100%;
+  aspect-ratio: auto;
+  transform: none;
+}
+
+#statement .food .f-almond {
+  right: -22%;
+  top: -25vh;
+  width: 108%;
+  --food-angle: -135deg;
+}
+
 #statement .food .f-berry {
-  right: -4%;
-  top: 14%;
-  width: 54%;
+  right: 12%;
+  top: 24vh;
+  width: 64%;
   --food-angle: 82deg;
 }
 
 #statement .food .f-cherries {
-  right: -36%;
-  top: 48%;
-  width: 118%;
+  right: -6%;
+  top: 56vh;
+  width: 105%;
 }
 
 @media (max-width: 720px) {
+  #statement .food .cluster {
+    right: -12vw;
+    width: min(72vw, 42vh);
+    height: 46vh;
+  }
+
+  #statement .food .f-almond {
+    right: -16%;
+    top: -12vh;
+    width: 104%;
+  }
+
   #statement .food .f-berry {
-    right: -7%;
-    top: 20%;
-    width: 52%;
+    right: 26%;
+    top: 2vh;
+    width: 61%;
   }
 
   #statement .food .f-cherries {
-    top: 52%;
-    width: 112%;
+    right: -8%;
+    top: 25vh;
+    width: 96%;
   }
 }

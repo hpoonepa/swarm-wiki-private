@@ -207,12 +207,12 @@
 
   .after { height: 40vh; }
 </style>
-<link rel="stylesheet" href="story.css?v=48bb70c7cab8">
+<link rel="stylesheet" href="story.css?v=aa0cd51addc1">
 <link rel="stylesheet" href="section-nav.css?v=2a67c9055550">
 <link rel="stylesheet" href="rnai-layout.css?v=4cc7ca49f5b7">
 <link rel="stylesheet" href="project-overview.css?v=d598eea91a36">
-<link rel="stylesheet" href="food-layout.css?v=8b7bbbbde534">
-<link rel="stylesheet" href="site-footer.css?v=e2327e788183">
+<link rel="stylesheet" href="food-layout.css?v=095352f43a89">
+<link rel="stylesheet" href="site-footer.css?v=e50c51e708e7">
 </head>
 <body>
 <script src="cursor.js?v=d226b130b92d"></script>
@@ -304,7 +304,7 @@
       <div class="art art1 food" aria-hidden="true">
         <div class="cluster">
           <img class="f-almond" src="https://static.igem.wiki/teams/6185/wiki/lastmin/food-almond.svg" alt="">
-          <img class="f-berry" src="https://static.igem.wiki/teams/6185/wiki/homepage/strawberry.svg" alt="">
+          <img class="f-berry" src="https://static.igem.wiki/teams/6185/wiki/lastmin/food-strawberry.svg" alt="">
           <img class="f-cherries" src="https://static.igem.wiki/teams/6185/wiki/lastmin/food-cherries.svg" alt="">
         </div>
       </div>
@@ -316,18 +316,19 @@
 
   <section id="honeycomb-earth" class="scroll-story" aria-label="From Earth to the hive, inside a honey bee, and inside a Varroa mite" data-region="world">
     <div class="stage geo-stage">
-      <div class="map-view"><canvas id="globe" role="img" aria-label="An illustrated Earth turns toward the United States, alongside separate statistics for annual colony loss and historical DWV-B prevalence."></canvas><span class="globe-location" aria-hidden="true"></span>
+      <div class="map-view"><canvas id="globe" role="img" aria-label="An illustrated Earth turns toward the United States. Separate evidence cards show U.S. colony losses and seasonal DWV detection in South Korea."></canvas><span class="globe-location" aria-hidden="true"></span>
       </div>
       <aside class="dwv-evidence" aria-labelledby="dwv-evidence-title" aria-hidden="true" inert>
-        <p class="dwv-evidence__eyebrow">Deformed wing virus · U.S. study</p>
-        <h3 id="dwv-evidence-title">DWV-B spread rapidly.</h3>
-        <p class="dwv-evidence__measure">Share of sampled apiaries testing positive for this DWV variant.</p>
-        <div class="dwv-evidence__samples" role="img" aria-label="DWV-B was detected in 2 of 75 sampled U.S. apiaries in 2010, 2.7 percent, and 389 of 603 in 2016, 64.5 percent. The bars use a common zero to one hundred percent scale.">
-          <div class="dwv-evidence__sample" aria-hidden="true"><span class="dwv-evidence__year">2010</span><span class="dwv-evidence__track"><i style="--prevalence:2.7%"></i></span><strong class="dwv-evidence__value">2.7%</strong></div>
-          <div class="dwv-evidence__sample" aria-hidden="true"><span class="dwv-evidence__year">2016</span><span class="dwv-evidence__track"><i style="--prevalence:64.5%"></i></span><strong class="dwv-evidence__value">64.5%</strong></div>
+        <p class="dwv-evidence__eyebrow">South Korea · Study published 2026</p>
+        <h3 id="dwv-evidence-title">DWV rose through 2025.</h3>
+        <p class="dwv-evidence__measure">Share of bee samples with DWV detected across three seasonal surveys.</p>
+        <div class="dwv-evidence__samples" role="img" aria-label="In South Korea in 2025, DWV was detected in 70.1 percent of spring samples, 90.4 percent of summer samples, and 97.0 percent of autumn samples. There were 458, 634, and 623 samples respectively. Apiary enrolment changed between seasonal rounds. All bars use a zero to one hundred percent scale.">
+          <div class="dwv-evidence__sample" aria-hidden="true"><span class="dwv-evidence__year">Spring</span><span class="dwv-evidence__track"><i style="--prevalence:70.1%"></i></span><strong class="dwv-evidence__value">70.1%</strong></div>
+          <div class="dwv-evidence__sample" aria-hidden="true"><span class="dwv-evidence__year">Summer</span><span class="dwv-evidence__track"><i style="--prevalence:90.4%"></i></span><strong class="dwv-evidence__value">90.4%</strong></div>
+          <div class="dwv-evidence__sample" aria-hidden="true"><span class="dwv-evidence__year">Autumn</span><span class="dwv-evidence__track"><i style="--prevalence:97%"></i></span><strong class="dwv-evidence__value">97.0%</strong></div>
         </div>
-        <p class="dwv-evidence__note">2 of 75 apiaries → 389 of 603.<br>Two historical surveys, not annual case counts.</p>
-        <a class="dwv-evidence__source" href="https://www.nature.com/articles/s41598-017-17802-3" target="_blank" rel="noreferrer">Ryabov et al., 2017 <span aria-hidden="true">↗</span></a>
+        <p class="dwv-evidence__note">Seasonal snapshots; sampled apiaries varied.<br>Detection in bee samples, not colony losses.</p>
+        <a class="dwv-evidence__source" href="https://www.frontiersin.org/journals/insect-science/articles/10.3389/finsc.2026.1891174/full" target="_blank" rel="noreferrer">Kim et al., 2026 · Table 5 <span aria-hidden="true">↗</span></a>
       </aside>
       <div class="geo-copy">
         <article class="geo-panel is-active" data-region-panel="world">
@@ -765,8 +766,8 @@
     <div class="swarm-footer__top">
       <div class="swarm-footer__identity">
         <a class="swarm-footer__brand" href="/lambert-ga/" aria-label="SWARM — Lambert iGEM homepage">
-          <svg class="swarm-footer__mark" viewBox="0 0 72 76" fill="none" aria-hidden="true"><path d="m36 3 18 10v21L36 44 18 34V13Z" fill="#F2C453"/><path d="m18 33 18 10v21L18 74 0 64V43Z" fill="#E8AC36"/><path d="m54 33 18 10v21L54 74 36 64V43Z" fill="#E9B942"/><path d="m36 11 11 6v13l-11 6-11-6V17Zm-18 30 11 6v13l-11 6-11-6V47Zm36 0 11 6v13l-11 6-11-6V47Z" stroke="#FFF9DF" stroke-width="2.6"/></svg>
-          <span>SWARM<span class="swarm-footer__team">Lambert iGEM · 2026</span></span>
+          <img class="swarm-footer__logo" src="https://static.igem.wiki/teams/6185/wiki/lastmin/swarm-logo.svg" alt="SWARM" width="260" height="110" loading="lazy" decoding="async">
+          <span class="swarm-footer__team">Lambert iGEM · 2026</span>
         </a>
         <address class="swarm-footer__contact">
           <span>805 Nichols Road, Suwanee, GA 30024</span>
@@ -788,24 +789,46 @@
       </div>
     </div>
     <div class="swarm-footer__support">
-      <p class="swarm-footer__eyebrow">With support from</p>
-      <ul class="swarm-footer__sponsors" aria-label="Our sponsors">
-        <li><a href="https://bhamla.com/" target="_blank" rel="noopener noreferrer">Bhamla Lab</a></li>
-        <li><a href="https://www.twistbioscience.com/" target="_blank" rel="noopener noreferrer">Twist <span>Bioscience</span></a></li>
-        <li><a href="https://www.addgene.org/" target="_blank" rel="noopener noreferrer">Addgene</a></li>
-        <li><a href="https://www.genscript.com/" target="_blank" rel="noopener noreferrer">GenScript</a></li>
-        <li><a href="https://www.promega.com/" target="_blank" rel="noopener noreferrer">Promega</a></li>
-        <li><a href="https://www.adaptyvbio.com/" target="_blank" rel="noopener noreferrer">Adaptyv</a></li>
-        <li><a href="https://boltz.com/" target="_blank" rel="noopener noreferrer">Boltz</a></li>
-        <li><a href="https://nebius.com/" target="_blank" rel="noopener noreferrer">Nebius</a></li>
-      </ul>
+      <input class="swarm-footer__pause-input" type="checkbox" id="sponsor-motion-pause" aria-label="Pause sponsor logo animation">
+      <div class="swarm-footer__support-heading">
+        <p class="swarm-footer__eyebrow">With support from</p>
+        <label class="swarm-footer__pause" for="sponsor-motion-pause">
+          <svg class="swarm-footer__pause-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3v10M11 3v10" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          <svg class="swarm-footer__play-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="m5 2 9 6-9 6Z" fill="currentColor"/></svg>
+          <span class="swarm-footer__pause-label">Pause</span><span class="swarm-footer__play-label">Resume</span>
+        </label>
+      </div>
+      <div class="swarm-footer__sponsor-window" aria-label="Our sponsors">
+        <div class="swarm-footer__sponsor-track">
+          <ul class="swarm-footer__sponsors">
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--bhamla" href="https://bhamla.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-bhamla-lab.avif" alt="Bhamla Lab" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--twist" href="https://www.twistbioscience.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-twist-bioscience.svg" alt="Twist Bioscience" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--addgene" href="https://www.addgene.org/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-addgene.svg" alt="Addgene" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--genscript" href="https://www.genscript.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-genscript.svg" alt="GenScript" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--promega" href="https://www.promega.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-promega.svg" alt="Promega" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--adaptyv" href="https://www.adaptyvbio.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-adaptyv.svg" alt="Adaptyv" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--boltz" href="https://boltz.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-boltz.svg" alt="Boltz" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--nebius" href="https://nebius.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-nebius.svg" alt="Nebius" width="180" height="80" loading="lazy" decoding="async"></a></li>
+          </ul>
+          <ul class="swarm-footer__sponsors swarm-footer__sponsors--clone" aria-hidden="true" inert>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--bhamla" href="https://bhamla.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-bhamla-lab.avif" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--twist" href="https://www.twistbioscience.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-twist-bioscience.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--addgene" href="https://www.addgene.org/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-addgene.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--genscript" href="https://www.genscript.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-genscript.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--promega" href="https://www.promega.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-promega.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--adaptyv" href="https://www.adaptyvbio.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-adaptyv.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--boltz" href="https://boltz.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-boltz.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--nebius" href="https://nebius.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-nebius.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+          </ul>
+        </div>
+      </div>
     </div>
     <details class="home-references">
       <summary>References &amp; artwork</summary>
       <ul>
         <li><a href="https://www.fao.org/pollination/about/" target="_blank" rel="noreferrer">FAO: crop pollination</a></li>
         <li><a href="https://wire.auburn.edu/content/agriculture/2025/06/2506-beekeepers-survey.php" target="_blank" rel="noreferrer">U.S. Beekeeping Survey, April 2024–April 2025: managed colony losses</a></li>
-        <li><a href="https://www.nature.com/articles/s41598-017-17802-3" target="_blank" rel="noreferrer">Ryabov et al. (2017): DWV-B detected in 2/75 sampled U.S. apiaries in 2010 and 389/603 in 2016 (raw proportions reported in the study results)</a></li>
+        <li><a href="https://www.frontiersin.org/journals/insect-science/articles/10.3389/finsc.2026.1891174/full" target="_blank" rel="noreferrer">Kim et al. (2026), Table 5: DWV detection in South Korean bee samples rose from 70.1% in spring to 90.4% in summer and 97.0% in autumn 2025; separate seasonal surveys with changing apiary enrolment</a></li>
         <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC5373406/" target="_blank" rel="noreferrer">DWV structure and the proposed role of the P domain</a></li>
         <li><a href="https://www.rcsb.org/structure/5L8Q" target="_blank" rel="noreferrer">Protein Data Bank: DWV capsid, 5L8Q</a></li>
         <li><a href="https://pubmed.ncbi.nlm.nih.gov/20003360/" target="_blank" rel="noreferrer">DWV in honey bee tissues</a></li>

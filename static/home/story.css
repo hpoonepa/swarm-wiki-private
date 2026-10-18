@@ -414,7 +414,7 @@ html.loading .honey-progress { visibility: hidden; }
 .dwv-evidence h3 { margin: 0 0 8px; font-size: clamp(23px,2.1vw,29px); font-weight: 700; letter-spacing: -.035em; line-height: 1.15; }
 .dwv-evidence__measure { margin: 0 0 15px; color: #526557; font-size: 14px; line-height: 1.4; }
 .dwv-evidence__samples { display: grid; gap: 12px; }
-.dwv-evidence__sample { display: grid; grid-template-columns: 42px 1fr 61px; align-items: center; gap: 10px; }
+.dwv-evidence__sample { display: grid; grid-template-columns: 58px 1fr 61px; align-items: center; gap: 10px; }
 .dwv-evidence__year { font-size: 14px; font-weight: 650; }
 .dwv-evidence__track { display: block; height: 12px; overflow: hidden; background: #eee7d5; border-radius: 3px; }
 .dwv-evidence__track i { display: block; height: 100%; width: var(--prevalence); background: #ca9225; border-radius: 3px; }

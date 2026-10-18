@@ -3,8 +3,8 @@
     <div class="swarm-footer__top">
       <div class="swarm-footer__identity">
         <a class="swarm-footer__brand" href="/lambert-ga/" aria-label="SWARM — Lambert iGEM homepage">
-          <svg class="swarm-footer__mark" viewBox="0 0 72 76" fill="none" aria-hidden="true"><path d="m36 3 18 10v21L36 44 18 34V13Z" fill="#F2C453"/><path d="m18 33 18 10v21L18 74 0 64V43Z" fill="#E8AC36"/><path d="m54 33 18 10v21L54 74 36 64V43Z" fill="#E9B942"/><path d="m36 11 11 6v13l-11 6-11-6V17Zm-18 30 11 6v13l-11 6-11-6V47Zm36 0 11 6v13l-11 6-11-6V47Z" stroke="#FFF9DF" stroke-width="2.6"/></svg>
-          <span>SWARM<span class="swarm-footer__team">Lambert iGEM · 2026</span></span>
+          <img class="swarm-footer__logo" src="https://static.igem.wiki/teams/6185/wiki/lastmin/swarm-logo.svg" alt="SWARM" width="260" height="110" loading="lazy" decoding="async">
+          <span class="swarm-footer__team">Lambert iGEM · 2026</span>
         </a>
         <address class="swarm-footer__contact">
           <span>805 Nichols Road, Suwanee, GA 30024</span>
@@ -26,17 +26,39 @@
       </div>
     </div>
     <div class="swarm-footer__support">
-      <p class="swarm-footer__eyebrow">With support from</p>
-      <ul class="swarm-footer__sponsors" aria-label="Our sponsors">
-        <li><a href="https://bhamla.com/" target="_blank" rel="noopener noreferrer">Bhamla Lab</a></li>
-        <li><a href="https://www.twistbioscience.com/" target="_blank" rel="noopener noreferrer">Twist <span>Bioscience</span></a></li>
-        <li><a href="https://www.addgene.org/" target="_blank" rel="noopener noreferrer">Addgene</a></li>
-        <li><a href="https://www.genscript.com/" target="_blank" rel="noopener noreferrer">GenScript</a></li>
-        <li><a href="https://www.promega.com/" target="_blank" rel="noopener noreferrer">Promega</a></li>
-        <li><a href="https://www.adaptyvbio.com/" target="_blank" rel="noopener noreferrer">Adaptyv</a></li>
-        <li><a href="https://boltz.com/" target="_blank" rel="noopener noreferrer">Boltz</a></li>
-        <li><a href="https://nebius.com/" target="_blank" rel="noopener noreferrer">Nebius</a></li>
-      </ul>
+      <input class="swarm-footer__pause-input" type="checkbox" id="sponsor-motion-pause" aria-label="Pause sponsor logo animation">
+      <div class="swarm-footer__support-heading">
+        <p class="swarm-footer__eyebrow">With support from</p>
+        <label class="swarm-footer__pause" for="sponsor-motion-pause">
+          <svg class="swarm-footer__pause-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3v10M11 3v10" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+          <svg class="swarm-footer__play-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="m5 2 9 6-9 6Z" fill="currentColor"/></svg>
+          <span class="swarm-footer__pause-label">Pause</span><span class="swarm-footer__play-label">Resume</span>
+        </label>
+      </div>
+      <div class="swarm-footer__sponsor-window" aria-label="Our sponsors">
+        <div class="swarm-footer__sponsor-track">
+          <ul class="swarm-footer__sponsors">
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--bhamla" href="https://bhamla.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-bhamla-lab.avif" alt="Bhamla Lab" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--twist" href="https://www.twistbioscience.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-twist-bioscience.svg" alt="Twist Bioscience" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--addgene" href="https://www.addgene.org/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-addgene.svg" alt="Addgene" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--genscript" href="https://www.genscript.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-genscript.svg" alt="GenScript" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--promega" href="https://www.promega.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-promega.svg" alt="Promega" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--adaptyv" href="https://www.adaptyvbio.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-adaptyv.svg" alt="Adaptyv" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--boltz" href="https://boltz.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-boltz.svg" alt="Boltz" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--nebius" href="https://nebius.com/" target="_blank" rel="noopener noreferrer"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-nebius.svg" alt="Nebius" width="180" height="80" loading="lazy" decoding="async"></a></li>
+          </ul>
+          <ul class="swarm-footer__sponsors swarm-footer__sponsors--clone" aria-hidden="true" inert>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--bhamla" href="https://bhamla.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-bhamla-lab.avif" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--twist" href="https://www.twistbioscience.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-twist-bioscience.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--addgene" href="https://www.addgene.org/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-addgene.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--genscript" href="https://www.genscript.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-genscript.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--promega" href="https://www.promega.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-promega.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--adaptyv" href="https://www.adaptyvbio.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-adaptyv.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--boltz" href="https://boltz.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-boltz.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+            <li><a class="swarm-footer__sponsor swarm-footer__sponsor--nebius" href="https://nebius.com/" target="_blank" rel="noopener noreferrer" tabindex="-1"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/sponsor-nebius.svg" alt="" width="180" height="80" loading="lazy" decoding="async"></a></li>
+          </ul>
+        </div>
+      </div>
     </div>
     <!-- HOME_REFERENCES -->
     <div class="swarm-footer__legal">
