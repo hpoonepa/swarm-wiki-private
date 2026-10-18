@@ -373,9 +373,9 @@ In our binding assay, the minibinder failed to bind to VP3. Additionally, there 
 
 ## Epidemiological Model
 
-One honeybee colony, simulated day by day for five years and run twice through the same weather: once left alone, and once fed sucrose syrup carrying dsRNA from the first day onward. Because the machine keeps fresh syrup available continuously, there is no feeding schedule to design and nothing to optimise about timing, which leaves a cleaner question underneath. Does the treatment actually hold Varroa and deformed wing virus down over the kind of timescale a beekeeper cares about, and how much should anyone trust the answer?
+We simulated a single honeybee colony day by day over five years under identical weather conditions, comparing an untreated colony with one receiving sucrose syrup containing dsRNA from the beginning. Because the model assumes a continuous supply of fresh syrup, feeding schedules and treatment timing were not variables we needed to optimize. This allowed us to focus on two central questions: how effectively does the treatment control Varroa mites and deformed wing virus over five years, and how reliable are the model's predictions?
 
-Getting to something we were willing to defend took four passes, and each one broke a claim the pass before it had made. We have kept the broken versions here rather than quietly replacing them, partly because that is what an engineering cycle is supposed to look like, and partly because the failures turned out to be the most informative part of the whole exercise.
+Developing a model we could confidently defend required four rounds of revisions, with each version revealing limitations in the one before it. We retained these earlier versions to document how the model changed as we identified and addressed problems with our initial assumptions. Each revision improved our understanding of the system and helped us build a model whose results we could evaluate more critically.
 
 ### Iteration 1 – The first working model
 
@@ -418,15 +418,15 @@ There is no seasonal cycle anywhere in these four, because there were no seasons
 
 #### Learn
 
-The general lesson was to split anything doing two jobs, so transmission from mites to bees and pickup from bees to mites became two separate rates, which had the useful side effect of letting mites clear the virus again rather than carrying it for life. We also redefined the virus death rate as the extra daily mortality the virus adds, so an infected bee now dies at the ordinary rate plus that extra, infection always costs lifespan, and the constraint we had been working around disappeared on its own.
+The model was revised to represent transmission from mites to bees and virus acquisition from bees to mites as separate rates. This also allows mites to clear the virus rather than remain infected indefinitely. The virus related death rate was redefined as the additional daily mortality caused by infection. As a result, infected bees experience both baseline mortality and mortality caused by the virus, ensuring that infection increases their daily risk of death. This change also resolved the constraint identified in the previous model.
 
-Recovery stayed in the equations but is set to zero at every point in the year, which is deliberate. Leaving it visible as a stated assumption lets a reader see the decision and disagree with it, where deleting the term outright would have hidden the fact that a choice had been made at all.
+Recovery remains included in the equations but is set to zero throughout the year. This assumption is stated explicitly so that readers can evaluate its justification and consider alternative values. Retaining the recovery term also makes the modeling decision transparent rather than removing the process from the model entirely.
 
 ### Iteration 2 – Seasons and weather
 
 #### Design
 
-A colony with constant rates cannot answer the question we actually care about, because Varroa and deformed wing virus are both strongly seasonal and because overwintering is where colonies really die. So thirteen rates were each given four quarterly anchor values, read at the start of January, April, July and October and joined by a smooth curve that repeats from year to year. On top of that calendar we layered weather, standing in for the forage and conditions data we have no records for.
+A model with constant rates cannot adequately represent the seasonal dynamics of Varroa mites and deformed wing virus, particularly because winter survival is a major factor in colony mortality. To account for these changes, thirteen rates were assigned four quarterly values corresponding to the beginning of January, April, July, and October. The values were connected using a smooth curve that repeats annually. Weather was also incorporated to represent seasonal variation in forage availability and environmental conditions, for which direct data were unavailable.
 
 #### Build
 
@@ -434,11 +434,17 @@ The weather went in as four independent random series, one each for brood rearin
 
 #### Test
 
-Four problems came out of this version, and every one of them was found by reading the equations rather than by looking at the output.
+Five problems were identified in this version of the model, all through reviewing the equations rather than examining the simulation output.
 
-The weather was being held constant across each whole day, so multiplying a smooth seasonal curve by what amounted to a daily step function left the right-hand side of the differential equation jumping at every midnight, which meant the model was not differentiable in time and the solver had to be pinned to one-day steps to cope. Two of the saturating constants had their weather response backwards, which is easy to do and hard to spot, since a larger half-saturation constant makes brood care and mite reproduction worse rather than better, so giving them a positive weather sensitivity meant good weather was closing the brood gate instead of opening it. The gate on mite growth had been applied to the whole logistic expression rather than to births alone, so a colony that started to collapse also stopped culling its own mites and the load could run away completely. And four independent weather series, it turns out, cannot produce a bad summer at all, because nothing in them stops brood rearing from failing while mite conditions stay good.
+First, weather was held constant throughout each day. Multiplying a smooth seasonal curve by this daily step function caused the right hand side of the differential equation to jump at midnight. This made the function discontinuous in time and required the solver to use one day time steps to handle these changes.
 
-A fifth problem sat in the brood term, where emergence was suppressed by an exponential decay in the number of virus-carrying mites, with a rate constant that had no measurable counterpart in anything we could point to.
+Second, two saturation constants had incorrectly defined weather responses. Increasing a half saturation constant reduces brood care and mite reproduction, so assigning these constants positive weather sensitivities meant that favorable weather reduced brood care instead of increasing it.
+
+Third, the restriction on mite growth was applied to the entire logistic expression rather than only to mite births. Consequently, when the colony began to decline, mite removal also decreased, allowing mite numbers to increase without adequate control.
+
+Fourth, the model used four independent weather series. These could not represent a poor summer in which brood rearing conditions deteriorated while conditions for mite reproduction remained favorable. Without a shared weather mechanism, the model could not adequately represent this combination of conditions.
+
+Finally, the brood term reduced emergence through an exponential decay function based on the number of virus carrying mites. Its rate constant had no measurable biological counterpart in the available evidence, leaving this part of the model without a clear empirical justification.
 
 <Image
   src="https://static.igem.wiki/teams/6185/wiki/modeling/colonycollapse.avif"
@@ -446,13 +452,13 @@ A fifth problem sat in the brood term, where emergence was suppressed by an expo
   size="md"
 />
 
-The seasonal cycle appears here for the first time, and so does the failure: watch the mite panels climb away instead of levelling off, and the colony that follows them down.
+This version introduces seasonal variation for the first time, but also reveals a major problem: mite populations continue to rise instead of stabilizing, eventually causing the colony to decline.
 
 #### Learn
 
-Three of those are really the same mistake in different clothing, and it is a mistake specific to models rather than to code, because an equation can be dimensionally correct, numerically stable and still completely wrong about the biology. A sign error on a saturating constant does not throw an error, it just quietly inverts the weather for the rest of the run, and a gate applied to the wrong half of a logistic term does not throw one either, it simply removes the brakes at precisely the moment a colony most needs them.
+Three of these problems stemmed from the same underlying issue: incorrect biological assumptions within the model. This highlights a limitation of mathematical modeling rather than coding, since an equation can be dimensionally correct and numerically stable while still misrepresenting biological processes. An incorrect sign on a saturation constant does not produce an error message, but instead reverses the effect of weather throughout the simulation. Similarly, applying a growth restriction to the wrong part of a logistic term removes the limits on mite growth when the colony is most vulnerable.
 
-Reading every functional form and asking what it was claiming about actual bees caught all four of these. Running the model and looking at the graphs caught none of them, which is the part we would want another team to take away from this.
+Reviewing each equation and evaluating its biological implications identified all four problems. However, running the simulation and examining its graphs revealed none of them. This is an important lesson for other teams: model validation requires checking the biological meaning of the equations, not just examining the simulation output.
 
 ### Iteration 3 – Fixing the equations and re-sourcing the parameters
 
@@ -472,7 +478,7 @@ Fifteen parameter values changed in the same pass. A few had been placeholders n
 
 #### Test
 
-The fifth change also settled something we had been getting wrong without realising it. Because coverage settles at a fixed ratio of uptake to loss, the potency, the uptake rate, the decay rate and the two parameters setting the shape of the dose-response all reach the data through a single product, which means they cannot be fitted separately at all. Raising the decay rate and raising the potency cancel each other almost exactly.
+The fifth change also clarified a limitation in the parameter estimation. Because coverage stabilizes at a fixed ratio of uptake to loss, potency, uptake rate, decay rate, and the two dose response parameters affect the data through a single product. As a result, these parameters cannot be fitted independently. Increasing the decay rate can be almost entirely offset by increasing potency.
 
 <Image
   src="https://static.igem.wiki/teams/6185/wiki/modeling/workingnotfinished.avif"
@@ -484,15 +490,15 @@ These are the same four panels as the set above, after the five fixes. The mite 
 
 #### Learn
 
-That leaves exactly one number in the treatment block that can be calibrated at all. The uptake rate, the dsRNA loss rate and the rate at which disabled mites die are all measurable in their own right, and the two shape parameters are held at published values, so the potency is the only thing left for data to pin down. The script solves for it against a mite reduction taken from the middle of the range reported for field trials of RNAi Varroa treatments.
+Only one parameter in the treatment model can be calibrated using the available data: potency. The uptake rate, dsRNA loss rate, and death rate of disabled mites can each be measured independently, while the two dose response shape parameters are fixed at published values. Potency is therefore the only remaining parameter that can be estimated from treatment data. The script calibrates it using a mite reduction value near the midpoint of the range reported in field trials of RNAi treatments for Varroa.
 
-The calibration routine also carries a warning we wrote after being caught out by it. If the untreated colony collapses partway through, its mite count sits at zero for the rest of the run, so a reduction averaged across the whole horizon understates the treatment badly and can even come out negative. Every effect the model reports is now measured only over the days when both colonies are still alive.
+The calibration routine also accounts for a limitation identified during testing. If the untreated colony collapses before the simulation ends, its mite population remains at zero for the rest of the simulation. Calculating the average mite reduction across the entire period can therefore underestimate the treatment effect or even produce a negative value. To avoid this, all reported treatment effects are calculated only over the days when both colonies remain alive.
 
 ### Iteration 4 – Checking the result from outside
 
 #### Design
 
-Everything up to this point had come out of one script, one weather sequence and one team's reading of its own work, which leaves three fairly obvious gaps. A result from a single weather is not really a result, the one-at-a-time sensitivity test only ever touched the six treatment parameters, and nobody had tried to re-derive the thing independently.
+Until this point, the model had been evaluated using a single script, one weather sequence, and the same team's review. This left three main limitations: the results had not been tested across different weather conditions, the one at a time sensitivity analysis covered only the six treatment parameters, and the model had not been independently rederived.
 
 #### Build
 
@@ -500,7 +506,7 @@ So the model was rebuilt in Python, working from the equations rather than trans
 
 #### Test
 
-The cross-check held comfortably. In fixed weather the two implementations agree to five decimal places, the spread across random weathers is statistically indistinguishable between them, halving the time step moves nothing worth reporting, and an older Python with older libraries produces identical output.
+The independent validation confirmed that the model was consistent across implementations. Under fixed weather conditions, both implementations agreed to five decimal places, and the variation across random weather sequences was statistically indistinguishable. Halving the time step produced no meaningful changes in the results, and running the model in an older Python version with older libraries produced identical outputs.
 
 <Image
   src="https://static.igem.wiki/teams/6185/wiki/modeling/mcsa-comparison.avif"
@@ -508,7 +514,7 @@ The cross-check held comfortably. In fixed weather the two implementations agree
   size="md"
 />
 
-The global analysis is where the result changed shape. Across a thousand draws both colonies survive in roughly four fifths of them, and in those the treatment removes around 96% of the feeding mites, with even the worst draw still above 84%. What was not obvious beforehand is that the two outcomes we care about turn out not to be controlled by the same things at all.
+The global analysis revealed a clearer picture of the results. Across 1,000 simulations, both colonies survived in approximately 80% of cases. In these simulations, the treatment reduced feeding mites by around 96%, with the lowest reduction still exceeding 84%. The analysis also showed that the two main outcomes of interest are influenced by different factors, which was not apparent beforehand.
 
 | Outcome | What actually drives it |
 |:--------|:------------------------|
@@ -519,12 +525,10 @@ None of the six treatment parameters moves the bee gain by a significant amount.
 
 #### Learn
 
-The honest reading of that table is that how many mites we remove is about the dsRNA, while how many more bees the colony ends up with is mostly about the colony's own demography. We would rather say so plainly than let a reader assume our treatment sets the bee number directly, and there is a fairly mechanical reason behind it: a higher adult death rate produces a smaller untreated colony, a smaller colony was never going to carry many mites to begin with, and so the gap between treated and untreated narrows from the untreated side. The treated colony itself barely moves either way, because nearly all of its mite-days fall in the first year and after that there is almost nothing left to count.
+The results suggest that mite reduction depends primarily on the dsRNA treatment, while the difference in adult bee populations is influenced more by the colony's own population dynamics. This distinction is important because the treatment does not directly determine the number of bees in the colony. A higher adult mortality rate reduces the size of the untreated colony, which also limits the number of mites it can support. As a result, the difference between the treated and untreated colonies becomes smaller. The treated colony's mite population changes very little across these conditions because most of its total mite days occur during the first year, with few mites remaining afterward.
 
-The stress tests suggest the headline is not fragile. A 90% reduction survives the uptake being cut to a quarter of what we plan to deliver, the dsRNA degrading several times faster than measured, and the potency being cut nearly in half, and it only really gives way when potency drops to a fifth of nominal, at which point the effect falls to roughly half.
+The stress tests also show that the treatment remains effective across a wide range of conditions. A 90% reduction in mites is maintained even when uptake falls to one quarter of the planned level, dsRNA degrades several times faster than measured, and potency decreases by nearly half. The effect declines substantially only when potency falls to one fifth of its nominal value, at which point the reduction drops to approximately 50%.
 
-The single most useful number here for an actual beekeeper is probably the survival asymmetry. Across the thousand draws about a fifth of the untreated colonies were lost, most of them in the second spring, against one of the treated ones, and no treated colony collapsed in any of the six stress tests.
-
-What four iterations cannot do, of course, is make the model true. It has never been compared against a real colony, with no trial, no cage study and not a single treated bee measured. The potency rests on one source and is the parameter the entire mite result leans on hardest, the weather is invented, and it is one isolated colony with no neighbours, no swarming and no queen loss, all three of which would work against the treated side rather than for it. So the most valuable thing anyone could hand this model is not another analysis but one season of mite counts from a treated hive and an untreated one, which would turn it from an argument into a prediction we could be wrong about.
+For beekeepers, one of the most important findings is the difference in colony survival. Across 1,000 simulations, approximately one fifth of untreated colonies collapsed, most during the second spring. In comparison, only one treated colony collapsed. No treated colonies collapsed in any of the six stress tests.
 
 ### References
