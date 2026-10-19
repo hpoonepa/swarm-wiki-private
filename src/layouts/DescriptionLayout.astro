@@ -1,9 +1,15 @@
 ---
+import type { MarkdownHeading } from 'astro';
 import ContentLayout from './ContentLayout.astro';
-const { frontmatter, headings } = Astro.props;
+const { frontmatter, headings = [] } = Astro.props;
+const sidebarHeadings = headings.map((heading: MarkdownHeading) =>
+  heading.slug === 'impact-and-sustainable-development'
+    ? { ...heading, text: 'Impact' }
+    : heading
+);
 ---
 
-<ContentLayout frontmatter={frontmatter} headings={headings}>
+<ContentLayout frontmatter={frontmatter} headings={sidebarHeadings}>
   <slot />
 </ContentLayout>
 
@@ -21,6 +27,23 @@ const { frontmatter, headings } = Astro.props;
   #article.info-prose > h1:not(:first-child),
   #article.info-prose > .description-references {
     margin-block-start: calc(var(--description-section-gap) - var(--description-block-gap));
+  }
+
+  #article.info-prose > h2 {
+    margin-block-start: calc(clamp(1.75rem, 4vw, 2.5rem) - var(--description-block-gap));
+  }
+
+  .section-list__link[data-depth='2'] .section-list__text { font-weight: 600; }
+  .section-list__link[data-depth='3'] { margin-inline-start: 1rem; }
+  .section-list__item:has(> [data-depth='3']) { position: relative; }
+  .section-list__item:has(> [data-depth='3'])::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: calc(var(--row-x) + var(--marker) / 2);
+    width: 1rem;
+    height: 1px;
+    background: color-mix(in oklch, var(--ink) 20%, transparent);
   }
 
   #article .description-references {
