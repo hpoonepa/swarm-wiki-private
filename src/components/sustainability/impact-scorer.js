@@ -201,7 +201,7 @@ function renderRecords() {
     const metrics = factor.metrics.map(metric => `<div><dt>${esc(metric.n)} <span>${state.metricWeights[factor.key][metric.k]}%</span></dt><dd>${validScore(item.scores[metric.k]) ? item.scores[metric.k] : 'Unscored'}</dd></div>`).join('');
     const goals = item.sdgs.map(number => `<span class="record-goal" title="${esc(SDG_BY_N[number].name)}">SDG ${number}</span>`).join('');
     const link = item.factor === 'outreach' && outreachAnchors[item.name] ? `<a class="record-link" href="/lambert-ga/education/#${outreachAnchors[item.name]}">Read the activity ↗</a>` : '';
-    return `<details class="assessment-record"><summary><span class="record-name">${esc(item.name || 'Untitled record')}</span><span class="record-goals">${goals}</span><span class="record-rating">${fmt(itemScore(item))}<small> / 10</small></span><span class="disclosure" aria-hidden="true">+</span></summary><div class="record-body"><p>${esc(item.why || 'No assessment note supplied.')}</p>${link}<dl class="record-metrics">${metrics}</dl></div></details>`;
+    return `<details class="assessment-record" id="impact-record-${item.id}"><summary><span class="record-name">${esc(item.name || 'Untitled record')}</span><span class="record-goals">${goals}</span><span class="record-rating">${fmt(itemScore(item))}<small> / 10</small></span><span class="disclosure" aria-hidden="true">+</span></summary><div class="record-body"><p>${esc(item.why || 'No assessment note supplied.')}</p>${link}<dl class="record-metrics">${metrics}</dl></div></details>`;
   }).join('') || '<p class="record-empty">No matching records.</p>';
 }
 function renderTable(){
@@ -262,6 +262,23 @@ function toast(msg,actionLabel,action){
 function note(msg){var n=$("save-note");n.textContent=msg||"";n.hidden=!msg;}
 
 /* ---- events ---- */
+document.addEventListener('click', event => {
+  const link = event.target.closest('a[data-assessment-record]');
+  if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const published = JSON.parse(STATE_TEXT);
+  const item = published.items.find(entry => entry.id === link.dataset.assessmentRecord);
+  if (!item) return;
+  event.preventDefault();
+  if (scenario) saveCopy();
+  state = published; normalize(state); scenario = false; editing = false;
+  activeTab = item.factor;
+  $('search').value = ''; $('goal-filter').value = '';
+  renderAll(); note('');
+  const record = $('record-' + item.id);
+  record.open = true;
+  record.querySelector('summary').focus({ preventScroll: true });
+  record.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+});
 root.addEventListener("input",function(e){
   if (!editing) return;
   var t=e.target, d=t.dataset;

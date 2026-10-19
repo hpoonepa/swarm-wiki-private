@@ -45,12 +45,12 @@ export function arrow(layout: Layout, angle: number, outward: boolean): { shaft:
 
 export function hubMarkup(goal: Goal, layout: Layout): string {
   const s = SHAPES[layout], p = point(layout, 0, 0), g = s.glyph.hub;
-  return `<g class="sdg-node sdg-node--hub" data-goal="${goal.id}" tabindex="-1" role="group" aria-label="${goal.name}, center goal" style="--tone:${goal.tone}" transform="translate(${p.x} ${p.y})"><circle r="${s.hub}"/><use href="#sdg-glyph-${goal.id}" x="${-g / 2}" y="${-g / 2}" width="${g}" height="${g}"/></g>`;
+  return `<g class="sdg-node sdg-node--hub" id="sdg-${goal.number}" data-goal="${goal.id}" tabindex="-1" role="group" aria-label="${goal.name}, center goal" style="--tone:${goal.tone}" transform="translate(${p.x} ${p.y})"><circle r="${s.hub}"/><use href="#sdg-glyph-${goal.id}" x="${-g / 2}" y="${-g / 2}" width="${g}" height="${g}"/></g>`;
 }
 
 export function satMarkup(goal: Goal, layout: Layout, angle: number): string {
   const s = SHAPES[layout], p = point(layout, angle, 1), g = s.glyph.sat;
-  return `<a class="sdg-node sdg-node--sat" href="#sdg-${goal.number}" data-goal="${goal.id}" style="--tone:${goal.tone}" transform="translate(${pt(p)})" aria-label="Bring ${goal.name} to the center"><circle r="${s.sat}"/><use href="#sdg-glyph-${goal.id}" x="${-g / 2}" y="${-g / 2}" width="${g}" height="${g}"/></a>`;
+  return `<a class="sdg-node sdg-node--sat" id="sdg-${goal.number}" href="#sdg-${goal.number}" data-goal="${goal.id}" style="--tone:${goal.tone}" transform="translate(${pt(p)})" aria-label="Bring ${goal.name} to the center"><circle r="${s.sat}"/><use href="#sdg-glyph-${goal.id}" x="${-g / 2}" y="${-g / 2}" width="${g}" height="${g}"/></a>`;
 }
 
 export function labelMarkup(goal: Goal, layout: Layout, angle: number): string {

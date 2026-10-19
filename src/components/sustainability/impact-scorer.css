@@ -53,7 +53,7 @@
 .impact-scorer .record-filters :is(input,select) { font: 400 14px var(--body); background: #fff; color: var(--ink); border: 1px solid #b8c6b8; padding: 10px 12px; border-radius: 4px; min-height: 42px; min-width: 0; width: 100%; }
 .impact-scorer .record-count { font-size: 12px; color: var(--muted); padding-bottom: 12px; }
 .impact-scorer .record-list { border-top: 1px solid var(--line); }
-.impact-scorer .assessment-record { border-bottom: 1px solid var(--line); }
+.impact-scorer .assessment-record { border-bottom: 1px solid var(--line); scroll-margin-top: 110px; }
 .impact-scorer .assessment-record > summary { display: grid; grid-template-columns: minmax(150px,1.3fr) minmax(100px,1fr) auto 16px; gap: 16px; align-items: center; padding: 17px 0; list-style: none; }
 .impact-scorer .record-name { font-size: 14px; font-weight: 500; }
 .impact-scorer .record-goals { display: flex; flex-wrap: wrap; gap: 5px; }
