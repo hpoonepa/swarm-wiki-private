@@ -2,13 +2,14 @@
 import InformationLayout from '../../layouts/InformationLayout.astro';
 import DesignResults from './DesignResults';
 import EpitopeExplorer from './EpitopeExplorer.astro';
+import BinderEmbed from '../binder/BinderEmbed.astro';
 import './modeling.css';
 
 const frontmatter = {
   title: 'Minibinder Design',
   description: 'Computational modeling and experimental evaluation of DWV minibinders.',
-  tabLabels: ['Overview', 'Minibinder Design', 'RNAi Model', 'Minibinder Dose Model', 'Epidemiological Model', 'Instructional'],
-  tabLinks: ['model', 'model-design', 'model-rnai', 'model-minibinder', 'model-epidemiological', 'model-instructional'],
+  tabLabels: ['Overview', 'Minibinder Design', 'RNAi Model', 'Minibinder Dose Model', 'Epidemiological Model'],
+  tabLinks: ['model', 'model-design', 'model-rnai', 'model-minibinder', 'model-epidemiological'],
 };
 const headings = [
   { depth: 1, slug: 'abstract', text: 'Abstract' },
@@ -106,10 +107,7 @@ const headings = [
     </tbody>
   </table>
   <p>The interactive viewer below shows the predicted complex for this candidate. The BLI measurements support moderate-affinity binding to the tested target construct; they do not validate every detail of the predicted pose or establish viral neutralization.</p>
-  <figure class="modeling-viewer wide">
-    <iframe src="/lambert-ga/minibinder-viewer/?embed=1&design=design-02" title="Interactive predicted structure of the confirmed minibinder and VP3" loading="lazy" allow="fullscreen" allowfullscreen></iframe>
-    <figcaption>Figure 2. Predicted complex of <code>l79_s469532_mpnn9</code> and the VP3 target. Drag to rotate the structure. <a href="/lambert-ga/minibinder-viewer/?design=design-02">Open the full minibinder viewer</a>.</figcaption>
-  </figure>
+  <BinderEmbed figureLabel="Figure 2" />
 
   <h2 id="results">Submitted Minibinder Results</h2>
   <p>The expandable table contains all 35 designs submitted across the two campaigns, with their reported computational scores and assay outcomes. In total, one design had confirmed binding, 18 received negative calls, and 16 did not yield a usable binding call. Missing scores remain unreported.</p>

@@ -4,9 +4,11 @@ title: Project Description
 description: 'Protecting honey bees by targeting deformed wing virus and the Varroa mite that spreads it.'
 ---
 
+import DwvMap from '../components/description/DwvMap.astro';
+
 {/* Adapted from SWARM Project Description.pdf, supplied October 14, 2026.
     The full write-up on pages 3–7 supersedes the planning outline on pages 1–2.
-    Both images are extracted unchanged from the supplied PDF; no new graphics.
+    The delivery image is unchanged; the interactive map distinguishes reported detections from an illustrative habitat transition.
     Editorial follow-ups retained from the source:
     - Supply the bibliography for references [1]–[20].
     - Add the DWV researchers' statement supporting VP3 as a target.
@@ -33,12 +35,7 @@ Across the United States, beekeepers lost 39.9% of their managed colonies betwee
 
 DWV threatens honey bees worldwide, and when researchers tested bees from 603 apiaries across the United States, they detected DWV in 89.4% of them [7], [8]. The mite wedges itself under the overlapping plates of a bee's abdomen, pierces the soft membrane between them, and feeds on the fat tissue underneath [9]. Each feeding wound gives DWV a direct route into the bee [7].
 
-<figure>
-  <a href="https://static.igem.wiki/teams/6185/wiki/lastmin/description-dwv-distribution.avif" aria-label="Open the DWV distribution map at full size">
-    <img src="https://static.igem.wiki/teams/6185/wiki/lastmin/description-dwv-distribution.avif" width="754" height="460" loading="lazy" decoding="async" alt="World map labeled DWV, with countries shaded in red, gray, and green, as supplied in the project description." style={{ width: '100%', maxWidth: '580px', marginInline: 'auto', borderRadius: '14px' }} />
-  </a>
-  <figcaption>Figure 1. Global distribution of DWV.</figcaption>
-</figure>
+<DwvMap />
 
 Without mites, DWV infections usually cause no visible symptoms, but mites drive viral levels high enough to cause deformed wings and early death [10], [11]. Each new round of brood adds more mites and more infected bees, and an untreated colony will likely die [12], [14].
 

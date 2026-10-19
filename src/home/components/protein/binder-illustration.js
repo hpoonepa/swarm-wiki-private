@@ -115,6 +115,8 @@ export async function mountBinderScene(host, {progress=0, reduced=false}={}) {
   const points=backbone(await response.text());
   const viewport=host.querySelector('.protein-viewport');
   const board=host.closest('.binder-board');
+  const intro=board.querySelector('.binder-copy--intro');
+  const headline=board.querySelector('.binder-copy--result');
   const cards=[...board.querySelectorAll('.binder-fact')];
   const leaders=board.querySelector('.binder-leaders');
   const lines=[...leaders.querySelectorAll('g')];
@@ -171,19 +173,17 @@ export async function mountBinderScene(host, {progress=0, reduced=false}={}) {
     matrix.compose(p,beadTurn,beadScale); beads.setMatrixAt(i,matrix); beads.setColorAt(i,colors[i]);
   });
   binder.add(beads);
-  const startQ=new T.Quaternion().setFromEuler(new T.Euler(.24,.68,-.15));
   const endQ=principal(points.A);
+  const allPoints=[...points.A,...points.B];
   const bounds=(list,q)=>new T.Box3().setFromPoints(list.map(p=>p.clone().applyQuaternion(q))).expandByScalar(2);
-  const startBounds=bounds([...points.A,...points.B],startQ), endBounds=bounds(points.A,endQ);
-  const startCenter=startBounds.getCenter(new T.Vector3()), endCenter=endBounds.getCenter(new T.Vector3());
-  const startSize=startBounds.getSize(new T.Vector3()), endSize=endBounds.getSize(new T.Vector3());
   const flat=points.A.map(p=>p.clone().applyQuaternion(endQ));
   const sorted=flat.map((_,i)=>i).sort((a,b)=>flat[a].x-flat[b].x);
   const k=Math.max(2,Math.round(sorted.length*.4)), left=sorted.slice(0,k), right=sorted.slice(-k);
   const extreme=(list,top)=>list.reduce((a,b)=>(top?flat[b].y>flat[a].y:flat[b].y<flat[a].y)?b:a);
   const anchors=[extreme(left,true),extreme(right,true),extreme(left,false),extreme(right,false)];
   let width=0,height=0,current=progress,dead=false,yaw=0,pitch=0,down=null,queued=0;
-  const scratch=new T.Vector3(), turn=new T.Quaternion();
+  const scratch=new T.Vector3(), turn=new T.Quaternion(), orbit=new T.Quaternion();
+  const startCenter=new T.Vector3(),endCenter=new T.Vector3(),startSize=new T.Vector3(),endSize=new T.Vector3();
   function size() {
     const w=viewport.clientWidth, h=viewport.clientHeight;
     if (!w || !h) return false;
@@ -232,17 +232,35 @@ export async function mountBinderScene(host, {progress=0, reduced=false}={}) {
     current=clamp(Number.isFinite(value)?value:0);
     if (!size()) return;
     const p=reduced?1:current;
-    const move=ease(ramp(p,.43,.68)), fade=ease(ramp(p,.43,.62));
+    const move=ease(ramp(p,.34,.64)), fade=ease(ramp(p,.35,.56));
+    const align=ease(ramp(p,.44,.68)), spin=ease(ramp(p,.16,.54));
     const narrow=width<=760;
-    const startScale=Math.min(width*(narrow?.78:.60)/startSize.x,height*.72/startSize.y);
-    const endScale=Math.min(width*(narrow?.78:.39)/endSize.x,height*(narrow?.78:.48)/endSize.y);
+    // One model stays in view: turn the bound pair, let the target recede,
+    // then bring the same binder forward into its reading pose.
+    orbit.setFromEuler(new T.Euler(.24+.08*spin,.38+.9*spin,-.15+.1*spin));
+    root.quaternion.copy(orbit).slerp(endQ,align);
+    turn.setFromEuler(new T.Euler(pitch,yaw,0)); root.quaternion.premultiply(turn);
+    const opening=bounds(allPoints,root.quaternion), ending=bounds(points.A,root.quaternion);
+    opening.getCenter(startCenter); opening.getSize(startSize);
+    ending.getCenter(endCenter); ending.getSize(endSize);
+    const startScale=Math.min(width*(narrow?.84:.50)/startSize.x,height*(narrow?.78:.68)/startSize.y);
+    const endScale=Math.min(width*(narrow?.84:.44)/endSize.x,height*(narrow?.78:.51)/endSize.y);
     const scale=T.MathUtils.lerp(startScale,endScale,move);
     root.scale.setScalar(scale);
-    root.quaternion.copy(startQ).slerp(endQ,move);
-    turn.setFromEuler(new T.Euler(pitch,yaw,0)); root.quaternion.premultiply(turn);
-    scratch.copy(startCenter).lerp(endCenter,move).applyQuaternion(turn).multiplyScalar(-scale);
-    root.position.copy(scratch); root.position.y-=height*(narrow?.03:.045);
-    target.position.set(0,0,-fade*18);
+    scratch.copy(startCenter).lerp(endCenter,move).multiplyScalar(-scale);
+    root.position.copy(scratch);
+    root.position.x+=narrow?0:width*.19*(1-move);
+    root.position.y-=height*(narrow?.03:.045);
+    target.position.set(fade*8,-fade*3,-fade*18);
+    board.style.setProperty('--binder-focus',move.toFixed(4));
+    // Explain minibinders beside the bound pair; reserve the result headline
+    // for the centered model and its four callouts.
+    for (const [copy,amount] of [[intro,1-ease(ramp(p,.34,.48))],[headline,ease(ramp(p,.52,.65))]]) {
+      if (!copy) continue;
+      copy.style.opacity=amount.toFixed(4);
+      copy.style.visibility=amount>.001?'visible':'hidden';
+      copy.setAttribute('aria-hidden',String(amount<.5));
+    }
     target.visible=fade<.999;
     target.children.forEach(child=> {
       child.material.transparent=fade>0; child.material.opacity=1-fade; child.material.depthWrite=fade===0;
@@ -257,7 +275,7 @@ export async function mountBinderScene(host, {progress=0, reduced=false}={}) {
     board.style.setProperty('--callouts',Math.max(...amounts).toFixed(4));
     root.updateMatrixWorld(true); camera.updateMatrixWorld();
     renderer?renderer.render(scene,camera):svgFallback(fade);
-    drawLeaders(amounts);
+    drawLeaders(cards.map((_,i)=>ease(ramp(p,.61+i*.035,.73+i*.035))));
     host.dataset.progress=current.toFixed(3); host.dataset.target=String(fade<.5);
   }
   const queue=()=>{if(!dead&&!queued)queued=requestAnimationFrame(()=>{queued=0;paint();});};

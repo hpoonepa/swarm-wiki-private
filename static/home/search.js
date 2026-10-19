@@ -1,4 +1,4 @@
-import { groups } from './nav-data.js?v=3dfdc3383d85';
+import { groups } from './nav-data.js?v=aee3ef9b6130';
 
 const magnifier = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.7" cy="10.7" r="6.7" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 4.4 4.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
 export const searchTrigger = `<button type="button" class="search-trigger" title="Search wiki (⌘/Ctrl K)" aria-label="Search the wiki" aria-haspopup="dialog" aria-expanded="false" aria-controls="search-pop" aria-keyshortcuts="Control+K Meta+K">${magnifier}</button>`;

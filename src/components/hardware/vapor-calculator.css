@@ -1,0 +1,103 @@
+.vapor-calculator {
+  --bg: #fffaf0; --surface: #ffffff; --surface-2: #f5efdE; --ink: #173f35; --muted: #627166; --line: #e4dcc5;
+  --accent: #245b49; --accent-soft: #eaf0e8; --on-accent: #fffdf4;
+  --warn: #8a591d; --warn-bg: #fff0cf; --ok: #3d6852; --ok-bg: #edf3e8; --err: #a63c39;
+  --t40: #669797; --t50: #53765c; --t60: #b18025; --t70: #b95742;
+  --font-body: 'Space Grotesk Variable', 'Space Grotesk', sans-serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  color: var(--ink); font: 400 16px/1.5 var(--font-body); background: var(--surface);
+  margin-block: 30px 48px; border: 1px solid var(--line); border-radius: 24px; overflow: clip;
+  container-type: inline-size; color-scheme: light;
+}
+.vapor-calculator *, .vapor-calculator *::before, .vapor-calculator *::after { box-sizing: border-box; }
+.vapor-calculator [hidden] { display: none !important; }
+.vapor-calculator :focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.vapor-calculator header { padding: 28px 32px 20px; }
+.info-prose .vapor-calculator p { margin: 0; max-width: none; font-size: inherit; line-height: 1.5; }
+.info-prose .vapor-calculator h3 { margin: 0; padding: 0; border: 0; font: 700 clamp(28px, 3.1vw, 40px)/1.15 var(--font-body); letter-spacing: -.035em; color: var(--ink); }
+.vapor-calculator .modes { display: flex; gap: 26px; padding: 0 32px; border-bottom: 1px solid var(--line); }
+.vapor-calculator button, .vapor-calculator input { font-family: var(--font-body); }
+.vapor-calculator .modes button { color: var(--muted); background: none; border: 0; border-bottom: 3px solid transparent; padding: 13px 0; cursor: pointer; font-size: 15px; font-weight: 600; margin-bottom: -1px; }
+.vapor-calculator .modes button[aria-pressed='true'] { border-bottom-color: #d5a12b; color: var(--ink); }
+.vapor-calculator .modes button:hover { color: #a36a1c; }
+.vapor-calculator .layout { display: grid; grid-template-columns: minmax(270px, .8fr) minmax(0, 1.6fr); align-items: stretch; }
+.vapor-calculator .panel { min-width: 0; border: 0; box-shadow: none; border-radius: 0; background: transparent; }
+.vapor-calculator .controls { display: flex; flex-direction: column; gap: 20px; padding: 26px; background: var(--bg); border-right: 1px solid var(--line); }
+.vapor-calculator .fields { display: grid; gap: 18px; }
+.vapor-calculator .field { display: grid; gap: 7px; }
+.vapor-calculator .field label { color: var(--ink); font-size: 14px; font-weight: 600; }
+.vapor-calculator .inputrow { display: flex; align-items: center; background: #fffef9; border: 1px solid #d9cfb6; border-radius: 9px; }
+.vapor-calculator .inputrow:focus-within { outline: 2px solid #bb8d30; outline-offset: 2px; }
+.vapor-calculator .inputrow input { border: 0; padding: 11px 12px; background: transparent; color: var(--ink); width: 100%; min-width: 0; font-size: 20px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.vapor-calculator .inputrow input:focus { outline: none; }
+.vapor-calculator .unit { padding-right: 14px; color: var(--muted); white-space: nowrap; font-size: 15px; }
+.vapor-calculator .slider { position: relative; padding-bottom: 18px; }
+.vapor-calculator input[type='range'] { display: block; appearance: none; width: 100%; height: 26px; margin: 0; background: transparent; cursor: pointer; }
+.vapor-calculator input[type='range']::-webkit-slider-runnable-track { height: 5px; border-radius: 4px; background: #ddc58d; }
+.vapor-calculator input[type='range']::-moz-range-track { height: 5px; border-radius: 4px; background: #ddc58d; }
+.vapor-calculator input[type='range']::-webkit-slider-thumb { appearance: none; width: 19px; height: 19px; margin-top: -7px; background: #fffdf5; border: 3px solid #a87720; border-radius: 50%; }
+.vapor-calculator input[type='range']::-moz-range-thumb { width: 15px; height: 15px; background: #fffdf5; border: 3px solid #a87720; border-radius: 50%; }
+.vapor-calculator .ticks { position: absolute; left: 10px; right: 10px; bottom: 0; height: 18px; font-size: 12px; color: var(--muted); }
+.vapor-calculator .ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.vapor-calculator .ticks .m { font-weight: 600; color: var(--ink); }
+.vapor-calculator .oled { background: #f6e7b6; border-top: 2px solid #d1a13a; padding: 19px 18px; border-radius: 3px 3px 14px 14px; }
+.vapor-calculator .oled .k { display: flex; justify-content: space-between; gap: 12px; color: #6d5a2f; font-size: 14px; font-weight: 500; }
+.vapor-calculator .oled .val { display: flex; align-items: baseline; gap: 8px; margin: 12px 0; flex-wrap: wrap; }
+.vapor-calculator .oled .big { font-size: clamp(42px, 5vw, 60px); font-weight: 600; line-height: 1; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+.vapor-calculator .oled .u { font-size: 19px; }
+.vapor-calculator .oled .line { font-size: 14px; line-height: 1.5; }
+.vapor-calculator .oled.err .big { color: var(--err); }
+.vapor-calculator .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.vapor-calculator .chip { font-size: 12px; line-height: 1.5; display: inline-flex; gap: 7px; align-items: center; color: var(--ok); }
+.vapor-calculator .chip::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.vapor-calculator .chip.warn { color: var(--warn); }
+.vapor-calculator .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.vapor-calculator .btn { padding: 10px 13px; font-size: 13px; font-weight: 600; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; background: #fffefa; cursor: pointer; min-height: 42px; }
+.vapor-calculator .btn:hover { border-color: #ba9d58; }
+.vapor-calculator .btn.primary { background: var(--accent); border-color: var(--accent); color: #fffdf4; }
+.vapor-calculator .btn:disabled { opacity: .5; cursor: default; }
+.vapor-calculator .timer { padding-top: 4px; }
+.vapor-calculator .timer .row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.vapor-calculator .timer .clock { font: 500 25px var(--font-mono); }
+.vapor-calculator .timer .lbl { font-size: 12px; color: var(--muted); }
+.vapor-calculator .bar { height: 5px; margin-top: 8px; border-radius: 4px; overflow: hidden; background: #e6ddc5; }
+.vapor-calculator .bar i { display: block; width: 0; height: 100%; background: var(--accent); transition: width .25s linear; }
+.vapor-calculator .right { padding: 26px; min-width: 0; display: grid; gap: 26px; align-content: start; }
+.info-prose .vapor-calculator h2 { margin: 0; padding: 0; border: 0; font: 600 20px/1.3 var(--font-body); letter-spacing: -.02em; color: var(--ink); }
+.vapor-calculator .chartbox { width: 100%; min-width: 0; margin-top: 18px; }
+.vapor-calculator .chartbox svg { display: block; max-width: 100%; height: auto; }
+.vapor-calculator .chartbox svg text { font-family: var(--font-body); font-size: 12px; fill: var(--muted); }
+.vapor-calculator .chartbox .t-strong { fill: var(--ink); font-weight: 600; }
+.vapor-calculator .chartbox .halo { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.vapor-calculator .chartbox .grid { stroke: #e6ebe5; stroke-width: 1; }
+.vapor-calculator .chartbox .axis { stroke: #9aab9c; stroke-width: 1; }
+.vapor-calculator .legend { display: flex; flex-wrap: wrap; gap: 6px 15px; font-size: 12px; color: var(--muted); margin-top: 10px; }
+.vapor-calculator .legend span { display: inline-flex; align-items: center; gap: 5px; }
+.vapor-calculator .legend i { display: inline-block; width: 15px; height: 3px; border-radius: 2px; }
+.vapor-calculator .legend i.dot { width: 7px; height: 7px; border-radius: 50%; }
+.vapor-calculator .pair { display: grid; gap: 22px; }
+.vapor-calculator .pair > section { padding-top: 24px; border-top: 1px solid #e7e9df; }
+.vapor-calculator .cmp { display: grid; gap: 12px; margin-top: 18px; }
+.vapor-calculator .crow { display: grid; grid-template-columns: 67px minmax(0, 1fr) 78px; gap: 7px 12px; align-items: center; font-size: 14px; padding: 8px 10px; margin-inline: -10px; border-radius: 8px; }
+.vapor-calculator .crow.cur { background: #f7f4e9; }
+.vapor-calculator .ct { display: inline-flex; gap: 7px; align-items: center; font-weight: 600; white-space: nowrap; }
+.vapor-calculator .ct i { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.vapor-calculator .cbar { height: 7px; background: #eff1e9; border-radius: 4px; overflow: hidden; }
+.vapor-calculator .cbar b { display: block; height: 100%; border-radius: inherit; }
+.vapor-calculator .cv { text-align: right; font-variant-numeric: tabular-nums; }
+@container (max-width: 690px) {
+  .vapor-calculator header { padding: 24px 20px; }
+  .vapor-calculator .modes { padding-inline: 20px; gap: 20px; }
+  .vapor-calculator .modes button { font-size: 13px; flex: 1; }
+  .vapor-calculator .layout { grid-template-columns: minmax(0, 1fr); }
+  .vapor-calculator .controls { border-right: 0; border-bottom: 1px solid var(--line); padding: 22px 20px; }
+  .vapor-calculator .fields { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .vapor-calculator .right { padding: 26px 20px; }
+}
+@container (max-width: 420px) {
+  .vapor-calculator .fields { grid-template-columns: minmax(0, 1fr); }
+  .vapor-calculator .modes { gap: 14px; }
+  .vapor-calculator .modes button { font-size: 12px; line-height: 1.35; min-height: 50px; }
+  .vapor-calculator .crow { grid-template-columns: 62px minmax(0, 1fr) 65px; gap: 6px 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .vapor-calculator * { transition: none !important; } }

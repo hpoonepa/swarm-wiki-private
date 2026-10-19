@@ -1,4 +1,4 @@
-import { HOME_STOPS, getDestination } from './journey-stops.js?v=95c9dd0161ab';
+import { HOME_STOPS, getDestination } from './journey-stops.js?v=7c0bd87a1a76';
 
 // A small section rail, inspired by McGill's 2023 homepage navigation.
 // Native scrolling remains in charge; no snapping or external libraries.

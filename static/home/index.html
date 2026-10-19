@@ -188,11 +188,11 @@
 
   .after { height: 40vh; }
 </style>
-<link rel="stylesheet" href="story.css?v=dd2832d4e107">
-<link rel="stylesheet" href="binder-illustration.css?v=937c72759525">
+<link rel="stylesheet" href="story.css?v=73697fc58b8e">
+<link rel="stylesheet" href="binder-illustration.css?v=e15ae0e17231">
 <link rel="stylesheet" href="section-nav.css?v=2a67c9055550">
-<link rel="stylesheet" href="rnai-layout.css?v=4cc7ca49f5b7">
-<link rel="stylesheet" href="project-overview.css?v=d598eea91a36">
+<link rel="stylesheet" href="rnai-layout.css?v=a1313af0e19c">
+<link rel="stylesheet" href="project-overview.css?v=41feac2dda05">
 <link rel="stylesheet" href="food-layout.css?v=e52574b3b968">
 <link rel="stylesheet" href="site-footer.css?v=de5bb7befaa0">
 <link rel="stylesheet" href="swarm-loader.css?v=single-1550-restored-8">
@@ -391,7 +391,8 @@ setTimeout(function () {
 </div></div>
       </div>
       <div class="journey-copy journey-copy--hive" id="hive" aria-hidden="true" inert>
-        <h2><span class="swarm-introducing">Introducing</span><img class="swarm-wordmark" src="https://static.igem.wiki/teams/6185/wiki/homepage/swarm-wordmark.avif" alt="SWARM" width="866" height="813"></h2>
+        <h2><span class="swarm-introducing">Introducing</span> <span class="swarm-name">SWARM</span></h2>
+        <p class="swarm-subtitle">Two approaches. One goal: protect bees from DWV.</p>
       </div>
       <div class="journey-copy journey-copy--return" id="return-hive" aria-hidden="true" inert><h2>Back at the hive.</h2></div>
       <div class="journey-copy journey-copy--bee journey-approach" id="bee" aria-hidden="true" inert>
@@ -413,10 +414,11 @@ setTimeout(function () {
         <circle class="gut-focus__ring" cx="337" cy="416" r="99" fill="none" stroke="#b67527" stroke-width="4"/>
         <circle cx="337" cy="416" r="106" fill="none" stroke="#fff8e9" stroke-width="2"/>
       </svg>
-      <figcaption><strong>Inside the bee’s gut</strong></figcaption>
+      <figcaption><strong>Inside the bee’s gut</strong><span>A closer look at where our approach begins. Schematic view.</span></figcaption>
     </figure>
     <div class="binder-board binder-illustration">
-      <div class="binder-copy"><h2>Our minibinder, up close.</h2></div>
+      <div class="binder-copy binder-copy--intro"><h2>1. Minibinders</h2><p>Small proteins designed to bind to a specific target.</p></div>
+      <div class="binder-copy binder-copy--result" aria-hidden="true"><h2><span>The first-ever experimentally validated</span> <span>de novo minibinder for an iflavirus.</span></h2></div>
       <div class="binder-panel">
         <div class="protein-stage"><div class="protein-view">
           <div id="capsid-host" tabindex="0" role="img" aria-description="Honey-yellow beads show our minibinder. The leaf-green backbone shows the viral P domain. Illustration of the team's predicted complex. Drag or use arrow keys to turn; press R to reset." aria-label="Illustrated SWARM minibinder and DWV VP3 P domain">
@@ -431,64 +433,62 @@ setTimeout(function () {
         <g><path pathLength="1" stroke-dasharray="1"/><circle r="4" fill="#fcc42f" stroke="#153f36"/></g>
         <g><path pathLength="1" stroke-dasharray="1"/><circle r="4" fill="#fcc42f" stroke="#153f36"/></g>
       </svg>
-      <details class="binder-fact binder-fact--design" inert aria-hidden="true"><summary><span class="binder-fact__label">The design</span><span class="binder-fact__plus" aria-hidden="true">+</span><strong class="binder-fact__value">79</strong><span class="binder-fact__description">amino acids in our minibinder.</span></summary><p>The bead colors trace the saved model’s backbone. <a href="../minibinder-design/">Explore the design ↗</a></p></details>
-      <details class="binder-fact binder-fact--target" inert aria-hidden="true"><summary><span class="binder-fact__label">The target</span><span class="binder-fact__plus" aria-hidden="true">+</span><strong class="binder-fact__value">VP3</strong><span class="binder-fact__description">on the virus’s outer shell.</span></summary><p>The leaf-green drawing shows the VP3 P domain in our predicted complex. <a href="../minibinder/">Meet the target ↗</a></p></details>
-      <details class="binder-fact binder-fact--evidence" inert aria-hidden="true"><summary><span class="binder-fact__label">The evidence</span><span class="binder-fact__plus" aria-hidden="true">+</span><strong class="binder-fact__value">BLI</strong><span class="binder-fact__description">Binding measured in the lab.</span></summary><p>The illustrated pose is a prediction, separate from the binding measurement. <a href="../minibinder-experimentation/">See the experiments ↗</a></p></details>
-      <details class="binder-fact binder-fact--aim" inert aria-hidden="true"><summary><span class="binder-fact__label">The aim</span><span class="binder-fact__plus" aria-hidden="true">+</span><strong class="binder-fact__value">Bee cells</strong><span class="binder-fact__description">Where we aim to block infection.</span></summary><p>This is the goal of our minibinder approach. <a href="../minibinder/">Explore minibinders ↗</a></p></details>
+      <details class="binder-fact binder-fact--design" inert aria-hidden="true"><summary><span class="binder-fact__plus" aria-hidden="true">+</span><strong class="binder-fact__value">79</strong><span class="binder-fact__description">amino acids</span></summary><p>The bead colors trace the saved model’s backbone. <a href="../minibinder-design/">Explore the design ↗</a></p></details>
+      <details class="binder-fact binder-fact--target" inert aria-hidden="true"><summary><span class="binder-fact__plus" aria-hidden="true">+</span><strong class="binder-fact__value binder-fact__value--phrase">Targeting VP3</strong></summary><p>The leaf-green drawing shows the VP3 P domain in our predicted complex. <a href="../minibinder/">Meet the target ↗</a></p></details>
+      <details class="binder-fact binder-fact--evidence" inert aria-hidden="true"><summary><span class="binder-fact__plus" aria-hidden="true">+</span><strong class="binder-fact__value">604 <span class="binder-fact__unit">nM</span></strong><span class="binder-fact__description">Binding affinity · apparent K<sub>D</sub></span></summary><p>Measured by BLI: apparent K<sub>D</sub> ≈ 604 nM, rounded from the overall binding result. The illustrated pose is a prediction, separate from this measurement. <a href="../minibinder-experimentation/">See the experiments ↗</a></p></details>
+      <details class="binder-fact binder-fact--aim" inert aria-hidden="true"><summary><span class="binder-fact__plus" aria-hidden="true">+</span><strong class="binder-fact__value binder-fact__value--phrase">Neutralizing DWV</strong></summary><p>Neutralizing DWV is the goal of our minibinder approach. Binding to VP3 is measured separately from neutralization. <a href="../minibinder/">Explore minibinders ↗</a></p></details>
     </div>
   </div>
 
       <div id="mite" class="journey-copy journey-copy--mite journey-approach" aria-hidden="true" inert>
         <h2><span>2.</span> RNAi</h2>
-
+        <p>Now, the mite that spreads it.</p>
       </div>
 
-  <div id="rnai" class="journey-rna" data-theme="dark" aria-labelledby="rnai-title" aria-hidden="true" inert>
-    <div class="cell-field cell-field--rna" data-cell-field aria-hidden="true"></div>
-    <figure class="rna-subject">
-      <div class="rna-subject__portrait"><img src="https://static.igem.wiki/teams/6185/wiki/lastmin/homepage-varroa-mite.svg" alt="Illustrated Varroa mite" width="1035" height="1024"></div>
-      <figcaption><strong>The <em>Varroa</em> mite</strong><a href="../rnai/">Explore RNAi <span aria-hidden="true">↗</span></a></figcaption>
-    </figure>
-    <div class="rna-panel-frame" aria-hidden="true"></div>
+  <div id="rnai" class="journey-rna" data-theme="light" aria-labelledby="rnai-title" aria-hidden="true" inert>
+    <h2 id="rnai-title" class="rna-sr-only">RNA interference</h2>
     <div id="rna-intro" class="rna-discovery" aria-hidden="true" inert>
-      <div class="rna-discovery__copy">
-        <span class="rna-panel-kicker">Our approach</span>
-        <h2>Interrupt the feeding.</h2>
-        <p>RNA interference (RNAi) reduces specific gene messages. We’re targeting three salivary genes in <em>Varroa</em> to interfere with feeding.</p>
+      <div class="rna-discovery__art">
+        <img src="./assets/illustration/rnai-three-targets.svg?v=08faa4943077" alt="Three gene illustrations: Vd-CHIsal, Vd-CHIBIN and AV422." width="800" height="650">
       </div>
-        <div class="rna-targets">
-          <h3>Our targets</h3>
-          <dl>
-            <div><dt>Vd-CHIsal</dt><dd>An enzyme that may help keep feeding wounds open.</dd></div>
-            <div><dt>Vd-CHIBIN</dt><dd>A protein that may affect the bee’s wound response.</dd></div>
-            <div><dt>AV422</dt><dd>A saliva protein involved in mite feeding and reproduction.</dd></div>
-          </dl>
-        </div>
+      <div class="rna-discovery__copy">
+        <span class="rna-section-label">RNAi</span>
+        <h3>RNA interference.</h3>
+        <p>RNA interference (RNAi) reduces gene activity by breaking down the messages cells use to make proteins. We’re targeting three salivary genes in <em>Varroa</em> mites, aiming to disrupt feeding.</p>
+        <ul class="rna-target-names" aria-label="Our three gene targets">
+          <li>Vd-CHIsal</li><li>Vd-CHIBIN</li><li>AV422</li>
+        </ul>
+        <a class="rna-explore" href="../rnai/">Explore RNAi <span aria-hidden="true">↗</span></a>
+      </div>
     </div>
     <div class="mechanism-stage rna-layout">
-      <div class="mechanism-copy mechanism-copy--headline">
-        <span class="rna-panel-kicker">Inside a mite cell</span>
-        <h2 id="rnai-title">How RNAi works</h2>
-        <p class="rna-context">An RNA guide helps the cell find and break down a matching message.</p>
-      </div>
       <div class="rna-player" data-rna-player data-step="0">
-  <div class="rna-stage" role="img" aria-label="RNA interference inside a Varroa mite cell: Dicer processes dsRNA, RISC assembles, and a guide directs cleavage of matching mite messenger RNA.">
-    <canvas class="rna-canvas" aria-hidden="true"></canvas>
-  </div>
-  <div class="rna-player__copy" aria-live="polite" aria-atomic="true">
-    <p data-rna-copy="0">The process starts with double-stranded RNA that matches the target gene. Dicer, an enzyme in the cell, cuts it into shorter pieces.</p>
-    <p data-rna-copy="1" hidden>These pieces are called siRNAs. Each one can provide a guide for finding the target message. We designed six candidates for our three mite genes.</p>
-    <p data-rna-copy="2" hidden>Argonaute, shown in pink, joins other proteins to form RISC. Argonaute does the cutting once the right message is found.</p>
-    <p data-rna-copy="3" hidden>RISC picks up an siRNA. Its sequence determines which messenger RNA the complex can recognize.</p>
-    <p data-rna-copy="4" hidden>The two strands separate. One is released; the other stays with Argonaute as the guide.</p>
-    <p data-rna-copy="5" hidden>The guide pairs with a matching sequence in the mite’s messenger RNA.</p>
-    <p data-rna-copy="6" hidden>Argonaute cuts the message, and the cell breaks it down. With fewer copies left to read, the cell can make less of the protein.</p>
-  </div>
-  <div class="rna-player__controls">
-    <button class="rna-control" type="button" data-rna-play aria-label="Play sequence" aria-pressed="false"><span aria-hidden="true" data-rna-play-icon>▷</span></button>
-    <button class="rna-control" type="button" data-rna-next aria-label="Next step"><span aria-hidden="true">→</span></button>
-  </div>
-</div>
+        <div class="rna-stage" role="group" aria-label="RNA interference mechanism">
+          <canvas class="rna-canvas" role="img" aria-label="Schematic animation: an siRNA guide directs Argonaute to cleave matching messenger RNA; the released fragments are then degraded."></canvas>
+          <a class="rna-mechanism-note" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC1315391/" target="_blank" rel="noopener noreferrer">RNAi mechanism · schematic <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="rna-player__story">
+          <div class="rna-step-label"><span class="rna-section-label">RNAi</span><span class="rna-step-counter" data-rna-counter aria-label="Step 1 of 7">01 / 07</span></div>
+          <h3 class="rna-player__heading" data-rna-heading>Double-stranded RNA.</h3>
+          <div class="rna-player__copy" aria-live="polite" aria-atomic="true">
+            <p data-rna-copy="0">The process begins with double-stranded RNA. Dicer approaches the strand.</p>
+            <p data-rna-copy="1" hidden>Dicer cuts the strand into short siRNAs, which will guide RISC to a matching message.</p>
+            <p data-rna-copy="2" hidden>Argonaute and other proteins come together in the RISC complex.</p>
+            <p data-rna-copy="3" hidden>An siRNA is loaded into RISC, bringing the guide and the cutting protein together.</p>
+            <p data-rna-copy="4" hidden>The two RNA strands separate. One stays with Argonaute as the guide.</p>
+            <p data-rna-copy="5" hidden>The guide pairs with a matching sequence in the mite’s messenger RNA.</p>
+            <p data-rna-copy="6" hidden>Guided by the siRNA, Argonaute cuts the matching mRNA. The released fragments are then broken down.</p>
+          </div>
+          <div class="rna-progress" aria-hidden="true"><span></span></div>
+          <div class="rna-player__footer">
+            <div class="rna-player__controls">
+              <button class="rna-control" type="button" data-rna-play aria-label="Play sequence" aria-pressed="false"><span aria-hidden="true" data-rna-play-icon>▷</span></button>
+              <button class="rna-control" type="button" data-rna-next aria-label="Next step"><span aria-hidden="true">→</span></button>
+            </div>
+            <a class="rna-explore" href="../rnai/">Explore RNAi <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
     </div>
@@ -798,17 +798,19 @@ setTimeout(function () {
   <script src="vendor/three.min.js"></script>
   <script src="assets/landmask.js"></script>
   <script src="assets/landmask-hi.js"></script>
-  <script src="earth-scroll.js?v=2047d64508f4"></script>
+  <script src="earth-scroll.js?v=8b25a154f499"></script>
   <script src="globe.js?v=66add05d854d"></script>
   <script src="dwv-virus.js?v=afa362653e9c"></script>
   <script src="statement.js?v=53263926cd20"></script>
   <script src="food.js?v=1b43e049137a"></script>
-  <script type="module" src="navbar.js?v=c3cd0023961e"></script>
-  <script type="module" src="menu.js?v=e058dee8f5c3"></script>
-  <script type="module" src="section-nav.js?v=138d8aaff58e"></script>
+  <script type="module" src="navbar.js?v=2681f64ac4a5"></script>
+  <script type="module" src="menu.js?v=9537433fd889"></script>
+  <script type="module" src="section-nav.js?v=b3a39821eeb3"></script>
+  <script src="project-overview.js?v=39dba40ebfc6"></script>
+  <script src="scroll-pace.js?v=221cfdf2450d"></script>
   <script src="ux.js?v=story1"></script>
   <script src="intro-bee.js?v=6" defer></script>
   <script src="flight.js?v=07c2ecff106d"></script>
-  <script type="module" src="mechanisms.js?v=e770f412f322"></script>
+  <script type="module" src="mechanisms.js?v=0455edba8637"></script>
 </body>
 </html>

@@ -10,6 +10,7 @@
 .binder-board.binder-illustration {
   --ink: #153f36;
   --callouts: 0;
+  --binder-focus: 0;
   --callout-1: 0;
   --callout-2: 0;
   --callout-3: 0;
@@ -33,25 +34,41 @@
 .binder-illustration .binder-copy {
   position: absolute;
   z-index: 4;
-  inset: 0 15% auto;
-  width: auto;
+  top: 29%;
+  left: 3%;
+  right: auto;
+  width: 32%;
   transform: none;
-  text-align: center;
+  text-align: left;
   pointer-events: none;
 }
 
 .binder-illustration .binder-copy h2 {
   margin: 0;
   color: var(--ink);
-  font-size: clamp(30px, 3.25vw, 50px);
+  font-size: clamp(32px, 3.4vw, 48px);
   font-weight: 750;
-  line-height: 1.06;
+  line-height: 1.08;
   letter-spacing: -.045em;
+  text-wrap: balance;
 }
 
+.binder-illustration .binder-copy h2 > span { display: block; }
+
+.binder-illustration .binder-copy--result {
+  top: 0;
+  left: 12%;
+  width: 76%;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.binder-illustration .binder-copy--result h2 { font-size: clamp(28px, 2.8vw, 48px); }
+
 .binder-illustration .binder-copy > p:last-child {
-  max-width: 48ch;
-  margin: 12px auto 0;
+  max-width: 28ch;
+  margin: 16px 0 0;
   color: var(--ink);
   font-size: clamp(16px, 1.25vw, 19px);
   line-height: 1.4;
@@ -91,6 +108,9 @@
   height: 100%;
   filter: none;
 }
+
+/* The board controls the gut-to-model reveal, including its first frame. */
+.journey-protein .binder-illustration .protein-view { visibility: visible; }
 
 .binder-illustration .binder-leaders {
   position: absolute;
@@ -159,6 +179,7 @@
 .binder-illustration .binder-fact {
   --reveal: var(--callout-1);
   --turn: 0deg;
+  --side: -1;
   position: absolute;
   z-index: 3;
   width: 25%;
@@ -174,18 +195,19 @@
   box-shadow: none;
   text-align: left;
   opacity: var(--reveal);
-  transform: translateY(calc((1 - var(--reveal)) * 22px)) scale(calc(.94 + var(--reveal) * .06)) rotate(var(--turn));
+  transform: translate3d(calc((1 - var(--reveal)) * var(--side) * -24px), calc((1 - var(--reveal)) * 12px), 0) scale(calc(.97 + var(--reveal) * .03));
   transform-origin: center;
 }
 
 .binder-illustration .binder-fact--design { --reveal: var(--callout-1); left: 2%; top: 20%; }
-.binder-illustration .binder-fact--target { --reveal: var(--callout-2); left: auto; right: 2%; top: 20%; }
+.binder-illustration .binder-fact--target { --reveal: var(--callout-2); --side: 1; left: auto; right: 2%; top: 20%; }
 .binder-illustration .binder-fact--evidence { --reveal: var(--callout-3); left: 2%; top: auto; bottom: 10%; }
-.binder-illustration .binder-fact--aim { --reveal: var(--callout-4); left: auto; right: 2%; top: auto; bottom: 10%; }
+.binder-illustration .binder-fact--aim { --reveal: var(--callout-4); --side: 1; left: auto; right: 2%; top: auto; bottom: 10%; }
 
 .binder-illustration .binder-fact summary {
   position: relative;
   display: block;
+  min-height: 112px;
   list-style: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
@@ -194,20 +216,10 @@
 .binder-illustration .binder-fact summary::-webkit-details-marker { display: none; }
 .binder-illustration .binder-fact summary::marker { content: ''; }
 
-.binder-illustration .binder-fact__label {
-  display: block;
-  padding-right: 36px;
-  color: var(--ink);
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(18px, 1.5vw, 23px);
-  font-weight: 650;
-  line-height: 1.2;
-  letter-spacing: -.025em;
-}
-
 .binder-illustration .binder-fact__value {
   display: block;
-  margin: 18px 0 12px;
+  margin: 0 0 12px;
+  padding-right: 32px;
   color: #bd5826;
   font-family: 'Space Grotesk', Inter, sans-serif;
   font-size: clamp(40px, 3.8vw, 57px);
@@ -216,6 +228,16 @@
   letter-spacing: -.055em;
   text-shadow: none;
 }
+
+.binder-illustration .binder-fact__value--phrase {
+  max-width: 9ch;
+  margin-bottom: 0;
+  font-size: clamp(29px, 2.8vw, 42px);
+  line-height: 1.13;
+  letter-spacing: -.04em;
+}
+
+.binder-illustration .binder-fact__unit { font-size: .6em; letter-spacing: -.035em; }
 
 .binder-illustration .binder-fact--target .binder-fact__value,
 .binder-illustration .binder-fact--aim .binder-fact__value { color: var(--ink); }
@@ -249,8 +271,9 @@
   .binder-illustration .binder-copy h2 { font-size: clamp(29px, 3vw, 42px); }
   .binder-illustration .binder-copy > p:last-child { margin-top: 7px; }
   .binder-illustration .binder-fact { padding: 18px 20px; max-height: 36%; }
-  .binder-illustration .binder-fact__label { font-size: 19px; }
-  .binder-illustration .binder-fact__value { margin: 14px 0 10px; font-size: 42px; }
+  .binder-illustration .binder-fact summary { min-height: 94px; }
+  .binder-illustration .binder-fact__value { margin: 0 0 10px; font-size: 42px; }
+  .binder-illustration .binder-fact__value--phrase { margin-bottom: 0; font-size: clamp(27px, 2.8vw, 36px); }
   .binder-illustration .binder-fact p,
   .binder-illustration .binder-fact__description { font-size: 16px; line-height: 1.4; }
   .binder-illustration .protein-footer { bottom: 0; gap: 0; }
@@ -265,9 +288,9 @@
     grid-template-rows: auto minmax(160px, 1fr) auto auto;
     gap: 14px 12px;
   }
-  .binder-illustration .binder-copy { position: static; grid-column: 1 / -1; width: auto; }
+  .binder-illustration .binder-copy { position: static; grid-column: 1 / -1; grid-row: 1; align-self: center; width: auto; text-align: center; }
   .binder-illustration .binder-copy h2 { font-size: clamp(26px, 6.4vw, 36px); }
-  .binder-illustration .binder-copy > p:last-child { margin-top: 8px; font-size: 16px; }
+  .binder-illustration .binder-copy > p:last-child { margin: 8px auto 0; font-size: 16px; }
   .binder-illustration .binder-panel { position: relative; inset: auto; grid-column: 1 / -1; grid-row: 2; min-height: 160px; }
   .binder-board.binder-illustration::before { display: none; }
   .binder-illustration .binder-panel::before { content: none; }
@@ -282,8 +305,9 @@
   .binder-illustration .binder-fact--target { grid-column: 2; grid-row: 3; }
   .binder-illustration .binder-fact--evidence { grid-column: 1; grid-row: 4; }
   .binder-illustration .binder-fact--aim { grid-column: 2; grid-row: 4; }
-  .binder-illustration .binder-fact__label { padding-right: 25px; font-size: 17px; }
-  .binder-illustration .binder-fact__value { margin: 11px 0 8px; font-size: clamp(29px, 7.2vw, 38px); text-shadow: none; }
+  .binder-illustration .binder-fact summary { min-height: 82px; }
+  .binder-illustration .binder-fact__value { margin: 0 0 8px; padding-right: 24px; font-size: clamp(29px, 7.2vw, 38px); text-shadow: none; }
+  .binder-illustration .binder-fact__value--phrase { margin-bottom: 0; font-size: clamp(22px, 5.4vw, 29px); }
   .binder-illustration .binder-fact__plus { width: 21px; height: 21px; border-width: 1px; font-size: 18px; }
   .binder-illustration .binder-fact p,
   .binder-illustration .binder-fact__description { font-size: 16px; line-height: 1.4; }
@@ -295,7 +319,9 @@
   .binder-illustration .binder-copy h2 { font-size: 25px; }
   .binder-illustration .binder-copy > p:last-child { margin-top: 5px; font-size: 15px; }
   .binder-illustration .binder-fact { padding: 10px; max-height: 180px; }
-  .binder-illustration .binder-fact__value { margin: 8px 0 6px; font-size: 30px; }
+  .binder-illustration .binder-fact summary { min-height: 76px; }
+  .binder-illustration .binder-fact__value { margin: 0 0 6px; font-size: 30px; }
+  .binder-illustration .binder-fact__value--phrase { margin-bottom: 0; font-size: 22px; }
   .binder-illustration .binder-fact p,
   .binder-illustration .binder-fact__description { font-size: 16px; line-height: 1.3; }
 }

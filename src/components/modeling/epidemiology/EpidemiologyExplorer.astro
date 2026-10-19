@@ -1,0 +1,70 @@
+---
+import "./dwv-widgets.css";
+import "./epidemiology.css";
+import weather from "./weather.png";
+interface Props { section: "methods" | "results" }
+const { section } = Astro.props;
+const plots = [
+  { id: "explorer", label: "Colony", title: "Five years in the hive" },
+  { id: "net", label: "Mite reduction", title: "Change in feeding mites" },
+  { id: "sensitivity", label: "Sensitivity", title: "Treatment sensitivity" },
+  { id: "uptake", label: "Syrup uptake", title: "Syrup uptake" },
+  { id: "timing", label: "Start month", title: "Feeding start month" },
+  { id: "weather", label: "Weather", title: "Seasonal weather" },
+];
+---
+<div class:list={["epi-model", "wide", `epi-model--${section}`]} data-epi-section={section}>
+  {section === "methods" ? <>
+    <div class="epi-method">
+      <h3>RNAi in the colony</h3>
+      <div class="dwv-viz" data-dwv="diagram"></div>
+    </div>
+    <div class="epi-method epi-method--dose">
+      <h3>Protection and mite response</h3>
+      <div class="dwv-viz" data-dwv="dose"></div>
+    </div>
+  </> : <>
+    <div class="epi-tabs" role="tablist" aria-label="RNAi simulation results">
+      {plots.map((plot, i) => <button type="button" role="tab" id={`epi-tab-${plot.id}`} aria-controls={`epi-panel-${plot.id}`} aria-selected={i === 0 ? "true" : "false"} tabindex={i === 0 ? 0 : -1} data-epi-tab={plot.id}>{plot.label}</button>)}
+    </div>
+    {plots.map((plot, i) => <section class="epi-plot" id={`epi-panel-${plot.id}`} role="tabpanel" aria-labelledby={`epi-tab-${plot.id}`} tabindex="0" hidden={i !== 0}>
+      <h3>{plot.title}</h3>
+      {plot.id === "weather" ? <figure class="epi-weather">
+        <img src={weather.src} width={weather.width} height={weather.height} alt="Seasonal rates and weather variation used in the five-year RNAi colony simulation." loading="lazy" />
+        <figcaption>Both colonies experience the same weather. The population charts show the 10–90% range across 20 additional weather runs.</figcaption>
+      </figure> : <div class="dwv-viz" data-dwv={plot.id}></div>}
+    </section>)}
+  </>}
+  <noscript><p>Enable JavaScript to view the interactive model figures.</p></noscript>
+</div>
+
+<script>
+  import "./dwv-data.js";
+  import "./dwv-widgets.js";
+  document.querySelectorAll<HTMLElement>('[data-epi-section="results"]').forEach(root => {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-epi-tab]'));
+    function activate(tab: HTMLButtonElement, focus = false) {
+      tabs.forEach(button => {
+        const selected = button === tab;
+        button.setAttribute('aria-selected', String(selected));
+        button.tabIndex = selected ? 0 : -1;
+        const panel = root.querySelector<HTMLElement>(`#${button.getAttribute('aria-controls')}`);
+        if (panel) panel.hidden = !selected;
+      });
+      if (focus) tab.focus();
+    }
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => activate(tab));
+      tab.addEventListener('keydown', event => {
+        let index = i;
+        if (event.key === 'ArrowRight') index = (i + 1) % tabs.length;
+        else if (event.key === 'ArrowLeft') index = (i - 1 + tabs.length) % tabs.length;
+        else if (event.key === 'Home') index = 0;
+        else if (event.key === 'End') index = tabs.length - 1;
+        else return;
+        event.preventDefault();
+        activate(tabs[index], true);
+      });
+    });
+  });
+</script>

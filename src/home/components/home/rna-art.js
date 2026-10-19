@@ -1,14 +1,16 @@
 // RNAi artwork and timeline adapted from the team's supplied RNAi animation.
+// Schematic mechanism, not a species-specific molecular structure model.
+// Guide-loaded Argonaute cleavage: Miyoshi et al. (2005), PMCID PMC1315391.
 export function createRnaScene(cv) {
   const THREE = window.THREE;
   const dark = cv.closest('[data-theme="dark"]') !== null;
 
   // ---------------------------------------------------------------- colours & shapes (from the team's part SVGs)
   const C = {
-    dicer: '#7deaa3', ago: '#f87b8c', comp: '#9ed2ee',
-    back: dark ? '#70ced8' : '#095b8a', rung: '#05deba', // dsRNA / siRNA
-    tBack: dark ? '#b9b2ff' : '#2b1ec2', tRung: '#52a3fe', // target mRNA
-    ink: dark ? '#fff1e6' : '#1e1e24', paper: '#ffffff',
+    dicer: '#e6b64f', ago: '#315d4c', comp: '#ead8aa',
+    back: dark ? '#abc9b9' : '#3b7560', rung: '#edc36b', // dsRNA / siRNA
+    tBack: '#bb883c', tRung: '#f0dca3', // target mRNA
+    ink: dark ? '#fff1e6' : '#153f36', paper: '#ffffff',
   };
   const DICER = 'M394.64 21.37C432.11 16.48 472.29 34.56 493.97 65.55C499.59 73.58 504.82 83.16 506.53 92.91C509.65 110.81 502.67 131.52 488.52 143.03C479.22 150.59 467.29 150.68 456.31 147.25C440.08 142.19 425.61 133.08 408.52 130.73C393.85 128.72 379.13 132.35 365.77 138.27C351.01 144.8 334.96 154.22 318.96 145.51C307.31 139.16 300.89 124.26 300.62 111.5C300.45 103.71 302.46 95.75 304.78 88.37C318.4 45.23 352.01 26.92 394.64 21.37Z';
   const AGO = 'M271.59 524.34C276.61 523.68 281.86 523.68 286.85 524.55C316.25 529.68 327.53 558.55 326.63 585.5C325.24 626.72 301.31 668.63 267.69 692.17C250.92 703.92 229.21 711.49 208.98 704.48C181.26 694.88 174.81 659.75 178.7 634.43C183.81 601.2 200.48 569.66 225.88 547.4C238.81 536.06 254.23 526.61 271.59 524.34Z';
@@ -101,52 +103,43 @@ export function createRnaScene(cv) {
     [16.4, {}], [17.4, { y: 750 }],                                               // grips the guide strand
     [17.8, {}], [18.3, { b: .6 }], [20.4, { x: 438, y: 1350, r: 4 }], [21.3, { x: 435, y: 1275, r: 0, b: 0 }],   // carried to the target
     [22.35, { s: 1 }], [22.45, { s: 1.04, sy: .96 }, 'out'], [22.7, { s: 1, sy: 1 }],
-    [23.2, {}], [24.0, { x: 535 }], [24.1, { sy: .96 }, 'out'], [24.35, { sy: 1 }],   // slides along, cutting
-    [24.6, {}], [25.4, { x: 635 }], [25.45, { sy: .96 }, 'out'], [25.7, { sy: 1 }],
-    [27.2, {}], [29.8, { x: 700, y: 1270, r: 6, b: .8 }], [31.4, { x: 960, y: 1240, r: 10 }, 'in'],
+    [23.25, {}], [25.1, { x: 435, y: 1360, r: -4 }], // release both cleavage products; retain the guide
+    [27.5, { x: 510, y: 1365, r: 3, b: .25 }], [30, { x: 560, y: 1345, r: 5, b: .4 }],
   ]);
   const RISC_AGO = [-8, -20, -5, .8], RISC_COMP = [38, 22, 0, .7];                  // ox, oy, r, s relative to RISC
 
-  // target mRNA, seven pieces of 100 (2 rungs each) that start joined
-  const TGT_FALL = [
-    [23.3, 95, 1405, -5], [23.18, 190, 1470, 4], [23.06, 300, 1415, -3], [22.94, 405, 1472, 3],
-    [24.3, 520, 1428, -4], [25.6, 630, 1476, 2], [25.72, 730, 1414, 5],
+  // One intact target until ONE cleavage beneath the center of the loaded guide.
+  // The two products remain recognizable before their later degradation/fade.
+  const CUT_TIME = 22.4, CUT_X = 435;
+  const targetEntry = track([[17.9, { x: 550, y: 1240, a: 0 }], [19.8, { x: 410, a: 1 }, 'out']]);
+  const products = [
+    track([[CUT_TIME, { x: 247.5, y: 1240 }], [24.4, { x: 215, y: 1215, r: -5 }], [27.5, { x: 195, y: 1196, r: -7, a: .9 }], [30, { x: 170, y: 1178, r: -9, a: .35 }]]),
+    track([[CUT_TIME, { x: 597.5, y: 1240 }], [24.4, { x: 635, y: 1235, r: 6 }], [27.5, { x: 650, y: 1220, r: 8, a: .9 }], [30, { x: 670, y: 1205, r: 10, a: .35 }]]),
   ];
-  const tgt = TGT_FALL.map(([tf, fx, fy, fr], k) => {
-    const x0 = 110 + 100 * k, left = k < 4, ent = 17.9 + k * .07;
-    const keys = [[ent, { x: x0 + 140, y: 1240, a: 0 }], [ent + 1.6, { x: x0, a: 1 }, 'out']];
-    if (left) keys.push([22.4, {}], [22.75, { x: x0 - 8, r: -.5 }, 'out']);
-    keys.push([tf, {}], [tf + 1.6, { x: fx, y: fy, r: fr, b: 1 }], [31, {}]);
-    return { ph: k * 1.3, g: track(keys) };
-  });
 
   const SNIPS = [
     [c1, 250, 230], [c2, 400, 230], [c3, 550, 230],
-    [22.4, 460, 1240], [22.85, 360, 1240, .6], [23.0, 260, 1240, .6], [23.12, 160, 1240, .6],
-    [24.12, 560, 1240], [25.47, 660, 1240],
+    [CUT_TIME, CUT_X, 1240, .75],
   ];
 
   const W = {};                                     // world transforms, filled each frame
   const LABELS = [
     ['dsRNA', .6, 3.6, () => [690, 178]],
     ['Dicer', 1.0, 6.4, () => [W.dicer.x + 132, W.dicer.y - 18]],
-    ['cleaves into pieces', 4.3, 7.0, () => [400, 305]],
+    ['Short RNA guides', 4.3, 7.0, () => [400, 320]],
     ['siRNA', 8.3, 12.6, () => [W.si[3].x, W.si[3].y - 50]],
-    ['Ago', 9.6, 11.6, () => [W.ago.x, W.ago.y + 6], 30],
+    ['Argonaute', 9.6, 11.6, () => [W.ago.x, W.ago.y + 120], 25],
     ['+', 10.0, 11.5, () => [410, 650], 46],
-    ['RISC', 12.75, 16.6, () => [W.ago.x - 4, W.ago.y - 8], 30],
-    ['RISC', 18.4, 21.0, () => [W.ago.x - 4, W.ago.y - 8], 30],
+    ['RISC', 12.75, 16.6, () => [W.ago.x - 4, W.ago.y - 108], 25],
+    ['RISC', 18.4, 21.0, () => [W.ago.x - 4, W.ago.y - 108], 25],
     ['binds', 15.2, 16.7, () => [W.risc.x + 108, W.risc.y + 18]],
-    ['discard strand', 16.7, 18.9, () => [W.siTop.x, W.siTop.y - 26]],
+    ['Released strand', 16.7, 18.9, () => [W.siTop.x, W.siTop.y - 32], 23],
     ['guide strand', 17.2, 18.9, () => [W.siBot.x, W.siBot.y + 48]],
     ['target mRNA', 19.3, 22.3, () => [150, 1196]],
-    ['guide pairs with its match', 21.3, 22.6, () => [435, 1392]],
-    ['cut', 22.4, 23.3, () => [470, 1180]],
-    ['cut', 24.1, 24.9, () => [570, 1180]],
-    ['cut', 25.45, 26.2, () => [670, 1180]],
-    ['moves down & cuts', 23.4, 26.4, () => [W.risc.x + 20, W.risc.y - 120]],
-    ['gets cut up', 24.9, 31, () => [130, 1340]],
-    ['RISC moves on to the next target', 27.6, 31.4, () => [Math.min(W.risc.x, 640) - 60, W.risc.y - 100]],
+    ['Matching message', 21.3, 22.6, () => [435, 1392]],
+    ['One cleavage', 22.4, 24.6, () => [CUT_X, 1162], 25],
+    ['Cleavage products', 24.9, 30.5, () => [410, 1105], 25],
+    ['Guide retained', 26.0, 30.5, () => [W.risc.x, W.risc.y + 85], 25],
   ];
 
   // camera: [time, cx, cy, width, height] region that must stay in view
@@ -154,69 +147,132 @@ export function createRnaScene(cv) {
     [0, 400, 175, 820, 400], [6.4, 400, 190, 820, 420], [8.4, 410, 360, 840, 470],
     [10.0, 410, 560, 840, 430], [12.8, 410, 560, 840, 430], [14.3, 410, 690, 600, 340],
     [16.2, 400, 700, 620, 340], [17.8, 380, 700, 660, 360],
-    [20.6, 435, 1280, 700, 330], [22.4, 435, 1280, 700, 330], [23.6, 420, 1345, 840, 410], [END, 420, 1345, 840, 410],
+    [20.6, 435, 1280, 800, 380], [22.4, 435, 1280, 800, 380], [25, 420, 1280, 900, 470], [END, 420, 1280, 900, 470],
   ];
 
 
   // ---------------------------------------------------------------- WebGL scene (three.js)
-  THREE.ColorManagement.enabled = false;                // hex colours go to the screen untouched
   const renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true });
-  renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
   renderer.setClearColor(C.paper, 0);
   const scene = new THREE.Scene();
   const root = new THREE.Group(); root.scale.y = -1; scene.add(root);   // world is y-down, like the guide
-  const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, -10, 10);
-  const BW = 9, RW = 8, RL = 30.5;
+  const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, .1, 2000);
+  cam.position.z = 900;
+  const ambient = new THREE.HemisphereLight('#fff8e7', '#879b8a', 2.0);
+  const keyLight = new THREE.DirectionalLight('#fff3d5', 3.0);
+  keyLight.position.set(-400, 700, 700);
+  const rimLight = new THREE.DirectionalLight('#ffffff', 1.8);
+  rimLight.position.set(450, -100, 500);
+  scene.add(ambient, keyLight, rimLight);
+  const RL = 30.5;
   const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
   const FLAT = { transparent: true, depthTest: false, depthWrite: false, side: THREE.DoubleSide };
   const flat = color => new THREE.MeshBasicMaterial({ color, ...FLAT });
+  const material = (color, roughness = .34) => {
+    const col = new THREE.Color(color);
+    if (!THREE.ColorManagement.enabled) col.convertSRGBToLinear();
+    return new THREE.MeshStandardMaterial({ color: col, roughness, metalness: .06, transparent: true, side: THREE.DoubleSide });
+  };
 
-  // protein blobs: the artist's outlines, flat colour with a faint top-lit shading
+  // Inflate the team's contour into a continuous, convex front and back surface.
+  // There is no extrusion cap or bevel rim: highlights flow over an organic dome.
   function shapeGeo(d, [cx, cy]) {
     const sh = new THREE.Shape(), n = d.match(/[MCZ]|-?[\d.]+/g); let i = 0, cmd = '';
     const num = () => +n[i++];
     while (i < n.length) {
-      if (/[MCZ]/.test(n[i])) { cmd = n[i++]; if (cmd === 'Z') continue; }
+      if (/[MCZ]/.test(n[i])) { cmd = n[i++]; if (cmd === 'Z') { sh.closePath(); continue; } }
       if (cmd === 'M') sh.moveTo(num() - cx, num() - cy);
       else { const a = num() - cx, b = num() - cy, c = num() - cx, e = num() - cy, f = num() - cx, g = num() - cy; sh.bezierCurveTo(a, b, c, e, f, g); }
     }
-    const geo = new THREE.ShapeGeometry(sh, 32); geo.computeBoundingBox(); return geo;
+    const count = 112, rings = 24, contour = sh.getSpacedPoints(count).slice(0, count);
+    if (THREE.ShapeUtils.isClockWise(contour)) contour.reverse();
+    const bounds = new THREE.Box2().setFromPoints(contour), size = bounds.getSize(new THREE.Vector2());
+    // Keep the tilted dome behind the RNA tubes at z=64, including their wave.
+    const depth = Math.min(60, Math.max(28, Math.min(size.x, size.y) * .53));
+    const positions = [0, 0, depth], indices = [];
+    for (let row = 1; row < rings; row++) {
+      const theta = Math.PI * row / rings, radius = Math.sin(theta), height = Math.cos(theta);
+      for (let k = 0; k < count; k++) {
+        const p = contour[k], angle = Math.atan2(p.y, p.x);
+        const fullness = 1 + .045 * Math.sin(angle * 3 + .7) * radius * radius;
+        positions.push(p.x * radius, p.y * radius, depth * height * fullness);
+      }
+    }
+    const back = positions.length / 3; positions.push(0, 0, -depth);
+    for (let k = 0; k < count; k++) {
+      const next = (k + 1) % count;
+      indices.push(0, 1 + k, 1 + next);
+      for (let row = 0; row < rings - 2; row++) {
+        const a = 1 + row * count + k, b = 1 + row * count + next;
+        indices.push(a, a + count, b, b, a + count, b + count);
+      }
+      const a = 1 + (rings - 2) * count + k, b = 1 + (rings - 2) * count + next;
+      indices.push(a, back, b);
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geo.setIndex(indices); geo.computeVertexNormals(); return geo;
   }
   function blob(d, center, color, order) {
-    const geo = shapeGeo(d, center), bb = geo.boundingBox;
-    const m = new THREE.ShaderMaterial({
-      uniforms: { col: { value: new THREE.Color(color) }, op: { value: 1 }, yr: { value: new THREE.Vector2(bb.min.y, bb.max.y) } },
-      vertexShader: 'uniform vec2 yr; varying float vy; void main(){ vy = (position.y - yr.x) / (yr.y - yr.x); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }',
-      fragmentShader: 'uniform vec3 col; uniform float op; varying float vy; void main(){ gl_FragColor = vec4(col * (1.045 - .085 * vy), op); }',
-      ...FLAT,
-    });
-    const g = new THREE.Mesh(geo, m); g.renderOrder = order; root.add(g); return { g, mats: [m] };
+    const geo = shapeGeo(d, center), m = material(color, .39);
+    const mesh = new THREE.Mesh(geo, m);
+    mesh.rotation.x = -.23; mesh.rotation.y = .28;
+    const g = new THREE.Group(); g.add(mesh); root.add(g);
+    return { g, mats: [m], depth: -12 };
   }
   const dicerO = blob(DICER, CENTER.dicer, C.dicer, 6);
   const agoO = blob(AGO, CENTER.ago, C.ago, 1);
   const compO = blob(COMP, CENTER.comp, C.comp, 5);
 
-  // RNA strands: backbone + half-rungs, so two strands meet into one ladder
-  function rectsGeo(rects) {
-    const p = [], idx = [];
-    rects.forEach(([x, y, w, h], k) => { p.push(x, y, 0, x + w, y, 0, x + w, y + h, 0, x, y + h, 0); const o = k * 4; idx.push(o, o + 1, o + 2, o, o + 2, o + 3); });
-    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(p, 3)); g.setIndex(idx); return g;
+  // Rounded tubes and capsule-like bases share cached geometry, two draws per strand.
+  function mergeGeometry(parts) {
+    const positions = [], normals = [];
+    for (const part of parts) {
+      const geo = part.index ? part.toNonIndexed() : part;
+      positions.push(...geo.attributes.position.array); normals.push(...geo.attributes.normal.array);
+      if (geo !== part) geo.dispose(); part.dispose();
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    geo.setAttribute('normal', new THREE.Float32BufferAttribute(normals, 3));
+    return geo;
   }
   const geoCache = {};
-  function makeStrand(len, rungs, dir, back, rung) {
-    const key = [len, dir, rungs].join();
-    const [rg, bg] = geoCache[key] || (geoCache[key] = [
-      rectsGeo(rungs.map(rx => [rx - RW / 2, dir > 0 ? 0 : -RL, RW, RL])), rectsGeo([[-len / 2 - .5, -BW / 2, len + 1, BW]])]);
-    const g = new THREE.Group(), m1 = flat(rung), m2 = flat(back);
-    const a = new THREE.Mesh(rg, m1), b = new THREE.Mesh(bg, m2); a.renderOrder = 3; b.renderOrder = 4;
-    g.add(a, b); root.add(g); return { g, mats: [m1, m2] };
+  function makeStrand(len, rungs, dir, back, rung, phase = 0) {
+    const key = [len, dir, rungs, phase].join();
+    let geometry = geoCache[key];
+    if (!geometry) {
+      const wave = x => new THREE.Vector3(x, 2.6 * Math.sin((x + phase) * Math.PI / 75), 4 * Math.cos((x + phase) * Math.PI / 75));
+      const pointCount = Math.max(10, Math.ceil(len / 14));
+      const points = Array.from({ length: pointCount }, (_, i) => wave(-len / 2 + len * i / (pointCount - 1)));
+      const backbone = new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points), Math.max(32, Math.ceil(len / 5)), 5.8, 12, false);
+      const ends = [-len / 2, len / 2].map(x => { const p = wave(x); return new THREE.SphereGeometry(5.8, 12, 8).translate(p.x, p.y, p.z); });
+      const bases = [];
+      for (const x of rungs) {
+        const p = wave(x), endY = p.y + dir * RL;
+        bases.push(new THREE.CylinderGeometry(3.5, 3.5, RL, 10).translate(x, p.y + dir * RL / 2, p.z));
+        bases.push(new THREE.SphereGeometry(3.5, 10, 6).translate(x, endY, p.z));
+      }
+      geometry = geoCache[key] = [mergeGeometry(bases), mergeGeometry([backbone, ...ends])];
+    }
+    const g = new THREE.Group(), m1 = material(rung, .3), m2 = material(back, .28);
+    g.add(new THREE.Mesh(geometry[0], m1), new THREE.Mesh(geometry[1], m2));
+    root.add(g); return { g, mats: [m1, m2], depth: 64 };
   }
   const siO = si.map(() => [makeStrand(150, [-50, 0, 50], 1, C.back, C.rung), makeStrand(150, [-50, 0, 50], -1, C.back, C.rung)]);
-  const tgO = tgt.map(() => makeStrand(100, [-25, 25], 1, C.tBack, C.tRung));
+  const targetRungs = Array.from({ length: 14 }, (_, i) => 85 + i * 50);
+  const targetO = makeStrand(700, targetRungs.map(x => x - 410), 1, C.tBack, C.tRung, 410);
+  const productO = [
+    makeStrand(375, targetRungs.filter(x => x < CUT_X).map(x => x - 247.5), 1, C.tBack, C.tRung, 247.5),
+    makeStrand(325, targetRungs.filter(x => x > CUT_X).map(x => x - 597.5), 1, C.tBack, C.tRung, 597.5),
+  ];
 
   function pose(o, v, bx = 1, by = 1) {
     const vis = v.a > .002; o.g.visible = vis; if (!vis) return;
-    o.g.position.set(v.x, v.y, 0); o.g.rotation.z = v.r * RAD; o.g.scale.set(v.s * bx, v.s * (v.sy || 1) * by, 1);
+    o.g.position.set(v.x, v.y, o.depth || 0); o.g.rotation.z = v.r * RAD; o.g.scale.set(v.s * bx, v.s * (v.sy || 1) * by, 1);
     const a = Math.min(1, v.a);
     for (const m of o.mats) { if (m.uniforms) m.uniforms.op.value = a; else m.opacity = a; }
   }
@@ -225,7 +281,7 @@ export function createRnaScene(cv) {
   const glow = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.ShaderMaterial({
     uniforms: { op: { value: 0 } },
     vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }',
-    fragmentShader: 'uniform float op; varying vec2 vUv; void main(){ float d = clamp(length(vUv - .5) * 2.1, 0., 1.); gl_FragColor = vec4(.32, .64, 1., op * .3 * pow(1. - d, 1.6)); }',
+    fragmentShader: 'uniform float op; varying vec2 vUv; void main(){ float d = clamp(length(vUv - .5) * 2.1, 0., 1.); gl_FragColor = vec4(.92, .69, .22, op * .19 * pow(1. - d, 1.6)); }',
     ...FLAT,
   }));
   glow.position.set(435, 1270, 0); glow.renderOrder = 2; root.add(glow);
@@ -238,21 +294,22 @@ export function createRnaScene(cv) {
     root.add(g); return { g, m, rays };
   });
 
-  // handwritten labels, rasterised once into textures (redone when the font arrives)
+  // Restrained sans-serif labels, rendered once at high resolution.
   const PX = 3;                                                  // texture pixels per world unit
   const labO = LABELS.map(([txt, , , , size = 27]) => {
     const cnv = document.createElement('canvas'), tex = new THREE.CanvasTexture(cnv);
+    tex.colorSpace = THREE.SRGBColorSpace;
     tex.minFilter = THREE.LinearFilter; tex.generateMipmaps = false;
-    const m = new THREE.MeshBasicMaterial({ map: tex, ...FLAT }), mesh = new THREE.Mesh(unitQuad, m);
+    const m = new THREE.MeshBasicMaterial({ map: tex, toneMapped: false, ...FLAT }), mesh = new THREE.Mesh(unitQuad, m);
     mesh.renderOrder = 8; root.add(mesh);
     const o = { mesh, m, tex, cnv, txt, size, w: 1, h: 1 };
     rasterLabel(o); return o;
   });
   function rasterLabel(o) {
-    const c2 = o.cnv.getContext('2d'), font = `600 ${o.size * PX}px Caveat, "Comic Sans MS", cursive`;
+    const c2 = o.cnv.getContext('2d'), font = `500 ${o.size * PX}px "Space Grotesk", Inter, sans-serif`;
     c2.font = font; const w = Math.ceil(c2.measureText(o.txt).width) + 12 * PX, h = Math.ceil(o.size * PX * 1.5);
     o.cnv.width = w; o.cnv.height = h;
-    c2.font = font; c2.fillStyle = ['Ago','RISC'].includes(o.txt) ? '#361b24' : C.ink; c2.textAlign = 'center'; c2.textBaseline = 'middle';
+    c2.font = font; c2.fillStyle = C.ink; c2.textAlign = 'center'; c2.textBaseline = 'middle';
     c2.fillText(o.txt, w / 2, h / 2);
     o.w = w / PX; o.h = h / PX; o.tex.dispose(); o.tex.needsUpdate = true;
   }
@@ -297,7 +354,15 @@ export function createRnaScene(cv) {
       pose(siO[i][0], { ...attach(v, tr.x, -30 + tr.y, tr.r), a: v.a * tr.a, s: 1 });
       pose(siO[i][1], { ...attach(v, 0, 30), s: 1 });
     });
-    tgt.forEach((p, k) => { const v = bob(at(p.g, T), p.ph, T); pose(tgO[k], { ...v, a: T > 17.5 ? v.a : 0 }); });
+    const target = at(targetEntry, T), cleaved = T >= CUT_TIME;
+    pose(targetO, { ...target, a: T > 17.5 && !cleaved ? target.a : 0 });
+    const productPoses = products.map(p => at(p, T));
+    productPoses.forEach((v, i) => pose(productO[i], { ...v, a: cleaved ? v.a : 0 }));
+    const [left, right] = productPoses;
+    const gap = cleaved ? Math.max(0, right.x - 162.5 * Math.cos(right.r * RAD) - left.x - 187.5 * Math.cos(left.r * RAD)) : 0;
+    cv.dataset.cleavage = !cleaved ? 'intact' : T < 25.1 ? 'cleaved' : 'released';
+    cv.dataset.cleavageGap = gap.toFixed(2);
+    cv.dataset.targetProducts = cleaved ? '2' : '0';
 
     const gl = clamp((T - 21.1) / .4) * (1 - clamp((T - 22.3) / .5));
     glow.visible = gl > 0; glow.material.uniforms.op.value = gl;
@@ -316,7 +381,11 @@ export function createRnaScene(cv) {
     LABELS.forEach(([, t0, t1, pos], i) => {
       const o = labO[i], on = T >= t0 && T <= t1; o.mesh.visible = on; if (!on) return;
       const aIn = E.out(clamp((T - t0) / .45)), aOut = 1 - clamp((T - (t1 - .4)) / .4), [x, y] = pos();
-      o.m.opacity = aIn * aOut; o.mesh.position.set(x, y + (1 - aIn) * 8, 0); const legibility = Math.max(1, 14 / (o.size * z));
+      o.m.opacity = aIn * aOut;
+      const legibility = Math.max(1, 13 / (o.size * z));
+      const halfLabel = o.w * legibility / 2 + 8 / z;
+      const labelX = Math.max(cx - cw / (2 * z) + halfLabel, Math.min(cx + cw / (2 * z) - halfLabel, x));
+      o.mesh.position.set(labelX, y + (1 - aIn) * 8, 130);
       o.mesh.scale.set(o.w * legibility, -o.h * legibility, 1);
     });
 
@@ -333,11 +402,12 @@ export function createRnaScene(cv) {
     currentTime = time;
     frame(time);
     cv.dataset.time = time.toFixed(3);
+    cv.dataset.artwork = 'dimensional-rnai';
   };
   const observer = new ResizeObserver(() => { resize(); render(currentTime); });
   observer.observe(cv);
   resize(); render(currentTime);
-  if (document.fonts) document.fonts.load('600 27px Caveat').then(() => {
+  if (document.fonts) document.fonts.load('500 27px "Space Grotesk"').then(() => {
     if (destroyed) return;
     labO.forEach(rasterLabel); render(currentTime);
   });

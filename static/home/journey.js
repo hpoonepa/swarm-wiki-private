@@ -1,21 +1,22 @@
+import { initRnaTransition } from './rnai-transition.js?v=e187ac17a66b';
+
 // Camera positions are measured in five viewport heights. Extending the journey
 // does not change the timing of the original globe or its geographic zoom.
 const clamp = n => Math.max(0, Math.min(1, n));
 const smooth = n => { const t = clamp(n); return t * t * t * (t * (6 * t - 15) + 10); };
 const between = (p, a, b) => smooth((p - a) / (b - a));
 const mix = (a, b, t) => a + (b - a) * t;
-export const RNA_START = 1.85, RNA_END = 2.37;
-// Scene boundaries: hive | bee's gut | minibinder | hive | RNAi | RNAi mechanism.
-// Crossing one starts a timed move, so a resting scroll position always shows a whole scene.
-const SCENES = [.58, .82, 1.24, 1.36, 1.81], CAMERA = [0, -1, -1, 0, 1, 1];
+export const BINDER_START = .76, BINDER_END = 1.08;
+export const RNA_START = 1.85, RNA_END = 2.55;
 const root = () => document.getElementById('honeycomb-earth');
 export const journeyUnit = () => root().querySelector('.geo-stage').clientHeight * 5;
 export const journeyProgress = () => window.earthScroll ? window.earthScroll().p : Math.max(0, -root().getBoundingClientRect().top / journeyUnit());
 export const journeyScroll = p => root().getBoundingClientRect().top + scrollY + (window.earthOffset ? window.earthOffset(p) : journeyUnit() * p);
+export const binderProgress = () => clamp((journeyProgress() - BINDER_START) / (BINDER_END - BINDER_START));
 export const rnaProgress = () => clamp((journeyProgress() - RNA_START) / (RNA_END - RNA_START));
 export const rnaScroll = p => journeyScroll(RNA_START + p * (RNA_END - RNA_START));
 
-export function initJourney(onBinder = () => {}) {
+export function initJourney() {
   const section = root(), stage = section.querySelector('.geo-stage');
   const map = section.querySelector('.map-view'), stats = section.querySelector('.geo-copy');
   const hiveCopy = section.querySelector('.journey-copy--hive'), beeCopy = section.querySelector('.journey-copy--bee');
@@ -24,6 +25,9 @@ export function initJourney(onBinder = () => {}) {
   const protein = document.getElementById('minibinders');
   const rna = document.getElementById('rnai');
   const rnaIntro = document.getElementById('rna-intro'), rnaMechanism = rna.querySelector('.rna-layout');
+  const rnaIntroCopy = rnaIntro.querySelector('.rna-discovery__copy');
+  const rnaStage = rna.querySelector('.rna-stage'), rnaStory = rna.querySelector('.rna-player__story');
+  const rnaTransition = initRnaTransition(rna);
   const virus = document.getElementById('dwv'), disease = section.querySelector('.dwv-story');
   const captions = [...section.querySelectorAll('[data-disease-beat]')];
   const comparison = section.querySelector('.bee-comparison');
@@ -59,7 +63,7 @@ export function initJourney(onBinder = () => {}) {
   let width = 1, height = 1;
   const introBee = section.querySelector('.intro-bee'), introScene = section.querySelector('.intro-scene');
   const introMite = section.querySelector('.intro-mite');
-  const introHive = section.querySelector('.intro-hive'), introTitle = hiveCopy.querySelector('h2');
+  const introHive = section.querySelector('.intro-hive');
   // Each complete scene slides as one window, including its title and artwork.
   const overview = document.createElement('div');
   overview.className = 'journey-window journey-window--overview';
@@ -68,36 +72,6 @@ export function initJourney(onBinder = () => {}) {
   protein.classList.add('journey-window');
   rna.classList.add('journey-window');
   let titleMid = 0;
-  let zone = 0, returning = false, binder = -1;
-  const camera = { v: 0, w: 0 }, reveal = { v: 0, w: 0 }, handoff = { v: 0, w: 0 };
-  // Critically damped spring toward each scene's resting value.
-  function settle(s, target, rate, dt) {
-    if (reduced.matches || !dt) { s.v = target; s.w = 0; return; }
-    const x = s.v - target, k = s.w + rate * x, e = Math.exp(-rate * dt);
-    s.v = target + (x + k * dt) * e;
-    s.w = (s.w - rate * k * dt) * e;
-    if (Math.abs(s.v - target) < .0005 && Math.abs(s.w) < .005) { s.v = target; s.w = 0; }
-  }
-  function advance(p, dt) {
-    while (zone < SCENES.length && p > SCENES[zone] + .02) zone++;
-    while (zone > 0 && p < SCENES[zone - 1] - .02) zone--;
-    if (zone >= 3) returning = true;
-    else if (zone === 0) returning = false;
-    const view = CAMERA[zone], revealGoal = Number(zone >= 2), handoffGoal = Number(zone === 5);
-    settle(camera, view, 6.5, dt);
-    if (view === -1) settle(reveal, revealGoal, 5, dt);
-    else if (camera.v >= 0) settle(reveal, revealGoal, 0, 0);
-    if (view === 1) settle(handoff, handoffGoal, 6, dt);
-    else if (camera.v <= 0) settle(handoff, handoffGoal, 0, 0);
-    const next = reveal.v > 0 ? .24 + .21 * reveal.v : 0;
-    if (next !== binder) onBinder(binder = next);
-    return camera.v !== view || reveal.v !== revealGoal || handoff.v !== handoffGoal;
-  }
-  function jump() {
-    const p = journeyProgress();
-    zone = SCENES.filter(at => p > at).length;
-    advance(p, 0);
-  }
   let shown = journeyProgress(), shownDisease = window.earthScroll().disease, shownIntro = window.earthScroll().intro, frame = 0, previous = performance.now(), visible = false;
   function layer(element, opacity) {
     element.style.opacity = opacity.toFixed(4);
@@ -112,10 +86,15 @@ export function initJourney(onBinder = () => {}) {
     if (reduced.matches) d = d <= 0 ? 0 : d < .28 ? .22 : d < .50 ? .42 : d < .73 ? .66 : .96;
     if (reduced.matches) i = i > .02 ? 1 : 0;
     const mobile = width <= 760;
-    const c = camera.v;
+    const slideProgress = (start, end) => {
+      const t = clamp((p-start)/(end-start));
+      return t*t*(3-2*t);
+    };
+    const toBee = slideProgress(.50, .76), toMiddle = slideProgress(1.085, 1.26);
+    const toMite = slideProgress(1.31, 1.53);
     const sceneName = raw < .325 ? diseaseProgress > .15 ? 'dwv' : 'earth'
-      : c > .5 ? handoff.v >= .5 ? 'rnai' : 'rna-intro'
-      : c < -.5 ? 'minibinders' : returning ? 'cross-hive' : 'hive';
+      : toMite >= .5 ? raw < 1.82 ? 'rna-intro' : 'rnai'
+      : toMiddle >= .5 ? 'cross-hive' : toBee >= .5 ? 'minibinders' : 'hive';
     section.dataset.journey = sceneName;
     section.dataset.journeyProgress = raw.toFixed(3);
     section.dataset.diseaseProgress = diseaseProgress.toFixed(3);
@@ -161,35 +140,40 @@ export function initJourney(onBinder = () => {}) {
     comparison.setAttribute('aria-hidden',String(compare < .02));
     document.body.classList.toggle('dwv-focus',p > .225 && p < .54);
 
-    // SWARM introduction (its own scroll pause): the word alone in the middle, the logo
-    // grows in beside it, then the hive pops up from below and lifts the title to the top.
-    const word = between(i, 0, .08), logo = between(i, .08, .27), lift = between(i, .27, .58);
-    const popT = clamp((i - .27) / .32), pop = smooth(popT);
-    // The bee window sits left of the hive and the mite window right of it.
-    function slide(element, offset) {
-      const shown = p >= .325 && Math.abs(offset) < .999;
+    // Read the complete title first, then lift it before revealing the two approaches.
+    const word = between(i, 0, .075), lift = between(i, .42, .70);
+    const popT = clamp((i - .60) / .25), pop = smooth(popT);
+    // The bee window enters from the left. Return to the centered hive and
+    // pause there before the mite window enters from the right.
+    function slide(element, offset, active) {
+      const shown = reduced.matches ? active : p >= .325 && Math.abs(offset) < 1;
       layer(element, Number(shown));
       element.style.clipPath = 'none';
-      element.style.transform = Math.abs(offset) < .00001 ? 'none' : `translate3d(${(offset * width).toFixed(3)}px,0,0)`;
-      element.inert = !shown || Math.abs(offset) > .015;
+      element.style.transform = reduced.matches || Math.abs(offset) < .00001 ? 'none'
+        : `translate3d(${(offset * width).toFixed(3)}px,0,0)`;
+      element.inert = !shown || (!reduced.matches && Math.abs(offset) > .015);
     }
-    slide(overview, -c);
-    slide(protein, -1 - c);
-    slide(rna, 1 - c);
+    const returning = toMiddle > 0;
+    const overviewActive = p >= .325 && (toBee < .5 || (toMiddle >= .5 && toMite < .5));
+    const binderActive = toBee >= .5 && toMiddle < .5;
+    const rnaActive = toMite >= .5;
+    const hiveOffset = toMite > 0 ? -toMite : toMiddle > 0 ? 1-toMiddle : toBee;
+    slide(overview, hiveOffset, overviewActive);
+    slide(protein, toMiddle > 0 ? -toMiddle : toBee-1, binderActive);
+    slide(rna, 1-toMite, rnaActive);
     const rnaVisible = rna.dataset.active === 'true';
     introScene.style.transform = 'none';
     introScene.style.opacity = '1';
-    introScene.style.setProperty('--overview-labels', (returning ? 1 : between(i,.64,.84)).toFixed(4));
+    introScene.style.setProperty('--overview-labels', (returning ? 1 : between(i,.80,.94)).toFixed(4));
     layer(hiveCopy, returning ? 0 : word);
-    hiveCopy.style.setProperty('--logo', logo.toFixed(4));
-    hiveCopy.style.setProperty('--subtitle', lift.toFixed(4));
-    introTitle.style.transform = reduced.matches ? 'none' : `translate3d(0,${((height / 2 - titleMid) * (1 - lift)).toFixed(1)}px,0) scale(${mix(mix(mobile ? 1.9 : 2.3, mobile ? 1.12 : 1.6, logo), 1, lift).toFixed(4)})`;
+    hiveCopy.style.setProperty('--subtitle', between(i,.07,.16).toFixed(4));
+    hiveCopy.style.transform = reduced.matches ? 'none' : `translate3d(0,${((height * .47 - titleMid) * (1 - lift)).toFixed(1)}px,0)`;
     introHive.style.setProperty('--rise', returning ? '1' : pop.toFixed(4));
     introHive.style.setProperty('--leave', '0');
-    introHive.style.opacity = '1';
+    introHive.style.opacity = (returning ? 1 : pop).toFixed(4);
     introHive.style.visibility = returning || popT > .001 ? 'visible' : 'hidden';
-    layer(introMite, returning ? 1 : between(i, .64, .84));
-    const fly = returning ? 1 : between(i, .57, .82);
+    layer(introMite, returning ? 1 : between(i, .74, .91));
+    const fly = returning ? 1 : between(i, .70, .88);
     introBee.style.setProperty('--fly', fly.toFixed(4));
     introBee.style.setProperty('--leave', '0');
     introBee.style.visibility = fly < .001 ? 'hidden' : 'visible';
@@ -198,11 +182,18 @@ export function initJourney(onBinder = () => {}) {
     layer(miteCopy, 0);
     protein.querySelector('.protein-view').style.transform = 'none';
     protein.style.setProperty('--model-labels', '1');
-    // The same right-hand panel changes from our targets to the RNA animation.
-    // The targets clear before the animation fades in; the panel frame stays.
-    const rnaHandoff = handoff.v;
-    layer(rnaIntro, 1 - between(rnaHandoff, 0, .55));
-    layer(rnaMechanism, between(rnaHandoff, .45, 1));
+    // The original middle helix uncoils into the first RNA strand. All movement
+    // follows the same reversible scroll playhead, including the text handoff.
+    const rnaHandoff = reduced.matches ? Number(p >= RNA_START) : clamp((p - 1.68) / (RNA_START - 1.68));
+    rna.style.setProperty('--rna-handoff', rnaHandoff.toFixed(4));
+    rna.style.setProperty('--rna-transition', rnaHandoff.toFixed(4));
+    rna.style.setProperty('--rna-arrival', between(p, 1.46, 1.58).toFixed(4));
+    rnaTransition.setProgress(rnaHandoff);
+    layer(rnaIntro, 1-between(rnaHandoff, .90, 1));
+    layer(rnaIntroCopy, 1-between(rnaHandoff, .10, .27));
+    layer(rnaMechanism, between(rnaHandoff, .60, .68));
+    layer(rnaStage, between(rnaHandoff, .86, 1));
+    layer(rnaStory, between(rnaHandoff, .68, .91));
     rnaIntro.inert = rnaHandoff >= .5 || !rnaVisible;
     rnaIntro.setAttribute('aria-hidden', String(rnaIntro.inert));
     rnaMechanism.inert = rnaHandoff < .5 || !rnaVisible;
@@ -218,25 +209,22 @@ export function initJourney(onBinder = () => {}) {
     shown = reduced.matches ? goal : shown + (goal - shown) * (1 - Math.exp(-dt * response));
     shownDisease = reduced.matches ? diseaseGoal : shownDisease + (diseaseGoal-shownDisease)*(1-Math.exp(-dt*4));   // DWV section glides rather than steps
     if (Math.abs(goal - shown) < .0001) shown = goal;
-    shownIntro = reduced.matches ? introGoal : shownIntro + (introGoal-shownIntro)*(1-Math.exp(-dt*4.5));
+    shownIntro = reduced.matches ? introGoal : shownIntro + (introGoal-shownIntro)*(1-Math.exp(-dt*7));
     if (Math.abs(diseaseGoal-shownDisease)<.0001) shownDisease=diseaseGoal;
     if (Math.abs(introGoal-shownIntro)<.0001) shownIntro=introGoal;
-    const moving = advance(goal, dt);
     paint(shown,shownDisease,shownIntro);
-    if (moving || shown !== goal || shownDisease !== diseaseGoal || shownIntro !== introGoal) frame = requestAnimationFrame(tick);
+    if (shown !== goal || shownDisease !== diseaseGoal || shownIntro !== introGoal) frame = requestAnimationFrame(tick);
   }
   function kick() { if (!frame && visible && !document.hidden) { previous = performance.now(); frame = requestAnimationFrame(tick); } }
   function resize() {
     height = stage.clientHeight; width = stage.clientWidth;
-    titleMid = hiveCopy.offsetTop + introTitle.offsetTop + introTitle.offsetHeight / 2;
-    // how far "Introducing" sits from the centre once the logo is beside it
-    const wordmark = introTitle.querySelector('.swarm-wordmark');
-    hiveCopy.style.setProperty('--shift', `${((wordmark.offsetWidth + parseFloat(getComputedStyle(introTitle).columnGap || 0)) / 2).toFixed(1)}px`);
+    rnaTransition.resize();
+    titleMid = hiveCopy.offsetTop + hiveCopy.offsetHeight / 2;
     paint(shown,shownDisease,shownIntro); kick();
   }
   new IntersectionObserver(([entry]) => {
     visible = entry.isIntersecting;
-    if (visible) { shown = journeyProgress(); shownDisease=window.earthScroll().disease; shownIntro=window.earthScroll().intro; jump(); kick(); }
+    if (visible) { shown = journeyProgress(); shownDisease=window.earthScroll().disease; shownIntro=window.earthScroll().intro; kick(); }
     else { protein.dataset.active = rna.dataset.active = 'false'; }
   }).observe(stage);
   new ResizeObserver(resize).observe(stage);
@@ -244,7 +232,6 @@ export function initJourney(onBinder = () => {}) {
   introMite.addEventListener('load', resize);
   addEventListener('scroll', kick, { passive: true });
   document.addEventListener('visibilitychange', kick);
-  reduced.addEventListener('change', () => { shown = journeyProgress(); jump(); resize(); });
-  jump();
+  reduced.addEventListener('change', () => { shown = journeyProgress(); resize(); });
   resize();
 }

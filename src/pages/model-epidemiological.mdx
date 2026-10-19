@@ -1,11 +1,13 @@
 ---
 layout: ../layouts/ContentLayout.astro
 title: Epidemiological Model
-tabLabels: ["Overview", "Minibinder Design", "RNAi Model", "Minibinder Dose Model", "Epidemiological Model", "Instructional"]
-tabLinks: ["model", "model-design", "model-rnai", "model-minibinder", "model-epidemiological", "model-instructional"]
+tabLabels: ["Overview", "Minibinder Design", "RNAi Model", "Minibinder Dose Model", "Epidemiological Model"]
+tabLinks: ["model", "model-design", "model-rnai", "model-minibinder", "model-epidemiological"]
 ---
 
 
+
+import EpidemiologyExplorer from "../components/modeling/epidemiology/EpidemiologyExplorer.astro";
 
 # Epidemiological Model
 ## Overview
@@ -81,4 +83,13 @@ The minibinder blocks mite to mite DWV transmission through the occupation of th
 To determine the maximum benefit the minibinder could provide, we simulated a perfect binder by removing the transmission route and comparing it against knockouts of each remaining route (see Table 10 in Results). Our model predicted that a perfect binder reduces DWV prevalence in year 2 from 0.80 to 0.20, a 74% reduction, but reduces the fraction of overtly symptomatic adults only from 6.8% to 5.7%.
 
 ## RNAi Pathway
+
+The figures below show our earlier five-year RNAi compartment model, separate from the six-year individual-based model described above. It follows healthy and infected adult bees, feeding mites, and mites disabled after exposure to dsRNA.
+
+<EpidemiologyExplorer section="methods" />
+
 ## Results
+
+These simulated results compare an untreated colony with one receiving dsRNA syrup under the same weather conditions. This earlier model uses an action threshold of 2 mites per 100 adult bees; the six-year study above uses 3.
+
+<EpidemiologyExplorer section="results" />

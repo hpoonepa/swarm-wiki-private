@@ -1,12 +1,24 @@
 import { onReducedMotionChange, prefersReducedMotion } from '../../motion/reduced';
 import { createRnaScene } from './rna-art.js';
 
-// The uploaded animation keeps its original timing and camera moves. Scroll owns
-// the playhead; stop before the standalone version's fade-to-white loop.
+// Give each molecular event equal reading room while keeping the camera and
+// artwork synchronized to the page's reversible scroll position.
 const START = .8, END = 30, DURATION = END - START;
 const boundaries = [3, 8.6, 13, 16, 17.8, 22.2];
 const keyframes = [1.8, 5.1, 11.6, 15.2, 17.1, 21.5, 27.5];
+const headings = ['Double-stranded RNA.', 'Make short guides.', 'Assemble RISC.', 'Load the siRNA.', 'Keep one strand.', 'Find the message.', 'Cut the target mRNA.'];
 const clamp = (n: number) => Math.max(0, Math.min(1, n));
+const edges = [START, ...boundaries, END];
+const sceneTime = (progress: number) => {
+  const position = clamp(progress) * keyframes.length;
+  const index = Math.min(keyframes.length - 1, Math.floor(position));
+  return edges[index] + (edges[index + 1] - edges[index]) * (position - index);
+};
+const progressAtTime = (time: number) => {
+  const next = edges.findIndex(edge => edge > time);
+  const index = next < 0 ? keyframes.length - 1 : Math.max(0, next - 1);
+  return (index + (time - edges[index]) / (edges[index + 1] - edges[index])) / keyframes.length;
+};
 const ease = (n: number) => { const t = clamp(n); return t*t*(3-2*t); };
 const phaseAt = (time: number) => {
   const i = boundaries.findIndex(boundary => time < boundary);
@@ -20,14 +32,17 @@ export function initRnaPlayer(player: HTMLElement) {
   const next = player.querySelector<HTMLButtonElement>('[data-rna-next]')!;
   const play = player.querySelector<HTMLButtonElement>('[data-rna-play]')!;
   const playIcon = player.querySelector<HTMLElement>('[data-rna-play-icon]')!;
+  const heading = player.querySelector<HTMLElement>('[data-rna-heading]');
+  const counter = player.querySelector<HTMLElement>('[data-rna-counter]');
   const events = new AbortController();
   let progress = 0, step = -1, frame = 0, playing = false;
-  player.dataset.animation = 'supplied-rnai';
+  player.dataset.animation = 'swarm-rnai';
 
   const render = (raw: number) => {
     progress = clamp(raw);
     player.dataset.progress = progress.toFixed(4);
-    const time = START + progress * DURATION;
+    player.style.setProperty('--rna-progress', String(progress));
+    const time = sceneTime(progress);
     const current = phaseAt(time), reduced = prefersReducedMotion();
     scene.render(reduced ? keyframes[current] : time);
     copies.forEach((copy, i) => {
@@ -41,6 +56,11 @@ export function initRnaPlayer(player: HTMLElement) {
     });
     if (current !== step) {
       step = current; player.dataset.step = String(step);
+      if (heading) heading.textContent = headings[step];
+      if (counter) {
+        counter.textContent = `${String(step + 1).padStart(2, '0')} / 07`;
+        counter.setAttribute('aria-label', `Step ${step + 1} of 7`);
+      }
       const atEnd = step === copies.length-1;
       next.setAttribute('aria-label', atEnd ? 'Start again' : 'Next step');
       next.innerHTML = `<span aria-hidden="true">${atEnd ? '↻' : '→'}</span>`;
@@ -54,7 +74,7 @@ export function initRnaPlayer(player: HTMLElement) {
   };
   const show = (index: number, instant = false) => {
     pause();
-    const target = (keyframes[index] - START)/DURATION;
+    const target = progressAtTime(keyframes[index]);
     const seek = new CustomEvent('rna-seek', { bubbles: true, cancelable: true,
       detail: { progress: target, instant: instant || prefersReducedMotion() } });
     if (player.dispatchEvent(seek)) render(target);
@@ -79,7 +99,7 @@ export function initRnaPlayer(player: HTMLElement) {
     };
     frame = requestAnimationFrame(tick);
   }, {signal: events.signal});
-  const visibility = new IntersectionObserver(([entry]) => { if (!entry.isIntersecting) pause(); });
+  const visibility = new IntersectionObserver(([entry]) => { if (!entry.isIntersecting || player.closest('[inert]')) pause(); });
   visibility.observe(player);
   const removeReducedListener = onReducedMotionChange(() => { pause(); render(progress); });
   document.addEventListener('visibilitychange', () => { if (document.hidden) pause(); }, {signal: events.signal});

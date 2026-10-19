@@ -1,10 +1,11 @@
 /* Shared scroll mapping: pause for the yearly data, the DWV comparison, then the SWARM introduction. */
 (() => {
   // [progress where the pause happens, name of its own 0-1 progress, length in screen heights]
-  const HOLDS = [[.16, 'years', 1.5], [.285, 'disease', 2.8], [.325, 'intro', 1.4], [1.285, 'middle', .5]];
+  const HOLDS = [[.16, 'years', 1.5], [.285, 'disease', 2.8], [.325, 'intro', 2.4], [1.285, 'middle', .5]];
   // Camera moves have room to read as a sideways journey; reading and RNA playback keep
   // their original room. Both navigation and playback use this same mapping.
-  const QUICK_MOVES = [[.35, .76, .52], [1.085, 1.53, .74]];
+  // Give the protein close-up 4.2 screens: arrival, separation, then readable cards.
+  const QUICK_MOVES = [[.35, .76, .52], [.76, 1.08, 2.625], [1.085, 1.53, .74]];
   const travel = p => 5 * (p - QUICK_MOVES.reduce((saved, [start, end, rate]) =>
     saved + Math.max(0, Math.min(p, end) - start) * (1 - rate), 0));
   function progressAt(distance) {
@@ -18,7 +19,7 @@
     return (distance + saved) / 5;
   }
   document.getElementById('honeycomb-earth').style.setProperty('--journey-screens',
-    String(1 + travel(2.40) + HOLDS.reduce((sum, [, , length]) => sum + length, 0)));
+    String(1 + travel(2.60) + HOLDS.reduce((sum, [, , length]) => sum + length, 0)));
   function parts() {
     const section = document.getElementById('honeycomb-earth');
     const height = section.querySelector('.geo-stage').clientHeight;

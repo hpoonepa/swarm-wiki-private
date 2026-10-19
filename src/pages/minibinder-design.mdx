@@ -6,6 +6,7 @@ tabLinks: ["minibinder", "minibinder-design", "minibinder-experimentation", "min
 ---
 
 import Reference from "../components/md_components/Reference";
+import BinderEmbed from "../components/binder/BinderEmbed.astro";
 
 
 
@@ -35,6 +36,10 @@ We incorporated binding hotspots identified using our software PRINCE to guide d
 Following generation, we independently evaluated candidate minibinders using **Protenix and Boltz-2**, which predict the three-dimensional structures of protein complexes. We screened candidates using interface predicted template modeling scores (ipTM), which estimate confidence in the relative positioning of interacting proteins, and interface predicted aligned error (iPAE), which measures uncertainty in the predicted binding interface. These metrics helped us prioritize candidates with more confident predicted interactions.
 
 We additionally used **SolubleMPNN**, a sequence-design model trained on soluble proteins, to redesign candidate amino acid sequences while seeking to preserve their intended structures and binding interfaces ([Goverde et al., 2024](https://doi.org/10.1038/s41586-024-07601-y)). This step aimed to improve sequence properties associated with solubility and experimental expression without compromising predicted binding.
+
+## Structure
+
+<BinderEmbed />
 
 For more detail on our computational design process and results, see [Minibinder Design Modeling](/lambert-ga/model-design/).
 

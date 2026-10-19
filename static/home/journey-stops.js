@@ -1,6 +1,6 @@
 /* Shared positions for links into the pinned homepage story. */
 export const STORY_STOPS = Object.freeze({
-  minibinders: .94,
+  minibinders: 1.055,
   rnaIntro: 1.67,
   rnaMechanism: 1.9
 });
@@ -29,9 +29,9 @@ export const HOME_STOPS = Object.freeze([
   { id: 'usa', label: 'DWV & bee health', target: () => at(.18), start: () => at(.115) },
   { id: 'dwv', label: 'Deformed wing virus', target: () => pause('disease', .23), start: () => at(.235) },
   { id: 'hive', label: 'Introducing SWARM', target: () => pause('intro', .96), start: () => at(.32) },
-  { id: 'minibinders', label: 'Minibinders', target: () => at(STORY_STOPS.minibinders), start: () => at(.58) },
-  { id: 'rna-intro', label: 'RNAi and the mite', target: () => at(STORY_STOPS.rnaIntro), start: () => at(1.36) },
-  { id: 'rnai', label: 'How RNAi works', target: () => at(STORY_STOPS.rnaMechanism), start: () => at(1.81) },
+  { id: 'minibinders', label: 'Minibinders', target: () => at(STORY_STOPS.minibinders), start: () => at(.63) },
+  { id: 'rna-intro', label: 'RNAi and the mite', target: () => at(STORY_STOPS.rnaIntro), start: () => at(1.42) },
+  { id: 'rnai', label: 'How RNAi works', target: () => at(STORY_STOPS.rnaMechanism), start: () => at(1.82) },
   { id: 'project-overview', label: 'The whole project', target: () => elementTop('project-overview'), start: () => elementTop('project-overview') - innerHeight * .3 },
   { id: 'explore', label: 'Explore our project', target: () => elementTop('explore'), start: () => elementTop('explore') - innerHeight * .3 }
 ].map(Object.freeze));

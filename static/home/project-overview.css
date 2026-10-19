@@ -1,4 +1,4 @@
-/* An illustrated project path: narrative at left, a six-part snake at right. */
+/* An illustrated project path: narrative at left, two rows reading left to right. */
 .swarm-overview {
   position: relative;
   isolation: isolate;
@@ -71,52 +71,14 @@
   margin: 0;
   --step-tint: #f1dbaa;
 }
-.swarm-overview__step:nth-child(4) { grid-column: 3; grid-row: 2; }
-.swarm-overview__step:nth-child(5) { grid-column: 2; grid-row: 2; }
-.swarm-overview__step:nth-child(6) { grid-column: 1; grid-row: 2; }
 .swarm-overview__step--protein { --step-tint: #dbe5d2; }
 .swarm-overview__step--rna { --step-tint: #eed8d4; }
 .swarm-overview__step--delivery { --step-tint: #eddeb6; }
 .swarm-overview__step--hives { --step-tint: #e5e5b7; }
 .swarm-overview__step--people { --step-tint: #ebd7b6; }
-/* The DOM remains 1–6; only the visual positions and connectors reverse. */
-.swarm-overview__step:not(:last-child)::after {
-  content: '→';
-  position: absolute;
-  top: calc(var(--art-mid) - 12px);
-  right: -28px;
-  z-index: 2;
-  color: #b18e48;
-  font-size: 25px;
-  line-height: 1;
-  pointer-events: none;
-}
-.swarm-overview__step:nth-child(4)::after,
-.swarm-overview__step:nth-child(5)::after { content: '←'; left: -28px; right: auto; }
-.swarm-overview__step:nth-child(3)::after {
-  content: '';
-  top: var(--art-mid);
-  right: -25px;
-  width: 28px;
-  height: calc(100% + var(--row-gap));
-  box-sizing: border-box;
-  border: 2px solid #b99b5a;
-  border-left: 0;
-  border-radius: 0 24px 24px 0;
-}
-.swarm-overview__step:nth-child(3)::before {
-  content: '';
-  position: absolute;
-  z-index: 3;
-  right: -1px;
-  top: calc(100% + var(--row-gap) + var(--art-mid) - 5px);
-  width: 8px;
-  height: 8px;
-  border-left: 2px solid #b99b5a;
-  border-bottom: 2px solid #b99b5a;
-  transform: rotate(45deg);
-  pointer-events: none;
-}
+/* Connectors follow the actual card positions, including the return to row two. */
+.swarm-overview__steps { position: relative; padding-inline: 22px; --row-gap: 64px; }
+.swarm-overview__connectors { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; color: #b18e48; }
 .swarm-overview__stage {
   display: block;
   color: inherit;
@@ -238,43 +200,7 @@
 }
 @media (max-width: 740px) and (min-width: 481px) {
   .swarm-overview { padding-inline: 24px; }
-  .swarm-overview__steps { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-inline: 22px; gap: 34px 30px; --row-gap: 34px; }
-  .swarm-overview__step:nth-child(3) { grid-column: 2; grid-row: 2; }
-  .swarm-overview__step:nth-child(4) { grid-column: 1; grid-row: 2; }
-  .swarm-overview__step:nth-child(5) { grid-column: 1; grid-row: 3; }
-  .swarm-overview__step:nth-child(6) { grid-column: 2; grid-row: 3; }
-  .swarm-overview__step:nth-child(3)::before { content: none; }
-  .swarm-overview__step:nth-child(3)::after { content: '←'; width: auto; height: auto; border: 0; border-radius: 0; left: -28px; right: auto; top: calc(var(--art-mid) - 12px); }
-  .swarm-overview__step:nth-child(5)::after { content: '→'; left: auto; right: -28px; }
-  .swarm-overview__step:nth-child(2)::after,
-  .swarm-overview__step:nth-child(4)::after {
-    content: '';
-    top: var(--art-mid);
-    right: -22px;
-    left: auto;
-    width: 24px;
-    height: calc(100% + var(--row-gap));
-    box-sizing: border-box;
-    border: 2px solid #b99b5a;
-    border-left: 0;
-    border-radius: 0 22px 22px 0;
-  }
-  .swarm-overview__step:nth-child(4)::after { left: -22px; right: auto; border-left: 2px solid #b99b5a; border-right: 0; border-radius: 22px 0 0 22px; }
-  .swarm-overview__step:nth-child(2)::before,
-  .swarm-overview__step:nth-child(4)::before {
-    content: '';
-    position: absolute;
-    z-index: 3;
-    right: -2px;
-    top: calc(100% + var(--row-gap) + var(--art-mid) - 5px);
-    width: 8px;
-    height: 8px;
-    border-left: 2px solid #b99b5a;
-    border-bottom: 2px solid #b99b5a;
-    transform: rotate(45deg);
-    pointer-events: none;
-  }
-  .swarm-overview__step:nth-child(4)::before { right: auto; left: -2px; transform: rotate(225deg); }
+  .swarm-overview__steps { grid-template-columns: repeat(2, minmax(0, 1fr)); padding-inline: 22px; gap: 54px 30px; --row-gap: 54px; }
   .swarm-overview__stage h3 { font-size: 21px; }
   .swarm-overview__details li { font-size: 14px; }
 }
@@ -298,7 +224,7 @@
   .swarm-overview__drop { height: 49px; }
   .swarm-overview__hive { height: 130px; }
   .swarm-overview__flight, .swarm-overview__book { height: 130px; }
-  .swarm-overview__step:nth-child(3)::before { content: none; }
+  .swarm-overview__connectors { display: none; }
   .swarm-overview__step:not(:last-child)::after {
     content: '↓';
     top: auto;

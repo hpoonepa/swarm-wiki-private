@@ -1,5 +1,7 @@
-import { initRnaPlayer } from './vendor/rna-player.js?v=0ad76dc16e5c';
-import { initJourney, rnaProgress, rnaScroll } from './journey.js?v=8fd57091299c';
+import { initRnaPlayer } from './vendor/rna-player.js?v=43b1c8a95158';
+import { initJourney, binderProgress, rnaProgress, rnaScroll } from './journey.js?v=eaca2c6cd33b';
+
+initJourney();
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const clamp = n => Math.max(0, Math.min(1, n));
@@ -10,16 +12,7 @@ const rna = document.getElementById('rnai');
 const player = rna.querySelector('[data-rna-player]');
 const rnaPlayer = initRnaPlayer(player);
 const smoothMini = n => { const t = clamp(n); return t * t * (3 - 2 * t); };
-// Broad, soft glows give the RNA scene depth without floating bubbles.
-document.querySelectorAll('.cell-field--rna').forEach(field => {
-  [[-9,7,440],[66,-18,520],[51,77,390]].forEach(([x,y,size],i) => {
-    const glow = document.createElement('span');
-    glow.className = 'cell-field__glow';
-    glow.style.cssText = `--x:${x}%;--y:${y}%;--size:${size}px;--delay:${-i*3.7}s;--duration:${26+i*5}s;--sway:${i%2?58:-48}px;--rise:${i%3?42:-54}px`;
-    field.append(glow);
-  });
-});
-let displayedMini = 0;
+let displayedMini = binderProgress();
 let scene = null, loading = false;
 let previousRNA = -1, displayedRNA = rnaProgress(), frame = 0, last = performance.now();
 const inView = new Set();
@@ -28,8 +21,8 @@ async function loadProtein() {
   if (scene || loading) return;
   loading = true;
   try {
-    const { mountBinderScene } = await import('./binder-scene.js?v=1c2006718cc1');
-    scene = await mountBinderScene(host, { reduced: reduced.matches, progress: displayedMini });
+    const { mountBinderScene } = await import('./binder-scene.js?v=2efe03129e68');
+    scene = await mountBinderScene(host, { reduced: reduced.matches, progress: binderProgress() });
     host.dataset.backend = scene.backend;
     paintMini();
   } catch (error) {
@@ -44,16 +37,15 @@ async function loadProtein() {
 function paintMini(p = displayedMini) {
   const index = p < .22 ? 0 : p < .43 ? 1 : p < .62 ? 2 : p < .82 ? 3 : 4;
   mini.dataset.phase = String(index);
-  const zoom = reduced.matches ? Number(index > 0) : smoothMini((p - .10) / .17);
+  const zoom = reduced.matches ? Number(index > 0) : smoothMini((p - .025) / .13);
   mini.style.setProperty('--gut-zoom', zoom.toFixed(4));
-  const molecular = reduced.matches ? Number(index > 0) : smoothMini((p - .25) / .15);
+  const molecular = reduced.matches ? Number(index > 0) : smoothMini((p - .13) / .10);
   mini.style.setProperty('--molecule-in', molecular.toFixed(4));
   const board = mini.querySelector('.binder-board'), cutaway = mini.querySelector('.gut-focus');
   board.inert = molecular < .05; board.setAttribute('aria-hidden', String(molecular < .05));
   cutaway.setAttribute('aria-hidden', String(molecular > .95));
   scene?.setProgress(reduced.matches ? [.05,.33,.52,.72,1][index] : p, { instant: reduced.matches });
 }
-initJourney(p => { displayedMini = p; paintMini(); });
 // Each molecule stays in the same scene throughout. Explicit playback is optional;
 // scrolling resumes control and the next-step button seeks the same scroll timeline.
 player.addEventListener('rna-seek', e => {
@@ -75,6 +67,17 @@ function tick(now) {
   frame = 0;
   if (document.hidden) return;
   const dt = Math.min(.05, (now - last) / 1000); last = now;
+  let settlingMini=false;
+  if (inView.has(journey)) {
+    const goal=binderProgress();
+    const previousMini=displayedMini;
+    displayedMini=reduced.matches?goal:displayedMini+(goal-displayedMini)*(1-Math.exp(-dt*7));
+    if(Math.abs(goal-displayedMini)<.0001)displayedMini=goal;
+    // The completed minibinder remains offscreen during RNAi. Do not redraw its
+    // molecular geometry on every RNA frame once its own playhead has settled.
+    if(displayedMini!==previousMini)paintMini();
+    settlingMini=displayedMini!==goal;
+  }
   if (inView.has(rna) && !rnaPlayer.isPlaying()) {
     const goal = rnaProgress();
     displayedRNA = reduced.matches ? goal : displayedRNA + (goal - displayedRNA) * (1 - Math.exp(-dt * 7));
@@ -85,6 +88,7 @@ function tick(now) {
     }
     if (displayedRNA !== goal) frame = requestAnimationFrame(tick);
   }
+  if(settlingMini && !frame)frame=requestAnimationFrame(tick);
 }
 function kick() { if (!frame && !document.hidden) { last = performance.now(); frame = requestAnimationFrame(tick); } }
 const observer = new IntersectionObserver(entries => {
@@ -101,5 +105,5 @@ if ('requestIdleCallback' in window) requestIdleCallback(loadProtein, { timeout:
 else setTimeout(loadProtein, 1500);
 addEventListener('scroll', kick, { passive: true }); addEventListener('resize', kick);
 document.addEventListener('visibilitychange', kick);
-reduced.addEventListener('change', () => { scene?.setReduced(reduced.matches); previousRNA = -1; kick(); });
+reduced.addEventListener('change', () => { scene?.setReduced(reduced.matches); paintMini(); previousRNA = -1; kick(); });
 addEventListener('pagehide', e => { if (!e.persisted) { scene?.destroy(); rnaPlayer.destroy(); observer.disconnect(); } });

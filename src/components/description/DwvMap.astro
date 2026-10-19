@@ -1,0 +1,49 @@
+---
+import { geoNaturalEarth1, geoPath } from 'd3-geo';
+import world from './world.json';
+import { evidence } from './dwv-evidence';
+import './dwv-map.css';
+const projection = geoNaturalEarth1().fitExtent([[18, 20], [942, 476]], world as any);
+const path = geoPath(projection);
+const sources = evidence.filter((record, index, all) => all.findIndex(other => other.url === record.url) === index);
+// Geographic labels only. Future country colors are an illustrative animation.
+const regions = [
+  { name: 'North America', point: [-105, 44], level: 'high' },
+  { name: 'Europe', point: [15, 52], level: 'high' },
+  { name: 'South America', point: [-61, -18], level: 'patch' },
+  { name: 'Asia', point: [106, 32], level: 'patch' },
+  { name: 'Australia', point: [134, -27], level: 'patch' },
+  { name: 'Africa', point: [19, 4], level: 'low' },
+];
+---
+<section class="dwv-atlas wide" id="dwv-map" data-dwv-atlas aria-labelledby="dwv-map-title">
+  <header class="atlas-heading"><h2 id="dwv-map-title">DWV around the world</h2><output id="atlas-year-output" aria-label="Displayed year">2014</output></header>
+  <p class="atlas-illustrative-note" data-illustrative-note hidden><strong>Illustrative transition</strong><span>Country shades are illustrative, not measured or predicted values.</span></p>
+  <div class="atlas-stage">
+    <svg viewBox="0 0 960 500" role="img" aria-labelledby="atlas-map-description">
+      <title id="atlas-map-description">Selected countries with published DWV detections. Country shading indicates a report, not national prevalence.</title>
+      {world.features.map(feature => <path d={path(feature as any) || ''} data-country={feature.properties.iso} class:list={['atlas-land', { 'is-recorded': feature.properties.iso === 'NZL' }]}><title>{feature.properties.name}</title></path>)}
+      <g data-observed>
+        {evidence.map(record => { const [x,y] = projection(record.point) || [0,0]; return <a href={record.url} target="_blank" rel="noopener noreferrer" aria-label={`${record.name}: ${record.citation}`} data-marker={record.id} data-year={record.year} class:list={['atlas-marker', {'is-visible': record.year <= 2014}]} transform={`translate(${x},${y})`}><circle class="atlas-halo" r="12"/><circle r="5"/><title>{record.name} · {record.citation}</title></a>; })}
+      </g>
+      <g data-outlook hidden>
+        {regions.map(region => { const [x,y] = projection(region.point) || [0,0]; return <g class="atlas-region" transform={`translate(${x},${y})`}><text x="0" y="0" text-anchor="middle">{region.name}</text></g>; })}
+      </g>
+    </svg>
+    <div class="atlas-key" data-observed-key><span><i></i>Published DWV detection</span><span class="atlas-key-note">Selected reports, not case totals</span></div>
+    <div class="atlas-shade-key" data-outlook-key hidden><strong>Illustrative shading</strong><div><span>Pale yellow</span><i aria-hidden="true"></i><span>Deep rust</span></div></div>
+  </div>
+  <div class="atlas-sources" data-sources><span>Sources:</span>{sources.map((record,index) => <a href={record.url} title={record.citation} aria-label={record.citation} target="_blank" rel="noopener noreferrer">[{index+1}]</a>)}</div>
+  <div class="atlas-quantities" data-outlook-metrics hidden>
+    <p class="atlas-published-label">Published habitat estimate · separate from the illustration</p>
+    <div><strong>25.5–26.7 <small>million km²</small></strong><span>Global suitable habitat · 2050s</span></div>
+    <div class="atlas-change"><strong>9.64–13.54% less</strong><span>than the 29.5 million km² baseline</span></div>
+  </div>
+  <div class="atlas-sources" data-outlook-source hidden><span>3 climate scenarios · baseline climate: 1970–2000.</span><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13358152/#Tab2" target="_blank" rel="noopener noreferrer">Akongte et al., 2026, Table 2 ↗</a></div>
+  <div class="atlas-bottom">
+    <div class="atlas-progress" data-progress-wrap aria-label="Selected reports from 2014 to 2025"><span data-progress-start>2014</span><div class="atlas-progress-track"><i data-progress></i></div><span data-progress-end>2025</span></div>
+    <p class="atlas-scope" data-outlook-scope hidden>2050s habitat model · not DWV case counts.</p>
+    <div class="atlas-action"><button type="button" data-outlook-button hidden>See 2050 outlook <span aria-hidden="true">→</span></button></div>
+  </div>
+</section>
+<script>import './dwv-map';</script>

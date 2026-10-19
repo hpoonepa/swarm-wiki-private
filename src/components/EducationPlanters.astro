@@ -1,0 +1,133 @@
+---
+import { getImage } from 'astro:assets';
+import planterArtwork from '../assets/education/education-planters-white.png';
+
+// Display crops of the supplied artwork; keep the original image intact.
+const artwork = await getImage({ src: planterArtwork, format: 'webp', quality: 92 });
+const planters = [
+  { id: 'elementary', clip: '0,0 530,0 530,308 490,308 490,322 70,322 70,285 0,285', name: 'Elementary', crop: '292 10 530 322', initiatives: [
+    { title: 'Sharon Bees workshop', anchor: 'sharon-bees-workshop--sdg-4-11-15-17' },
+    { title: 'Children’s Book', anchor: 'childrens-book--sdg-4-15' },
+  ] },
+  { id: 'middle', clip: '0,0 350,0 350,35 530,35 530,298 480,298 480,322 0,322', name: 'Middle School', crop: '5 294 530 322', initiatives: [
+    { title: 'Riverwatch workshops', anchor: 'riverwatch-workshops--sdg-4-15-17' },
+    { title: 'Biotech Bootcamp', anchor: 'biotech-bootcamp--sdg-4-15-17' },
+  ] },
+  { id: 'high', clip: '0,45 160,45 160,0 530,0 530,310 0,310', name: 'High School', crop: '650 294 530 322', initiatives: [
+    { title: 'Pollinator presentations', anchor: 'pollinator-presentations--sdg-2-4-11-15' },
+    { title: 'Connectivity Night', anchor: 'connectivity-night--sdg-4-17' },
+  ] },
+  { id: 'general', clip: '0,38 205,38 205,0 375,0 375,38 530,38 530,322 70,322 70,292 0,292', name: 'General', crop: '292 583 530 322', initiatives: [
+    { title: 'iGEM collaboration call', anchor: 'igem-human-practices-collaboration-call--sdg-4-17' },
+    { title: 'Webinars', anchor: 'webinars--sdg-2-4-8-11-15-17' },
+    { title: 'Concrete Jungle workshop', anchor: 'concrete-jungle-workshop--sdg-2-4-8-11-15-17' },
+    { title: 'STEM for Tomorrow forum', anchor: 'nwga-resa-stem-for-tomorrow-forum--sdg-4-8-17' },
+    { title: 'Gardener’s Handbook', anchor: 'gardeners-handbook--sdg-2-4-11-15' },
+    { title: 'Social media', anchor: 'social-media--sdg-2-4-5-8-11-15-17' },
+    { title: 'Mentorship', anchor: 'mentorship--sdg-4-17' },
+    { title: 'Bee PSA', anchor: 'bee-psa--sdg-4-11-15' },
+  ] },
+  { id: 'inclusivity', clip: '0,0 325,0 325,28 530,28 530,322 0,322', name: 'Inclusivity', crop: '5 883 530 322', initiatives: [
+    { title: 'Flowers for the Future', anchor: 'flowers-for-the-future--sdg-4-5-11-15-17' },
+    { title: 'FFF–BioBuilderClub', anchor: 'fffbiobuilderclub--sdg-4-5-11-15-17' },
+    { title: 'Children’s Book translations', anchor: 'childrens-book-translations--sdg-4-15' },
+    { title: 'Exceptional Science!', anchor: 'exceptional-science--sdg-4-15' },
+    { title: 'Neurodivergent Handbook', anchor: 'neurodivergent-handbook--sdg-4-17' },
+  ] },
+  { id: 'internal', clip: '0,38 145,38 145,0 530,0 530,322 0,322', name: 'Internal', crop: '650 883 530 322', initiatives: [
+    { title: 'Team resources', anchor: 'internal' },
+  ] },
+];
+---
+
+<nav id="education-garden" class="education-garden wide" aria-label="Explore our education initiatives">
+  <p class="garden-title">Explore our initiatives</p>
+  <p class="garden-instruction">Click a planter, then choose an initiative to read.</p>
+  <div class="garden-planters">
+    {planters.map(planter => (
+      <details class={`garden-planter garden-planter--${planter.id}`} name="education-planters">
+        <summary aria-label={planter.id === 'internal' ? 'Internal: open team resources' : `${planter.name}: open ${planter.initiatives.length} initiatives`}>
+          <svg class="planter-art" viewBox="0 0 530 322" aria-hidden="true" focusable="false">
+            <defs><clipPath id={`planter-${planter.id}`}><polygon points={planter.clip} /></clipPath></defs>
+            <g clip-path={`url(#planter-${planter.id})`}>
+              <image href={artwork.src} x={-Number(planter.crop.split(' ')[0])} y={-Number(planter.crop.split(' ')[1])} width="1182" height="1206" preserveAspectRatio="none" />
+            </g>
+          </svg>
+          <span class="planter-toggle" aria-hidden="true">
+            <span class="planter-toggle__closed">{planter.id === 'internal' ? 'View team resources' : 'View initiatives'}</span>
+            <span class="planter-toggle__open">Close list</span>
+            <svg viewBox="0 0 24 24"><path d="m7 10 5 5 5-5" /></svg>
+          </span>
+        </summary>
+        <ul class="planter-initiatives" aria-label={`${planter.name} initiatives`}>
+          {planter.initiatives.map(initiative => (
+            <li><a href={`#${initiative.anchor}`}><span>{initiative.title}</span><span aria-hidden="true">↗</span></a></li>
+          ))}
+        </ul>
+      </details>
+    ))}
+  </div>
+</nav>
+
+<script>
+  const garden = document.getElementById('education-garden');
+  garden?.querySelectorAll<HTMLAnchorElement>('a[href^="#"]').forEach(link => {
+    link.addEventListener('click', event => {
+      const hash = link.getAttribute('href');
+      const target = hash && document.getElementById(hash.slice(1));
+      if (!target) return;
+      event.preventDefault();
+      history.pushState(null, '', hash);
+      const previousTabindex = target.getAttribute('tabindex');
+      target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+      target.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
+      target.addEventListener('blur', () => {
+        if (previousTabindex === null) target.removeAttribute('tabindex');
+        else target.setAttribute('tabindex', previousTabindex);
+      }, { once: true });
+    });
+  });
+</script>
+
+<style>
+  .education-garden { margin-block: clamp(36px, 5vw, 64px) 48px; }
+  .education-garden .garden-title { margin: 0 0 12px; color: #153f36; font-size: clamp(28px, 3vw, 38px); font-weight: 700; line-height: 1.15; letter-spacing: -.035em; text-align: center; }
+  .education-garden .garden-instruction { margin: 0 0 32px; color: #506459; text-align: center; font-size: 17px; line-height: 1.5; }
+  .garden-planters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; gap: 42px 36px; padding: 8px 0 24px; background: transparent; }
+  .garden-planter { margin: 0; padding: 0; min-width: 0; border: 0; background: none; box-shadow: none; }
+  .garden-planter:last-child:nth-child(odd) { grid-column: 1 / -1; width: calc(50% - 14px); justify-self: center; }
+  .garden-planter summary { display: block; position: relative; list-style: none; padding: 0; border: 0; cursor: pointer; text-align: center; -webkit-tap-highlight-color: transparent; }
+  .garden-planter summary::-webkit-details-marker { display: none; }
+  .planter-art { display: block; width: 100%; height: auto; aspect-ratio: 530 / 322; transition: transform .22s ease; }
+  .planter-toggle { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 46px; padding: 10px 20px; margin-top: 16px; color: #153f36; background: #fae6aa; border: 1px solid #c5a157; border-radius: 999px; font-size: 16px; line-height: 1.4; font-weight: 650; transition: background .2s, border-color .2s; }
+  .planter-toggle svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s; }
+  .planter-toggle__open { display: none; }
+  .garden-planter[open] .planter-toggle { background: #f1cf71; border-color: #a07928; }
+  .garden-planter[open] .planter-toggle svg { transform: rotate(180deg); }
+  .garden-planter[open] .planter-toggle__closed { display: none; }
+  .garden-planter[open] .planter-toggle__open { display: inline; }
+  .garden-planter summary:focus-visible { outline: 3px solid #966126; outline-offset: 4px; border-radius: 8px; }
+  .education-garden .planter-initiatives { list-style: none; padding: 18px 7% 14px; margin: 0; }
+  .education-garden .planter-initiatives li { padding: 0; margin: 0; }
+  .education-garden .planter-initiatives a { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 48px; padding: 11px 0; color: #264938; border-bottom: 1px solid #bbbfac; text-decoration: none; font-size: 16px; font-weight: 500; line-height: 1.4; }
+  .education-garden .planter-initiatives a > span:last-child { color: #8d6336; }
+  .education-garden .planter-initiatives a:hover { color: #8b4c27; border-color: currentColor; }
+  .education-garden .planter-initiatives a:focus-visible { outline: 2px solid #966126; outline-offset: 4px; }
+  :global(.info-prose [id]) { scroll-margin-top: 120px; }
+  @media (hover: hover) {
+    .garden-planter summary:hover .planter-art { transform: translateY(-4px); }
+    .garden-planter summary:hover .planter-toggle { background: #f1cf71; border-color: #a07928; }
+  }
+  @media (max-width: 620px) {
+    .garden-planters { grid-template-columns: 1fr; gap: 32px; padding: 0 4px 24px; }
+    .garden-planter, .garden-planter:last-child:nth-child(odd) { width: 100%; max-width: 440px; grid-column: auto; justify-self: center; }
+    .education-garden .garden-title { margin-bottom: 12px; }
+    .education-garden .garden-instruction { font-size: 16px; margin-bottom: 28px; padding-inline: 12px; }
+    .education-garden .planter-initiatives { padding-inline: 8%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .planter-art, .planter-toggle, .planter-toggle svg { transition: none; }
+    .garden-planter summary:hover .planter-art { transform: none; }
+  }
+</style>

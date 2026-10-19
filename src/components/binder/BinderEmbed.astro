@@ -1,0 +1,16 @@
+---
+interface Props { figureLabel?: string }
+const { figureLabel } = Astro.props;
+---
+
+<figure class="binder-embed wide">
+  <iframe src="/lambert-ga/minibinder-viewer/?embed=1&design=design-02" title="Interactive predicted minibinder and VP3 structure" loading="lazy" allow="fullscreen" allowfullscreen></iframe>
+  <figcaption>{figureLabel && `${figureLabel}. `}Predicted complex of <code>l79_s469532_mpnn9</code> and the VP3 target. Drag to rotate the structure. <a href="/lambert-ga/minibinder-viewer/?design=design-02">Open the full minibinder viewer ↗</a></figcaption>
+</figure>
+
+<style>
+  .binder-embed { margin-block: 28px; }
+  .binder-embed iframe { display: block; width: 100%; height: clamp(400px, 65vh, 640px); border: 1px solid #ded8c4; border-radius: 16px; background: #fff8e7; }
+  .binder-embed figcaption { margin-top: 12px; }
+  @media (max-width: 600px) { .binder-embed iframe { height: 440px; } }
+</style>

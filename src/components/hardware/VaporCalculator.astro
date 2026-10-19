@@ -1,0 +1,84 @@
+---
+import "./vapor-calculator.css";
+---
+
+<section class="vapor-calculator wide" data-vapor-calculator aria-label="VAPOR-X drying calculator">
+  <header>
+    <h3>Drying calculator</h3>
+  </header>
+
+  <div class="modes" id="vapor-calc-modes">
+    <button type="button" data-mode="time" aria-pressed="true">Time to dry</button>
+    <button type="button" data-mode="left" aria-pressed="false">Liquid remaining</button>
+    <button type="button" data-mode="temp" aria-pressed="false">Temperature</button>
+  </div>
+  <div class="layout">
+    <!-- LEFT: inputs + readout -->
+    <section class="panel controls" aria-label="Calculator">
+
+      <div class="fields">
+        <div class="field" id="vapor-calc-f-start">
+          <label for="vapor-calc-in-start">Starting volume</label>
+          <div class="inputrow"><input id="vapor-calc-in-start" type="number" inputmode="decimal" min="0" step="any" value="100"><span class="unit">µL</span></div>
+        </div>
+        <div class="field" id="vapor-calc-f-temp">
+          <label for="vapor-calc-in-temp">Temperature</label>
+          <div class="inputrow"><input id="vapor-calc-in-temp" type="number" inputmode="decimal" step="any" value="60"><span class="unit">°C</span></div>
+          <div class="slider">
+            <input id="vapor-calc-in-temp-range" type="range" min="25" max="90" step="1" value="60" aria-label="Temperature slider">
+            <div class="ticks" id="vapor-calc-ticks"></div>
+          </div>
+        </div>
+        <div class="field" id="vapor-calc-f-time">
+          <label for="vapor-calc-in-time">Drying time</label>
+          <div class="inputrow"><input id="vapor-calc-in-time" type="number" inputmode="decimal" min="0" step="any" value="10"><span class="unit">min</span></div>
+        </div>
+        <div class="field" id="vapor-calc-f-target">
+          <label for="vapor-calc-in-target">Target volume</label>
+          <div class="inputrow"><input id="vapor-calc-in-target" type="number" inputmode="decimal" min="0" step="any" value="0"><span class="unit">µL</span></div>
+        </div>
+      </div>
+
+      <div class="oled" id="vapor-calc-oled" aria-live="polite">
+        <div class="k"><span id="vapor-calc-ro-k">Time to reach target</span></div>
+        <div class="val"><span class="big" id="vapor-calc-ro-big">--</span><span class="u" id="vapor-calc-ro-u"></span></div>
+        <div class="line" id="vapor-calc-ro-line" hidden></div>
+      </div>
+      <div class="chips" id="vapor-calc-chips" hidden></div>
+
+      <div class="actions">
+        <button type="button" class="btn primary" id="vapor-calc-btn-timer">Start timer</button>
+        <button type="button" class="btn" id="vapor-calc-btn-copy">Copy result</button>
+      </div>
+      <div class="timer" id="vapor-calc-timer" hidden>
+        <div class="row"><span class="clock" id="vapor-calc-timer-clock">00:00</span><span class="lbl" id="vapor-calc-timer-label"></span></div>
+        <div class="bar"><i id="vapor-calc-timer-bar"></i></div>
+      </div>
+    </section>
+
+    <!-- RIGHT: charts -->
+    <div class="right">
+      <section class="panel">
+        <h2>Liquid left over time</h2>
+        <div class="chartbox" id="vapor-calc-chart-main"></div>
+        <div class="legend" id="vapor-calc-legend-main"></div>
+      </section>
+      <div class="pair">
+        <section class="panel">
+          <h2>Drying rate vs temperature</h2>
+          <div class="chartbox" id="vapor-calc-chart-rate"></div>
+        </section>
+        <section class="panel">
+          <h2>Compare temperatures</h2>
+          <div class="cmp" id="vapor-calc-cmp"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<script>
+  import { initVaporCalculator } from "./vapor-calculator.js";
+  document.querySelectorAll<HTMLElement>("[data-vapor-calculator]").forEach(initVaporCalculator);
+</script>

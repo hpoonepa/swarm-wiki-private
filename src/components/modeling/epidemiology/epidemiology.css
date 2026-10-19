@@ -1,0 +1,78 @@
+.epi-model {
+  --dwv-bg: #fff; --dwv-surface: #faf6e9; --dwv-figure: #fff;
+  --dwv-ink: #233d33; --dwv-ink2: #667168; --dwv-line: #e8e6da; --dwv-line-strong: #cdc7b3;
+  --dwv-shade: #f5f3eb; --dwv-shadow: rgba(43,48,30,.1);
+  --dwv-ctrl: #898b81; --dwv-rnai: #a97920; --dwv-rnai-mid: #d7bd73; --dwv-rnai-soft: #fff5d6;
+  --dwv-total: #253d32; --dwv-healthy: #467c87; --dwv-infected: #b85e42; --dwv-killed: #a34e47;
+  --dwv-disabled: #b58f40; --dwv-virus: #b85e42; --dwv-thresh: #a34e47; --dwv-low: #b85e42; --dwv-high: #467c87;
+  --dwv-winter: #467c87; --dwv-spring: #63835b; --dwv-summer: #c19529; --dwv-autumn: #b85e42;
+  --dwv-g-brood: #467c87; --dwv-g-survival: #4b785a; --dwv-g-mite: #b8860b; --dwv-g-contact: #996770;
+  --dwv-focus: #a97920; --dwv-font-display: 'Space Grotesk Variable','Space Grotesk',sans-serif;
+  --dwv-font-body: 'Space Grotesk Variable','Space Grotesk',sans-serif;
+  --dwv-font-math: 'Cambria Math','Times New Roman',serif;
+  font: 400 16px/1.55 var(--dwv-font-body); color: var(--dwv-ink); color-scheme: light;
+  margin-block: 30px 52px; min-width: 0;
+}
+.epi-model [hidden] { display: none !important; }
+.epi-model *, .epi-model *::before, .epi-model *::after { box-sizing: border-box; }
+.info-prose .epi-model h3 { font: 600 clamp(23px,2.5vw,30px)/1.2 var(--dwv-font-body); color: var(--dwv-ink); letter-spacing: -.025em; margin: 0 0 24px; border: 0; padding: 0; }
+.info-prose .epi-model h3::before { display: none; }
+.info-prose .epi-model p { font: inherit; margin: 0; max-width: none; }
+.epi-model .epi-method + .epi-method { margin-top: 44px; padding-top: 32px; border-top: 1px solid var(--dwv-line); }
+.epi-model .epi-method--dose { padding: 28px; background: #fcf9ee; border-radius: 16px; }
+.epi-model .epi-tabs { display: flex; flex-wrap: wrap; gap: 0 24px; border-bottom: 1px solid var(--dwv-line-strong); margin-bottom: 30px; }
+.epi-model .epi-tabs button { appearance: none; border: 0; border-bottom: 3px solid transparent; border-radius: 0; background: none; font: 500 15px/1.4 var(--dwv-font-body); color: var(--dwv-ink2); cursor: pointer; padding: 15px 0 13px; margin-bottom: -1px; }
+.epi-model .epi-tabs button[aria-selected='true'] { color: var(--dwv-ink); border-bottom-color: #d6aa3a; font-weight: 700; }
+.epi-model .epi-tabs button:hover { color: #9d6e16; }
+.epi-model :focus-visible { outline: 2px solid #b28a2d; outline-offset: 4px; }
+.epi-model .epi-plot { min-width: 0; }
+.epi-model .dwv-stats { gap: 22px; margin-bottom: 24px; }
+.epi-model .dwv-stat { padding: 0 0 16px; border: 0; border-bottom: 1px solid var(--dwv-line); border-radius: 0; background: none; gap: 8px; }
+.epi-model .dwv-stat-big { font-size: clamp(28px,2.4vw,34px); font-weight: 600; letter-spacing: -.04em; }
+.epi-model .dwv-stat-label { font-size: 15px; }
+.epi-model .dwv-stat-sub { font-size: 13px; }
+.info-prose .epi-model .dwv-status { margin: 0 0 24px; color: var(--dwv-ink2); font-size: 15px; }
+.epi-model .dwv-toolbar { gap: 14px 20px; margin-bottom: 22px; }
+.epi-model .dwv-seg { padding: 0; gap: 2px; border: 1px solid var(--dwv-line); background: #fff; border-radius: 7px; overflow: hidden; }
+.epi-model .dwv-seg button { padding: 9px 12px; border-radius: 0; font-size: 14px; }
+.epi-model .dwv-seg button[aria-pressed='true'] { background: #f7e9b8; color: #3a3a27; box-shadow: none; }
+.epi-model .dwv-checks { font-size: 13px; }
+.epi-model .dwv-card-title { border-top-width: 2px; padding-block: 10px 3px; font-size: 16px; }
+.info-prose .epi-model .dwv-ro-hint { font-size: 13px; color: var(--dwv-ink2); margin: 10px 0 16px; }
+.info-prose .epi-model .dwv-foot, .info-prose .epi-model .dwv-map-info { font-size: 14px; line-height: 1.65; color: var(--dwv-ink2); margin-top: 18px; }
+.info-prose .epi-model .dwv-hint { font-size: 14px; color: var(--dwv-ink2); margin-bottom: 14px; }
+.info-prose .epi-model .dwv-scroll-hint { font-size: 13px; color: var(--dwv-ink2); margin-top: 10px; }
+.info-prose .epi-model .dwv-dose-big { font-size: 48px; font-weight: 600; line-height: 1.1; color: var(--dwv-rnai); }
+.info-prose .epi-model .dwv-note { font-size: 14px; color: var(--dwv-ink2); margin-top: 12px; }
+.epi-model .dwv-range-label { font-size: 15px; }
+.epi-model .dwv-range { min-height: 28px; }
+.epi-model .dwv-diagram { border-color: var(--dwv-line); border-radius: 12px; }
+.epi-model .w1-param:hover > rect, .epi-model .w1-param:focus-visible > rect, .epi-model .w1-param.is-active > rect { stroke: #a97920; fill: #fff0bf; }
+.epi-model .dwv-details { border-top: 1px solid var(--dwv-line); margin-top: 24px; padding-top: 14px; }
+.epi-model .dwv-details summary { font-size: 14px; }
+.info-prose .epi-model table { display: table; width: 100%; margin: 0; border-collapse: collapse; font-size: 13px; }
+.info-prose .epi-model th, .info-prose .epi-model td { padding: 6px 8px; background: none; color: var(--dwv-ink); border: 0; border-bottom: 1px solid var(--dwv-line); }
+.info-prose .epi-model .dwv-readout { max-width: 620px; }
+.info-prose .epi-model .dwv-ro-num { text-align: right; }
+.info-prose .epi-model .dwv-refs { font-size: 13px; color: var(--dwv-ink2); }
+.epi-model .epi-weather { margin: 0; }
+.epi-model .epi-weather img { display: block; width: 100%; height: auto; }
+.epi-model .epi-weather figcaption { font-size: 14px; color: var(--dwv-ink2); margin-top: 18px; }
+@container (max-width: 640px) {
+  .dwv-viz .dwv-charts.is-two { grid-template-columns: minmax(0,1fr); }
+  .dwv-viz .dwv-dose { grid-template-columns: minmax(0,1fr); }
+}
+@media (max-width: 640px) {
+  .epi-model { margin-block: 24px 36px; }
+  .epi-model .epi-tabs { gap: 0 20px; margin-bottom: 24px; }
+  .epi-model .epi-tabs button { font-size: 14px; padding-block: 13px; }
+  .epi-model .epi-method--dose { padding: 22px 16px; }
+  .epi-model .dwv-stats { gap: 16px; }
+  .epi-model .dwv-stat-label { font-size: 14px; }
+  .epi-model .dwv-stat-sub { font-size: 12px; }
+  .epi-model .dwv-toolbar { align-items: flex-start; }
+  .epi-model .dwv-seg button { font-size: 13px; padding: 9px 10px; }
+}
+
+.epi-model .dwv-readout-wrap { margin-block: 24px; }
+.epi-model .dwv-glance { margin-top: 28px; }
