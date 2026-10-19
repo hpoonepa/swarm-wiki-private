@@ -28,7 +28,7 @@ async function loadProtein() {
   if (scene || loading) return;
   loading = true;
   try {
-    const { mountBinderScene } = await import('./binder-scene.js?v=a3133bd1ea3b');
+    const { mountBinderScene } = await import('./binder-scene.js?v=1c2006718cc1');
     scene = await mountBinderScene(host, { reduced: reduced.matches, progress: displayedMini });
     host.dataset.backend = scene.backend;
     paintMini();

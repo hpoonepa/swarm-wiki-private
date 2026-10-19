@@ -194,6 +194,7 @@
   .after { height: 40vh; }
 </style>
 <link rel="stylesheet" href="story.css?v=dd2832d4e107">
+<link rel="stylesheet" href="binder-illustration.css?v=937c72759525">
 <link rel="stylesheet" href="section-nav.css?v=2a67c9055550">
 <link rel="stylesheet" href="rnai-layout.css?v=4cc7ca49f5b7">
 <link rel="stylesheet" href="project-overview.css?v=d598eea91a36">
@@ -419,24 +420,26 @@ setTimeout(function () {
       </svg>
       <figcaption><strong>Inside the bee’s gut</strong></figcaption>
     </figure>
-    <div class="binder-board">
-      <img class="binder-board__art" src="https://static.igem.wiki/teams/6185/wiki/lastmin/homepage-minibinder-layout.svg" width="1440" height="849" alt="" aria-hidden="true">
-      <div class="binder-copy"><h2>Our minibinder, up close.</h2><p>A small designed protein that binds to the virus’s outer shell.</p></div>
+    <div class="binder-board binder-illustration">
+      <div class="binder-copy"><h2>Our minibinder, up close.</h2></div>
       <div class="binder-panel">
-        <div class="protein-key" aria-label="Molecular colors"><span><i class="binder-dot"></i>Our minibinder</span><span><i class="virus-dot"></i>DWV VP3</span></div>
         <div class="protein-stage"><div class="protein-view">
-          <div id="capsid-host" tabindex="0" role="img" aria-description="Teal: our minibinder. Gold: the viral P domain. Predicted complex. Drag or use arrow keys to rotate; press R to reset." aria-label="Predicted 3D structure of the SWARM minibinder l79_s469532_mpnn9 and the DWV VP3 P domain">
+          <div id="capsid-host" tabindex="0" role="img" aria-description="Honey-yellow beads show our minibinder. The leaf-green backbone shows the viral P domain. Illustration of the team's predicted complex. Drag or use arrow keys to turn; press R to reset." aria-label="Illustrated SWARM minibinder and DWV VP3 P domain">
             <div class="protein-viewport"></div><p class="model-fallback" role="status">Loading our minibinder structure…</p>
           </div>
         </div></div>
-        <div class="protein-footer"><p class="protein-note">Predicted pose · Drag to rotate</p><button class="protein-reset" type="button" data-protein-reset aria-label="Reset the 3D model view">Reset view <span aria-hidden="true">↺</span></button></div>
+        <div class="protein-footer"><p class="protein-note">Illustrated predicted structure · Drag to turn</p><button class="protein-reset" type="button" data-protein-reset aria-label="Reset the 3D model view">Reset view <span aria-hidden="true">↺</span></button></div>
       </div>
-      <article class="binder-fact binder-fact--design"><h3>The design</h3><p>A 79-amino-acid minibinder.</p></article>
-      <article class="binder-fact binder-fact--target"><h3>The target</h3><p>VP3 on the virus’s shell.</p></article>
-      <article class="binder-fact binder-fact--evidence"><h3>The evidence</h3><p>Binding measured with BLI.</p></article>
-      <article class="binder-fact binder-fact--aim"><h3>The aim</h3><p>Block infection in bee cells.</p></article>
-      <svg class="binder-bee-marker" viewBox="0 0 1440 849" aria-hidden="true"><circle cx="1174" cy="493" r="72" fill="#fff6db" fill-opacity=".25" stroke="#ad6828" stroke-width="3"/><path d="M1174 568 L1174 613" stroke="#ad6828" stroke-width="2"/></svg>
-      <div class="binder-bee-caption"><strong>The bee’s gut</strong><a href="../minibinder/">Explore minibinders ↗</a></div>
+      <svg class="binder-leaders" aria-hidden="true" fill="none" stroke="#153f36" stroke-width="1.5" stroke-linecap="round">
+        <g><path pathLength="1" stroke-dasharray="1"/><circle r="4" fill="#fcc42f" stroke="#153f36"/></g>
+        <g><path pathLength="1" stroke-dasharray="1"/><circle r="4" fill="#fcc42f" stroke="#153f36"/></g>
+        <g><path pathLength="1" stroke-dasharray="1"/><circle r="4" fill="#fcc42f" stroke="#153f36"/></g>
+        <g><path pathLength="1" stroke-dasharray="1"/><circle r="4" fill="#fcc42f" stroke="#153f36"/></g>
+      </svg>
+      <details class="binder-fact binder-fact--design" inert aria-hidden="true"><summary><span class="binder-fact__label">The design</span><span class="binder-fact__plus" aria-hidden="true">+</span><strong class="binder-fact__value">79</strong><span class="binder-fact__description">amino acids in our minibinder.</span></summary><p>The bead colors trace the saved model’s backbone. <a href="../minibinder-design/">Explore the design ↗</a></p></details>
+      <details class="binder-fact binder-fact--target" inert aria-hidden="true"><summary><span class="binder-fact__label">The target</span><span class="binder-fact__plus" aria-hidden="true">+</span><strong class="binder-fact__value">VP3</strong><span class="binder-fact__description">on the virus’s outer shell.</span></summary><p>The leaf-green drawing shows the VP3 P domain in our predicted complex. <a href="../minibinder/">Meet the target ↗</a></p></details>
+      <details class="binder-fact binder-fact--evidence" inert aria-hidden="true"><summary><span class="binder-fact__label">The evidence</span><span class="binder-fact__plus" aria-hidden="true">+</span><strong class="binder-fact__value">BLI</strong><span class="binder-fact__description">Binding measured in the lab.</span></summary><p>The illustrated pose is a prediction, separate from the binding measurement. <a href="../minibinder-experimentation/">See the experiments ↗</a></p></details>
+      <details class="binder-fact binder-fact--aim" inert aria-hidden="true"><summary><span class="binder-fact__label">The aim</span><span class="binder-fact__plus" aria-hidden="true">+</span><strong class="binder-fact__value">Bee cells</strong><span class="binder-fact__description">Where we aim to block infection.</span></summary><p>This is the goal of our minibinder approach. <a href="../minibinder/">Explore minibinders ↗</a></p></details>
     </div>
   </div>
 
@@ -784,10 +787,11 @@ setTimeout(function () {
         <li><a href="https://www.ars.usda.gov/pacific-west-area/tucson-az/carl-hayden-bee-research-center/research/varroa/varroosis/" target="_blank" rel="noreferrer">USDA ARS: Varroa, DWV and deformed wings</a></li>
         <li>Bee and Varroa illustrations supplied by the team. The animated wing change illustrates damage associated with infection during development.</li>
         <li><a href="https://www.nature.com/articles/s42003-023-04704-6">DWV infection during pupal development and wing deformity — Communications Biology (2023).</a></li>
-        <li>Minibinder: team-predicted l79_s469532_mpnn9 complex, rendered from PDB coordinates with <a href="https://3dmol.org/">3Dmol.js</a>. The predicted binding pose is not an experimentally determined complex structure.</li>
+        <li>Minibinder: team-predicted l79_s469532_mpnn9 complex, illustrated from its saved backbone coordinates with <a href="https://threejs.org/">Three.js</a>. The predicted binding pose is not an experimentally determined complex structure.</li>
         <li><a href="https://static.igem.wiki/teams/6185/wiki/lastmin/evidence-binding-summary.csv" download>SWARM binding result: Adaptyv Bio round 2 summary (CSV)</a></li>
         <li><a href="https://static.igem.wiki/teams/6185/wiki/lastmin/evidence-rnai-design-summary.csv" download>SWARM RNA guide design panel: v10 summary (CSV)</a></li>
         <li>SWARM logo and bee, honeycomb, and mite composition supplied by the team.</li>
+        <li>Minibinder illustration and connected-card interaction adapted from <a href="https://gitlab.igem.org/2026/denmark-ga/-/blob/dc4433b64faf5b2edc50ee04191403abf611eb85/static/home-v2.js" target="_blank" rel="noopener noreferrer">Denmark-GA iGEM 2026</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a>. Adapted with Swarm’s saved model, colors, content and controls.</li>
       </ul>
     </details>
     <div class="swarm-footer__legal">
@@ -810,6 +814,6 @@ setTimeout(function () {
   <script src="ux.js?v=story1"></script>
   <script src="intro-bee.js?v=6" defer></script>
   <script src="flight.js?v=07c2ecff106d"></script>
-  <script type="module" src="mechanisms.js?v=6a7ed85906da"></script>
+  <script type="module" src="mechanisms.js?v=e770f412f322"></script>
 </body>
 </html>
