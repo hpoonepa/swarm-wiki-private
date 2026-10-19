@@ -85,7 +85,7 @@
   max-width: min(44rem, 100% - var(--hc-comb-w));
   font-size: var(--fs-body);
 }
-.honeycomb-window__title { margin: 0; max-width: 100%; }
+.honeycomb-window__title { margin: 0; min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
 
 .honeycomb-window__cell {
   --hc-shape: polygon(
