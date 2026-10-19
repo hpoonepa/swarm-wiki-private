@@ -408,31 +408,41 @@ html.loading .honey-progress { visibility: hidden; }
 @media(max-width:760px) and (max-height:700px) {
   .dwv-bee { top: 70%; }
 }
-/* Two measured DWV-B observations stay readable together beside the globe. */
-.dwv-evidence { position: absolute; z-index: 4; right: max(88px,7vw); bottom: 4.5%; width: clamp(310px,28vw,390px); max-width: calc(100% - 40px); box-sizing: border-box; padding: 22px 24px 18px; border: 1px solid #ded8c7; border-radius: 18px; background: #fffdf7; color: #153f36; box-shadow: 0 8px 25px #153f360b; opacity: 0; visibility: hidden; }
-.dwv-evidence__eyebrow { margin: 0 0 7px; color: #77613e; font-size: 14px; font-weight: 650; line-height: 1.4; }
-.dwv-evidence h3 { margin: 0 0 8px; font-size: clamp(23px,2.1vw,29px); font-weight: 700; letter-spacing: -.035em; line-height: 1.15; }
-.dwv-evidence__measure { margin: 0 0 15px; color: #526557; font-size: 14px; line-height: 1.4; }
-.dwv-evidence__samples { display: grid; gap: 12px; }
-.dwv-evidence__sample { display: grid; grid-template-columns: 58px 1fr 61px; align-items: center; gap: 10px; }
-.dwv-evidence__year { font-size: 14px; font-weight: 650; }
-.dwv-evidence__track { display: block; height: 12px; overflow: hidden; background: #eee7d5; border-radius: 3px; }
-.dwv-evidence__track i { display: block; height: 100%; width: var(--prevalence); background: #ca9225; border-radius: 3px; }
-.dwv-evidence__sample:last-child .dwv-evidence__track i { background: #aa4a29; }
-.dwv-evidence__value { text-align: right; font-size: 22px; font-weight: 750; font-variant-numeric: tabular-nums; letter-spacing: -.035em; }
-.dwv-evidence__note { margin: 15px 0 9px; color: #526557; font-size: 14px; line-height: 1.45; }
-.dwv-evidence__source { display: inline-flex; align-items: center; gap: 7px; min-height: 30px; color: #355c4c; font-size: 14px; line-height: 1.4; text-underline-offset: 4px; }
-.dwv-evidence__source:hover { color: #9b651e; }
-.dwv-evidence__source:focus-visible { outline: 2px solid #b5872a; outline-offset: 4px; }
+/* Documented geographic reach; these counts are not infection prevalence. */
+.dwv-evidence { position: absolute; z-index: 4; right: max(88px,7vw); bottom: 4.5%; width: clamp(320px,29vw,410px); max-width: calc(100% - 40px); box-sizing: border-box; padding: 24px 26px 18px; border: 1px solid #ded8c7; border-radius: 18px; background: #fffdf7; color: #153f36; box-shadow: 0 8px 25px #153f360b; opacity: 0; visibility: hidden; }
+.dwv-evidence h3 { margin: 0 0 14px; font-size: clamp(23px,2.1vw,29px); font-weight: 700; letter-spacing: -.035em; line-height: 1.15; }
+.dwv-evidence__reach { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; }
+.dwv-evidence__reach > strong { color: #b24b27; font-size: clamp(62px,5.5vw,80px); font-weight: 750; letter-spacing: -.07em; line-height: .95; font-variant-numeric: tabular-nums; }
+.dwv-evidence__reach p { margin: 0; font-size: 16px; font-weight: 650; line-height: 1.25; }
+.dwv-evidence__reach p span { display: inline-block; margin-top: 6px; max-width: 23ch; color: #526557; font-size: 12px; font-weight: 400; line-height: 1.35; }
+.dwv-evidence__chart { margin: 0 0 6px; }
+.dwv-evidence__chart svg { display: block; width: 100%; height: auto; overflow: visible; }
+.dwv-evidence__grid path { fill: none; stroke: #e8e1cf; stroke-width: 1; }
+.dwv-evidence__grid text { fill: #788071; font-size: 10px; text-anchor: end; }
+.dwv-evidence__area { fill: #e8b44e; opacity: .2; }
+.dwv-evidence__line { fill: none; stroke: #b24b27; stroke-width: 2.5; stroke-linejoin: round; }
+.dwv-evidence__endpoints circle { fill: #b24b27; stroke: #fffdf7; stroke-width: 2; }
+.dwv-evidence__endpoints text { fill: #9e4020; font-size: 13px; font-weight: 700; }
+.dwv-evidence__dates text { fill: #526557; font-size: 11px; }
+.dwv-evidence__chart figcaption { margin-top: 2px; color: #526557; font-size: 11px; line-height: 1.4; }
+.dwv-evidence__source { display: inline-flex; align-items: center; gap: 7px; min-height: 32px; color: #355c4c; font-size: 12px; line-height: 1.4; text-underline-offset: 4px; }
+.dwv-evidence__source:hover, .dwv-evidence__update:hover { color: #9b651e; }
+.dwv-evidence a:focus-visible { outline: 2px solid #b5872a; outline-offset: 4px; }
+.dwv-evidence__update { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; padding-top: 13px; margin-top: 9px; border-top: 1px solid #e8e1cf; color: inherit; text-decoration: none; }
+.dwv-evidence__update-year { display: block; font-size: 12px; font-weight: 700; color: #a14626; }
+.dwv-evidence__update strong { display: block; font-size: 12px; line-height: 1.35; font-weight: 600; }
+.dwv-evidence__update small { display: block; margin-top: 3px; color: #526557; font-size: 11px; line-height: 1.35; }
 @media (max-width:760px) {
-  .dwv-evidence { right: 16px; bottom: max(16px,env(safe-area-inset-bottom)); width: calc(100% - 32px); max-width: 380px; padding: 16px 18px 13px; border-radius: 15px; }
-  .dwv-evidence h3 { font-size: 24px; }
-  .dwv-evidence__measure { margin-bottom: 10px; }
-  .dwv-evidence__samples { gap: 8px; }
-  .dwv-evidence__note { margin: 10px 0 5px; }
+  .dwv-evidence { right: 16px; bottom: max(16px,env(safe-area-inset-bottom)); width: calc(100% - 32px); max-width: 350px; padding: 16px 18px 13px; border-radius: 15px; }
+  .dwv-evidence h3 { font-size: 23px; margin-bottom: 10px; }
+  .dwv-evidence__reach { margin-bottom: 4px; }
+  .dwv-evidence__reach > strong { font-size: 56px; }
+  .dwv-evidence__reach p { font-size: 14px; }
+  .dwv-evidence__chart svg { max-height: 115px; }
+  .dwv-evidence__update { padding-top: 10px; margin-top: 5px; }
 }
 @media (min-width:601px) and (max-width:760px) { .dwv-evidence { right: 64px; } }
-@media (min-width:761px) and (max-height:650px) { .dwv-evidence { bottom: 18px; padding: 16px 20px 13px; } .dwv-evidence__note { margin-top: 10px; } }
+@media (min-width:761px) and (max-height:650px) { .dwv-evidence { bottom: 18px; padding: 16px 20px 13px; } .dwv-evidence__chart svg { max-height: 130px; } }
 .geo-stage .map-view { inset: 0; width: 100%; height: 100%; }
 @media (max-width:760px) { .geo-stage .map-view { mask-image: linear-gradient(to bottom,transparent 35%,#000 48%); } }
 

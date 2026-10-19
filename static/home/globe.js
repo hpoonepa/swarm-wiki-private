@@ -171,8 +171,8 @@
   ring.quaternion.copy(pin.quaternion);spin.add(ring);
   const placeLabel = viewport.querySelector('.globe-location');
   const projected = new T.Vector3();
-  // Show two published observations together. Do not interpolate annual DWV
-  // counts or reuse all-cause colony-loss bubbles as a disease-prevalence map.
+  // Keep worldwide DWV-B location records separate from U.S. all-cause
+  // colony losses. The chart uses documented collection years, not case counts.
   const evidenceCard = section.querySelector('.dwv-evidence');
   function paintEvidence(usOn) {
     if (!evidenceCard) return;
