@@ -84,7 +84,7 @@ export function arrowMarkup(hub: Goal, sat: Goal, layout: Layout, angle: number)
   return pair.map(([from, to, outward]) => {
     const state = linkState(from.id, to.id), d = arrow(layout, angle, outward);
     const body = `<path class="sdg-arrow" d="${d.shaft}"/><path class="sdg-arrow__head" d="${d.head}"/>`;
-    if (state === 'none') return `<g class="sdg-link sdg-link--none" data-state="none" aria-hidden="true">${body}</g>`;
+    if (state === 'none') return '';
     return `<g class="sdg-link" role="button" tabindex="0" data-state="${state}" data-from="${from.id}" data-to="${to.id}" aria-label="${from.name} to ${to.name}${state === 'tension' ? ', a tension' : ''}">${body}<path class="sdg-arrow__hit" d="${d.hit}"/></g>`;
   }).join('');
 }

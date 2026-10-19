@@ -1,6 +1,6 @@
 ---
 import './sdg-wheel.css';
-import { goals, summaryText, type GoalId } from './sdg-data';
+import { goals, summaryText, evidenceLinks, type GoalId } from './sdg-data';
 import { glyphs } from './sdg-glyphs';
 import { byId, chipsMarkup, defaultRing, hintMarkup, viewBox, wheelMarkup } from './sdg-wheel-geometry';
 
@@ -10,7 +10,7 @@ const ring = defaultRing(hub);
 const { nodes, arrows, labels } = wheelMarkup(hub, ring, 'large');
 const first = byId[hub];
 ---
-<section class="sdg-wheel" aria-label="Sustainable Development Goals" data-sdg-wheel data-hub={hub} data-ring={ring.join(',')} data-layout="large" style={`--panel-tone:${first.tone}`}>
+<section class="sdg-wheel wide" aria-label="Sustainable Development Goals" data-sdg-wheel data-hub={hub} data-ring={ring.join(',')} data-layout="large" style={`--panel-tone:${first.tone}`}>
   <svg class="sdg-wheel__svg" viewBox={viewBox('large')} role="group" aria-label="Goal wheel">
     <defs>
       {goals.map(g => <symbol id={`sdg-glyph-${g.id}`} viewBox={glyphs[g.id].viewBox} fill="currentColor" set:html={glyphs[g.id].body} />)}
@@ -26,6 +26,7 @@ const first = byId[hub];
       <p class="eyebrow sdg-wheel__eyebrow" data-eyebrow>Goal {first.number}</p>
       <p class="sdg-wheel__title" data-title>{first.name}</p>
       <p class="sdg-wheel__body" data-body>{summaryText(hub)}</p>
+      <a class="sdg-wheel__evidence" data-evidence href={evidenceLinks[hub].href}>{evidenceLinks[hub].label} <span aria-hidden="true">↗</span></a>
     </div>
     <div class="sdg-wheel__legend" aria-label="Connection colors">
       <span><i aria-hidden="true"></i>Supports</span>
@@ -35,16 +36,14 @@ const first = byId[hub];
 </section>
 <script>
   import { animate } from 'motion';
-  import { goals, linkState, pairText, summaryText, type GoalId } from './sdg-data';
+  import { goals, linkState, pairText, summaryText, evidenceLinks, type GoalId } from './sdg-data';
   import { byId, chipsMarkup, defaultRing, hintMarkup, point, viewBox, wheelMarkup, SHAPES, SLOTS, type Layout } from './sdg-wheel-geometry';
   import { prefersReducedMotion } from './motion/reduced';
 
   const TURN = 120;
   const EASE = [0.6, 0.05, 0.2, 1] as [number, number, number, number];
-  const phone = matchMedia('(max-width: 760px)');
-  const layoutNow = (): Layout => (phone.matches ? 'small' : 'large');
-
   for (const root of document.querySelectorAll<HTMLElement>('[data-sdg-wheel]')) {
+    const layoutNow = (): Layout => root.getBoundingClientRect().width < 1200 ? 'small' : 'large';
     const svg = root.querySelector('svg')!;
     const nodes = svg.querySelector<SVGGElement>('[data-nodes]')!;
     const arrows = svg.querySelector<SVGGElement>('[data-arrows]')!;
@@ -55,6 +54,7 @@ const first = byId[hub];
     const eyebrow = panel.querySelector<HTMLElement>('[data-eyebrow]')!;
     const title = panel.querySelector<HTMLElement>('[data-title]')!;
     const body = panel.querySelector<HTMLElement>('[data-body]')!;
+    const evidence = panel.querySelector<HTMLAnchorElement>('[data-evidence]')!;
     // On stacked screens, reserve space for the card's current content.
     const fitPanel = () => root.style.setProperty('--sdg-panel-height', `${Math.ceil(panel.getBoundingClientRect().height)}px`);
     const panelObserver = new ResizeObserver(fitPanel);
@@ -86,6 +86,8 @@ const first = byId[hub];
       pair = null; mark();
       chips.innerHTML = chipsMarkup(g);
       eyebrow.textContent = `Goal ${g.number}`; title.textContent = g.name; body.textContent = summaryText(hub); panel.dataset.state = 'summary';
+      evidence.href = evidenceLinks[hub].href;
+      evidence.textContent = `${evidenceLinks[hub].label} ↗`;
     };
     const showPair = (from: GoalId, to: GoalId) => {
       const a = byId[from], b = byId[to], state = linkState(from, to);
@@ -93,6 +95,8 @@ const first = byId[hub];
       chips.innerHTML = chipsMarkup(a, b);
       eyebrow.textContent = state === 'tension' ? `Goals ${a.number} and ${b.number}, a tension` : `Goals ${a.number} and ${b.number}`;
       title.textContent = `${a.name} and ${b.name}`; body.textContent = pairText(from, to); panel.dataset.state = state;
+      evidence.href = '#connections-and-trade-offs';
+      evidence.textContent = 'Project trade-offs ↗';
       panel.scrollIntoView({ block: 'nearest', behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
     };
     const fromHash = (): GoalId | null => {
@@ -152,7 +156,8 @@ const first = byId[hub];
       const sat = target.closest<SVGAElement>('.sdg-node--sat');
       if (sat && e.key === ' ') { e.preventDefault(); choose(sat.dataset.goal as GoalId); }
     });
-    phone.addEventListener('change', () => { if (!busy) paint(); });
+    const layoutObserver = new ResizeObserver(() => { if (!busy && layout !== layoutNow()) paint(); });
+    layoutObserver.observe(root);
     addEventListener('hashchange', () => { const id = fromHash(); if (id && id !== hub && !busy) jump(id); });
 
     if (layout !== 'large') paint();

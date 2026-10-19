@@ -1,10 +1,82 @@
 ---
 layout: ../layouts/ContentLayout.astro
 title: Sustainability
-band: sdg
-noTOC: true
+description: 'How stakeholder feedback, pollinator education, and our assessment of benefits and trade-offs shaped SWARM.'
 ---
 
 import ImpactScorer from "../components/sustainability/ImpactScorer.astro";
+import SdgWheel from "../components/info/SdgWheel.astro";
+import Image from "../components/md_components/Image";
+
+SWARM began with a problem in honey bee health. Conversations with beekeepers, educators, and researchers made us consider who would use our work, what it would cost, and which consequences we still needed to investigate. We connected those questions to seven [United Nations Sustainable Development Goals](https://sdgs.un.org/goals): food security, education, gender equality, economic opportunity, communities, biodiversity, and partnerships.
+
+Our completed work includes educational programs, public resources, stakeholder consultation, and laboratory and hardware development. Healthier colonies, improved crop production, and lower treatment costs remain intended benefits that require further testing. This distinction guides our sustainability assessment: we document what we have done, examine conflicts between goals, and identify the measurements needed to evaluate longer-term impact.
+
+# Pollinator health
+
+Protecting pollinators connects our project to [SDG 15: Life on Land](https://sdgs.un.org/goals/goal15) and [SDG 2: Zero Hunger](https://sdgs.un.org/goals/goal2). Our stakeholder record shows how that connection developed. Sharanya Madhavan encouraged us to consider the food-system consequences of bee decline. Beekeepers Peter Helfrich and Claressa Lucas emphasized bee health and the practical burden of Varroa mites. Angela Partain brought attention to rural food insecurity and the need for public awareness alongside technical development.
+
+These conversations broadened the work beyond a laboratory intervention. Our education programs address pollination, gardens, and the importance of bees, while our experimental work investigates approaches to the disease and parasite pressures facing honey bees. The [project description](/lambert-ga/description/) explains this scope; our [education activities](/lambert-ga/education/) document the accompanying community work.
+
+Honey bee health is only one part of pollinator conservation. Feedback from Amy Dolan prompted us to consider other pollinators as well. We therefore treat benefits to biodiversity as a question to assess alongside the effects on managed colonies. Laboratory binding results alone cannot establish colony survival, crop yield, or ecosystem benefit.
+
+# Education and access
+
+Our [education program](/lambert-ga/education/) records more than 30 initiatives reaching more than 530 participants. Workshops, pollinator presentations, and public resources connect [SDG 4: Quality Education](https://sdgs.un.org/goals/goal4) with the environmental questions behind SWARM. At Sharon Elementary, students prepared a garden and took part in a pollination activity. At Riverwatch, a three-week workshop series introduced biotechnology, with student surveys used to review understanding and improve subsequent lessons.
+
+<Image
+  src="https://static.igem.wiki/teams/6185/wiki/human-practices/education3.avif"
+  caption="Figure 1. Students at Sharon Elementary prepare a garden during our pollinator workshop."
+  size="lg"
+/>
+
+Access shaped the format of our teaching. Through Flowers for the Future, we teach a twelve-week introduction to synthetic biology for Afghan girls. Approximately 120 students have taken part across three semesters. This work connects educational access with [SDG 5: Gender Equality](https://sdgs.un.org/goals/goal5). The course materials and student feedback are documented in [Inclusivity](/lambert-ga/education/#inclusivity).
+
+We also developed *The Mite-ty Adventure of Bentley the Bee*, translated it into twelve additional languages, and designed hands-on lessons for our Exceptional Science! program. Tiffany Bono’s feedback helped us simplify the book’s language for younger readers. Our Neurodivergent Handbook records considerations for adapting educational activities. The lessons and handbook give other educators a starting point for adapting activities to their own students.
+
+# Decisions shaped by feedback
+
+[SDG 17: Partnerships for the Goals](https://sdgs.un.org/goals/goal17) runs through our stakeholder work. We used conversations to identify practical constraints and revise our priorities. The examples below come from the team’s stakeholder assessment, which is available in the scorer at the end of this page.
+
+| Feedback | Effect on our work | Question that remains |
+| --- | --- | --- |
+| Kerry Langley raised hardware cost considerations. | We reconsidered affordability as part of the hardware design. [VAPOR-X](/lambert-ga/hardware/) documents the prototype. | What would a complete system cost to manufacture, maintain, and use? |
+| Matt Carter and John James brought beekeeper and hobbyist perspectives. | We considered acceptance and usability alongside technical performance. | Can beekeepers use the proposed approach within their normal workflow? |
+| Lewis Bartlett emphasized measures of success and seasonal beekeeping practice. | We considered how evaluation and use would fit the beekeeping calendar. | Which outcomes and comparison groups would support a meaningful field evaluation? |
+| Tiffany Bono reviewed the children’s book. | We revised the language to make it easier for younger readers to understand. | How well do readers retain and apply the ideas after the activity? |
+| Amy Dolan raised the importance of other pollinators. | We expanded our environmental assessment beyond managed honey bees. | What effects could the proposed approach have outside the treated colony? |
+
+Affordability and practical use connect this work to [SDG 8: Decent Work and Economic Growth](https://sdgs.un.org/goals/goal8). Community workshops and gardening resources connect it to [SDG 11: Sustainable Cities and Communities](https://sdgs.un.org/goals/goal11).
+
+# Connections and trade-offs
+
+Several goals reinforce each other in SWARM. Partnerships make educational programs possible, and education can help people understand pollinator conservation. Other connections involve trade-offs: a low purchase price does not establish low operating costs, and an intervention intended to protect managed honey bees still needs assessment for unintended ecological effects. The diagram records how we interpret these relationships in our project.
+
+<SdgWheel hub="life-on-land" />
+
+| Decision | Intended benefit | Trade-off to assess |
+| --- | --- | --- |
+| Develop equipment that other teams can reproduce. | Reduce financial barriers to research. | Component cost is only part of ownership; energy use, reliability, repairs, and material disposal also matter. |
+| Investigate a bee-health intervention. | Protect managed colonies and the pollination they support. | Environmental exposure and effects on other organisms require assessment before wider use. |
+| Offer online lessons and downloadable materials. | Reach learners beyond our local area. | Internet access, language, time zones, and accessibility can still exclude participants. |
+| Share project resources openly. | Allow others to examine and build on our work. | Reuse depends on clear documentation, accessible formats, and an accurate account of what has been validated. |
+
+# Assessing progress
+
+We separate activities, observed results, and projected benefits when evaluating progress. Participation totals document reach. Student surveys and feedback provide evidence about an educational experience. Experimental measurements address specific laboratory or hardware questions. None of these alone establishes the long-term environmental and economic effects of a deployed product.
+
+The following measurements would extend that assessment. They are next steps, rather than results already obtained.
+
+| Area | What we document now | What further assessment would measure |
+| --- | --- | --- |
+| Education | Activities, attendance, teaching materials, and participant feedback. | Learning before and after an activity, retention over time, and barriers to participation. |
+| Affordability | Prototype design and component costs. | Full cost of ownership, maintenance needs, energy consumption, and user workload. |
+| Bee health | Laboratory development and experimental findings within the tested systems. | Relevant colony outcomes under an appropriately reviewed field evaluation. |
+| Environmental effects | Potential benefits and risks identified during design and consultation. | Effects beyond the intended application, resource use, and waste across the product life cycle. |
+| Reuse | Educational materials, software, and hardware documentation. | Independent reproduction, resource uptake, and feedback from other users. |
+
+# Team assessment
+
+Our scorer contains **71 assessment records**: 32 stakeholder interactions, 19 outreach activities, 11 assessments of current work, and 9 projections. The ten-point ratings and weights are team judgments that combine current work with anticipated benefits. They support comparison and reflection; they do not measure achieved SDG impact.
 
 <ImpactScorer />

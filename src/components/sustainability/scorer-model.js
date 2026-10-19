@@ -14,7 +14,7 @@ var FACTORS=[
    {k:"iterations",n:"Iterations",w:10,q:"How many times did we run it, applying past feedback?"},
    {k:"method",n:"Method",w:5,q:"Did the way it was run affect its effectiveness?"},
    {k:"reproducibility",n:"Reproducibility",w:5,q:"Could other groups replicate it from our documentation?"}]},
- {key:"current",name:"Current effects",short:"Current effects",unit:"assessment",color:"var(--f-olive)",
+ {key:"current",name:"Current work",short:"Current work",unit:"assessment",color:"var(--f-olive)",
   desc:"Score what the project does today: one row per component or claim, tagged with the goals it affects.",
   metrics:[{k:"environment",n:"Environment",w:30,q:"What is the project's current impact on the environment?"},
    {k:"efficiency",n:"Efficiency",w:30,q:"Does it use resources well compared with existing technologies?"},

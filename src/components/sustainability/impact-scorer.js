@@ -1,4 +1,4 @@
-import { FACTORS, SDGS, LAYERS, SDG_BY_N, FACTOR_BY_KEY, validScore, itemScore as scoreItem, sdgScore as scoreGoal, weightsFor as goalWeights } from './scorer-model.js';
+import { FACTORS, SDGS, SDG_BY_N, FACTOR_BY_KEY, validScore, itemScore as scoreItem, sdgScore as scoreGoal, weightsFor as goalWeights } from './scorer-model.js';
 
 export function initImpactScorer(root) {
   if (root.dataset.initialized) return;
@@ -7,11 +7,11 @@ export function initImpactScorer(root) {
   const STATE_TEXT = $('state').textContent;
   const STORE_KEY = 'swarm-sustainability-scorer-20261018-v1';
   const uid = () => 'e' + crypto.randomUUID().replaceAll('-', '');
-  let storageOK = true, saveTimer = null, state = JSON.parse(STATE_TEXT);
+  let storageOK = true, saveTimer = null, state = JSON.parse(STATE_TEXT), savedCopy = null, scenario = false;
   normalize(state);
   try {
     const stored = localStorage.getItem(STORE_KEY);
-    if (stored) { const saved = JSON.parse(stored); normalize(saved); state = saved; }
+    if (stored) { const saved = JSON.parse(stored); normalize(saved); savedCopy = saved; }
   } catch { storageOK = false; }
   let activeTab = 'stakeholder', editing = false, lastDeleted = null, toastTimer = null;
   const itemScore = item => scoreItem(item, state);
@@ -44,17 +44,34 @@ export function initImpactScorer(root) {
   }
   function applyEditMode() {
     root.dataset.editing = String(editing);
+    root.dataset.scenario = String(scenario);
+    $('mode').textContent = scenario ? 'Your local copy' : 'Published team assessment';
+    $('btn-published').hidden = !scenario;
+    $('btn-resume').hidden = scenario || !savedCopy;
+    $('btn-edit').textContent = editing ? 'Finish editing' : scenario ? 'Edit this copy' : 'Explore a copy';
+    $('btn-edit').setAttribute('aria-pressed', String(editing));
     root.querySelectorAll('input[type=number]').forEach(input => { input.readOnly = !editing; input.tabIndex = editing ? 0 : -1; });
     root.querySelectorAll('[data-goal]').forEach(button => { button.disabled = !editing; });
   }
   $('btn-edit').addEventListener('click', () => {
+    scenario = true;
     editing = !editing;
-    $('btn-edit').textContent = editing ? 'Done editing' : 'Adjust scores';
-    $('btn-edit').setAttribute('aria-pressed', String(editing));
-    renderSummary(); renderTable();
+    renderSummary(); renderWeights(); renderTable();
     applyEditMode();
-    note(editing ? 'Edits save in this browser. The published team data stays unchanged.' : '');
+    note('This copy is saved in this browser. Published team scores are unchanged.');
   });
+  $('btn-resume').addEventListener('click', () => {
+    if (!savedCopy) return;
+    state = structuredClone(savedCopy); scenario = true; editing = true;
+    renderAll(); note('Your saved copy is open. Published team scores are unchanged.');
+  });
+  $('btn-published').addEventListener('click', () => {
+    if (scenario) saveCopy();
+    scenario = false; editing = false; state = JSON.parse(STATE_TEXT); normalize(state);
+    renderAll(); note('');
+  });
+  $('search').addEventListener('input', renderRecords);
+  $('goal-filter').addEventListener('change', renderRecords);
   $('tabs').addEventListener('keydown', event => {
     const current = FACTORS.findIndex(f => f.key === activeTab);
     let next;
@@ -68,35 +85,22 @@ export function initImpactScorer(root) {
   });
 
 /* ---- rendering ---- */
-function renderSummary(){
-  var html="";
-  LAYERS.forEach(function(L){
-    html+='<div class="tier"><div class="tier-label"><b>'+L.n+'</b><span>'+L.d+'</span></div><div class="tier-cards">';
-    SDGS.filter(function(s){return s.layer===L.k;}).forEach(function(s){
-      var r=sdgScore(s.n);
-      var covCls=r.used<r.active?"cov partial":"cov";
-      html+='<article class="card"><div class="card-head"><div class="sdg-sq" style="background:'+s.color+';color:'+s.ink+'">'+s.n+'</div><div class="ttl"><h3>'+esc(s.name)+'</h3>'+
-        ''+'</div></div>'+
-        '<div class="score-row"><span class="score-big'+(r.score==null?' empty':'')+'">'+fmt(r.score)+'</span><span class="score-of">/ 10</span>'+
-        '<span class="'+covCls+'">'+r.used+' / '+r.active+' factors</span></div><div class="bars">';
-      FACTORS.forEach(function(f){
-        var p=r.parts[f.key], w=r.weights[f.key]||0;
-        var pct=p.score==null?0:(p.score/10*100);
-        html+='<div class="bar'+(p.score==null?' none':'')+(w>0?'':' off')+'" title="'+esc(f.name)+': '+p.count+' item'+(p.count===1?'':'s')+', weight '+w+'%"><span class="lbl">'+esc(f.short)+' <span class="wt">'+w+'%</span></span>'+
-          '<span class="track"><span class="fill" style="display:block;width:'+pct+'%;background:'+f.color+'"></span></span>'+
-          '<span class="val">'+fmt(p.score)+'</span></div>';
-      });
-      html+='</div>'+(state.sdgNotes[s.n]?'<p class="score-note view-only">'+esc(state.sdgNotes[s.n])+'</p>':'')+'<div class="why edit-only"><label for="impact-why-'+s.n+'">Why this score</label>'+
-        '<textarea id="impact-why-'+s.n+'" data-why="'+s.n+'" rows="3" placeholder="What drives this score? Which evidence matters most, and what’s missing?">'+esc(state.sdgNotes[s.n]||"")+'</textarea></div></article>';
-    });
-    html+='</div></div>';
-  });
-  $("tiers").innerHTML=html;applyEditMode();
+function renderSummary() {
+  const openGoals = new Set([...$('tiers').querySelectorAll('details[open]')].map(el => el.dataset.goalNumber));
+  $('tiers').innerHTML = [...SDGS].sort((a, b) => a.n - b.n).map(goal => {
+    const result = sdgScore(goal.n);
+    const factors = FACTORS.map(factor => {
+      const part = result.parts[factor.key], weight = result.weights[factor.key] || 0;
+      return `<div class="factor-result${weight ? '' : ' off'}"><span>${esc(factor.name)}<small>${part.count} scored entries · ${weight}% weight</small></span><span class="factor-track"><i style="width:${part.score == null ? 0 : part.score * 10}%;background:${factor.color}"></i></span><b>${fmt(part.score)}</b></div>`;
+    }).join('');
+    return `<details class="score-goal" data-goal-number="${goal.n}"${openGoals.has(String(goal.n)) ? ' open' : ''}><summary><span class="sdg-sq" style="background:${goal.color};color:${goal.ink}">${goal.n}</span><span class="goal-name">${esc(goal.name)}</span><span class="goal-rating">${fmt(result.score)}<small> / 10</small></span><span class="disclosure" aria-hidden="true">+</span></summary><div class="goal-breakdown">${factors}<p class="factor-coverage">${result.used} of ${result.active} weighted factors have scored entries.</p>${state.sdgNotes[goal.n] ? `<p class="score-note view-only">${esc(state.sdgNotes[goal.n])}</p>` : ''}<div class="why edit-only"><label for="impact-why-${goal.n}">Assessment note</label><textarea id="impact-why-${goal.n}" data-why="${goal.n}" rows="3">${esc(state.sdgNotes[goal.n] || '')}</textarea></div></div></details>`;
+  }).join('');
+  applyEditMode();
 }
 function weightRowHTML(id,labelHTML,W){
   var h='<tr'+(id==="default"?' class="def"':'')+'><th scope="row">'+labelHTML+'</th>';
   FACTORS.forEach(function(f){
-    h+='<td class="n"><span class="inp-pct"><input type="number" id="impact-fw-'+id+'-'+f.key+'" data-fw="'+f.key+'" data-sdg="'+id+'" min="0" max="100" step="5" value="'+W[f.key]+'" aria-label="'+esc(f.name)+' weight">%</span></td>';
+    h+='<td class="n"><span class="inp-pct">'+(editing?'<input type="number" id="impact-fw-'+id+'-'+f.key+'" data-fw="'+f.key+'" data-sdg="'+id+'" min="0" max="100" step="5" value="'+W[f.key]+'" aria-label="'+esc(f.name)+' weight for '+(id==='default'?'default':('SDG '+id))+'">':('<span id="impact-fw-'+id+'-'+f.key+'">'+W[f.key]+'</span>'))+'%</span></td>';
   });
   h+='<td class="n"><span class="tot" id="impact-fwt-'+id+'"></span></td><td>'+
     (id==="default"?'':'<button type="button" class="del edit-only" id="impact-fwr-'+id+'" data-resetsdg="'+id+'">Use default</button>')+'</td></tr>';
@@ -118,8 +122,8 @@ function renderWeights(){
   FACTORS.forEach(function(f){
     mw+='<div><h4>'+esc(f.name)+'</h4>';
     f.metrics.forEach(function(m){
-      mw+='<div class="mw-row"><label for="impact-mw-'+f.key+'-'+m.k+'">'+esc(m.n)+'<small>'+esc(m.q)+'</small></label>'+
-        '<span class="inp-pct"><input type="number" id="impact-mw-'+f.key+'-'+m.k+'" data-mwf="'+f.key+'" data-mwk="'+m.k+'" min="0" max="100" step="5" value="'+state.metricWeights[f.key][m.k]+'">%</span></div>';
+      mw+='<div class="mw-row"><'+(editing?'label for="impact-mw-'+f.key+'-'+m.k+'"':'span')+'>'+esc(m.n)+'<small>'+esc(m.q)+'</small></'+(editing?'label':'span')+'>'+
+        '<span class="inp-pct">'+(editing?'<input type="number" id="impact-mw-'+f.key+'-'+m.k+'" data-mwf="'+f.key+'" data-mwk="'+m.k+'" min="0" max="100" step="5" value="'+state.metricWeights[f.key][m.k]+'">':state.metricWeights[f.key][m.k])+'%</span></div>';
     });
     mw+='<p class="mw-sum" id="impact-mws-'+f.key+'"></p></div>';
   });
@@ -132,7 +136,7 @@ function refreshWeightTable(){
     var W=id==="default"?state.factorWeights:weightsFor(id), t=0;
     FACTORS.forEach(function(f){
       var el=$("fw-"+id+"-"+f.key);
-      if(el&&el!==document.activeElement) el.value=W[f.key];
+      if(el&&el!==document.activeElement) { if (el.tagName === 'INPUT') el.value=W[f.key]; else el.textContent=W[f.key]; }
       t+=W[f.key]||0;
     });
     var tot=$("fwt-"+id);
@@ -164,7 +168,43 @@ function renderTabs(){
   $("factor-desc").textContent=f.desc;
   $("btn-add").textContent="Add "+f.unit;
 }
+const outreachAnchors = {
+  'Sharon Bees Workshop': 'sharon-bees-workshop--sdg-4-11-15-17',
+  "Children's Book": 'childrens-book--sdg-4-15',
+  'Riverwatch Workshops': 'riverwatch-workshops--sdg-4-15-17',
+  'Biotech Bootcamp': 'biotech-bootcamp--sdg-4-15-17',
+  'Pollinator Presentations': 'pollinator-presentations--sdg-2-4-11-15',
+  'Connectivity Night': 'connectivity-night--sdg-4-17',
+  'iGEM Human Practices Collaboration Call': 'igem-human-practices-collaboration-call--sdg-4-17',
+  'Webinars': 'webinars--sdg-2-4-8-11-15-17',
+  'Concrete Jungle Workshop': 'concrete-jungle-workshop--sdg-2-4-8-11-15-17',
+  'NWGA RESA STEM for Tomorrow Forum': 'nwga-resa-stem-for-tomorrow-forum--sdg-4-8-17',
+  "Gardener's Handbook": 'gardeners-handbook--sdg-2-4-11-15',
+  'Social Media': 'social-media--sdg-2-4-5-8-11-15-17',
+  'Mentorship': 'mentorship--sdg-4-17',
+  'Bee PSA': 'bee-psa--sdg-4-11-15',
+  'Flowers for the Future': 'flowers-for-the-future--sdg-4-5-11-15-17',
+  'FFF-BioBuilderClub': 'fffbiobuilderclub--sdg-4-5-11-15-17',
+  "Children's Book Translations": 'childrens-book-translations--sdg-4-15',
+  'Exceptional Science!': 'exceptional-science--sdg-4-15',
+  'Neurodivergent Handbook': 'neurodivergent-handbook--sdg-4-17',
+};
+function renderRecords() {
+  const query = $('search').value.trim().toLocaleLowerCase();
+  const goal = Number($('goal-filter').value);
+  const factor = FACTOR_BY_KEY[activeTab];
+  const rows = state.items.filter(item => item.factor === activeTab && (!goal || item.sdgs.includes(goal)) && (!query || `${item.name} ${item.why}`.toLocaleLowerCase().includes(query)));
+  $('record-count').textContent = `${rows.length} ${rows.length === 1 ? 'record' : 'records'}`;
+  $('records').innerHTML = rows.map(item => {
+    const metrics = factor.metrics.map(metric => `<div><dt>${esc(metric.n)} <span>${state.metricWeights[factor.key][metric.k]}%</span></dt><dd>${validScore(item.scores[metric.k]) ? item.scores[metric.k] : 'Unscored'}</dd></div>`).join('');
+    const goals = item.sdgs.map(number => `<span class="record-goal" title="${esc(SDG_BY_N[number].name)}">SDG ${number}</span>`).join('');
+    const link = item.factor === 'outreach' && outreachAnchors[item.name] ? `<a class="record-link" href="/lambert-ga/education/#${outreachAnchors[item.name]}">Read the activity ↗</a>` : '';
+    return `<details class="assessment-record"><summary><span class="record-name">${esc(item.name || 'Untitled record')}</span><span class="record-goals">${goals}</span><span class="record-rating">${fmt(itemScore(item))}<small> / 10</small></span><span class="disclosure" aria-hidden="true">+</span></summary><div class="record-body"><p>${esc(item.why || 'No assessment note supplied.')}</p>${link}<dl class="record-metrics">${metrics}</dl></div></details>`;
+  }).join('') || '<p class="record-empty">No matching records.</p>';
+}
 function renderTable(){
+  $("evidence-panel").setAttribute("aria-labelledby", "impact-tab-"+activeTab);
+  if (!editing) { $("tbl").innerHTML = ''; renderRecords(); return; }
   var f=FACTOR_BY_KEY[activeTab], mw=state.metricWeights[f.key];
   var html='<caption class="sr-only">'+esc(f.name)+' evidence and scores</caption><thead><tr><th>'+esc(f.unit)+'</th><th>Goals</th>';
   f.metrics.forEach(function(m){html+='<th class="n" title="'+esc(m.q)+'">'+esc(m.n)+'<span class="w">'+mw[m.k]+'%</span></th>';});
@@ -181,7 +221,7 @@ function renderTable(){
     f.metrics.forEach(function(m){
       var v=it.scores[m.k];
       html+='<td class="n"><input type="number" id="impact-s-'+it.id+'-'+m.k+'" data-item="'+it.id+'" data-metric="'+m.k+'" min="1" max="10" step="0.5" inputmode="decimal"'+
-        (validScore(v)?' value="'+v+'"':' class="empty"')+' aria-label="'+esc(m.n)+'"></td>';
+        (validScore(v)?' value="'+v+'"':' class="empty"')+' aria-label="'+esc(it.name || 'Untitled record')+': '+esc(m.n)+'"></td>';
     });
     html+='<td class="n"><span id="impact-sc-'+it.id+'"></span></td>'+
       '<td><span class="item-reason view-only">'+esc(it.why)+'</span><input type="text" class="why-in edit-only" id="impact-w-'+it.id+'" data-itemwhy="'+it.id+'" value="'+esc(it.why)+'" placeholder="Brief reason for these scores" aria-label="Why these scores"></td><td class="edit-only"><button type="button" class="del" id="impact-d-'+it.id+'" data-del="'+it.id+'" aria-label="Remove row">Remove</button></td></tr>';
@@ -196,12 +236,17 @@ function updateRowScore(id){
   el.className=s==null?"item-score empty":"item-score";
   el.textContent=s==null?"incomplete":s.toFixed(2);
 }
-function renderStatus(){
+function saveCopy() {
+  if (!scenario) return;
   clearTimeout(saveTimer);
-  saveTimer=setTimeout(function(){
-    try{localStorage.setItem(STORE_KEY,JSON.stringify(state));}
-    catch(x){if(storageOK){storageOK=false;note("This browser isn\u2019t keeping your changes. Use Export data to save a copy.");}}
-  },400);
+  savedCopy = structuredClone(state);
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(savedCopy)); }
+  catch { storageOK = false; note('This browser cannot save your copy. Export JSON to keep it.'); }
+}
+function renderStatus(){
+  if (!scenario) return;
+  clearTimeout(saveTimer);
+  saveTimer=setTimeout(saveCopy,400);
 }
 function renderAll(){renderSummary();renderWeights();renderTabs();renderTable();applyEditMode();renderStatus();}
 function findItem(id){for(var i=0;i<state.items.length;i++) if(state.items[i].id===id) return state.items[i];return null;}
@@ -216,6 +261,7 @@ function note(msg){var n=$("save-note");n.textContent=msg||"";n.hidden=!msg;}
 
 /* ---- events ---- */
 root.addEventListener("input",function(e){
+  if (!editing) return;
   var t=e.target, d=t.dataset;
   if(d.metric){
     var it=findItem(d.item); if(!it) return;
@@ -250,6 +296,7 @@ root.addEventListener("input",function(e){
   }
 });
 root.addEventListener("change",function(e){
+  if (!editing) return;
   var t=e.target;
   if(t.dataset.metric&&t.value!==""){
     var v=parseFloat(t.value);
@@ -265,6 +312,7 @@ root.addEventListener("click",function(e){
   var b=e.target.closest("button"); if(!b) return;
   var d=b.dataset;
   if(d.tab){activeTab=d.tab;renderTabs();renderTable();$("tab-"+d.tab).focus();}
+  else if (!editing) return;
   else if(d.resetsdg){
     delete state.sdgWeights[d.resetsdg];refreshWeightTable();renderSummary();renderStatus();
     toast("SDG "+d.resetsdg+" now follows the default weights.");
@@ -287,13 +335,14 @@ root.addEventListener("click",function(e){
   }
 });
 $("btn-add").addEventListener("click",function(){
+  if (!editing) return;
   var it={id:uid(),factor:activeTab,name:"",sdgs:[],scores:{}};
   state.items.push(it);renderTabs();renderTable();renderStatus();
   var inp=$("n-"+it.id); if(inp) inp.focus();
 });
 /* ---- export ---- */
 function tableRows(){
-  var rows=[["SWARM SDG impact scores"],[],["SDG","Goal","Layer"].concat(FACTORS.map(function(f){return f.name;})).concat(["Final score (1-10)","Factors with data","Why this score"])];
+  var rows=[["SWARM SDG self-assessment"],[scenario ? "Visitor's local copy" : "Published team assessment"],[],["SDG","Goal","Layer"].concat(FACTORS.map(function(f){return f.name;})).concat(["Combined team rating (1-10)","Factors with data","Assessment note"])];
   SDGS.forEach(function(s){
     var r=sdgScore(s.n);
     rows.push([s.n,s.name,s.layer].concat(FACTORS.map(function(f){var p=r.parts[f.key];return p.score==null?"":+p.score.toFixed(2);})).concat([r.score==null?"":+r.score.toFixed(2),r.used+" of "+r.active,state.sdgNotes[s.n]||""]));
@@ -313,7 +362,7 @@ function tableRows(){
   });
   return rows;
 }
-function safeCell(value){var text=String(value);return /^[=+@\-]/.test(text)?"'"+text:text;}
+function safeCell(value){var text=String(value);return /^[\t\r\n ]*[=+@\-]/.test(text)?"'"+text:text;}
 function toCSV(rows){return rows.map(function(r){return r.map(function(c){c=safeCell(c);return /[",\r\n]/.test(c)?'"'+c.replace(/"/g,'""')+'"':c;}).join(",");}).join("\r\n");}
 function toTSV(rows){return rows.map(function(r){return r.map(function(c){return safeCell(c).replace(/[\t\r\n]/g," ");}).join("\t");}).join("\n");}
 $("btn-copy").addEventListener("click",function(){
@@ -338,28 +387,34 @@ $("btn-export").addEventListener("click",function(){
 });
 $("file-import").addEventListener("change",function(e){
   var file=e.target.files[0]; if(!file) return;
+  if (file.size > 2 * 1024 * 1024) { toast('Choose a scorer JSON file smaller than 2 MB.'); e.target.value = ''; return; }
   var reader=new FileReader();
   reader.onload=function(){
     try{
       var next=JSON.parse(reader.result);
       if(!next||!Array.isArray(next.items)) throw new Error("no items");
       var prev=JSON.stringify(state);
-      normalize(next);state=next;renderAll();
-      toast("Loaded "+file.name+".","Undo",function(){state=JSON.parse(prev);renderAll();});
+      const previousScenario = scenario, previousEditing = editing;
+      normalize(next);state=next;scenario=true;editing=true;renderAll();
+      note('Imported into your local copy. Published team scores are unchanged.');
+      toast("Loaded "+file.name+".","Undo",function(){state=JSON.parse(prev);scenario=previousScenario;editing=previousEditing;renderAll();note(scenario ? 'Your local copy is open.' : '');});
     }catch(x){toast("That file isn\u2019t scorer data. Choose a file made with Export data.");}
     e.target.value="";
   };
+  reader.onerror = function() { toast('The file could not be read. Please try again.'); e.target.value = ''; };
   reader.readAsText(file);
 });
 $("btn-reset").addEventListener("click",function(){
+  if (!editing) return;
   var prev=JSON.stringify(state);
   state=JSON.parse(STATE_TEXT);normalize(state);renderAll();
-  toast("Original team scores restored.","Undo",function(){state=JSON.parse(prev);renderAll();});
+  toast("Your copy now matches the published scores.","Undo",function(){state=JSON.parse(prev);renderAll();});
 });
 
 renderAll();
+addEventListener('pagehide', saveCopy);
 
-if(!storageOK) note("This browser isn\u2019t keeping your changes. Use Export data to save a copy.");
+if(!storageOK) note('Saved copies are unavailable in this browser. Published team scores are shown.');
 
 
 }

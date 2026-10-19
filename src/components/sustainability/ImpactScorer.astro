@@ -3,18 +3,20 @@ import './impact-scorer.css';
 import initialData from './scorer-data.json';
 const data = JSON.stringify(initialData).replaceAll('<', '\\u003c');
 ---
-<section id="impact-scorer" class="impact-scorer wide" data-impact-scorer data-editing="false" aria-labelledby="impact-title">
+<section id="impact-scorer" class="impact-scorer wide" data-impact-scorer data-editing="false" data-scenario="false" aria-labelledby="impact-title">
   <header class="scorer-header">
-    <h2 id="impact-title">SWARM impact scorer</h2>
+    <div class="scorer-heading"><h2 id="impact-title">SWARM impact scorer</h2><p class="scorer-mode" id="impact-mode">Published team assessment</p></div>
     <div class="scorer-actions">
-      <button class="btn primary" id="impact-btn-edit" type="button" aria-pressed="false">Adjust scores</button>
+      <button class="btn primary" id="impact-btn-edit" type="button" aria-pressed="false">Explore a copy</button>
+      <button class="btn" id="impact-btn-resume" type="button" hidden>Resume saved copy</button>
+      <button class="btn" id="impact-btn-published" type="button" hidden>View published scores</button>
       <button class="btn" id="impact-btn-csv" type="button">Download CSV</button>
     </div>
     <p class="save-note" id="impact-save-note" role="status" hidden></p>
   </header>
 
   <section class="scorer-summary" aria-labelledby="impact-summary-title">
-    <h3 id="impact-summary-title">Scores by goal</h3>
+    <h3 id="impact-summary-title">Team ratings by goal</h3>
     <div id="impact-tiers"></div>
   </section>
 
@@ -22,8 +24,8 @@ const data = JSON.stringify(initialData).replaceAll('<', '\\u003c');
     <summary>Scoring method &amp; weights</summary>
     <div class="method-content">
       <ol class="steps">
-        <li><strong>Evidence:</strong> Each metric is scored from 1 to 10. Its weight determines its contribution to the evidence score. All metrics must have a score for the item to count.</li>
-        <li><strong>Factors:</strong> For each goal, average the scored evidence within each factor.</li>
+        <li><strong>Entries:</strong> Each metric is scored from 1 to 10. Its weight determines its contribution to the entry’s score. All metrics must have a score for the item to count.</li>
+        <li><strong>Factors:</strong> For each goal, average the scored entries within each factor.</li>
         <li><strong>Goals:</strong> Combine the factor averages using that goal’s weights. Factors with no scored evidence or a weight of zero are excluded, and the remaining weights rescale.</li>
       </ol>
       <h3>Factor weights by goal</h3>
@@ -39,21 +41,27 @@ const data = JSON.stringify(initialData).replaceAll('<', '\\u003c');
 
   <section class="scorer-evidence" aria-labelledby="impact-evidence-title">
     <header class="evidence-header">
-      <h3 id="impact-evidence-title">Evidence</h3>
+      <h3 id="impact-evidence-title">Assessment records</h3>
       <details class="data-options">
         <summary>Data options</summary>
         <div class="data-actions">
           <button class="btn" id="impact-btn-copy" type="button">Copy for Sheets</button>
           <button class="btn" id="impact-btn-export" type="button">Export JSON</button>
-          <label class="btn file-btn" for="impact-file-import">Import JSON<input type="file" id="impact-file-import" accept=".json,application/json" /></label>
-          <button class="btn" id="impact-btn-reset" type="button">Restore team scores</button>
+          <label class="btn file-btn" for="impact-file-import">Import a copy<input type="file" id="impact-file-import" accept=".json,application/json" /></label>
+          <button class="btn edit-only" id="impact-btn-reset" type="button">Reset this copy</button>
         </div>
       </details>
     </header>
     <div class="tabs" role="tablist" id="impact-tabs" aria-label="Evidence factors"></div>
     <p id="impact-factor-desc" hidden></p>
     <div id="impact-evidence-panel" role="tabpanel" aria-labelledby="impact-tab-stakeholder">
-      <div class="table-wrap evidence-wrap" tabindex="0" role="region" aria-label="Evidence and assessment scores">
+      <div class="record-filters view-only">
+        <label for="impact-search">Find a record<input id="impact-search" type="search" placeholder="Search names or notes" /></label>
+        <label for="impact-goal-filter">Goal<select id="impact-goal-filter"><option value="">All goals</option><option value="2">SDG 2</option><option value="4">SDG 4</option><option value="5">SDG 5</option><option value="8">SDG 8</option><option value="11">SDG 11</option><option value="15">SDG 15</option><option value="17">SDG 17</option></select></label>
+      </div>
+      <p class="record-count view-only" id="impact-record-count" role="status"></p>
+      <div class="record-list view-only" id="impact-records"></div>
+      <div class="table-wrap evidence-wrap edit-only" tabindex="0" role="region" aria-label="Edit assessment scores">
         <table id="impact-tbl"><caption class="sr-only">Evidence and assessment scores</caption></table>
       </div>
       <button class="btn add edit-only" id="impact-btn-add" type="button">Add stakeholder</button>

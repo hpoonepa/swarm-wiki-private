@@ -25,31 +25,52 @@
 .impact-scorer .btn.primary { background: var(--ink); color: #fffaf0; border-color: var(--ink); }
 .impact-scorer .btn.primary:hover { background: #265a47; }
 .impact-scorer .save-note { flex-basis: 100%; color: var(--muted); font-size: 13px; }
+.impact-scorer .scorer-heading { display: grid; gap: 10px; }
+.impact-scorer .scorer-mode { font-size: 13px; color: var(--muted); }
+.impact-scorer[data-scenario=true] .scorer-mode { color: #8b5614; font-weight: 600; }
+.impact-scorer[data-scenario=true] .scorer-header { border-color: #bd8d35; }
+.impact-scorer .score-goal { border-bottom: 1px solid var(--line); }
+.impact-scorer .score-goal > summary { display: grid; grid-template-columns: 40px minmax(0,1fr) auto 16px; align-items: center; gap: 16px; padding-block: 15px; list-style: none; }
+.impact-scorer .score-goal > summary::-webkit-details-marker,
+.impact-scorer .assessment-record > summary::-webkit-details-marker { display: none; }
+.impact-scorer .goal-name { font-size: 16px; font-weight: 500; }
+.impact-scorer .goal-rating { font-size: 24px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -.04em; }
+.impact-scorer .goal-rating small, .impact-scorer .record-rating small { font-size: 12px; font-weight: 400; color: var(--muted); letter-spacing: 0; }
+.impact-scorer .disclosure { color: var(--muted); font-size: 20px; font-weight: 400; transition: transform 160ms; text-align: center; }
+.impact-scorer details[open] > summary .disclosure { transform: rotate(45deg); }
+.impact-scorer .goal-breakdown { display: grid; gap: 13px; padding: 7px 32px 24px 56px; }
+.impact-scorer .factor-result { display: grid; grid-template-columns: minmax(140px,1fr) minmax(40px,1fr) 28px; align-items: center; gap: 20px; font-size: 13px; }
+.impact-scorer .factor-result small { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; }
+.impact-scorer .factor-result b { font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
+.impact-scorer .factor-result.off { opacity: .55; }
+.impact-scorer .factor-track { height: 5px; background: #eef0e8; }
+.impact-scorer .factor-track i { display: block; height: 100%; }
+.impact-scorer .factor-coverage { font-size: 12px; color: var(--muted); }
+.impact-scorer .record-filters { display: flex; flex-wrap: wrap; gap: 14px; margin: 22px 0 14px; }
+.impact-scorer .record-filters label { display: grid; gap: 6px; font-size: 12px; font-weight: 500; }
+.impact-scorer .record-filters label:first-child { flex: 1 1 190px; }
+.impact-scorer .record-filters :is(input,select) { font: 400 14px var(--body); background: #fff; color: var(--ink); border: 1px solid #b8c6b8; padding: 10px 12px; border-radius: 4px; min-height: 42px; min-width: 0; width: 100%; }
+.impact-scorer .record-count { font-size: 12px; color: var(--muted); padding-bottom: 12px; }
+.impact-scorer .record-list { border-top: 1px solid var(--line); }
+.impact-scorer .assessment-record { border-bottom: 1px solid var(--line); }
+.impact-scorer .assessment-record > summary { display: grid; grid-template-columns: minmax(150px,1.3fr) minmax(100px,1fr) auto 16px; gap: 16px; align-items: center; padding: 17px 0; list-style: none; }
+.impact-scorer .record-name { font-size: 14px; font-weight: 500; }
+.impact-scorer .record-goals { display: flex; flex-wrap: wrap; gap: 5px; }
+.impact-scorer .record-goal { font-size: 10px; font-weight: 400; color: var(--muted); padding: 2px 5px; border: 1px solid #e0e5d9; border-radius: 2px; white-space: nowrap; }
+.impact-scorer .record-rating { font-size: 16px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.impact-scorer .record-body { padding: 2px 32px 25px 0; display: grid; gap: 18px; }
+.impact-scorer .record-body p { max-width: 75ch; line-height: 1.7; font-size: 14px; }
+.impact-scorer .record-link { color: #62172f; font-size: 13px; text-decoration: underline; text-underline-offset: 3px; width: fit-content; }
+.impact-scorer .record-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px 20px; margin: 0; padding-top: 14px; border-top: 1px solid var(--line); }
+.impact-scorer .record-metrics > div { display: flex; justify-content: space-between; gap: 8px; font-size: 12px; }
+.impact-scorer .record-metrics :is(dt,dd) { margin: 0; }
+.impact-scorer .record-metrics dt span { color: var(--muted); font-size: 10px; margin-left: 4px; }
+.impact-scorer .record-metrics dd { font-weight: 600; font-variant-numeric: tabular-nums; }
+.impact-scorer .record-empty { padding-block: 24px; font-size: 14px; }
 .impact-scorer .scorer-summary { padding-block: 32px 36px; }
 .impact-scorer .scorer-summary > h3 { margin-bottom: 24px; }
-.impact-scorer #impact-tiers { display: grid; gap: 16px; }
-.impact-scorer .tier { display: grid; grid-template-columns: 100px minmax(0,1fr); gap: 24px; }
-.impact-scorer .tier-label { border-top: 2px solid #a8b45c; padding-top: 13px; }
-.impact-scorer .tier-label b { display: block; font-size: 17px; font-weight: 600; }
-.impact-scorer .tier-label span { display: block; margin-top: 3px; font-size: 12px; color: var(--muted); line-height: 1.4; }
-.impact-scorer .tier-cards { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(100%,250px),1fr)); gap: 14px; min-width: 0; }
-.impact-scorer .card { display: grid; gap: 18px; align-content: start; padding: 20px; background: #fff; border: 1px solid var(--line); border-radius: 6px; min-width: 0; }
-.impact-scorer .card-head { display: flex; align-items: center; gap: 12px; min-height: 45px; }
+.impact-scorer #impact-tiers { display: grid; gap: 0; border-top: 1px solid var(--line); }
 .impact-scorer .sdg-sq { flex: 0 0 41px; height: 41px; display: grid; place-items: center; border-radius: 4px; font-size: 22px; font-weight: 600; }
-.info-prose .impact-scorer .card-head h3 { font-size: 15px; line-height: 1.3; letter-spacing: -.015em; }
-.impact-scorer .score-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px; }
-.impact-scorer .score-big { font-size: 45px; line-height: 1; font-weight: 500; letter-spacing: -.06em; font-variant-numeric: tabular-nums; }
-.impact-scorer .score-of { color: var(--muted); font-size: 15px; }
-.impact-scorer .cov { margin-left: auto; color: var(--muted); font-size: 11px; white-space: nowrap; }
-.impact-scorer .cov.partial { color: var(--warn); }
-.impact-scorer .bars { display: grid; gap: 8px; }
-.impact-scorer .bar { display: grid; grid-template-columns: minmax(106px,1.45fr) minmax(30px,1fr) 25px; align-items: center; gap: 8px; font-size: 11px; }
-.impact-scorer .lbl { color: var(--muted); white-space: nowrap; }
-.impact-scorer .wt { font-size: 10px; margin-left: 2px; }
-.impact-scorer .track { height: 5px; overflow: hidden; background: #edf0e8; border-radius: 1px; }
-.impact-scorer .fill { height: 100%; }
-.impact-scorer .val { text-align: right; font-variant-numeric: tabular-nums; }
-.impact-scorer .bar.off { opacity: .45; }
 .impact-scorer .why { display: grid; gap: 7px; grid-column: 1 / -1; padding-top: 12px; border-top: 1px solid var(--line); }
 .impact-scorer .score-note { grid-column: 1 / -1; padding-top: 12px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; line-height: 1.6; }
 .impact-scorer .why label { font-size: 12px; color: var(--muted); }
@@ -121,18 +142,13 @@
 .impact-scorer .add { margin-top: 14px; }
 .impact-scorer .scorer-toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 100; display: flex; gap: 18px; align-items: center; width: max-content; max-width: min(520px,calc(100vw - 32px)); padding: 13px 18px; background: #153f36; color: #fffaf0; border-radius: 5px; font-size: 13px; box-shadow: 0 4px 18px #153f3620; }
 .impact-scorer .scorer-toast button { border: 0; background: none; padding: 0; color: #fec341; font-weight: 600; text-decoration: underline; cursor: pointer; }
-/* Remove the placeholder subline beneath the goal diagram on this page. */
-.info-page:has([data-impact-scorer]) .sdg-wheel__body { display: none; }
-@container (min-width: 800px) {
-  .impact-scorer .tier-cards:has(> .card:only-child) .card { grid-template-columns: minmax(180px,1fr) minmax(125px,.7fr) minmax(235px,1.2fr); align-items: center; }
-  .impact-scorer .tier-cards:has(> .card:only-child) .score-row { align-content: center; }
-  .impact-scorer .tier-cards:has(> .card:only-child) .cov { flex-basis: 100%; margin-left: 0; }
-}
+
 @container (max-width: 760px) {
-  .impact-scorer .tier { grid-template-columns: minmax(0,1fr); gap: 12px; }
-  .impact-scorer .tier-label { display: flex; align-items: baseline; gap: 10px; }
-  .impact-scorer .tier-label span { margin-top: 0; }
-  .impact-scorer #impact-tiers { gap: 24px; }
+  .impact-scorer .assessment-record > summary { grid-template-columns: minmax(0,1fr) auto 16px; gap: 10px; }
+  .impact-scorer .record-goals { grid-column: 1; grid-row: 2; }
+  .impact-scorer .record-rating { grid-column: 2; grid-row: 1 / 3; }
+  .impact-scorer .assessment-record .disclosure { grid-column: 3; grid-row: 1 / 3; }
+  .impact-scorer .record-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .impact-scorer .mw { grid-template-columns: minmax(0,1fr); }
   .impact-scorer .tabs { gap: 20px; }
 }
@@ -140,7 +156,15 @@
   .impact-scorer .scorer-header { gap: 18px; }
   .impact-scorer .scorer-actions { width: 100%; }
   .impact-scorer .scorer-actions .btn { flex: 1; }
-  .impact-scorer .card { padding: 18px; }
   .impact-scorer .method-content { padding-inline: 14px; }
   .impact-scorer .evidence-header { align-items: baseline; }
+  .impact-scorer .score-goal > summary { gap: 10px; grid-template-columns: 34px minmax(0,1fr) auto 14px; }
+  .impact-scorer .score-goal .sdg-sq { width: 34px; height: 34px; font-size: 18px; }
+  .impact-scorer .goal-name { font-size: 14px; }
+  .impact-scorer .goal-rating { font-size: 21px; }
+  .impact-scorer .goal-breakdown { padding-inline: 0; }
+  .impact-scorer .factor-result { grid-template-columns: minmax(130px,1fr) minmax(20px,.7fr) 24px; gap: 12px; }
+  .impact-scorer .record-body { padding-right: 0; }
+  .impact-scorer .record-metrics { grid-template-columns: minmax(0,1fr); }
 }
+@media (prefers-reduced-motion: reduce) { .impact-scorer .disclosure { transition: none; } }
