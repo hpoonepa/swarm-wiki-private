@@ -103,7 +103,7 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
       const slug=location.pathname.replace(/\/$/,'').split('/').pop();
       const isHomepage=/^\/lambert-ga(?:\/home)?(?:\/index\.html)?\/?$/.test(location.pathname);
       this.toggleAttribute('data-homepage',isHomepage);
-      const logo={src:'https://static.igem.wiki/teams/6185/wiki/homepage/logo.webp',width:1202,height:1354};
+      const logo={src:'/lambert-ga/home/assets/logo.webp',width:1202,height:1354};
       const links=items=>items.map(([title,destination])=>Array.isArray(destination)
         ? `<details class="subgroup"><summary>${title}</summary><div>${links(destination)}</div></details>`
         : `<a href="/lambert-ga/${destination}/"${destination===slug?' aria-current="page"':''}>${title}</a>`).join('');

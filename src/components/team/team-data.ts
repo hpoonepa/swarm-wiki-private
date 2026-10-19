@@ -7,13 +7,16 @@ export interface TeamMember {
   year?: number;
   bio?: string;
   advisor?: boolean;
+  externalAdvisor?: boolean;
+  affiliation?: string;
+  profileUrl?: string;
 }
 
-const photo = (filename: string) => `https://static.igem.wiki/teams/6185/wiki/team-photos/${filename}.avif`;
+const photo = (filename: string) => `/lambert-ga/team/members/${filename}.avif`;
 
 // Only supplied grades, years, and bios are included. Missing details stay optional.
 export const members: TeamMember[] = [
-  { id: 'advay', name: 'Advay', color: 'honey', photo: photo('advay') },
+  { id: 'advay', name: 'Advay', color: 'honey', photo: photo('advay'), grade: 'Senior', year: 1 },
   {
     id: 'aiden', name: 'Aiden Lee', color: 'blue', photo: photo('aidenlee'), grade: 'Junior', year: 2,
     bio: 'iGEM has opened up so many opportunities for me, and I can’t wait to meet everyone at Jamboree! Outside the lab, you’ll find me listening to music or playing tennis with my brother.',
@@ -22,18 +25,18 @@ export const members: TeamMember[] = [
     id: 'aiyana', name: 'Aiyana Verma', color: 'lilac', photo: photo('aiyanaverma'), grade: 'Sophomore', year: 1,
     bio: 'When I’m not sending emails, I’m playing with my dog, trying my hand at photography, or shopping online. I love to travel and can’t wait to meet everyone in Paris!',
   },
-  { id: 'arjun', name: 'Arjun Gulati', color: 'peach', photo: photo('arjungulati') },
+  { id: 'arjun', name: 'Arjun Gulati', color: 'peach', photo: photo('arjungulati'), grade: 'Junior', year: 2 },
   {
     id: 'brandon', name: 'Brandon Jimerson', color: 'peach', photo: photo('brandonjimerson'), year: 1,
     bio: '¡Hola a todos! I’m Brandon. In my free time, I’m listening to phonk and aura farming. Next stop: “Brandon’s in Paris.” My aura 📈.',
   },
-  { id: 'catherine', name: 'Catherine', color: 'honey', photo: photo('catherine') },
+  { id: 'catherine', name: 'Catherine', color: 'honey', photo: photo('catherine'), grade: 'Junior', year: 1 },
   {
     id: 'diana', name: 'Diana Nijim', color: 'blue', photo: photo('diananijim'), grade: 'Junior', year: 1,
     bio: 'iGEM lets me explore my curiosities in the lab and look at problems from new perspectives. Outside the lab, I’m usually reading in a café or at the gym. I’m psyched for Jamboree!',
   },
   {
-    id: 'harsha', name: 'Harsha Poonepalle', color: 'lilac', photo: photo('harshapoonepelle'), year: 3,
+    id: 'harsha', name: 'Harsha Poonepalle', color: 'lilac', photo: photo('harshapoonepelle'), grade: 'Senior', year: 3,
     bio: 'Bonjour! I’m Harsha, and this is my third year on the team.',
   },
   {
@@ -53,7 +56,7 @@ export const members: TeamMember[] = [
     bio: 'In iGEM, I’m designing hardware in CAD—usually on version 10+—while my 3D printer runs for hours. Outside the lab, I photograph galaxies and build rockets and drones. Please keep the crumbs away from me.',
   },
   {
-    id: 'nathaniel', name: 'Nathaniel Nam', color: 'blue', photo: photo('nathanielnam'),
+    id: 'nathaniel', name: 'Nathaniel Nam', color: 'blue', photo: photo('nathanielnam'), grade: 'Sophomore', year: 1,
     bio: 'Yo, I’m Nathaniel, and I’m D1 in iGEM.',
   },
   {
@@ -64,18 +67,35 @@ export const members: TeamMember[] = [
     id: 'ngoc', name: 'Ngoc Nguyen', color: 'peach', photo: photo('ngocnguyen'), grade: 'Junior', year: 1,
     bio: 'iGEM gives me a chance to gain experience and dilly-dally with my friends! Outside the lab, I’m gaming or birdwatching. #YOLO',
   },
-  { id: 'rohan', name: 'Rohan Kaushik', color: 'honey', photo: 'https://static.igem.wiki/teams/5612/teampage/members/rohan-hs.webp' },
-  { id: 'scarlett', name: 'Scarlett', color: 'honey', photo: photo('scarlett') },
-  { id: 'shashwat', name: 'Shashwat Balamurali', color: 'blue', photo: photo('shashwatbalamurali') },
+  { id: 'rohan', name: 'Rohan Kaushik', color: 'honey', photo: '/lambert-ga/team/members/rohan-kaushik.jpg', grade: 'Senior', year: 2 },
+  { id: 'scarlett', name: 'Scarlett', color: 'honey', photo: photo('scarlett'), grade: 'Sophomore', year: 1 },
+  { id: 'shashwat', name: 'Shashwat Balamurali', color: 'blue', photo: photo('shashwatbalamurali'), grade: 'Senior', year: 3 },
   {
     id: 'veda', name: 'Veda Vudithyala', color: 'lilac', photo: photo('veda'), grade: 'Senior', year: 2,
     bio: 'I couldn’t have asked for a better iGEM experience. Outside the lab, I’m listening to music, making something crafty, or catching up on sleep. Come say hi at the Grand Jamboree!',
   },
-  { id: 'vedant', name: 'Vedant Kalipatnapu', color: 'peach', photo: photo('vedantkalipatnapu') },
+  { id: 'vedant', name: 'Vedant Kalipatnapu', color: 'peach', photo: photo('vedantkalipatnapu'), grade: 'Senior', year: 2 },
 ];
 
 export const advisors: TeamMember[] = [
-  { id: 'mrs-sharer', name: 'Mrs. Sharer', color: 'honey', photo: photo('mrssharer'), advisor: true },
+  { id: 'mrs-sharer', name: 'Mrs. Sharer', color: 'honey', photo: photo('mrssharer'), advisor: true, bio: 'Principal Investigator' },
+];
+
+export const externalAdvisors: TeamMember[] = [
+  {
+    id: 'mark-styczynski', name: 'Dr. Mark Styczynski', color: 'blue', advisor: true, externalAdvisor: true,
+    photo: '/lambert-ga/team/advisors/mark-styczynski.jpg',
+    affiliation: 'Georgia Institute of Technology',
+    bio: 'Professor in the School of Chemical and Biomolecular Engineering.',
+    profileUrl: 'https://chbe.gatech.edu/directory/person/mark-styczynski',
+  },
+  {
+    id: 'jon-daniel-sharer', name: 'Dr. Jon Daniel Sharer', color: 'lilac', advisor: true, externalAdvisor: true,
+    photo: '/lambert-ga/team/advisors/jon-daniel-sharer.jpg',
+    affiliation: 'University of Alabama at Birmingham',
+    bio: 'Professor in the Department of Genetics.',
+    profileUrl: 'https://scholars.uab.edu/3277-jon-sharer',
+  },
 ];
 
 export const yearLabel = (year: number) => `${year}${year === 1 ? 'st' : year === 2 ? 'nd' : year === 3 ? 'rd' : 'th'} year`;

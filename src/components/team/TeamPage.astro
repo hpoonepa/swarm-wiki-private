@@ -1,58 +1,73 @@
 ---
-import { members, advisors, memberDetails, yearLabel } from './team-data';
+import { members, advisors, externalAdvisors, memberDetails } from './team-data';
 import Portrait from './Portrait.astro';
-import HoneycombWindow from '../info/HoneycombWindow.astro';
 import './team.css';
-const everyone = [...members, ...advisors];
+const advisorGroups = [
+  { id: 'advisors', title: 'Team Advisor', members: advisors, primary: true },
+  { id: 'external-advisors', title: 'External Advisors', members: externalAdvisors, primary: false },
+];
 ---
-<main class="hive-page" id="team-main">
-  <div class="hive-backdrop" aria-hidden="true"><HoneycombWindow title="" decorative /></div>
-  <header class="hive-intro">
-    <div class="hive-intro__copy">
-      <h1>Team</h1>
+<div class="team-directory wide" id="team-main">
+  <section class="team-roster" id="the-team" aria-labelledby="students-title">
+    <div class="team-section-heading">
+      <h2 id="students-title">Students</h2>
     </div>
-  </header>
-  <section class="hive-roster" id="the-team" aria-labelledby="roster-title">
-    <div class="hive-section-bar">
-      <div class="hive-section-tabs"><h2 id="roster-title">{members.length} members</h2></div>
-    </div>
-    <div class="hive-grid">
-      {members.map(member => <button type="button" class="hive-member" data-profile={member.id} data-color={member.color} aria-haspopup="dialog" aria-controls="hive-profile" aria-label={`Meet ${member.name}${memberDetails(member) ? `, ${memberDetails(member)}` : ''}`}>
-        <span class="hive-member__art"><Portrait photo={member.photo} name={member.name} /></span>
-        <span class="hive-member__name">{member.name}</span><span class="hive-member__role">{memberDetails(member)}</span>
-      </button>)}
+    <div class="team-grid" data-team-grid>
+      {members.map((member, index) => <article class="team-member" data-member={member.id}>
+        <Portrait photo={member.photo} name={member.name} eager={index < 5} />
+        <div class="team-member__caption">
+          <h3>{member.name}</h3>
+          {memberDetails(member) && <p class="team-member__details">{memberDetails(member)}</p>}
+          {member.bio && <>
+            <details class="team-bio-fallback" data-bio-fallback>
+              <summary>About {member.name.split(' ')[0]}</summary>
+              <div data-member-bio><p>{member.bio}</p></div>
+            </details>
+          </>}
+        </div>
+        <button type="button" class="team-member__open" data-member-open={member.id} data-member-name={member.name} data-member-details={memberDetails(member)} aria-controls="team-profile" aria-haspopup="dialog" aria-expanded="false" aria-label={`View ${member.name}'s profile`} hidden><span class="team-member__control-frame" aria-hidden="true"><span>+</span></span></button>
+      </article>)}
     </div>
   </section>
-  <section class="hive-advisors" id="advisors" aria-labelledby="advisors-title">
-    <div class="hive-advisors__heading"><h2 id="advisors-title">Our advisor</h2></div>
-    <div class="hive-advisor-grid">
-      {advisors.map(member => <button type="button" class="hive-member hive-member--advisor" data-profile={member.id} data-color={member.color} aria-haspopup="dialog" aria-controls="hive-profile" aria-label={`Meet ${member.name}`}>
-        <span class="hive-member__art"><Portrait photo={member.photo} name={member.name} /></span>
-        <span class="hive-member__name">{member.name}</span><span class="hive-member__role">Advisor</span>
-      </button>)}
+  {advisorGroups.map(group => <section class:list={["team-advisors", { "team-advisors--primary": group.primary }]} id={group.id} aria-labelledby={`${group.id}-title`}>
+    <div class="team-advisors__content">
+      <h2 id={`${group.id}-title`}>{group.title}</h2>
+      <div class="team-advisor-grid">
+        {group.members.map(member => <article class="team-advisor" data-member={member.id}>
+          <Portrait photo={member.photo} name={member.name} />
+          <div class="team-advisor__copy">
+            <h3>{member.name}</h3>
+            {member.affiliation && <p class="team-advisor__affiliation">{member.affiliation}</p>}
+            {member.bio && <p class="team-advisor__bio" data-member-bio>{member.bio}</p>}
+            {member.profileUrl && <a class="team-advisor__link" href={member.profileUrl}>University profile<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 4h9v9M16 4 5 15" /></svg></a>}
+          </div>
+          <button type="button" class="team-member__open team-advisor__open" data-member-open={member.id} data-member-name={member.name} data-member-details={member.affiliation} aria-controls="team-profile" aria-haspopup="dialog" aria-expanded="false" aria-label={`View ${member.name}'s profile`} hidden><span class="team-advisor__open-icon" aria-hidden="true">+</span></button>
+        </article>)}
+      </div>
     </div>
-    <a class="hive-attributions" href="/lambert-ga/attributions/"><span>View attributions ↗</span></a>
-  </section>
-  <dialog class="hive-dialog" id="hive-profile" aria-labelledby="profile-name" aria-describedby="profile-bio">
-    <div class="hive-dialog__shell">
-      <button class="hive-dialog__close" type="button" data-profile-close aria-label="Close profile" autofocus><span>Close</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" /></svg></button>
-      <div class="hive-dialog__content" data-profile-content></div>
-      <div class="hive-dialog__nav"><button type="button" data-profile-prev aria-label="Previous profile">← <span>Previous</span></button><span data-profile-count></span><button type="button" data-profile-next aria-label="Next profile"><span>Next</span> →</button></div>
+  </section>)}
+  <dialog class="team-profile" id="team-profile" data-team-profile aria-labelledby="team-profile-name">
+    <div class="team-profile__sheet" data-profile-sheet>
+      <div class="team-profile__toolbar">
+        <span class="team-profile__position" data-profile-position></span>
+        <button type="button" class="team-profile__close" data-profile-close aria-label="Close profile" autofocus><span>Close</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15" /></svg></button>
+      </div>
+      <div class="team-profile__content">
+        <div class="team-profile__portrait" data-profile-portrait></div>
+        <div class="team-profile__copy">
+          <div class="team-profile__heading"><h2 id="team-profile-name" data-profile-name></h2><p data-profile-details></p></div>
+          <div class="team-profile__bio" data-profile-bio></div>
+          <div class="team-profile__links" data-profile-links></div>
+        </div>
+      </div>
+      <nav class="team-profile__navigation" aria-label="Browse team profiles">
+        <button type="button" data-profile-previous><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12H4m7-7-7 7 7 7" /></svg><span>Previous</span></button>
+        <button type="button" data-profile-next><span>Next</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h16m-7-7 7 7-7 7" /></svg></button>
+      </nav>
+      <span class="team-profile__announcement" data-profile-announcement role="status" aria-atomic="true"></span>
     </div>
   </dialog>
-  {everyone.map(member => <template data-profile-template={member.id}>
-    <div class="hive-profile__portrait" data-color={member.color}><Portrait photo={member.photo} name={member.name} /></div>
-    <div class="hive-profile__copy">
-      <p class="hive-profile__eyebrow">Lambert iGEM{member.advisor ? ' · Advisor' : ''}</p>
-      <h2 id="profile-name">{member.name}</h2>
-      {(member.grade || member.year) && <dl class="hive-profile__facts">
-        {member.grade && <div><dt>Grade</dt><dd>{member.grade}</dd></div>}
-        {member.year && <div><dt>On the team</dt><dd>{yearLabel(member.year)} in iGEM</dd></div>}
-      </dl>}
-      <p class="hive-profile__bio" id="profile-bio">{member.bio}</p>
-    </div>
-  </template>)}
-</main>
+</div>
 <script>
   import { initTeam } from './team';
   initTeam();

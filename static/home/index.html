@@ -26,7 +26,21 @@
   /* hero: the art portion of Frame 8.svg (everything above the white curve) */
   .hero { width: 100%; aspect-ratio: 1440 / 1066; overflow: hidden; position: relative; z-index: 2;
     clip-path: ellipse(108% 100% at 50% 0%); }   /* curved bottom edge: sides rise ~12%, centre reaches the bottom */
-  .hero img { width: 100%; height: auto; display: block; margin-top: calc(-68 / 1440 * 100%); }   /* frame starts 68 units into the art */
+  .hero > img { width: 100%; height: auto; display: block; margin-top: calc(-68 / 1440 * 100%); }   /* frame starts 68 units into the art */
+
+  /* Team illustrations frame the opening without adding another scroll scene. */
+  .hero-pollinators { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+  .hero-pollinators img { position: absolute; display: block; height: auto; }
+  .hero-pollinators__flower--left { width: 24%; left: -6%; bottom: 7%; transform: rotate(24deg); }
+  .hero-pollinators__flower--right { width: 22%; right: -5%; bottom: 11%; transform: rotate(-20deg); }
+  .hero-pollinators__bee--left { width: 9%; left: 8%; top: 55%; transform: rotate(-14deg); }
+  .hero-pollinators__bee--right { width: 8%; right: 12%; top: 25%; transform: scaleX(-1) rotate(-12deg); }
+  @media (max-width: 720px) {
+    .hero-pollinators__flower--left { width: 42%; left: -12%; bottom: 10%; }
+    .hero-pollinators__flower--right { width: 37%; right: -11%; bottom: 15%; }
+    .hero-pollinators__bee--left { width: 17%; left: 6%; top: 60%; }
+    .hero-pollinators__bee--right { width: 15%; right: 9%; top: 28%; }
+  }
 
   #statement { position: relative; height: 230vh; z-index: 2; pointer-events: none; }
   #statement .pin { position: sticky; top: 0; height: 100vh; display: flex; align-items: center; overflow: hidden; }
@@ -224,6 +238,12 @@ setTimeout(function () {
 <header class="hero" id="top">
     <h1 class="sr-only">SWARM: Protecting honey bees from Deformed wing virus and Varroa</h1>
     <img src="https://static.igem.wiki/teams/6185/wiki/homepage/frame8-hero.svg?v=5" alt="SWARM jungle hero with a honey bee on a red flower" width="1440" height="3137">
+    <div class="hero-pollinators" aria-hidden="true">
+      <img class="hero-pollinators__flower--left" src="assets/illustration/flower.svg" alt="" width="850" height="770" decoding="async">
+      <img class="hero-pollinators__flower--right" src="assets/illustration/flower.svg" alt="" width="850" height="770" decoding="async">
+      <img class="hero-pollinators__bee--left" src="assets/illustration/bee.svg" alt="" width="366" height="314" decoding="async">
+      <img class="hero-pollinators__bee--right" src="assets/illustration/bee.svg" alt="" width="366" height="314" decoding="async">
+    </div>
     <button class="scroll-cue" type="button" aria-label="Scroll to explore the story">Scroll to explore <span aria-hidden="true">↓</span></button>
   </header>
 
@@ -815,7 +835,7 @@ setTimeout(function () {
   <script src="dwv-virus.js?v=afa362653e9c"></script>
   <script src="statement.js?v=53263926cd20"></script>
   <script src="food.js?v=1b43e049137a"></script>
-  <script type="module" src="navbar.js?v=799cc6b37940"></script>
+  <script type="module" src="navbar.js?v=8caf1fe503d3"></script>
   <script type="module" src="menu.js?v=9537433fd889"></script>
   <script type="module" src="section-nav.js?v=b3a39821eeb3"></script>
   <script src="project-overview.js?v=39dba40ebfc6"></script>

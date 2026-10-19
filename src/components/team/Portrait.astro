@@ -1,10 +1,22 @@
 ---
-interface Props { photo?: string; name: string }
-const { photo, name } = Astro.props;
-const initials = name.split(' ').map(part => part[0]).slice(0, 2).join('');
+interface Props { photo?: string; name: string; eager?: boolean }
+const { photo, name, eager = false } = Astro.props;
+// Share the exact rounded contour between the image clip and its stroked rim.
+const clipId = `team-portrait-${crypto.randomUUID()}`;
+const contour = 'M 47.12 3.62 Q 50 2 52.88 3.62 L 95.12 27.38 Q 98 29 98 32.24 L 98 79.76 Q 98 83 95.12 84.62 L 52.88 108.38 Q 50 110 47.12 108.38 L 4.88 84.62 Q 2 83 2 79.76 L 2 32.24 Q 2 29 4.88 27.38 Z';
+const initials = name.replace(/^(Dr\.|Mrs\.)\s+/, '').split(' ').map(part => part[0]).slice(0, 2).join('');
 ---
-<span class="hive-portrait" aria-hidden="true">
-  <span class="hive-portrait__border"><span class="hive-portrait__surface">
-    {photo ? <img src={photo} alt="" width="360" height="540" loading="lazy" decoding="async" /> : <span class="hive-portrait__initials">{initials}</span>}
-  </span></span>
-</span>
+<div class="team-portrait" data-portrait data-image-state={photo ? undefined : 'error'}>
+  <span class="team-portrait__surface" style={`clip-path: url(#${clipId})`}>
+  <span class="team-portrait__fallback" aria-hidden="true"><span class="team-portrait__initials">{initials}</span><span class="team-portrait__status">Photo unavailable</span></span>
+  {photo && <img src={photo} alt={name} width="360" height="403" loading={eager ? 'eager' : 'lazy'} decoding="async" />}
+  </span>
+  <svg class="team-portrait__rim" viewBox="0 0 100 112" aria-hidden="true" focusable="false">
+    <defs>
+      <clipPath id={clipId} clipPathUnits="objectBoundingBox">
+        <path d={contour} transform="scale(0.01 0.00892857142857143)" />
+      </clipPath>
+    </defs>
+    <path d={contour} fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke" />
+  </svg>
+</div>
