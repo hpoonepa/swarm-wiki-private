@@ -1,127 +1,170 @@
 ---
-layout: ../layouts/ContentLayout.astro
+layout: ../layouts/DescriptionLayout.astro
 title: Project Description
 description: 'Protecting honey bees by targeting deformed wing virus and the Varroa mite that spreads it.'
 ---
 
 import DwvMap from '../components/description/DwvMap.astro';
 
-{/* Adapted from SWARM Project Description.pdf, supplied October 14, 2026.
-    The full write-up on pages 3–7 supersedes the planning outline on pages 1–2.
-    The delivery image is unchanged; the interactive map distinguishes reported detections from an illustrative habitat transition.
-    Editorial follow-ups retained from the source:
-    - Supply the bibliography for references [1]–[20].
-    - Add the DWV researchers' statement supporting VP3 as a target.
-    - Supply the missing figures before restoring references to Figures 1, 3–7.
-      The supplied feeder sketch itself is labeled Figure 4 in its image.
-    - Delivery: confirm whether drying has been performed, drying temperature,
-      cost in USD, stability results, and why low-temperature drying matters
-      given the heat tolerance in Table 2.
-    - The outline requests a 150-word abstract, modeling, and SDG discussion;
-      no completed copy for those sections was supplied.
+{/* Project description supplied October 19, 2026.
+    New figures are omitted until their iGEM-hosted URLs are supplied.
+    Captions and callouts are retained in comments at their intended positions.
 */}
 
 # Overview
 
-Lambert iGEM designed SWARM to protect honey bees from deformed wing virus (DWV) by targeting both the virus and the mite that spreads it, *Varroa destructor*.
+Lambert iGEM developed SWARM to protect honey bees from deformed wing virus (DWV) by targeting both the virus and the mite that spreads it, *Varroa destructor*.
 
-We designed small proteins called minibinders to grab the virus's outer shell, and double-stranded RNA (dsRNA) to switch off genes critical to the mite's survival. Together, the two treatments target both infection and transmission.
+We designed small proteins called minibinders to grab the virus's outer shell, and double-stranded RNA (dsRNA) to switch off genes associated with mite feeding, reproduction, and survival. Together, the two treatments target both infection and transmission.
 
 # Introduction
 
-SWARM addresses a threat to one of agriculture's most important pollinators. Honey bees visit crop flowers more often than any other single species, and many crops rely on them heavily [1]. In our home state of Georgia, beekeepers lost about 88,000 colonies between October 2025 and June 2026, translating to approximately 20% of the state's colonies lost every three months [2].
+Honey bees visit crop flowers more often than any other single species, and over 100 commercial crops rely on honey bee pollination in North America alone \[[1](#reference-1)\]. In our home state of Georgia, beekeepers lost about 88,000 colonies between October 2025 and June 2026, translating to ~20% of the state's colonies lost every three months \[[2](#reference-2)\].
 
-Across the United States, beekeepers lost 39.9% of their managed colonies between April 2025 and April 2026 [3]. Worldwide, the share of crop production that depends directly on animal pollinators is worth an estimated \$235 billion to \$577 billion USD each year [4]. Parasites, pesticides, and a lack of flowers all contribute to bee declines, but most U.S. colony losses trace back to the *Varroa destructor* mite and the virus it spreads, deformed wing virus (DWV) [5], [6].
-
-DWV threatens honey bees worldwide, and when researchers tested bees from 603 apiaries across the United States, they detected DWV in 89.4% of them [7], [8]. The mite wedges itself under the overlapping plates of a bee's abdomen, pierces the soft membrane between them, and feeds on the fat tissue underneath [9]. Each feeding wound gives DWV a direct route into the bee [7].
+Across the United States, beekeepers lost 55.6% of their managed colonies between April 2024 and April 2025 \[[3](#reference-3)\]. The importance of protecting honey bee populations extends globally, with animal pollination contributing an estimated \$235 billion to \$577 billion USD to crop production annually \[[4](#reference-4)\]. Although parasites, pesticides, and a lack of flowers all contribute to bee losses, the most significant threat to colony health is the parasitic mite *Varroa destructor* and the virus it transmits, deformed wing virus \[[4](#reference-4), [5](#reference-5)\].
 
 <DwvMap />
 
-Without mites, DWV infections usually cause no visible symptoms, but mites drive viral levels high enough to cause deformed wings and early death [10], [11]. Each new round of brood adds more mites and more infected bees, and an untreated colony will likely die [12], [14].
-
-# Current Solutions
-
-Current treatments face two shortfalls: mites resist several existing miticides, and the Honey Bee Health Coalition's 2026 guide lists treatments for the mite only [6], [14].
+The Varroa mite wedges itself beneath the overlapping plates of a bee's abdomen, piercing the soft membrane to feed on the fat body tissue underneath \[[6](#reference-6)\]. In doing so, it can transmit DWV directly into the bee, allowing the virus to reach levels associated with severe symptoms that are uncommon in the absence of mites, including deformed wings and premature death \[[5](#reference-5), [7](#reference-7)\]. As mites reproduce within developing brood, their populations grow, increasing opportunities for viral transmission and ultimately threatening the survival of entire colonies \[[5](#reference-5), [8](#reference-8)\].
 
 **Table 1. Current Varroa treatments**
 
 | Approach | Examples | Limitations |
 | --- | --- | --- |
-| Synthetic miticides | Amitraz, tau-fluvalinate, coumaphos | Mites resist them; residues persist in wax [6], [14], [15] |
-| Organic acids | Formic acid, oxalic acid | Formic acid can kill brood in heat; oxalic acid misses mites under cappings [14] |
-| Mechanical and cultural methods | Drone brood removal, screened bottom boards | Work poorly on their own [14] |
-| RNA interference (registered in 2025) | Vadescana, sold as Norroa | Targets one mite gene, not the virus; needs open brood [12], [14] |
+| Synthetic miticides | Amitraz, tau-fluvalinate, coumaphos | Resistance has been documented; some miticides leave residues in wax \[[8](#reference-8), [9](#reference-9)\]. |
+| Organic acids | Formic acid, oxalic acid | Formic acid can harm brood at high temperatures; oxalic acid does not penetrate brood cappings \[[8](#reference-8)\]. |
+| Mechanical and cultural methods | Drone brood removal, screened bottom boards | Usually need to be combined with other controls \[[8](#reference-8)\]. |
+| RNA interference (registered in 2025) | Vadescana, sold as Norroa | Targets one mite gene, not DWV; requires open brood \[[8](#reference-8), [10](#reference-10), [11](#reference-11)\]. |
 
-As one member of the Metro Atlanta Beekeepers Association said:
-
-> “It's not a matter of if there are Varroa mites. Every colony has them.”
-
-The gaps in existing treatments leave colonies facing a persistent threat, with broader ecological consequences.
+As Claressa Lucas of the Metro Atlanta Beekeepers Association said, "It's not a matter of if there are Varroa mites. Every colony has them." (see [Integrated Human Practices](/lambert-ga/human-practices/)).
 
 # Introducing SWARM
 
-SWARM began with four design requirements, drawn from the gaps in current treatments and from beekeepers' needs:
+Based on these limitations and feedback from beekeepers, we established four design requirements for SWARM:
 
-- Treat DWV directly, since current guidance lists only mite treatments [14].
-- Reduce mites without the brood harm or wax residues of chemicals [14], [15].
-- Slow resistance, because mites already resist several miticides [6], [14].
-- Fit into hive routines as a practical, low-cost treatment.
+1. Target DWV directly, addressing the virus alongside the mite responsible for its transmission \[[8](#reference-8)\].
+2. Develop an alternative to conventional miticides that could reduce mite populations while minimizing risks to brood health and wax contamination \[[8](#reference-8), [9](#reference-9)\].
+3. Address miticide resistance by exploring RNAi as an alternative mechanism for controlling Varroa \[[8](#reference-8)\].
+4. Prioritize affordability and ease of use by designing treatments compatible with existing beekeeping practices.
 
-To meet them, SWARM pairs two treatments in one hive-top feeder: minibinders against DWV and dsRNA against Varroa. Bees would take in both treatments through the feeder's sucrose solution. We designed the minibinders to act on the virus in the bee's gut, and the dsRNA to reach the mite when it feeds on a treated bee, a route earlier researchers demonstrated [16].
+To meet them, SWARM pairs two treatments: minibinders against DWV, and dsRNA against Varroa.
 
-<figure>
-  <a href="https://static.igem.wiki/teams/6185/wiki/lastmin/description-swarm-delivery-concept.avif" aria-label="Open the SWARM delivery concept at full size">
-    <img src="https://static.igem.wiki/teams/6185/wiki/lastmin/description-swarm-delivery-concept.avif" width="1250" height="682" loading="lazy" decoding="async" alt="Draft SWARM delivery concept: a three-chamber feeder provides minibinder powder, sucrose solution, and dsRNA to worker bees. Minibinders target DWV, while mites take up dsRNA when feeding on treated bees. PRINCE, a vacuum evaporator, and three dosing models support the system." style={{ width: '100%', borderRadius: '14px' }} />
-  </a>
-  <figcaption>Figure 2. Proposed SWARM delivery system.</figcaption>
-</figure>
+{/* Restore the callout "(Figures 2 and 3)" above when those figures are added. */}
 
 # Minibinders
 
-SWARM targets DWV with minibinders, small proteins designed on a computer to bind a specific target. We designed our minibinders against VP3, one of the proteins that form the virus's outer shell, or capsid. Part of VP3 folds into a knob on the virus's surface that may help the virus enter bee cells [17].
+SWARM targets DWV with minibinders, small proteins designed computationally to bind to a specific target \[[13](#reference-13)\]. We designed our minibinders against VP3, one of the proteins that form the virus's capsid, or outer shell \[[14](#reference-14)\]. To validate our target selection, we contacted Dr. Benjamin Lamp and Dr. Tatsuhiko Kadowaki, whose advice confirmed the potential of VP3 as a target for interfering with viral function (see [Integrated Human Practices](/lambert-ga/human-practices/)). Previous research further demonstrated that antibodies targeting the viral capsid proteins VP1 and VP3 reduced DWV load eightfold in infected bees, providing evidence that targeting the capsid could help neutralize the virus \[[15](#reference-15)\]. However, conventional antibodies are relatively large and can be susceptible to digestive degradation \[[16](#reference-16)\].
 
-We designed the minibinders to inhibit viral replication by binding VP3 to block host cell binding. We compared minibinders with antibodies and with nanobodies, small antibody fragments from camels and llamas, and chose minibinders for their small size and heat tolerance (Table 2).
-
-**Table 2. Antibodies compared with minibinders and nanobodies**
+We initially considered nanobodies because of their reported stability \[[19](#reference-19)\]. However, Dr. Aashish Manglik from UCSF advised us on the difficulty of computational nanobody design, stating, “For our computational design projects, we still make libraries of hundreds or thousands of candidates.” His advice highlighted the screening demands of nanobody design and encouraged us to look into minibinders (see [Integrated Human Practices](/lambert-ga/human-practices/)). After further consultations and literature review, we chose to pursue minibinders which were better equipped with computational design methods \[[13](#reference-13)\].
 
 | Property | Antibodies | Nanobodies | Minibinders |
 | --- | --- | --- | --- |
-| Size | Large, multi-part proteins of about 150 kilodaltons [18] | A single antibody domain of about 15 kilodaltons [18] | Fewer than approximately 100 amino acids [19] |
-| Heat tolerance | Lose activity after heating [20] | High stability [18] | Keep activity after exposure to high temperatures [20] |
-| Origin | Made by an animal's immune system or selected in the lab | Taken from antibodies that camels and llamas make [18] | Designed on a computer from the target's shape alone [19] |
+| Size (in kilodaltons, a measure of protein mass) | ~150 kDa \[[17](#reference-17)\]. | ~15 kDa \[[17](#reference-17)\]. | Design-dependent; roughly 6–22 kDa for 50–200-amino-acid designs. |
+| Thermal stability | Representative unfolding temperatures of approximately 65–85 °C. | Reported melting temperatures span approximately 45–85 °C. | Highly thermostable designs can have melting temperatures above 90 °C. |
+| Origin | Based on naturally occurring immune-system antibodies \[[17](#reference-17)\]. | Derived from the binding domains of camelid heavy-chain-only antibodies \[[21](#reference-21)\]. | Designed computationally to bind a selected molecular target \[[13](#reference-13)\]. |
 
-Nanobodies were the primary option we considered prior to minibinders. However, Dr. Aashish Manglik from UCSF advised us on the difficulty with design, stating:
+**Table 2. Comparison of antibodies, nanobodies, and de novo minibinders based on their size, thermal stability, and origin.** Reported values are drawn from separate studies hence the broad ranges.
 
-> “For our computational design projects, we still make libraries of hundreds or thousands of candidates.”
+Designing a minibinder against DWV's VP3 protein still presented challenges. VP3 forms part of the viral capsid and includes an exposed, flexible P-domain, complicating the selection of stable and accessible binding sites \[[14](#reference-14)\]. Tudor Ștefan Cotet and Corey Howe from Adaptyv Bio, who graciously sponsored our minibinder affinity testing, recommended targeting specific binding hotspots rather than allowing design models to select sites indiscriminately (see [Integrated Human Practices](/lambert-ga/human-practices/)). We initially identified potential hotspots and generated 15 experimental candidates, but our first experimental round produced no confirmed binding success. Following feedback from an engineer on the Boltz team, which develops frontier AI models for protein structure prediction and design, we refined our target setup and redirected designs toward more experimentally relevant hotspots (see [Modeling](/lambert-ga/model/)).
 
-Through more conversations with stakeholders and literature, we decided to pivot towards minibinder design as it had far greater promise in creating a binding molecule.
+{/* Figure 2: A visualization of the entire viral capsid and VP3’s exposed P-domain.
+    Add the iGEM-hosted figure here and restore "(Figure 2)" after [14] above.
+*/}
 
-To choose which designs to test, we built [PRINCE](/lambert-ga/software/), software trained on more than 5,000 experimentally validated minibinder designs. PRINCE first finds binding hotspots, the places on VP3 most likely to anchor a binder, then ranks each design on predicted binding and predicted expression, or how much usable protein gets produced. Through two cycles of binder expression testing, we created the first ever minibinder for deformed wing virus!
+To improve existing hotspot selection, we built PRINCE, a software tool trained on more than 5,000 experimentally validated minibinder designs and benchmarked against existing hotspot selection tools (see [Software](/lambert-ga/software/)). We used PRINCE to prioritize new candidate binding regions on VP3 and selected 20 re-designed candidates for experimental testing (see [Results](/lambert-ga/results/)). Through two rounds of iterative design and validation, we tested our new batch of binders and successfully developed what we believe to be the first experimentally confirmed minibinder against DWV (see [Results](/lambert-ga/results/))!
 
-[Explore our minibinder design and experiments →](/lambert-ga/minibinder/)
+For experimentation information, please see our [Minibinder page](/lambert-ga/minibinder/).
 
 # RNAi
 
-SWARM targets the mite with RNA interference, a natural process in which cells use dsRNA to switch off target genes. When a mite cell takes in dsRNA that matches one of its genes, the cell destroys that gene's messenger RNA (the working copy it uses to build a protein) to limit it from making that protein.
+SWARM targets the mite through RNA interference (RNAi), a natural process that cells use to reduce the production of specific proteins. Cells make proteins using instructions carried by messenger RNA (mRNA). During RNAi, double-stranded RNA (dsRNA) is processed into small interfering RNAs (siRNAs), which guide cellular machinery to matching mRNA. The machinery breaks down that mRNA, leaving fewer copies of the instructions available for protein production \[[22](#reference-22)\].
 
-We designed a multiplexed dsRNA that targets three Varroa salivary gland genes essential to mite survival. By designing novel siRNA sequences for **Vd-CHIsal**, **Vd-CHIBIN**, and **VdAV422**, we are able to silence three genes compared to one in existing remedies [12]. Earlier work that silenced a single mite gene reduced mite populations by over 60%, so targeting three should not only boost efficacy but also limit the likelihood of resistance that mites are developing [16].
+We designed siRNA sequences in-house to target three *Varroa destructor* salivary gland genes associated with feeding, reproduction, and survival: Vd-CHIsal, Vd-CHIBIN, and VdAV422 \[[23](#reference-23), [24](#reference-24)\]. While Norroa targets a single gene \[[11](#reference-11)\], we combined our sequences into one multiplexed dsRNA construct to investigate whether targeting multiple genes could improve mite control and reduce the risk of resistance. We used Sf9 insect cells as a model system to evaluate the gene-silencing mechanism of our RNAi approach (see [RNAi](/lambert-ga/rnai/)). For its intended application within the hive, we propose delivering dsRNA through treated bees, allowing mites to encounter it during feeding \[[12](#reference-12)\].
 
-Our dsRNA approach is delivered through treated bees, the same route used to successfully silence mite genes in the past [16].
+{/* Figure 3. Schematic showing how dsRNA is processed into siRNAs.
+    Add the iGEM-hosted figure here and restore "(Figure 3)" after [22] above.
+*/}
 
-To address ecological concerns with reduced mite populations, we spoke to entomologist Jeff Pettis, who assured us it would be “completely fine to eliminate Varroa, as honeybees get no benefit at all from it” (see [Integrated Human Practices](/lambert-ga/human-practices/)).
-
-[Explore our RNAi design and experiments →](/lambert-ga/rnai/)
+We discussed the ecological implications of reducing Varroa populations with entomologist Jeff Pettis. He explained that it would be “completely fine to eliminate Varroa, as honeybees get no benefit at all from it” (see [Integrated Human Practices–Jeff Pettis](/lambert-ga/human-practices/)). His feedback supported our focus on mite control, while the safety of the proposed treatment is addressed separately on our [Safety page](/lambert-ga/safety/).
 
 # Delivery
 
-SWARM reaches bees through a hive-top sucrose feeder. Our design dries the minibinders into a powder, intended to be shelf-stable, with a low-cost vacuum evaporator. The evaporator removes water at low temperature so heat does not unfold, or denature, the proteins.
+SWARM’s proposed delivery builds on feeding practices that beekeepers already use. The dsRNA would be supplied in a syrup pouch placed in the brood box, following the format used by Norroa \[[8](#reference-8), [11](#reference-11)\]. Freeze-dried minibinders would be mixed into syrup and administered through a standard in-hive feeder \[[26](#reference-26)\]. For the full delivery methodology, see [Implementation](/lambert-ga/implementation/).
 
-A three-chamber feeder holds the minibinder powder, a sucrose solution, and the dsRNA in separate compartments, so one unit delivers both treatments to the colony.
+{/* Figure 4. Proposed delivery formats for SWARM. A brood-box syrup pouch supplies dsRNA,
+    while a separate freeze-dried minibinder packet is mixed into syrup for an in-hive feeder.
+    Add the iGEM-hosted figure here and restore "(Figure 4)" after [26] above.
+*/}
 
-[Explore the hardware →](/lambert-ga/hardware/)
+# Impact and Sustainable Development
 
-# Project Document
+SWARM reflects our concern for honey bee health and the people whose livelihoods depend on pollination. We wanted this concern to shape both the treatments we explored and the opportunities we created for others to participate in science and pollinator conservation. Our Roots-to-Fruits model connects these efforts with seven United Nations Sustainable Development Goals \[[27](#reference-27)\].
 
-[Read the original SWARM Project Description (PDF)](https://static.igem.wiki/teams/6185/wiki/lastmin/description-swarm-project-description.pdf).
+Developing a useful treatment meant listening to the people who would use it. Beekeepers helped us understand practical treatment needs, while researchers informed our design decisions. These partnerships reinforced our emphasis on accessibility and compatibility with existing hive routines, putting Partnerships for the Goals (SDG 17) into practice. Our longer-term aim is to help protect agricultural pollination and reduce the financial burden of colony losses, connecting our research to Zero Hunger (SDG 2) and Decent Work and Economic Growth (SDG 8).
 
-{/* The supplied project description does not include its numbered bibliography. Match the original sources before adding citation destinations. */}
+We also wanted community members to understand pollinator health and find ways to support it themselves. Our school workshops introduced students to the challenges facing pollinators, while our Concrete Jungle workshop helped volunteers choose pollinator-friendly plants. Together, these efforts connected learning with practical opportunities to care for local environments, supporting Quality Education (SDG 4), Sustainable Cities and Communities (SDG 11), and Life on Land (SDG 15).
+
+Making science education accessible was equally important to us. Through Flowers for the Future, we continued into our third semester of teaching introductory synthetic biology to young women in Afghanistan, sustaining educational opportunities that support Gender Equality (SDG 5). Our Neurodivergent Handbook extends this commitment by giving educators guidance for starting their own Exceptional Science programs. By documenting and sharing our teaching approaches, we aimed to help others continue this work beyond our team’s direct involvement (see [Education](/lambert-ga/education/) and [Inclusivity](/lambert-ga/inclusivity/)).
+
+<details className="description-references">
+<summary>
+
+# References
+
+</summary>
+
+<p id="reference-1">[1] Alberta Beekeepers Commission. (2023, April 26). Brief submitted to the House of Commons Standing Committee on Agriculture and Agri-Food, section “The Importance of Bees to the Environment,” p. 2. [https://www.ourcommons.ca/Content/Committee/441/AGRI/Brief/BR12345615/br-external/AlbertaBeekeepersCommission-withGlossary-e.pdf](https://www.ourcommons.ca/Content/Committee/441/AGRI/Brief/BR12345615/br-external/AlbertaBeekeepersCommission-withGlossary-e.pdf)</p>
+
+<p id="reference-2">[2] USDA National Agricultural Statistics Service. (2026, August 3). Honey Bee Colonies. State tables for October–December 2025, January–March 2026, and April–June 2026. [https://esmis.nal.usda.gov/sites/default/release-files/796006/hcny0726.txt](https://esmis.nal.usda.gov/sites/default/release-files/796006/hcny0726.txt)</p>
+
+<p id="reference-3">[3] Apiary Inspectors of America. (2025). 2024–2025 U.S. Beekeeping Survey Results. [https://www.apiaryinspectors.org/US-beekeeping-survey-24-25](https://www.apiaryinspectors.org/US-beekeeping-survey-24-25)</p>
+
+<p id="reference-4">[4] IPBES. (2016). Summary for policymakers of the assessment report on pollinators, pollination and food production. Decision IPBES-4/1, Annex II. [https://files.ipbes.net/ipbes-web-prod-public-files/downloads/pdf/Decision_IPBES_4_1_EN.pdf](https://files.ipbes.net/ipbes-web-prod-public-files/downloads/pdf/Decision_IPBES_4_1_EN.pdf)</p>
+
+<p id="reference-5">[5] Dainat, B., Evans, J. D., Chen, Y. P., Gauthier, L., & Neumann, P. (2012). Dead or Alive: Deformed Wing Virus and Varroa destructor Reduce the Life Span of Winter Honeybees. Applied and Environmental Microbiology, 78, 981–987. [https://doi.org/10.1128/AEM.06537-11](https://doi.org/10.1128/AEM.06537-11)</p>
+
+<p id="reference-6">[6] Ramsey, S. D., et al. (2019). Varroa destructor feeds primarily on honey bee fat body tissue and not hemolymph. Proceedings of the National Academy of Sciences, 116, 1792–1801. [https://doi.org/10.1073/pnas.1818371116](https://doi.org/10.1073/pnas.1818371116)</p>
+
+<p id="reference-7">[7] Martin, S. J., et al. (2012). Global honey bee viral landscape altered by a parasitic mite. Science, 336, 1304–1306. [https://doi.org/10.1126/science.1220941](https://doi.org/10.1126/science.1220941)</p>
+
+<p id="reference-8">[8] Honey Bee Health Coalition. (2026). Tools for Varroa Management: A Guide to Effective Varroa Sampling & Control (9th ed.). [https://honeybeehealthcoalition.org/wp-content/uploads/2026/06/HBHC-Guide_Varroa-Mgmt_9thEd.pdf](https://honeybeehealthcoalition.org/wp-content/uploads/2026/06/HBHC-Guide_Varroa-Mgmt_9thEd.pdf)</p>
+
+<p id="reference-9">[9] Mullin, C. A., Frazier, M., Frazier, J. L., Ashcraft, S., Simonds, R., vanEngelsdorp, D., & Pettis, J. S. (2010). High Levels of Miticides and Agrochemicals in North American Apiaries: Implications for Honey Bee Health. PLOS ONE, 5, e9754. [https://doi.org/10.1371/journal.pone.0009754](https://doi.org/10.1371/journal.pone.0009754)</p>
+
+<p id="reference-10">[10] U.S. Environmental Protection Agency. Biopesticide Active Ingredients. Vadescana, PC code 006549, registration year 2025. Accessed October 18, 2026. [https://www.epa.gov/ingredients-used-pesticide-products/biopesticide-active-ingredients](https://www.epa.gov/ingredients-used-pesticide-products/biopesticide-active-ingredients)</p>
+
+<p id="reference-11">[11] Rawn, D., Prouty, C., Gautam, A., Jamison, M., Talton, W., Youngs, K., Narva, K., Manley, B., & Jack, C. (2026). Evaluating the new product Norroa™ against Varroa destructor in managed honey bee (Apis mellifera) colonies. Frontiers in Insect Science, 6, 1751606. [https://doi.org/10.3389/finsc.2026.1751606](https://doi.org/10.3389/finsc.2026.1751606)</p>
+
+<p id="reference-12">[12] Garbian, Y., Maori, E., Kalev, H., Shafir, S., & Sela, I. (2012). Bidirectional Transfer of RNAi between Honey Bee and Varroa destructor: Varroa Gene Silencing Reduces Varroa Population. PLOS Pathogens, 8, e1003035. [https://doi.org/10.1371/journal.ppat.1003035](https://doi.org/10.1371/journal.ppat.1003035)</p>
+
+<p id="reference-13">[13] Cao, L., et al. (2022). Design of protein-binding proteins from the target structure alone. Nature, 605, 551–560. [https://doi.org/10.1038/s41586-022-04654-9](https://doi.org/10.1038/s41586-022-04654-9)</p>
+
+<p id="reference-14">[14] Škubník, K., Nováček, J., Füzik, T., Přidal, A., Paxton, R. J., & Plevka, P. (2017). Structure of deformed wing virus, a major honey bee pathogen. Proceedings of the National Academy of Sciences, 114, 3210–3215. [https://doi.org/10.1073/pnas.1615695114](https://doi.org/10.1073/pnas.1615695114)</p>
+
+<p id="reference-15">[15] MacMillan, N. J. J., Hause, B. M., Nordseth, T., Felden, A., Baty, J. W., Pitman, J. L., & Lester, P. J. (2024). A novel antibody treatment reduces deformed wing virus loads in the western honey bee (Apis mellifera). mSphere, 9, e00497-24. [https://doi.org/10.1128/msphere.00497-24](https://doi.org/10.1128/msphere.00497-24)</p>
+
+<p id="reference-16">[16] Shimizu, M., Fitzsimmons, R. C., & Nakai, S. (1988). Anti-E. coli Immunoglobulin Y Isolated from Egg Yolk of Immunized Chickens as a Potential Food Ingredient. Journal of Food Science. [https://doi.org/10.1111/j.1365-2621.1988.tb09277.x](https://doi.org/10.1111/j.1365-2621.1988.tb09277.x)</p>
+
+<p id="reference-17">[17] el Hebieshy, A. F., Wijfjes, Z., Le Gall, C. M., et al. (2025). Site-directed multivalent conjugation of antibodies to ubiquitinated payloads. Nature Biomedical Engineering, 9, 1101–1116. [https://doi.org/10.1038/s41551-024-01342-z](https://doi.org/10.1038/s41551-024-01342-z)</p>
+
+<p id="reference-18">[18] Metzendorf, N. G., Petersen, I., & Hultqvist, G. (2025). Enhancing therapeutic antibody profiling: orthogonal strategies for stability and quality assessment. Frontiers in Pharmacology, 16, 1667210. Figure 6. [https://doi.org/10.3389/fphar.2025.1667210](https://doi.org/10.3389/fphar.2025.1667210)</p>
+
+<p id="reference-19">[19] Pejenaute, A., et al. (2025). Improving the production and stability of nanobodies. Protein Engineering, Design and Selection, 38, gzaf010. [https://doi.org/10.1093/protein/gzaf010](https://doi.org/10.1093/protein/gzaf010)</p>
+
+<p id="reference-20">[20] Cao, L., et al. (2020). De novo design of picomolar SARS-CoV-2 miniprotein inhibitors. Science, 370, 426–431. [https://doi.org/10.1126/science.abd9909](https://doi.org/10.1126/science.abd9909)</p>
+
+<p id="reference-21">[21] Hamers-Casterman, C., et al. (1993). Naturally occurring antibodies devoid of light chains. Nature, 363, 446–448. [https://doi.org/10.1038/363446a0](https://doi.org/10.1038/363446a0)</p>
+
+<p id="reference-22">[22] Elbashir, S. M., Lendeckel, W., & Tuschl, T. (2001). RNA interference is mediated by 21- and 22-nucleotide RNAs. Genes & Development, 15, 188–200. [https://doi.org/10.1101/gad.862301](https://doi.org/10.1101/gad.862301)</p>
+
+<p id="reference-23">[23] Becchimanzi, A., et al. (2025; first published online in 2024). The salivary gland transcriptome of Varroa destructor reveals suitable targets for RNAi-based mite control. Insect Molecular Biology, 34(4), 540–551. [https://doi.org/10.1111/imb.12945](https://doi.org/10.1111/imb.12945)</p>
+
+<p id="reference-24">[24] Kim, S., Jack, C., Ellis, J. D., Kim, W. T. H., Mulenga, A., & Swale, D. R. (2026). Functional characterization of Varroa destructor secreted saliva reveals insights into mechanisms for parasitism of the honey bee. Insect Biochemistry and Molecular Biology, 192, 104581. [https://doi.org/10.1016/j.ibmb.2026.104581](https://doi.org/10.1016/j.ibmb.2026.104581)</p>
+
+<p id="reference-25">[25] IUCN SSC Invasive Species Specialist Group. Global Invasive Species Database: Varroa destructor. Accessed October 18, 2026. [https://www.iucngisd.org/gisd/species.php?sc=478](https://www.iucngisd.org/gisd/species.php?sc=478)</p>
+
+<p id="reference-26">[26] Chakrabarti Basu, P. Honey Bee Nutrition: A Review and Guide to Supplemental Feeding. Honey Bee Health Coalition. [https://entnemdept.ufl.edu/media/entnemdeptifasufledu/honeybee/pdfs/HBHC-Honey-Bee-Nutrition-Supplemental-Feeding-Guide-002.pdf](https://entnemdept.ufl.edu/media/entnemdeptifasufledu/honeybee/pdfs/HBHC-Honey-Bee-Nutrition-Supplemental-Feeding-Guide-002.pdf)</p>
+
+<p id="reference-27">[27] United Nations Department of Economic and Social Affairs. The 17 Goals. [https://sdgs.un.org/goals](https://sdgs.un.org/goals)</p>
+
+</details>
