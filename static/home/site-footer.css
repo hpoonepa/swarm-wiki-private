@@ -48,12 +48,13 @@
 .swarm-footer__pause-input:checked ~ .swarm-footer__support-heading .swarm-footer__play-icon,
 .swarm-footer__pause-input:checked ~ .swarm-footer__support-heading .swarm-footer__play-label { display: block; }
 .swarm-footer__sponsor-window { overflow: hidden; margin: 8px -12px 30px; padding: 8px 0; -webkit-mask-image: linear-gradient(to right, transparent, #000 28px, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(to right, transparent, #000 28px, #000 calc(100% - 28px), transparent); }
-.swarm-footer__sponsor-track { display: flex; width: max-content; animation: swarm-sponsor-roll 42s linear infinite; }
+.swarm-footer__sponsor-track { display: flex; width: max-content; animation: swarm-sponsor-roll 52s linear infinite; }
 .swarm-footer__sponsors { display: flex; flex: 0 0 auto; align-items: center; gap: 56px; padding: 0 56px 0 0; margin: 0; list-style: none; }
 .swarm-footer__sponsors li { display: block; flex: 0 0 180px; }
 .swarm-footer__sponsor { display: flex; align-items: center; justify-content: center; width: 180px; height: 96px; padding: 10px 4px; border-radius: 4px; }
 .swarm-footer__sponsor img { display: block; width: 100%; height: 70px; object-fit: contain; mix-blend-mode: multiply; transition: opacity .18s ease; }
-.swarm-footer__sponsor--bhamla img { max-width: 124px; height: 80px; }
+.swarm-footer__sponsor--styczynski img { height: 80px; }
+.swarm-footer__sponsor--neb img { max-width: 148px; height: 80px; }
 .swarm-footer__sponsor--adaptyv img { max-width: 152px; }
 .swarm-footer__sponsor--boltz img { max-width: 138px; }
 .swarm-footer__sponsor:hover img { opacity: .72; }
@@ -85,7 +86,8 @@
   .swarm-footer__sponsors li { flex-basis: 144px; }
   .swarm-footer__sponsor { width: 144px; height: 86px; }
   .swarm-footer__sponsor img { height: 60px; }
-  .swarm-footer__sponsor--bhamla img { max-width: 104px; height: 72px; }
+  .swarm-footer__sponsor--styczynski img { height: 68px; }
+  .swarm-footer__sponsor--neb img { max-width: 124px; height: 68px; }
   .swarm-footer__sponsor--boltz img { max-width: 115px; }
   .swarm-footer__legal { display: block; max-width: 100%; font-size: 10px; }
   .swarm-footer__legal > a { display: inline-block; margin-top: 10px; }
