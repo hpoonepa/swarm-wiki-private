@@ -50,9 +50,18 @@ const sections: Section[] = frontmatter.noTOC ? [] : headings
       <div class:list={['sheet', { 'sheet--summary': summary.length > 0 }]} data-surface="sheet">
         {frontmatter.tabLabels && frontmatter.tabLinks && <div class="info-tabs"><TabReact labels={frontmatter.tabLabels} links={frontmatter.tabLinks} focus={slug} color={frontmatter.color ?? 'green'} /></div>}
         {summary.length > 0 && <section class="reading-summary" aria-label="Summary">
-          <p class="reading-summary__label">Summary</p>
-          {/* Summary paragraphs are trusted, repository-authored frontmatter. */}
-          {summary.map(paragraph => <p set:html={paragraph} />)}
+          <div class="reading-summary__identity">
+            <svg class="reading-summary__mark" viewBox="0 0 74 76" fill="none" aria-hidden="true" focusable="false">
+              <path d="M37 3 53 12.5v19L37 41l-16-9.5v-19Z" fill="currentColor" />
+              <path d="m19 35 16 9.5v19L19 73 3 63.5v-19Zm36 0 16 9.5v19L55 73l-16-9.5v-19Z" stroke="currentColor" stroke-width="1.5" />
+            </svg>
+            <p class="reading-summary__project">SWARM</p>
+            <p class="reading-summary__label">Project summary</p>
+          </div>
+          <div class="reading-summary__body">
+            {/* Summary paragraphs are trusted, repository-authored frontmatter. */}
+            {summary.map(paragraph => <p set:html={paragraph} />)}
+          </div>
         </section>}
         <div class:list={['longform', { 'longform--no-map': sections.length === 0 }]}>
           {sections.length > 0 && <div class="longform__map"><SideMap sections={sections} /></div>}
@@ -94,27 +103,91 @@ const sections: Section[] = frontmatter.noTOC ? [] : headings
 </html>
 
 <style>
-  /* Keep the hero decoration behind the full-width summary. */
-  .sheet--summary { z-index: 2; }
+  /* Let the honeycomb extend past the hero beside the narrower summary. */
+  .sheet--summary { z-index: auto; }
 
   .reading-summary {
+    position: relative;
+    z-index: 3;
     display: grid;
-    gap: 1rem;
-    width: min(78rem, calc(100% - 2 * var(--gutter)));
-    margin: 0 auto clamp(2.5rem, 5vw, 3.5rem);
-    padding: clamp(1.25rem, 3vw, 2rem);
-    border: 1px solid #e5b14470;
-    border-radius: var(--r-card);
-    background: #fffaf0;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    width: min(64rem, calc(100% - 2 * var(--gutter) - 12rem));
+    margin: 0 0 clamp(2.5rem, 5vw, 3.5rem);
+    margin-inline-start: max(var(--gutter), calc((100% - 78rem) / 2));
+    border: 1px solid #1a322a24;
+    border-radius: 4px;
+    background: #f7f9f5;
+    overflow: hidden;
     overflow-wrap: anywhere;
   }
 
-  .reading-summary > p { margin: 0; }
-  .reading-summary__label {
-    color: var(--moss);
-    font-size: var(--fs-eyebrow);
+  .reading-summary__identity {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1.5rem;
+    background: var(--ink);
+    color: #fff;
+  }
+  .reading-summary__mark {
+    width: 42px;
+    height: 43px;
+    margin-bottom: 1.5rem;
+    color: var(--honey);
+  }
+  .reading-summary__project {
+    margin: auto 0 .25rem;
+    font-size: 2rem;
     font-weight: 600;
-    letter-spacing: .06em;
+    letter-spacing: -.04em;
+    line-height: 1.1;
+  }
+  .reading-summary__label {
+    margin: .5rem 0 0;
+    color: var(--honey);
+    font-size: var(--fs-eyebrow);
+    font-weight: 500;
+    letter-spacing: .08em;
     text-transform: uppercase;
+  }
+  .reading-summary__body {
+    display: grid;
+    align-content: center;
+    gap: 1rem;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .reading-summary__body > p {
+    max-width: 78ch;
+    margin: 0;
+    line-height: 1.65;
+  }
+  .reading-summary__body > p:first-child {
+    font-size: clamp(1.0625rem, 1rem + .3vw, 1.1875rem);
+    line-height: 1.6;
+  }
+
+  @media (max-width: 1000px) {
+    .reading-summary { grid-template-columns: minmax(0, 1fr); }
+    .reading-summary__identity {
+      flex-direction: row;
+      align-items: center;
+      gap: .75rem;
+      padding: 1rem 1.25rem;
+    }
+    .reading-summary__mark { flex: none; width: 28px; height: 29px; margin: 0; }
+    .reading-summary__project { margin: 0; font-size: 1.5rem; }
+    .reading-summary__label { margin: 0 0 0 auto; font-size: .625rem; letter-spacing: .06em; text-align: right; }
+    .reading-summary__body { padding: 1.25rem; }
+  }
+
+  @media (max-width: 760px) {
+    .reading-summary {
+      --summary-art-space: clamp(0rem, calc(100vw - 24rem), 12rem);
+      width: calc(100% - 2 * var(--gutter) - var(--summary-art-space));
+    }
+  }
+
+  @media (max-width: 480px) {
+    .reading-summary { margin-block-start: 1rem; }
   }
 </style>
