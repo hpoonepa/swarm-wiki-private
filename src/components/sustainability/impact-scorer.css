@@ -41,6 +41,7 @@
 .impact-scorer .goal-breakdown { display: grid; gap: 13px; padding: 7px 32px 24px 56px; }
 .impact-scorer .factor-result { display: grid; grid-template-columns: minmax(140px,1fr) minmax(40px,1fr) 28px; align-items: center; gap: 20px; font-size: 13px; }
 .impact-scorer .factor-result small { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; }
+.impact-scorer .factor-records { padding: 0; border: 0; background: none; color: #62172f; font: inherit; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .impact-scorer .factor-result b { font-weight: 500; text-align: right; font-variant-numeric: tabular-nums; }
 .impact-scorer .factor-result.off { opacity: .55; }
 .impact-scorer .factor-track { height: 5px; background: #eef0e8; }
@@ -119,7 +120,7 @@
 .impact-scorer .file-btn { position: relative; overflow: hidden; }
 .impact-scorer .file-btn input { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; }
 .impact-scorer .file-btn:focus-within { outline: 2px solid #a67316; outline-offset: 3px; }
-.impact-scorer .tabs { display: flex; gap: 25px; overflow-x: auto; margin-bottom: 16px; border-bottom: 1px solid var(--line); }
+.impact-scorer .tabs { display: flex; gap: 25px; overflow-x: auto; margin-bottom: 16px; border-bottom: 1px solid var(--line); scroll-margin-top: 120px; }
 .impact-scorer .tab { display: inline-flex; align-items: center; gap: 4px; flex-shrink: 0; padding: 10px 0 13px; margin-bottom: -1px; border: 0; border-bottom: 3px solid transparent; color: var(--muted); background: transparent; font-size: 13px; font-weight: 500; cursor: pointer; white-space: nowrap; }
 .impact-scorer .tab[aria-selected=true] { color: var(--ink); border-bottom-color: var(--f-sand); }
 .impact-scorer .tab:hover { color: var(--ink); }
