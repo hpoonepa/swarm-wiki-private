@@ -1,28 +1,25 @@
 ---
 layout: ../layouts/ContentLayout.astro
 title: Minibinder Overview
-description: 'Summary placeholder for the Minibinder Overview page.'
 tabLabels: ["Overview", "Minibinder & Plasmid Design", "Experimentation", "Positive Control"]
 tabLinks: ["minibinder", "minibinder-design", "minibinder-experimentation", "minibinder-positive-control"]
 ---
 
-import Wip from "../components/md_components/Wip";
 
-<Wip />
 
 # Overview
 
-Minibinders are small, computationally designed proteins engineered to bind specific targets with high affinity (Figueiredo, 2025). Lambert iGEM generated and screened minibinders that bind to Deformed Wing Virus (DWV) through a sponsorship with Adaptyv. Our de-novo minibinder targets a protruding-domain (P-domain) on the external surface of DWV that allows it to bind to host cells (Škubník et al., 2017). By binding to this domain, viral entry is physically blocked because the minibinder prevents the virus from attaching to bee cell receptors.
+Minibinders are small, computationally designed proteins engineered to bind specific targets with high affinity ([Figueiredo, 2025](https://communities.springernature.com/posts/minibinders-tiny-proteins-with-huge-potential-in-bioengineering)). Lambert iGEM generated and screened minibinders that bind to Deformed Wing Virus (DWV) through a sponsorship with Adaptyv. Our de-novo minibinder targets a protruding-domain (P-domain) on the external surface of DWV that allows it to bind to host cells ([Škubník et al., 2017](https://doi.org/10.1073/pnas.1615695114)). By binding to this domain, viral entry is physically blocked because the minibinder prevents the virus from attaching to bee cell receptors.
 
 
 
 | Minibinders                                                                                                        | Nanobodies                                                                                                         | Antibodies                                                                                                         |
 |:------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|
-| De novo proteins engineered to bind targets with high affinity (Figueiredo, 2025)                                  | Antibody fragments derived from heavy-chain-only antibodies found in camelids (Kunz et al, 2023)                   | Y-shaped proteins produced by B cells (Weinstein, 2021)                                                            |
-| &lt;10 kDa (Figueiredo, 2025)                                                                                      | ~15 kDa (Kunz et al, 2023)                                                                                         | ~150 kDa (Weinstein, 2021)                                                                                         |
-| Stable; resistant to protease, pH, and temperature degradation (Braner, 2024; Figueiredo, 2025)                    | Stable; can be degraded by digestive enzymes (Hussack et al., 2011)                                                | Fragile; denatures under varying pH and temperature (Antibodies Incorporated, 2021)                                |
-| Cost effective production through expression in E. Coli (Figueiredo, 2025)                                         | Cost effective production through yeast/bacterial expression (Kunz et al, 2023)                                    | Expensive to produce; requires mammalian cell cultures (Chen et al., 2025)                                         |
-| Weeks to months; de novo computational design; no animal testing required (Figueiredo, 2025)                       | Months to years; requires animal immunization and antibody library screening (Wang et al., 2025)                   | Months to years; requires animal immunization, hybridoma creation, and extensive screening (Sino Biological, n.d.) |
+| De novo proteins engineered to bind targets with high affinity ([Figueiredo, 2025](https://communities.springernature.com/posts/minibinders-tiny-proteins-with-huge-potential-in-bioengineering))                                  | Antibody fragments derived from heavy-chain-only antibodies found in camelids ([Kunz et al, 2023](https://doi.org/10.3390/ijms241713229))                   | Y-shaped proteins produced by B cells ([Weinstein, 2021](https://blog.addgene.org/antibodies-101-introduction-to-antibodies))                                                            |
+| &lt;10 kDa ([Figueiredo, 2025](https://communities.springernature.com/posts/minibinders-tiny-proteins-with-huge-potential-in-bioengineering))                                                                                      | ~15 kDa ([Kunz et al, 2023](https://doi.org/10.3390/ijms241713229))                                                                                         | ~150 kDa ([Weinstein, 2021](https://blog.addgene.org/antibodies-101-introduction-to-antibodies))                                                                                         |
+| Stable; resistant to protease, pH, and temperature degradation ([Braner, 2024](https://doi.org/10.1021/cen-10220-scicon1); [Figueiredo, 2025](https://communities.springernature.com/posts/minibinders-tiny-proteins-with-huge-potential-in-bioengineering))                    | Stable; can be degraded by digestive enzymes ([Hussack et al., 2011](https://doi.org/10.1371/journal.pone.0028218))                                                | Fragile; denatures under varying pH and temperature ([Antibodies Incorporated, 2021](https://www.antibodiesinc.com/blogs/news/what-makes-antibodies-unstable))                                |
+| Cost effective production through expression in E. Coli ([Figueiredo, 2025](https://communities.springernature.com/posts/minibinders-tiny-proteins-with-huge-potential-in-bioengineering))                                         | Cost effective production through yeast/bacterial expression ([Kunz et al, 2023](https://doi.org/10.3390/ijms241713229))                                    | Expensive to produce; requires mammalian cell cultures ([Chen et al., 2025](https://doi.org/10.1080/19420862.2025.2451789))                                         |
+| Weeks to months; de novo computational design; no animal testing required ([Figueiredo, 2025](https://communities.springernature.com/posts/minibinders-tiny-proteins-with-huge-potential-in-bioengineering))                       | Months to years; requires animal immunization and antibody library screening ([Wang et al., 2025](https://doi.org/10.3389/fcimb.2025.1640352))                   | Months to years; requires animal immunization, hybridoma creation, and extensive screening ([Sino Biological, n.d.](https://www.sinobiological.com/services/platform/hybridoma-development)) |
 
 
 
@@ -39,13 +36,13 @@ Minibinders are small, computationally designed proteins engineered to bind spec
 
 ## Justification
 
-Initially, Lambert iGEM considered the use of nanobodies —antibody fragments derived from camelids — to bind the P-domain of VP3 of DWV. However, after meeting with nanobody specialist Aashish Manglik, a professor at the University of California, San Diego, our focus shifted to minibinders as they proposed greater potential wet-lab success. Minibinders also offered more promise with computational design tools and stability concerns (Bouchiba et al, 2022).
+Initially, Lambert iGEM considered the use of nanobodies —antibody fragments derived from camelids — to bind the P-domain of VP3 of DWV. However, after meeting with nanobody specialist Aashish Manglik, a professor at the University of California, San Diego, our focus shifted to minibinders as they proposed greater potential wet-lab success. Minibinders also offered more promise with computational design tools and stability concerns ([Bouchiba et al, 2022](https://doi.org/10.1007/978-1-0716-1855-4_17)).
 
 ## Target Selection
 
-Lambert iGEM designed de-novo minibinders to bind the P-domain of the VP3 protein of Deformed Wing Virus (DWV). The structure of DWV is an icosahedral capsid, a protein shell that protects the viral genome. Comprising the capsid are three structural proteins: VP1, VP2, and VP3. A polypeptide linker connects the VP3 protein to a P-domain that protrudes from the capsid. A Cyro-EM surface representation of DWV shows that portions of the VP1 and VP2 proteins are physically buried by the P-domain of the VP3 protein, rendering them ineffective targets in comparison to VP3 (Škubník et al., 2017). 
+Lambert iGEM designed de-novo minibinders to bind the P-domain of the VP3 protein of Deformed Wing Virus (DWV). The structure of DWV is an icosahedral capsid, a protein shell that protects the viral genome. Comprising the capsid are three structural proteins: VP1, VP2, and VP3. A polypeptide linker connects the VP3 protein to a P-domain that protrudes from the capsid. A Cyro-EM surface representation of DWV shows that portions of the VP1 and VP2 proteins are physically buried by the P-domain of the VP3 protein, rendering them ineffective targets in comparison to VP3 ([Škubník et al., 2017](https://doi.org/10.1073/pnas.1615695114)).
 
-The surface representation of the P-domain shows an Asp-His-Ser catalytic triad that is thought to participate in protein-protein interactions and cell entry. The dependence on this residue maintains its sequence and confirmation across all variants of DWV (Škubník et al., 2017). 
+The surface representation of the P-domain shows an Asp-His-Ser catalytic triad that is thought to participate in protein-protein interactions and cell entry. The dependence on this residue maintains its sequence and confirmation across all variants of DWV ([Škubník et al., 2017](https://doi.org/10.1073/pnas.1615695114)).
 
 ## References
 
@@ -58,7 +55,7 @@ Hussack, G., Hirama, T., Ding, W., MacKenzie, R., & Tanha, J. (2011). Engineered
 Hybridoma Development Platform | Sino Biological. (2026). Sinobiological.com. https://www.sinobiological.com/services/platform/hybridoma-development
 Kunz, S., Manon Durandy, Seguin, L., & Feral, C. C. (2023). NANOBODY® Molecule, a Giga Medical Tool in Nanodimensions. International Journal of Molecular Sciences, 24(17), 13229–13229. https://doi.org/10.3390/ijms241713229
 
-Moxley, J. (2022). Scribbr. Scribbr.com. https://doi.org/DOI
+Figueiredo, M. L. (2025). Minibinders: Tiny Proteins with Huge Potential in Bioengineering. Research Communities by Springer Nature. https://communities.springernature.com/posts/minibinders-tiny-proteins-with-huge-potential-in-bioengineering
 
 Sarah Braner. (2024). Designed “minibinder” proteins for autoinflammatory diseases. C&EN Global Enterprise, 102(20), 5–5. https://doi.org/10.1021/cen-10220-scicon1
 

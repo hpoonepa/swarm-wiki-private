@@ -4,11 +4,9 @@ title: Engineering Success
 description: 'Design, build, test, and learn cycles for SWARM’s VP3 minibinders and colony model.'
 ---
 
-import Wip from "../components/md_components/Wip";
 import Image from "../components/md_components/Image";
 import Reference from "../components/md_components/Reference";
 
-<Wip />
 
 # Cycle 1 – Minibinder Creation and Expression
 
@@ -18,17 +16,17 @@ The overall goal of this cycle was to develop and validate a system of expressio
 
 ### Design
 
-Our initial approach focused on generating minibinders capable of binding the VP3 P-domain of DWV (Shubnik et al., 2017), potentially interfering with viral attachment to honey bee cells. We utilized existing computational design pipelines, including Mosaic (Escalante Bio, 2025), BindCraft (Pacesa 2025), and BoltzGen (Stark 2025), to generate novel minibinder structures and sequences targeting VP3.
+Our initial approach focused on generating minibinders capable of binding the VP3 P-domain of DWV ([Škubník et al., 2017](https://doi.org/10.1073/pnas.1615695114)), potentially interfering with viral attachment to honey bee cells. We utilized existing computational design pipelines, including Mosaic ([Escalante Bio, 2025](https://github.com/escalante-bio/mosaic)), BindCraft ([Pacesa 2025](https://doi.org/10.1038/s41586-025-09429-6)), and BoltzGen ([Stark 2025](https://doi.org/10.1101/2025.11.20.689494)), to generate novel minibinder structures and sequences targeting VP3.
 
 ### Build
 
-Using the three-dimensional structure of VP3, we generated minibinder candidates through our computational pipelines. We subsequently evaluated these designs using Protenix (ByteDance Protenix Team, 2026) and Boltz-2 (Passaro 2025), examining interface predicted template modeling scores (ipTM) and interface predicted aligned error (iPAE) to assess predicted structural confidence and binding interface quality.
+Using the three-dimensional structure of VP3, we generated minibinder candidates through our computational pipelines. We subsequently evaluated these designs using Protenix ([ByteDance Protenix Team, 2026](https://doi.org/10.64898/2026.02.05.703733)) and Boltz-2 ([Passaro 2025](https://doi.org/10.1101/2025.06.14.659707)), examining interface predicted template modeling scores (ipTM) and interface predicted aligned error (iPAE) to assess predicted structural confidence and binding interface quality.
 
-Based on these evaluations, we selected promising candidates for experimental validation through our partnership with Adaptyv Bio (Adaptyv Bio, 2026).
+Based on these evaluations, we selected promising candidates for experimental validation through our partnership with Adaptyv Bio ([Adaptyv Bio, 2026](https://www.adaptyvbio.com/)).
 
 ### Test
 
-Through our sponsorship with Adaptyv Bio (Adaptyv Bio, 2026), we experimentally screened our initial minibinder candidates against VP3. Despite favorable computational predictions, none of the tested minibinders demonstrated detectable binding under the assay conditions.
+Through our sponsorship with Adaptyv Bio ([Adaptyv Bio, 2026](https://www.adaptyvbio.com/)), we experimentally screened our initial minibinder candidates against VP3. Despite favorable computational predictions, none of the tested minibinders demonstrated detectable binding under the assay conditions.
 
 {/* 
 <Image
@@ -83,13 +81,13 @@ Following the unsuccessful first batch, we revised our computational design appr
 To improve hotspot selection, we incorporated PRINCE, our software that combines computational structural analysis with literature-based evidence to identify promising binding regions (See [Software](https://2026.igem.wiki/lambert-ga/software/)). This allowed us to target alternative epitopes on the VP3 P-domain rather than relying on the initial binding regions.
 
 
-We also incorporated SolubleMPNN (Adaptyv Bio, n.d.), a protein sequence-design model that favors amino acid sequences with characteristics associated with soluble protein expression. By combining improved epitope selection with sequence optimization, we aimed to generate minibinders with more favorable predicted binding interactions and expression properties.
+We also incorporated SolubleMPNN ([Adaptyv Bio, n.d.](https://docs.adaptyvbio.com/wiki/models/solublempnn)), a protein sequence-design model that favors amino acid sequences with characteristics associated with soluble protein expression. By combining improved epitope selection with sequence optimization, we aimed to generate minibinders with more favorable predicted binding interactions and expression properties.
 
 ### Build
 
 Using PRINCE, we identified two new binding hotspots on the VP3 P-domain and generated a second batch of minibinders through our computational design pipelines (See software).
 
-We evaluated the resulting designs using Protenix and Boltz-2, analyzing ipTM and iPAE to assess predicted interface confidence. We additionally used SolubleMPNN  to redesign amino acid sequences with the goal of improving solubility while preserving their intended structures and binding interactions (Adaptyv Bio, n.d.; Dauparas et al., 2022). These evaluations allowed us to prioritize promising candidates for a second round of experimental screening.
+We evaluated the resulting designs using Protenix and Boltz-2, analyzing ipTM and iPAE to assess predicted interface confidence. We additionally used SolubleMPNN  to redesign amino acid sequences with the goal of improving solubility while preserving their intended structures and binding interactions ([Adaptyv Bio, n.d.](https://docs.adaptyvbio.com/wiki/models/solublempnn); [Dauparas et al., 2022](https://doi.org/10.1126/science.add2187)). These evaluations allowed us to prioritize promising candidates for a second round of experimental screening.
 
 
 ### Test
@@ -128,7 +126,7 @@ Dauparas, J., et al. (2022). Robust deep learning–based protein sequence desig
 
 ### Design
 
-Our goal for this iteration was to develop a system of expression to validate the efficacy of our de novo minibinders. We adjusted our approach to expression based on the pipeline established by Fei et al., 2022 for the expression of the VP3 protein. However, because standard expression protocols often result in low yields, we believed that that would pose problems for our engineered minibinders (Rosano & Ceccarelli, 2014). In order to prevent this, we incorporated and added a miniprep step to create plasmids encoded for our desired proteins. This allowed us to incorporate a cell-free protein synthesis step to enhance the expression efficacy and ensure sufficient yield for purification (Katzen et al., 2005). 
+Our goal for this iteration was to develop a system of expression to validate the efficacy of our de novo minibinders. We adjusted our approach to expression based on the pipeline established by [Fei et al., 2020](https://doi.org/10.7717/peerj.8750) for the expression of the VP3 protein. However, because standard expression protocols often result in low yields, we believed that that would pose problems for our engineered minibinders ([Rosano & Ceccarelli, 2014](https://doi.org/10.3389/fmicb.2014.00172)). In order to prevent this, we incorporated and added a miniprep step to create plasmids encoded for our desired proteins. This allowed us to incorporate a cell-free protein synthesis step to enhance the expression efficacy and ensure sufficient yield for purification ([Katzen et al., 2005](https://doi.org/10.1016/j.tibtech.2005.01.003)).
 
 As a result, we decided to apply the following expression protocol:
 
@@ -141,7 +139,7 @@ As a result, we decided to apply the following expression protocol:
 
 To validate our protein production framework prior to minibinder experimentation, the green fluorescent protein (GFP) and its complementary anti-GFP nanobody were selected to serve as a model system and positive control.
 
-Negative controls included samples containing standalone GFP and nanobody to establish baseline fluorescence and verify binding specificity. We expected that the GFP-nanobody complex would increase fluorescence emission as compared to GFP alone, confirming our expression and binding detection system works before transitioning to VP3 minibinders (Kirchhofer et al., 2010).
+Negative controls included samples containing standalone GFP and nanobody to establish baseline fluorescence and verify binding specificity. We expected that the GFP-nanobody complex would increase fluorescence emission as compared to GFP alone, confirming our expression and binding detection system works before transitioning to VP3 minibinders ([Kirchhofer et al., 2010](https://doi.org/10.1038/nsmb.1727)).
 
 ### Build
 

@@ -11,7 +11,7 @@ import Reference from "../components/md_components/Reference";
 
 # Overview
 
-Lyophilization (freeze-drying) is a critical process for stabilizing biological samples such as enzymes, minibinders, and proteins for long-term storage. However, commercial lyophilizers range from $2,000 to $15,000+, placing them out of reach for underfunded labs, including school teams and labs in low-resource regions (Excedr, 2025). To address this, Lambert iGEM developed a frugal vacuum dryer for under $85 USD using accessible components to perform a similar function as commercial units for a fraction of the cost, thereby making substance-drying accessible to all.
+Lyophilization (freeze-drying) is a critical process for stabilizing biological samples such as enzymes, minibinders, and proteins for long-term storage. However, commercial lyophilizers range from $2,000 to $15,000+, placing them out of reach for underfunded labs, including school teams and labs in low-resource regions ([Excedr, 2025](https://www.excedr.com/blog/how-much-does-a-lyophilizer-cost)). To address this, Lambert iGEM developed a frugal vacuum dryer for under $85 USD using accessible components to perform a similar function as commercial units for a fraction of the cost, thereby making substance-drying accessible to all.
 
 <Reference>
 Excedr. (2025, October 4). *How much does a lyophilizer cost?* https://www.excedr.com/blog/how-much-does-a-lyophilizer-cost
@@ -27,7 +27,7 @@ During operation, the minibinder solution is placed in a steel cup within the ma
 
 ## Scientific Principles
 
-Vapor-X is built around the Clausius-Clapeyron relation: the evaporation temperature of a substance decreases as the air pressure of its environment decreases (Tatum, n.d.). Lambert iGEM's hardware system uses a vacuum pump to lower the pressure inside an airtight mason jar, while a resistive heating pad heats a sample inside the mason jar. By heating substances in a vacuum chamber to temperatures lower than their normal boiling points at atmospheric pressure, Vapor-X can effectively dry substances while reducing the risk of degradation or melting at high temperatures.
+Vapor-X is built around the Clausius-Clapeyron relation: the evaporation temperature of a substance decreases as the air pressure of its environment decreases ([Tatum, n.d.](https://www.astro.uvic.ca/~tatum/thermod/thermod14.pdf)). Lambert iGEM's hardware system uses a vacuum pump to lower the pressure inside an airtight mason jar, while a resistive heating pad heats a sample inside the mason jar. By heating substances in a vacuum chamber to temperatures lower than their normal boiling points at atmospheric pressure, Vapor-X can effectively dry substances while reducing the risk of degradation or melting at high temperatures.
 
 <Reference>
 Tatum, J. B. (n.d.). *The Clausius-Clapeyron equation.* University of Victoria. https://www.astro.uvic.ca/~tatum/thermod/thermod14.pdf
@@ -35,9 +35,9 @@ Tatum, J. B. (n.d.). *The Clausius-Clapeyron equation.* University of Victoria. 
 
 ## Circuit
 
-Lambert iGEM integrated all electrical sensors and units into a consolidated hardware system, Vapor-X. The system is controlled by a Raspberry Pi Pico W, which coordinates a 12 volt (V) vacuum pump, a resistive heating pad, a thermistor (temperature sensor), and a BME280 environment sensor (Adafruit Industries, n.d.). These components allow Vapor-X to actively control the drying process while continuously monitoring temperature and environmental conditions within the system (see [Programming](#programming)).
+Lambert iGEM integrated all electrical sensors and units into a consolidated hardware system, Vapor-X. The system is controlled by a Raspberry Pi Pico W, which coordinates a 12 volt (V) vacuum pump, a resistive heating pad, a thermistor (temperature sensor), and a BME280 environment sensor ([Adafruit Industries, n.d.](https://learn.adafruit.com/adafruit-bme280-humidity-barometric-pressure-temperature-sensor-breakout)). These components allow Vapor-X to actively control the drying process while continuously monitoring temperature and environmental conditions within the system (see [Programming](#programming)).
 
-Vapor-X receives power through a 12 V power supply. An LM2596 adjustable step-down converter is used to input 5 V into the Pico W (Texas Instruments, n.d.). However, the Pico W can only provide a maximum output voltage of 3.3 V, which is insufficient for both the vacuum pump and the heating pad (Raspberry Pi Ltd, 2022). Therefore, both of these components must also be powered from the external power supply. To control the on-off state of both of these externally powered components from the Raspberry Pi, we utilized two N-channel MOSFETs (metal–oxide–semiconductor field-effect transistors) in the following control structure:
+Vapor-X receives power through a 12 V power supply. An LM2596 adjustable step-down converter is used to input 5 V into the Pico W ([Texas Instruments, n.d.](https://www.ti.com/product/LM2596)). However, the Pico W can only provide a maximum output voltage of 3.3 V, which is insufficient for both the vacuum pump and the heating pad ([Raspberry Pi Ltd, 2022](https://datasheets.raspberrypi.com/picow/pico-w-datasheet.pdf)). Therefore, both of these components must also be powered from the external power supply. To control the on-off state of both of these externally powered components from the Raspberry Pi, we utilized two N-channel MOSFETs (metal–oxide–semiconductor field-effect transistors) in the following control structure:
 
 - The N-channel MOSFETs each contain three pins: gate, source, and drain.
 - The positive pins of both the vacuum pump and the heater are connected to the positive pin of the adjustable power supply.
@@ -78,7 +78,7 @@ Lambert iGEM implemented software-level safety protocols into Vapor-X. The Pico 
 
 When any of these three conditions are true, the system either automatically shuts off or prevents the drying cycle from starting. These safeguards reduce the risk of uncontrolled heating and help protect both the user and the system's electrical components.
 
-The code for Vapor-X can be downloaded from our [GitLab](https://gitlab.igem.org/REPLACE-WITH-CODE-LINK).
+{/* Add the public Vapor-X source repository when its URL is supplied. */}
 
 ## Ease-of-Use
 

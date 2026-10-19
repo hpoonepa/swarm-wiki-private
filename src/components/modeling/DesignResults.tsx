@@ -43,7 +43,7 @@ export default function DesignResults() {
   const heading = (label: string, key: SortKey) => <th scope="col" aria-sort={sort === key ? ascending ? 'ascending' : 'descending' : 'none'}><button type="button" onClick={() => sortBy(key)}>{label}<span aria-hidden="true">{sort === key ? ascending ? ' ↑' : ' ↓' : ' ↕'}</span></button></th>;
 
   return <details className="md-results">
-    <summary><span className="md-results-number">35</span><span><strong>Explore every submitted design</strong><small>Computational scores, assay outcomes, and available structures</small></span><span className="md-expand" aria-hidden="true">+</span></summary>
+    <summary><span className="md-results-number">35</span><span><strong>Submitted designs</strong></span><span className="md-expand" aria-hidden="true">+</span></summary>
     <div className="md-results-body">
       <div className="md-result-controls">
         <label className="md-search">Find a design<input type="search" placeholder="Search ID, method, or site…" value={query} onChange={event => setQuery(event.target.value)} /></label>

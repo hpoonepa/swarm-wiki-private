@@ -64,8 +64,8 @@ function position(phase: number, index: number) {
       <div class="ihp-note-heading">
         <p class="ihp-note-phase">Phase {Number(phase.number)} <span>·</span> {phase.name}</p>
         <h2 id="ihp-dialog-title">{entry.title}</h2>
-        <p class="ihp-note-person">{entry.person}</p>
-        <p class="ihp-note-date">{entry.date} <span class="ihp-note-sample">· Sample entry</span></p>
+        {entry.person && !entry.person.startsWith('Lorem ipsum') && <p class="ihp-note-person">{entry.person}</p>}
+        {entry.date && !entry.date.startsWith('Lorem ipsum') && <p class="ihp-note-date">{entry.date}</p>}
       </div>
     </header>
     <div class="ihp-note-body">

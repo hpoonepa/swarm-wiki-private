@@ -1,13 +1,13 @@
 ---
 import './hardware.css';
 const parts = [
-  { id: 'chamber', name: 'Sample chamber', side: 'right', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
-  { id: 'cup', name: 'Sample cup', side: 'left', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
-  { id: 'platform', name: 'Raised platform', side: 'left', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
-  { id: 'controls', name: 'Front-panel controls', side: 'left', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
-  { id: 'enclosure', name: 'Main enclosure', side: 'right', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
-  { id: 'board', name: 'Electronics board', side: 'left', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
-  { id: 'unit', name: 'Internal unit', side: 'right', text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', note: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.' },
+  { id: 'chamber', name: 'Sample chamber', side: 'right' },
+  { id: 'cup', name: 'Sample cup', side: 'left' },
+  { id: 'platform', name: 'Raised platform', side: 'left' },
+  { id: 'controls', name: 'Front-panel controls', side: 'left' },
+  { id: 'enclosure', name: 'Main enclosure', side: 'right' },
+  { id: 'board', name: 'Electronics board', side: 'left' },
+  { id: 'unit', name: 'Internal unit', side: 'right' },
 ];
 ---
 <section class="vapor-story" id="vapor-x" data-vapor-story aria-label="VAPOR-X exploded view">
@@ -25,8 +25,6 @@ const parts = [
       {parts.map(part => <aside class="vapor-detail" data-vapor-detail={part.id} data-side={part.side} id={`vapor-detail-${part.id}`} aria-labelledby={`vapor-name-${part.id}`} hidden>
         <button type="button" data-vapor-close aria-label={`Close ${part.name.toLowerCase()} details`}>×</button>
         <h3 id={`vapor-name-${part.id}`}>{part.name}</h3>
-        <p>{part.text}</p>
-        <p class="vapor-detail-note">{part.note}</p>
       </aside>)}
       <p class="vapor-status" data-vapor-status></p>
     </div>

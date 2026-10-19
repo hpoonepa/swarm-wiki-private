@@ -57,7 +57,7 @@ const labels = [
             <div class="eng-phases eng-interactive" role="tablist" aria-label={`Iteration ${cycle.number} steps`} hidden>{phases.map((phase, pi) => <button type="button" role="tab" id={`${cycle.id}-tab-${pi}`} data-phase-tab={pi} aria-controls={cycle.phases[pi].id} aria-selected={pi === 0 ? 'true' : 'false'} tabindex={pi === 0 ? 0 : -1}>{phase}</button>)}</div>
             {cycle.phases.map((phase, pi) => <section class="eng-phase" id={phase.id} data-phase-panel={pi} aria-labelledby={`${phase.id}-heading`}>
               <h4 id={`${phase.id}-heading`}>{phase.title}</h4>
-              <div class="eng-copy" set:html={phase.html.trim() || '<p class="eng-pending">This section is still being written.</p>'} />
+              <div class="eng-copy" set:html={phase.html.trim()} />
             </section>)}
             {cycle.tail.trim() && <div class="eng-references eng-copy" set:html={cycle.tail} />}
           </section>)}

@@ -1,14 +1,11 @@
 ---
 layout: ../layouts/ContentLayout.astro
 title: Epidemiological Model
-description: 'Summary placeholder for the Epidemiological Model page.'
 tabLabels: ["Overview", "Minibinder Design", "RNAi Model", "Minibinder Dose Model", "Epidemiological Model", "Instructional"]
 tabLinks: ["model", "model-design", "model-rnai", "model-minibinder", "model-epidemiological", "model-instructional"]
 ---
 
-import Wip from "../components/md_components/Wip";
 
-<Wip />
 
 # Epidemiological Model
 ## Overview
@@ -39,10 +36,10 @@ To make the model useful to the beekeepers who would administer the treatment, w
 The hive is modeled as two 10-frame Langstroth deeps, which places a fixed comb ceiling on brood rearing. Within that space, the individual variation in age and infection status determines the colony level outcomes so the treatment would produce a different age structure or mite load.
 
 To ensure that every component carried an established background and that the model’s behavior could be attributed to known biology, we assembled it from published Varroa, DWV, and honey bee colony models. Four model families supply the backbone:
-- **Sumpter & Martin 2004** supplies the DWV block - the in-cell and phoretic transmission routes, seasonal brood death, and the epidemic threshold the model is later tested against.
-- **Khoury, Myerscough & Barron 2011** supplies colony demography: the saturating egg-laying term N/(w+N), the house-bee-to-forager recruitment rule R = α − σF/N, and the social-inhibition route to collapse. **Betti, Wahl & Zamir 2014** supplies forager mortality on foraging days.
-- **BEEPOP/VarroaPop** (DeGrandi-Hoffman et al.) and **BEEHAVE** (Becher et al. 2014) supply the weather-driven structure: egg laying as a function of temperature, photoperiod and colony size, and a foraging-day threshold on daily maximum temperature.
-- **Vetharaniam & Stevens 2020, Martin 1998** and **Calis et al. 1999** supply the daily age-structured mite cycle, which was validated in those papers against field mite growth.
+- **[Sumpter & Martin 2004](https://doi.org/10.1111/j.1365-2656.2004.00776.x)** supplies the DWV block - the in-cell and phoretic transmission routes, seasonal brood death, and the epidemic threshold the model is later tested against.
+- **[Khoury, Myerscough & Barron 2011](https://doi.org/10.1371/journal.pone.0018491)** supplies colony demography: the saturating egg-laying term N/(w+N), the house-bee-to-forager recruitment rule R = α − σF/N, and the social-inhibition route to collapse. **[Betti, Wahl & Zamir 2014](https://pubmed.ncbi.nlm.nih.gov/25329468/)** supplies forager mortality on foraging days.
+- **BEEPOP/VarroaPop** ([DeGrandi-Hoffman et al.](https://digitalcommons.usu.edu/bee_lab_da/32/)) and **BEEHAVE** ([Becher et al. 2014](https://doi.org/10.1111/1365-2664.12222)) supply the weather-driven structure: egg laying as a function of temperature, photoperiod and colony size, and a foraging-day threshold on daily maximum temperature.
+- **Vetharaniam & Stevens 2020, [Martin 1998](https://www.sciencedirect.com/science/article/abs/pii/S0304380098000593)** and **[Calis et al. 1999](https://doi.org/10.1051/apido:19990203)** supply the daily age-structured mite cycle, which was validated in those papers against field mite growth.
 Individual aspects are drawn from the studies that measured them (See Table X):
 
 (Table X)
@@ -68,12 +65,12 @@ Our colony model relies on structural assumptions that are adopted to keep the s
 ## Minibinder Pathway
 To predict the amount of protection the minibinder applies at the colony scale, we imported its measured molecular properties from the within-host model (see X) and applied them to each individual bee as a function of that bee’s syrup intake (See Table X). 
 
-The minibinder blocks mite to mite DWV transmission through the occupation of the virion surface so its colony level effects enters the model as a reduction in the per-bite probability that the feeding mite infects its host. This was anchored on the measured baseline that a single infected mite feeding on an uninfected adult and transmits DWV with a probability of 0.398 (Posada -Florez et al. 2019). The binder’s predicted measured blocking fraction is ρ = 0.5863 and the protection an individual bee receives scales under cumulative intake offered to the colony. 
+The minibinder blocks mite to mite DWV transmission through the occupation of the virion surface so its colony level effects enters the model as a reduction in the per-bite probability that the feeding mite infects its host. This was anchored on the measured baseline that a single infected mite feeding on an uninfected adult and transmits DWV with a probability of 0.398 ([Posada -Florez et al. 2019](https://doi.org/10.1038/s41598-019-47447-3)). The binder’s predicted measured blocking fraction is ρ = 0.5863 and the protection an individual bee receives scales under cumulative intake offered to the colony.
 
 | Parameter            | Description                                | Value     | Provenance                            |
 |----------------------|--------------------------------------------|-----------|---------------------------------------|
 | ρ                    | Fraction of per-bite transmission blocked  | 0.5863    | Prediction from Minibinder model      |
-| per_bite_P_untreated | Baseline per-bite transmission probability | 0.398     | Measured (Posada-Flórez et al., 2019) |
+| per_bite_P_untreated | Baseline per-bite transmission probability | 0.398     | Measured ([Posada-Flórez et al., 2019](https://doi.org/10.1038/s41598-019-47447-3)) |
 | K_d                  | Binder dissociation constant               | 603.45 nM | Adaptyv measured binding affinity     |
 | t_half               | Binder half-life in the bee                | 4.5 h     | From Minibinder model                 |
 | intake               | Mean per-bee syrup intake multiplier       | 1.6848    |                                       |

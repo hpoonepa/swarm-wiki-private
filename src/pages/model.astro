@@ -11,14 +11,13 @@ const frontmatter = {
 <InformationLayout frontmatter={frontmatter}>
   <div class="model-intro">
     <p>Modeling helps us connect SWARM’s molecular work with questions about delivery and bee health. Our minibinder design work examines predicted protein structures alongside experimental binding results, while our minibinder dosing model explores how binding and delivery affect the amount of minibinder available to a bee.</p>
-    <p>We extend that view with RNAi modeling for the mite-focused part of our project and epidemiological modeling at the colony scale. Together, these four models connect our work across scales. Each writeup explains the assumptions, methods, and results behind that part of SWARM.</p>
+    <p>We extend that view with RNAi modeling for the mite-focused part of our project and epidemiological modeling at the colony scale.</p>
   </div>
 
   <nav class="model-grid wide" aria-label="Explore our four models">
     <a class="model-card model-card--design model-card--featured" href="/lambert-ga/model-design/">
       <span class="model-card__eyebrow">01 · Protein modeling</span>
       <h2>Minibinder<br />Design</h2>
-      <p>From predicted structures to measured binding.</p>
       <svg class="model-card__art" viewBox="0 0 220 200" aria-hidden="true" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path d="M17 135C76 169 39 31 104 46S47 142 119 151S190 69 142 63S130 175 204 157" stroke="#39765f" stroke-width="16" />
         <path d="M48 176C111 181 78 106 133 109S159 20 200 35" stroke="#c88a29" stroke-width="13" />
@@ -29,7 +28,6 @@ const frontmatter = {
     <a class="model-card model-card--dosing model-card--featured" href="/lambert-ga/model-minibinder/">
       <span class="model-card__eyebrow">02 · Delivery modeling</span>
       <h2>Minibinder<br />Dosing</h2>
-      <p>Connecting binding, delivery, and availability in bees.</p>
       <svg class="model-card__art" viewBox="0 0 220 200" aria-hidden="true" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path d="M28 28V170H205" stroke="#6c8a80" stroke-width="3" />
         <path d="M35 150C66 151 60 105 95 103S127 110 140 70S180 46 200 32" stroke="#286858" stroke-width="9" />
@@ -43,7 +41,6 @@ const frontmatter = {
     <a class="model-card model-card--rnai" href="/lambert-ga/model-rnai/">
       <span class="model-card__eyebrow">03 · RNA modeling</span>
       <h2>RNAi</h2>
-      <p>The modeling behind our approach to the Varroa mite.</p>
       <svg class="model-card__art model-card__art--rna" viewBox="0 0 220 250" aria-hidden="true" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path d="M55 15C185 65 35 110 165 160S35 220 70 245" stroke="#286858" stroke-width="12" />
         <path d="M165 15C35 65 185 110 55 160S185 220 150 245" stroke="#bc654f" stroke-width="12" />
@@ -55,7 +52,6 @@ const frontmatter = {
     <a class="model-card model-card--epidemiology" href="/lambert-ga/model-epidemiological/">
       <span class="model-card__eyebrow">04 · Colony modeling</span>
       <h2>Epidemiological<br />Modeling</h2>
-      <p>From individual bees to outcomes across the colony.</p>
       <svg class="model-card__art" viewBox="0 0 220 200" aria-hidden="true" focusable="false" fill="none" stroke-linecap="round" stroke-linejoin="round">
         <path d="M47 46L112 86L179 40M112 86L175 152M112 86L47 155M47 46L47 155M179 40L175 152" stroke="#7c8f80" stroke-width="4" />
         <path d="M47 155Q109 180 175 152" stroke="#9b8f9f" stroke-width="4" stroke-dasharray="3 10" />

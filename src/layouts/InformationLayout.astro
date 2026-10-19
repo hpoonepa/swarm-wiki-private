@@ -43,8 +43,8 @@ const sections: Section[] = frontmatter.noTOC ? [] : headings
     <Nav client:load />
     <main class:list={[{ 'plain-page': sections.length === 0 }]} data-band={frontmatter.band}>
       <slot name="hero">{hero === 'honeycomb'
-        ? <HoneycombWindow title={frontmatter.title} summary={frontmatter.description} corner={frontmatter.honeycombCorner} />
-        : <CanopyWindow title={frontmatter.title} summary={frontmatter.description} group={page.group} focal={page.focal} />}</slot>
+        ? <HoneycombWindow title={frontmatter.title} corner={frontmatter.honeycombCorner} />
+        : <CanopyWindow title={frontmatter.title} group={page.group} focal={page.focal} />}</slot>
       {frontmatter.band === 'sdg' && <SdgWheel />}
       <div class="sheet" data-surface="sheet">
         {frontmatter.tabLabels && frontmatter.tabLinks && <div class="info-tabs"><TabReact labels={frontmatter.tabLabels} links={frontmatter.tabLinks} focus={slug} color={frontmatter.color ?? 'green'} /></div>}

@@ -31,7 +31,6 @@ const href = (slug: string) => slug.startsWith('https://') ? slug : `/lambert-ga
 ---
 <InformationLayout frontmatter={frontmatter} headings={headings}>
   <div class="judging-guide wide">
-    <p class="judging-intro">How our work on SWARM connects to each medal criterion and our three selected special awards.</p>
     <nav class="judging-jumps" aria-label="Medal criteria">
       <a href="#bronze"><span class="medal-token medal-token--bronze" aria-hidden="true">B</span>Bronze</a>
       <a href="#silver"><span class="medal-token medal-token--silver" aria-hidden="true">S</span>Silver</a>
@@ -52,7 +51,7 @@ const href = (slug: string) => slug.startsWith('https://') ? slug : `/lambert-ga
     ))}
     <section class="judging-section judging-section--gold" aria-labelledby="gold">
       <header class="judging-section-heading"><span class="medal-token medal-token--gold" aria-hidden="true">G</span><h2 id="gold">Gold medal criteria</h2></header>
-      <div class="judging-gold-intro"><p>We are pursuing Best Model, Best Sustainable Development Impact, and Best Hardware. Each brings together a different part of SWARM: predicting how it could work, assessing its wider impact, and building tools to support its delivery.</p></div>
+      <div class="judging-gold-intro"><p>We are pursuing Best Model, Best Sustainable Development Impact, and Best Hardware.</p></div>
       <div class="judging-table">
         {gold.map(row => <div class="judging-row"><h3 id={row.id}>{row.title}</h3><div class="judging-evidence"><p>{row.text}</p><nav class="judging-links" aria-label={`${row.title} documentation`}>{row.links.map(([label, slug]) => <a href={href(slug)}>{label}<span aria-hidden="true">↗</span></a>)}</nav></div></div>)}
       </div>

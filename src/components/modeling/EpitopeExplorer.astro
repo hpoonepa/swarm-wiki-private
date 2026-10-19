@@ -14,7 +14,7 @@ const regions = [
 <div class="ep-explorer wide" id="epitope-explorer">
   <figure class="ep-figure" aria-labelledby="ep-map-title">
     <div class="ep-heading">
-      <div><h3 id="ep-map-title">VP3 epitope map</h3><p>Five regions from our writeup, shown on the target.</p></div>
+      <div><h3 id="ep-map-title">VP3 epitope map</h3></div>
       <button class="ep-reset" type="button" disabled>Reset view</button>
     </div>
     <div class="ep-stage">
@@ -39,7 +39,7 @@ const regions = [
 
   <div class="ep-table-wrap" role="region" aria-label="Epitope comparison and design history" tabindex="0">
     <table class="ep-table">
-      <caption>Table 1. Candidate regions, their reported rationale, and experimental outcomes. Select a region on the target to open its design history.</caption>
+      <caption>Table 1. Candidate regions, their reported rationale, and experimental outcomes.</caption>
       <thead><tr><th scope="col">Region</th><th scope="col">Reported residues</th><th scope="col">Rationale and design history</th><th scope="col">Outcome</th></tr></thead>
       <tbody>{regions.map((region, index) => <tr id={`epitope-${region.id}`} data-ep-row={region.id} data-residues={region.residues.join(',')} data-color={region.color} tabindex="-1" style={`--ep-color:${region.color}`}>
         <th scope="row"><span class="ep-region-title"><span class="ep-number">{index + 1}</span>{region.name}</span>{region.id === princeRegion && <span class="ep-badge ep-badge-prince">PRINCE evidence review</span>}{region.id === 'qp' && <span class="ep-badge">Confirmed binder</span>}<a class="ep-back" href="#epitope-explorer" data-show-region={region.id}>Show on target ↑</a></th>

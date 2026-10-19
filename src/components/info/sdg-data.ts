@@ -28,14 +28,13 @@ export function linkState(from: GoalId, to: GoalId): LinkState {
 
 export function pairKey(a: GoalId, b: GoalId): string { return [a, b].sort().join('+'); }
 
-const name = (id: GoalId) => goals.find(g => g.id === id)!.name;
 const texts: Partial<Record<string, string>> = {};
 const summaries: Partial<Record<GoalId, string>> = {};
 
 export function pairText(a: GoalId, b: GoalId): string {
-  return texts[pairKey(a, b)] ?? `How ${name(a)} and ${name(b)} meet in SWARM. This text is a placeholder until the write-up is in.`;
+  return texts[pairKey(a, b)] ?? '';
 }
 
 export function summaryText(id: GoalId): string {
-  return summaries[id] ?? `What SWARM does for ${name(id)}. Press an arrow to read how this goal interacts with another.`;
+  return summaries[id] ?? '';
 }

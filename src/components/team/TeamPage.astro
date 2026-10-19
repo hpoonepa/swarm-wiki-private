@@ -10,13 +10,11 @@ const everyone = [...members, ...advisors];
   <header class="hive-intro">
     <div class="hive-intro__copy">
       <h1>Team</h1>
-      <p>The people behind SWARM.</p>
     </div>
   </header>
   <section class="hive-roster" id="the-team" aria-labelledby="roster-title">
     <div class="hive-section-bar">
       <div class="hive-section-tabs"><h2 id="roster-title">{members.length} members</h2></div>
-      <span class="hive-roster-hint">Select a portrait to meet us</span>
     </div>
     <div class="hive-grid">
       {members.map(member => <button type="button" class="hive-member" data-profile={member.id} data-color={member.color} aria-haspopup="dialog" aria-controls="hive-profile" aria-label={`Meet ${member.name}${memberDetails(member) ? `, ${memberDetails(member)}` : ''}`}>

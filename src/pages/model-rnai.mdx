@@ -1,15 +1,12 @@
 ---
 layout: ../layouts/ContentLayout.astro
 title: RNAi Model
-description: 'Summary placeholder for the RNAi Model page.'
 tabLabels: ["Overview", "Minibinder Design", "RNAi Model", "Minibinder Dose Model", "Epidemiological Model", "Instructional"]
 tabLinks: ["model", "model-design", "model-rnai", "model-minibinder", "model-epidemiological", "model-instructional"]
 ---
 
-import Wip from "../components/md_components/Wip";
 import Image from "../components/md_components/Image";
 
-<Wip />
 
 # RNAi Model
 ## Overview
@@ -110,31 +107,31 @@ Rate constants and degradation rates were inputted into our Mass Action equation
 
 | Variable | Reaction                                                                                         | Values   | Units                 | Citation |
 |----------|--------------------------------------------------------------------------------------------------|----------|-----------------------|----------|
-| Vm       | Maximal Velocity of Dicer-2 cleaving the multiplexed dsRNA construct into siRNAs                 | 1.612    | Nanomolarity          | (Singh et al., 2021) |
-| Km       | Michaelis-Menten constant for Dicer-2 binding dsRNA                                              | 50       | Nanomolarity          | (Vermeulen et al., 2005) |
-| kf       | Rate at which the first siRNA duplex loads onto Argonaute-2 to form RISC                         | 0.0756   | liter/nanomole/second | (Deerberg et al., 2013) |
-| kf_1     | Rate at which the second siRNA duplex loads onto Argonaute-2 to form RISC                        | 0.0756   | liter/nanomole/second | (Deerberg et al., 2013) |
-| kf_2     | Rate at which the third siRNA duplex loads onto Argonaute-2 to form RISC                         | 0.0756   | liter/nanomole/second | (Deerberg et al., 2013) |
-| Vm_1     | Maximal velocity of RISC cleaving the *Renilla* hybrid transcript                                  | 0.078    | 1/second              | (Salomon et al., 2015) |
+| Vm       | Maximal Velocity of Dicer-2 cleaving the multiplexed dsRNA construct into siRNAs                 | 1.612    | Nanomolarity          | ([Singh et al., 2021](https://doi.org/10.7554/eLife.65810)) |
+| Km       | Michaelis-Menten constant for Dicer-2 binding dsRNA                                              | 50       | Nanomolarity          | ([Vermeulen et al., 2005](https://doi.org/10.1261/rna.7272305)) |
+| kf       | Rate at which the first siRNA duplex loads onto Argonaute-2 to form RISC                         | 0.0756   | liter/nanomole/second | ([Deerberg et al., 2013](https://research.uni-luebeck.de/en/publications/minimal-mechanistic-model-of-sirna-dependent-target-rna-slicing-b/)) |
+| kf_1     | Rate at which the second siRNA duplex loads onto Argonaute-2 to form RISC                        | 0.0756   | liter/nanomole/second | ([Deerberg et al., 2013](https://research.uni-luebeck.de/en/publications/minimal-mechanistic-model-of-sirna-dependent-target-rna-slicing-b/)) |
+| kf_2     | Rate at which the third siRNA duplex loads onto Argonaute-2 to form RISC                         | 0.0756   | liter/nanomole/second | ([Deerberg et al., 2013](https://research.uni-luebeck.de/en/publications/minimal-mechanistic-model-of-sirna-dependent-target-rna-slicing-b/)) |
+| Vm_1     | Maximal velocity of RISC cleaving the *Renilla* hybrid transcript                                  | 0.078    | 1/second              | ([Salomon et al., 2015](https://doi.org/10.1016/j.cell.2015.06.029)) |
 | Km_1     | Michaelis-Menten constant for RISC binding the *Renilla* hybrid transcript                         | 1.7      | Nanomolarity          | (Darzacq et al., |
 | kf_3     | Rate at which the *Renilla* transcript is translated into *Renilla* luciferase                       | 0.00167  | 1/second              | Experimentation. Equation: 206101*x + 70894 |
-| kf_4     | Rate at which the reporter plasmid is transcribed into the *Renilla* hybrid transcript             | 5.6e-4   | 1/second              | (Darzacq et al., 2005) |
-| kf_5     | Rate at which the reporter plasmid is transcribed into the Firefly transcript                    | 5.6e-4   | 1/second              | (Darzacq et al., 2005) |
+| kf_4     | Rate at which the reporter plasmid is transcribed into the *Renilla* hybrid transcript             | 5.6e-4   | 1/second              | ([Darzacq et al., 2005](https://pubmed.ncbi.nlm.nih.gov/15901505/)) |
+| kf_5     | Rate at which the reporter plasmid is transcribed into the Firefly transcript                    | 5.6e-4   | 1/second              | ([Darzacq et al., 2005](https://pubmed.ncbi.nlm.nih.gov/15901505/)) |
 | kf_6     | Rate at which the Firefly transcript is translated into Firefly luciferase                       | 0.000943 | 1/second              | Experimentation. Equation: 1.6E-03*x + -0.0893 |
 | kf_7     | Rate at which unprocessed dsRNA is degraded by cellular nucleases                                | 8.5e-5   | 1/second              | (Koo & Palli, 2023) |
 | kf_8     | -                                                                                                | 8.5e-5   | 1/second              | (Koo & Palli, 2023) |
 | kf_9     | -                                                                                                | 8.5e-5   | 1/second              | (Koo & Palli, 2023) |
-| kf_10    | Rate at which the first RISC unloads its guide strand returning Ago2 to the free pool            | 1.01e-5  | 1/second              | (Brown et al., 2020) |
-| kf_11    | Rate at which the second RISC unloads its guide strand returning Ago2 to the free pool           | 1.01e-5  | 1/second              | (Brown et al., 2020) |
-| kf_12    | Rate at which the third RISC unloads its guide strand returning Ago2 to the free pool            | 1.01e-5  | 1/second              | (Brown et al., 2020) |
-| kf_13    | Rate at which the *Renilla* transcript turns over through mRNA decay.                              | 2.94e-5  | 1/second              | (Schwanhäusser et al., 2011) |
+| kf_10    | Rate at which the first RISC unloads its guide strand returning Ago2 to the free pool            | 1.01e-5  | 1/second              | ([Brown et al., 2020](https://doi.org/10.1093/nar/gkaa670)) |
+| kf_11    | Rate at which the second RISC unloads its guide strand returning Ago2 to the free pool           | 1.01e-5  | 1/second              | ([Brown et al., 2020](https://doi.org/10.1093/nar/gkaa670)) |
+| kf_12    | Rate at which the third RISC unloads its guide strand returning Ago2 to the free pool            | 1.01e-5  | 1/second              | ([Brown et al., 2020](https://doi.org/10.1093/nar/gkaa670)) |
+| kf_13    | Rate at which the *Renilla* transcript turns over through mRNA decay.                              | 2.94e-5  | 1/second              | ([Schwanhäusser et al., 2011](https://doi.org/10.1038/nature10098)) |
 | kf_14    | Rate at which *Renilla* luciferase protein is degraded and diluted by cell division.               | 2.18e-5  | 1/second              | (Loening et al., 2007) |
-| kf_15    | Rate at which the reporter plasmid is lost from the cell population by dilution during division. | 1.132e-5 | 1/second              | (Fliedl et al., 2015) |
-| kf_16    | Rate at which the Firefly transcript turns over through mRNA decay.                              | 2.94e-5  | 1/second              | (Schwanhäusser et al., 2011) |
-| kf_17    | Rate at which Firefly luciferase protein is degraded and diluted by cell division.               | 6.03e-5  | 1/second              | (Leclerc et al., 2000) |
-| kf_18    | Rate at which siRNA_1 is degraded                                                                | 1.6e-5   | 1/second              | (Bartlett & Davis, 2006) |
-| kf_19    | Rate at which siRNA_2 is degraded                                                                | 1.6e-5   | 1/second              | (Bartlett & Davis, 2006) |
-| kf_20    | Rate at which siRNA_3 is degraded                                                                | 1.6e-5   | 1/second              | (Bartlett & Davis, 2006) |
+| kf_15    | Rate at which the reporter plasmid is lost from the cell population by dilution during division. | 1.132e-5 | 1/second              | ([Fliedl et al., 2015](https://doi.org/10.1016/j.nbt.2015.03.004)) |
+| kf_16    | Rate at which the Firefly transcript turns over through mRNA decay.                              | 2.94e-5  | 1/second              | ([Schwanhäusser et al., 2011](https://doi.org/10.1038/nature10098)) |
+| kf_17    | Rate at which Firefly luciferase protein is degraded and diluted by cell division.               | 6.03e-5  | 1/second              | ([Leclerc et al., 2000](https://doi.org/10.2144/00293rr02)) |
+| kf_18    | Rate at which siRNA_1 is degraded                                                                | 1.6e-5   | 1/second              | ([Bartlett & Davis, 2006](https://doi.org/10.1093/nar/gkj439)) |
+| kf_19    | Rate at which siRNA_2 is degraded                                                                | 1.6e-5   | 1/second              | ([Bartlett & Davis, 2006](https://doi.org/10.1093/nar/gkj439)) |
+| kf_20    | Rate at which siRNA_3 is degraded                                                                | 1.6e-5   | 1/second              | ([Bartlett & Davis, 2006](https://doi.org/10.1093/nar/gkj439)) |
 | kf_25    | Rate at which dsRNA_1 is degraded                                                                | 8.5e-5   | 1/second              | (Koo & Chakravarthy) |
 
 <center>*Table X. Reactions and values for RNAi  parameters*</center>

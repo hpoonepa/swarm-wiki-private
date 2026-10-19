@@ -1,7 +1,7 @@
 ---
 import './canopy.css';
 interface Props { title: string; summary?: string; group: string; focal: { x: number; y: number } }
-const { title, summary, group, focal } = Astro.props;
+const { title, group, focal } = Astro.props;
 const layers = ['back', 'canopy-mid', 'vines-mid', 'props', 'bees', 'vines-front'];
 const style = `--fx:${focal.x / 2521};--fy:${focal.y / 2017};--zoom:1.35;--pfx:${focal.x / 2521};--pfy:${focal.y / 2017};--pzoom:1.35`;
 ---
@@ -13,7 +13,6 @@ const style = `--fx:${focal.x / 2521};--fy:${focal.y / 2017};--zoom:1.35;--pfx:$
     <div class="canopy-window__inner">
       <p class="eyebrow canopy-window__eyebrow">{group}</p>
       <h1 class="display-l canopy-window__title">{title}</h1>
-      {summary && <p class="canopy-window__summary">{summary}</p>}
     </div>
   </div>
 </header>
