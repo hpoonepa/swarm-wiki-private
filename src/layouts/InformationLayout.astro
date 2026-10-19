@@ -96,7 +96,10 @@ const sections: Section[] = frontmatter.noTOC ? [] : headings
 
 <style>
   /* Let the honeycomb extend past the hero beside the narrower summary. */
-  .sheet--summary { z-index: auto; }
+  .sheet--summary {
+    z-index: auto;
+    padding-block-start: calc(clamp(2rem, 5vw, 3.5rem) - clamp(.625rem, 1vw, .9375rem));
+  }
 
   .reading-summary {
     --summary-corner: 1.25rem;
