@@ -7,10 +7,10 @@ export function createRnaScene(cv) {
 
   // ---------------------------------------------------------------- colours & shapes (from the team's part SVGs)
   const C = {
-    dicer: '#e6b64f', ago: '#315d4c', comp: '#ead8aa',
-    back: dark ? '#abc9b9' : '#3b7560', rung: '#edc36b', // dsRNA / siRNA
-    tBack: '#bb883c', tRung: '#f0dca3', // target mRNA
-    ink: dark ? '#fff1e6' : '#153f36', paper: '#ffffff',
+    dicer: '#edbd42', ago: '#a16d19', comp: '#fff0bc',
+    back: dark ? '#f8d875' : '#dca421', rung: '#fff0b3', // dsRNA / siRNA
+    tBack: '#44413b', tRung: '#d9d5cb', // target mRNA
+    ink: dark ? '#ffffff' : '#20201d', paper: '#ffffff',
   };
   const DICER = 'M394.64 21.37C432.11 16.48 472.29 34.56 493.97 65.55C499.59 73.58 504.82 83.16 506.53 92.91C509.65 110.81 502.67 131.52 488.52 143.03C479.22 150.59 467.29 150.68 456.31 147.25C440.08 142.19 425.61 133.08 408.52 130.73C393.85 128.72 379.13 132.35 365.77 138.27C351.01 144.8 334.96 154.22 318.96 145.51C307.31 139.16 300.89 124.26 300.62 111.5C300.45 103.71 302.46 95.75 304.78 88.37C318.4 45.23 352.01 26.92 394.64 21.37Z';
   const AGO = 'M271.59 524.34C276.61 523.68 281.86 523.68 286.85 524.55C316.25 529.68 327.53 558.55 326.63 585.5C325.24 626.72 301.31 668.63 267.69 692.17C250.92 703.92 229.21 711.49 208.98 704.48C181.26 694.88 174.81 659.75 178.7 634.43C183.81 601.2 200.48 569.66 225.88 547.4C238.81 536.06 254.23 526.61 271.59 524.34Z';
@@ -161,7 +161,7 @@ export function createRnaScene(cv) {
   const root = new THREE.Group(); root.scale.y = -1; scene.add(root);   // world is y-down, like the guide
   const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, .1, 2000);
   cam.position.z = 900;
-  const ambient = new THREE.HemisphereLight('#fff8e7', '#879b8a', 2.0);
+  const ambient = new THREE.HemisphereLight('#fff8e7', '#999183', 2.0);
   const keyLight = new THREE.DirectionalLight('#fff3d5', 3.0);
   keyLight.position.set(-400, 700, 700);
   const rimLight = new THREE.DirectionalLight('#ffffff', 1.8);
