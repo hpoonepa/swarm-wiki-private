@@ -1,0 +1,38 @@
+html.loading, html.loading body { overflow: hidden; }
+html.loading { scrollbar-gutter: stable; }
+html.loading #heroLogo { visibility: hidden; }
+#loader {
+  position: fixed; inset: 0; z-index: 1000;
+  overflow: hidden; isolation: isolate;
+}
+#loader::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 43%, #2c594638 0%, transparent 59%),
+    radial-gradient(ellipse at 50% 120%, #071f22a6 0%, transparent 65%), #123c33;
+  transition: opacity .42s ease;
+}
+#loader::after {
+  content: ''; position: absolute; inset: 0; opacity: .04; pointer-events: none;
+  transition: opacity .42s ease;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23n)' opacity='.8' d='M0 0h180v180H0z'/%3E%3C/svg%3E");
+}
+#loader.ld-leaving { pointer-events: none; }
+#loader.ld-leaving::before, #loader.ld-leaving::after { opacity: 0; }
+#loader .ld-art {
+  position: absolute;
+  display: block;
+  left: calc(179.9 / 1440 * 100%);
+  top: calc(24.4 / 1440 * 100vw);
+  width: calc(672.7 / 1440 * 100%);
+  height: auto;
+  aspect-ratio: 1202 / 1354;
+  overflow: visible;
+}
+#loader .ld-outline {
+  fill: none; stroke: #f3ca74; stroke-width: 3.8;
+  stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+}
+#loader .ld-color-region { fill: white; opacity: 0; }
+@media (max-width: 600px) { #loader .ld-art { left: 8%; top: 70px; width: 64%; } }
+@media (prefers-reduced-motion: reduce) { #loader::before, #loader::after { transition-duration: .15s; } }
