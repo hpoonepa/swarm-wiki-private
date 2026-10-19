@@ -2,6 +2,9 @@ import clsx from "clsx";
 export interface Props {
   src: string;
   caption?: string;
+  alt?: string;
+  width?: number;
+  height?: number;
   size?: string;
 }
 
@@ -17,22 +20,28 @@ function getMaxWidthClass(size?: string) {
       return "max-w-xl";
     case "xl":
       return "max-w-2xl";
-      case "5xl":
-        return "max-w-5xl";
+    case "5xl":
+      return "max-w-5xl";
     default:
-      return "max-w-lg"; // Return an empty string or handle other sizes as needed
+      return "max-w-lg";
   }
 }
 
 export default function Image(props: Props) {
+  if (!props.src.trim() || /\bREPLACE(?:[-_\s]|$)/i.test(props.src)) return null;
+
   return (
-    <div className="flex w-full flex-col items-center justify-center p-1">
+    <figure className="flex w-full flex-col items-center justify-center p-1">
       <img
         src={props.src}
-        alt=""
-        className={clsx(`mx-2 rounded-xl w-[80%]`, getMaxWidthClass(props.size))}
+        alt={props.alt ?? ""}
+        width={props.width}
+        height={props.height}
+        loading={props.width && props.height ? "lazy" : undefined}
+        decoding="async"
+        className={clsx("rounded-xl w-full sm:w-[80%]", getMaxWidthClass(props.size))}
       />
-      <div className="text-center italic">{props.caption}</div>
-    </div>
+      {props.caption && <figcaption className="text-center">{props.caption}</figcaption>}
+    </figure>
   );
 }

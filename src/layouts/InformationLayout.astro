@@ -67,5 +67,22 @@ const sections: Section[] = frontmatter.noTOC ? [] : headings
     <div class="info-footer">
       <div class="overflow-hidden w-full relative flex justify-center"><Footer /></div>
     </div>
+    <script>
+      document.querySelectorAll<HTMLTableElement>('.info-prose > table').forEach((table, index) => {
+        let previous = table.previousElementSibling;
+        while (previous && !/^H[1-6]$/.test(previous.tagName)) previous = previous.previousElementSibling;
+        const wrapper = document.createElement('div');
+        wrapper.className = 'reading-table';
+        wrapper.setAttribute('role', 'region');
+        wrapper.setAttribute('aria-label', `${previous?.textContent?.trim() || 'Article'} — table ${index + 1}`);
+        wrapper.style.setProperty('--table-columns', String(table.rows[0]?.cells.length || 1));
+        table.querySelectorAll('thead th').forEach(heading => heading.setAttribute('scope', 'col'));
+        table.before(wrapper);
+        wrapper.append(table);
+        const update = () => { wrapper.tabIndex = wrapper.scrollWidth > wrapper.clientWidth + 1 ? 0 : -1; };
+        new ResizeObserver(update).observe(wrapper);
+        update();
+      });
+    </script>
   </body>
 </html>
