@@ -1,0 +1,69 @@
+---
+import './impact-scorer.css';
+import initialData from './scorer-data.json';
+const data = JSON.stringify(initialData).replaceAll('<', '\\u003c');
+---
+<section id="impact-scorer" class="impact-scorer wide" data-impact-scorer data-editing="false" aria-labelledby="impact-title">
+  <header class="scorer-header">
+    <h2 id="impact-title">SWARM impact scorer</h2>
+    <div class="scorer-actions">
+      <button class="btn primary" id="impact-btn-edit" type="button" aria-pressed="false">Adjust scores</button>
+      <button class="btn" id="impact-btn-csv" type="button">Download CSV</button>
+    </div>
+    <p class="save-note" id="impact-save-note" role="status" hidden></p>
+  </header>
+
+  <section class="scorer-summary" aria-labelledby="impact-summary-title">
+    <h3 id="impact-summary-title">Scores by goal</h3>
+    <div id="impact-tiers"></div>
+  </section>
+
+  <details class="scorer-method">
+    <summary>Scoring method &amp; weights</summary>
+    <div class="method-content">
+      <ol class="steps">
+        <li><strong>Evidence:</strong> Each metric is scored from 1 to 10. Its weight determines its contribution to the evidence score. All metrics must have a score for the item to count.</li>
+        <li><strong>Factors:</strong> For each goal, average the scored evidence within each factor.</li>
+        <li><strong>Goals:</strong> Combine the factor averages using that goal’s weights. Factors with no scored evidence or a weight of zero are excluded, and the remaining weights rescale.</li>
+      </ol>
+      <h3>Factor weights by goal</h3>
+      <div class="table-wrap weights-wrap" tabindex="0" role="region" aria-label="Factor weights by goal">
+        <table class="fwt" id="impact-fw"><caption class="sr-only">Factor weights for each Sustainable Development Goal</caption></table>
+      </div>
+      <details class="metric-weights">
+        <summary>Metric weights</summary>
+        <div class="mw" id="impact-mw"></div>
+      </details>
+    </div>
+  </details>
+
+  <section class="scorer-evidence" aria-labelledby="impact-evidence-title">
+    <header class="evidence-header">
+      <h3 id="impact-evidence-title">Evidence</h3>
+      <details class="data-options">
+        <summary>Data options</summary>
+        <div class="data-actions">
+          <button class="btn" id="impact-btn-copy" type="button">Copy for Sheets</button>
+          <button class="btn" id="impact-btn-export" type="button">Export JSON</button>
+          <label class="btn file-btn" for="impact-file-import">Import JSON<input type="file" id="impact-file-import" accept=".json,application/json" /></label>
+          <button class="btn" id="impact-btn-reset" type="button">Restore team scores</button>
+        </div>
+      </details>
+    </header>
+    <div class="tabs" role="tablist" id="impact-tabs" aria-label="Evidence factors"></div>
+    <p id="impact-factor-desc" hidden></p>
+    <div id="impact-evidence-panel" role="tabpanel" aria-labelledby="impact-tab-stakeholder">
+      <div class="table-wrap evidence-wrap" tabindex="0" role="region" aria-label="Evidence and assessment scores">
+        <table id="impact-tbl"><caption class="sr-only">Evidence and assessment scores</caption></table>
+      </div>
+      <button class="btn add edit-only" id="impact-btn-add" type="button">Add stakeholder</button>
+    </div>
+  </section>
+  <div class="scorer-toast" id="impact-toast" role="status" hidden></div>
+  <script type="application/json" id="impact-state" set:html={data} />
+  <noscript><p>Enable JavaScript to view and adjust the impact scores.</p></noscript>
+</section>
+<script>
+  import { initImpactScorer } from './impact-scorer.js';
+  document.querySelectorAll('[data-impact-scorer]').forEach(initImpactScorer);
+</script>

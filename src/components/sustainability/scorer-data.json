@@ -1,0 +1,1340 @@
+{
+  "isExample": false,
+  "factorWeights": {
+    "stakeholder": 25,
+    "outreach": 25,
+    "current": 25,
+    "projected": 25
+  },
+  "metricWeights": {
+    "stakeholder": {
+      "relevance": 30,
+      "impact": 30,
+      "iterations": 20,
+      "influence": 10,
+      "attitude": 10
+    },
+    "outreach": {
+      "reach": 30,
+      "inclusivity": 30,
+      "response": 20,
+      "iterations": 10,
+      "method": 5,
+      "reproducibility": 5
+    },
+    "current": {
+      "environment": 30,
+      "efficiency": 30,
+      "performance": 20,
+      "safety": 20
+    },
+    "projected": {
+      "environment": 30,
+      "agriculture": 20,
+      "economics": 20,
+      "technology": 20,
+      "implementation": 10
+    }
+  },
+  "sdgWeights": {
+    "2": {
+      "stakeholder": 20,
+      "outreach": 10,
+      "current": 25,
+      "projected": 45
+    },
+    "4": {
+      "stakeholder": 25,
+      "outreach": 55,
+      "current": 10,
+      "projected": 10
+    },
+    "5": {
+      "stakeholder": 10,
+      "outreach": 55,
+      "current": 10,
+      "projected": 25
+    },
+    "8": {
+      "stakeholder": 20,
+      "outreach": 10,
+      "current": 25,
+      "projected": 45
+    },
+    "11": {
+      "stakeholder": 20,
+      "outreach": 15,
+      "current": 25,
+      "projected": 40
+    },
+    "15": {
+      "stakeholder": 15,
+      "outreach": 10,
+      "current": 30,
+      "projected": 45
+    },
+    "17": {
+      "stakeholder": 60,
+      "outreach": 30,
+      "current": 5,
+      "projected": 5
+    }
+  },
+  "items": [
+    {
+      "id": "emvcx3y72p7xj",
+      "factor": "stakeholder",
+      "name": "Sharanya Madhavan",
+      "sdgs": [
+        2,
+        4,
+        11,
+        17
+      ],
+      "scores": {
+        "relevance": 8,
+        "impact": 7,
+        "iterations": 10,
+        "influence": 7,
+        "attitude": 9
+      },
+      "why": "Helped us broaden our project to embrace another SDG zero hunger. Helped us realize the importance of bee decline and the underlying consequences, significantly impacted our understanding."
+    },
+    {
+      "id": "emvef17c3at13",
+      "factor": "stakeholder",
+      "name": "Chloe Weatherington",
+      "sdgs": [
+        2,
+        4,
+        17
+      ],
+      "scores": {
+        "relevance": 8,
+        "impact": 9,
+        "iterations": 8,
+        "influence": 7,
+        "attitude": 9
+      },
+      "why": "Helped us shift the focus of our project to our stakeholders and people impacted by the decline of bees. Also helped us understand the disparity in educaiton amongst people"
+    },
+    {
+      "id": "emvefau7s8te7",
+      "factor": "stakeholder",
+      "name": "Samantha Houck",
+      "sdgs": [
+        4,
+        11,
+        17
+      ],
+      "scores": {
+        "relevance": 9,
+        "impact": 8,
+        "iterations": 5,
+        "influence": 9,
+        "attitude": 7
+      },
+      "why": "Helped us solidify the understanding of the lack of bee educationn and awareness. Let us know that the city has a greater effect than we could think and many aspects of it comes into play to a sustainable environment"
+    },
+    {
+      "id": "emvefbudzcqwf",
+      "factor": "stakeholder",
+      "name": "Peter Helfrich",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 9,
+        "impact": 8,
+        "iterations": 6,
+        "influence": 8,
+        "attitude": 7
+      },
+      "why": "Helped us validate our dual approach by confirming that DWV is a sig. problem, helped us consider bee health in our treatment and how it could potentially affect them"
+    },
+    {
+      "id": "emvefcw18mvbm",
+      "factor": "stakeholder",
+      "name": "Claressa Lucas",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 9,
+        "impact": 9,
+        "iterations": 6,
+        "influence": 8,
+        "attitude": 8
+      },
+      "why": "\"“Its not a matter of IF there are Varroa mites — every colony has them.” Helped us change our perspective on the project from a prevenative measure -> something urgent to be address \""
+    },
+    {
+      "id": "emvefek5akmm3",
+      "factor": "stakeholder",
+      "name": "Olivia Menard",
+      "sdgs": [
+        2,
+        8,
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 8,
+        "impact": 7,
+        "iterations": 7,
+        "influence": 9,
+        "attitude": 9
+      },
+      "why": "Helped us consider our approach to connecting SDGs and beekeepers/farmers, influential on our HP consideration"
+    },
+    {
+      "id": "emvefg0s6hio4",
+      "factor": "stakeholder",
+      "name": "Matt Carter",
+      "sdgs": [
+        8,
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 10,
+        "impact": 9,
+        "iterations": 8,
+        "influence": 10,
+        "attitude": 7
+      },
+      "why": "Showed us that we have to consider if our targeted audience would receive this well, prompting us to make many changes and consideration towards beekeepers. "
+    },
+    {
+      "id": "emvefhgt2iadg",
+      "factor": "stakeholder",
+      "name": "John James",
+      "sdgs": [
+        4,
+        8,
+        17
+      ],
+      "scores": {
+        "relevance": 5,
+        "impact": 7,
+        "iterations": 6,
+        "influence": 6,
+        "attitude": 9
+      },
+      "why": "Showed us the perspective of a hobbyist beekeeper on our project and how we could make it more friendly to ordinary use"
+    },
+    {
+      "id": "emvefjo4kwvx4",
+      "factor": "stakeholder",
+      "name": "Kerry Langley",
+      "sdgs": [
+        4,
+        8,
+        17
+      ],
+      "scores": {
+        "relevance": 5,
+        "impact": 7,
+        "iterations": 8,
+        "influence": 9,
+        "attitude": 4
+      },
+      "why": "Helped us reconsider the cost factor of our hardware and changes we can make to address that"
+    },
+    {
+      "id": "emveflul69mzf",
+      "factor": "stakeholder",
+      "name": "Aashish Manglik",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 9,
+        "impact": 10,
+        "iterations": 10,
+        "influence": 9,
+        "attitude": 8
+      },
+      "why": "Showed us a better alternative to nanobody and prompted us to use minibinders, making a significant change in our wetlabs"
+    },
+    {
+      "id": "emvefoiwy3iz1",
+      "factor": "stakeholder",
+      "name": "Raymond Owens",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 8,
+        "impact": 8,
+        "iterations": 9,
+        "influence": 8,
+        "attitude": 7
+      },
+      "why": "Helped us realize that nanobody is not the most optimal tool in this case, eventually helping change a core part of our project to minibinder"
+    },
+    {
+      "id": "emvefpmesnnd6",
+      "factor": "stakeholder",
+      "name": "Per Greisen Jr.",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 8,
+        "impact": 7,
+        "iterations": 7,
+        "influence": 4,
+        "attitude": 5
+      },
+      "why": "Helped confirm that our shift to minibinder was sufficient and the benefits of  minibinders are helpfuul"
+    },
+    {
+      "id": "emvefr4d7lb54",
+      "factor": "stakeholder",
+      "name": "Benjamin Lamp",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 10,
+        "impact": 9,
+        "iterations": 7,
+        "influence": 10,
+        "attitude": 7
+      },
+      "why": "Helped us verify the P domain for targeting and helped us with the minibinder design process"
+    },
+    {
+      "id": "emveftgn46o0x",
+      "factor": "stakeholder",
+      "name": "Tatsuhiko Kadowaki",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 10,
+        "impact": 8,
+        "iterations": 8,
+        "influence": 9,
+        "attitude": 7
+      },
+      "why": "Helped us realize that we could target multiple p regions and inspired us to make PRINCE"
+    },
+    {
+      "id": "emvefvr05uqgu",
+      "factor": "stakeholder",
+      "name": "Neil MacMillan",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 10,
+        "impact": 8,
+        "iterations": 7,
+        "influence": 5,
+        "attitude": 6
+      },
+      "why": "Helped us realize there are rooms for doubt in our solution and helped us stay vigilant going forward even though we went against his advice"
+    },
+    {
+      "id": "emvefx4uinbh2",
+      "factor": "stakeholder",
+      "name": "Bryony Bonning",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 8,
+        "impact": 10,
+        "iterations": 8,
+        "influence": 8,
+        "attitude": 7
+      },
+      "why": "Helped us walk over the virus binding process and how we could potentially test these on which cell lines"
+    },
+    {
+      "id": "emveg0cqzih27",
+      "factor": "stakeholder",
+      "name": "Mark Styczynski",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 9,
+        "impact": 10,
+        "iterations": 10,
+        "influence": 9,
+        "attitude": 6
+      },
+      "why": "Directly influenced our thinking of model design to be more defensible and effective, advised our team at various staages and gave us heplful advices"
+    },
+    {
+      "id": "emveg1y6f78ng",
+      "factor": "stakeholder",
+      "name": "Andrew Hunt",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 9,
+        "impact": 10,
+        "iterations": 7,
+        "influence": 10,
+        "attitude": 7
+      },
+      "why": "Helped how we designed our binder when we just switched and is the foundation of our minibinder design & protocols"
+    },
+    {
+      "id": "emveg4m37m7lx",
+      "factor": "stakeholder",
+      "name": "Jennifer Leavey",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 10,
+        "impact": 7,
+        "iterations": 10,
+        "influence": 7,
+        "attitude": 6
+      },
+      "why": "Helped us recognize the significance of SDG life on land, and how we appraoched pitching our project to beekeepers at various events and conferences."
+    },
+    {
+      "id": "emveg5n7r3pd6",
+      "factor": "stakeholder",
+      "name": "Anonymous | GreenLight Biosciences",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 9,
+        "impact": 10,
+        "iterations": 8,
+        "influence": 10,
+        "attitude": 4
+      },
+      "why": "Helped us reshape our understanding of RNAi delivery and prompted us to consider more  in depth about our delivery methods"
+    },
+    {
+      "id": "emveg8hn6wqpy",
+      "factor": "stakeholder",
+      "name": "Jamie Ellis",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 10,
+        "impact": 9,
+        "iterations": 8,
+        "influence": 10,
+        "attitude": 9
+      },
+      "why": "Validated our project from a researcher's standpoint, supported our multiplex approach. Additionally helped us realize further steps for our project from an entrepreneurship standpoint"
+    },
+    {
+      "id": "emvegagwptzg0",
+      "factor": "stakeholder",
+      "name": "Lewis Bartlett",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 8,
+        "impact": 8,
+        "iterations": 8,
+        "influence": 9,
+        "attitude": 7
+      },
+      "why": "Helped us with measuring the success caliber of our project and advised us on when our solution would most likely be taken up by bees effectively due to their seasonal cycle"
+    },
+    {
+      "id": "emvegd3urqwsw",
+      "factor": "stakeholder",
+      "name": "Tiffany Bono",
+      "sdgs": [
+        4,
+        11,
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 8,
+        "impact": 7,
+        "iterations": 9,
+        "influence": 8,
+        "attitude": 8
+      },
+      "why": "Helped us with establishing the foundation of all of our educational initiatives by validating the educational method, Helped ediited our children's book and offered helpful feedback for our plans"
+    },
+    {
+      "id": "emveghm5d7kwi",
+      "factor": "stakeholder",
+      "name": "Jeff Pettis",
+      "sdgs": [
+        2,
+        8,
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 9,
+        "impact": 8,
+        "iterations": 7,
+        "influence": 8,
+        "attitude": 9
+      },
+      "why": "Helped us solidify our understanding of the impact that would come if varroa mites were eliminated, helping us recognize the gap bewteen federal funding for bee research"
+    },
+    {
+      "id": "emvegina3xcur",
+      "factor": "stakeholder",
+      "name": "Amy Dolan",
+      "sdgs": [
+        2,
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 10,
+        "impact": 8,
+        "iterations": 9,
+        "influence": 7,
+        "attitude": 8
+      },
+      "why": "Helped us define how SWARM could affect beyond just bees and towards other pollinators"
+    },
+    {
+      "id": "emvegmz9cbnqq",
+      "factor": "stakeholder",
+      "name": "Angela Partain",
+      "sdgs": [
+        2,
+        8,
+        17
+      ],
+      "scores": {
+        "relevance": 10,
+        "impact": 9,
+        "iterations": 6,
+        "influence": 6,
+        "attitude": 8
+      },
+      "why": "Shifted our understanding of food insecurity by showing us that the rural communities closest to farms were the ones struggling with food insecurity the most. She also highlighted  the gap between the public and the producers in understanding the involvement of honeybees."
+    },
+    {
+      "id": "emvegqo1lvfxy",
+      "factor": "stakeholder",
+      "name": "Jonathan Nixon",
+      "sdgs": [
+        2,
+        8,
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 8,
+        "impact": 7,
+        "iterations": 7,
+        "influence": 9,
+        "attitude": 8
+      },
+      "why": "Helped solidify SWARM as an effective solution to bees and pollinators."
+    },
+    {
+      "id": "emvegrlsb1hcx",
+      "factor": "stakeholder",
+      "name": "Morgane Golan",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 10,
+        "impact": 10,
+        "iterations": 10,
+        "influence": 10,
+        "attitude": 9
+      },
+      "why": "Helped us adopt the SF9 cell line for experimentation and a vital part of our project development"
+    },
+    {
+      "id": "emvegue0u5qqe",
+      "factor": "stakeholder",
+      "name": "Tudor Cotet",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 9,
+        "impact": 10,
+        "iterations": 8,
+        "influence": 9,
+        "attitude": 7
+      },
+      "why": "Helped us with the Confidence filtering process after our first batch failed, reshaping how we approach experimentation and how we filter designs before testing"
+    },
+    {
+      "id": "emvegvbtg2rhi",
+      "factor": "stakeholder",
+      "name": "Corey Howe",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 8,
+        "impact": 8,
+        "iterations": 9,
+        "influence": 9,
+        "attitude": 8
+      },
+      "why": "Influenced how we plan the rest of the season to avoid wasting time and resources while testing"
+    },
+    {
+      "id": "emvegvzyg4hdk",
+      "factor": "stakeholder",
+      "name": "Gijs de Bruin",
+      "sdgs": [
+        15,
+        17
+      ],
+      "scores": {
+        "relevance": 8,
+        "impact": 8,
+        "iterations": 8,
+        "influence": 9,
+        "attitude": 7
+      },
+      "why": "Helped us realize exactly where in our pipeline that breaks and hinders our progress, Helped give us a benchmark for our project"
+    },
+    {
+      "id": "emvegzxra1zdb",
+      "factor": "outreach",
+      "name": "Sharon Bees Workshop",
+      "sdgs": [
+        4,
+        11,
+        15,
+        17
+      ],
+      "scores": {
+        "reach": 4,
+        "inclusivity": 7,
+        "response": 10,
+        "iterations": 7,
+        "method": 10,
+        "reproducibility": 10
+      },
+      "why": "4 for reach and 7 for inclusivity because it includes kids in the critters club only. response 10 because the students really engaged iwht the lesson, minimal iterations from feedback as there is not much, 10 for method because it was hands on annd 10 for reproducibility bc it doesnt use much fancy equipment and lesson plans are simple to reproduce."
+    },
+    {
+      "id": "emvehh6kb4nkj",
+      "factor": "outreach",
+      "name": "Children's Book",
+      "sdgs": [
+        4,
+        15
+      ],
+      "scores": {
+        "reach": 5,
+        "inclusivity": 9,
+        "response": 8,
+        "iterations": 9,
+        "method": 8,
+        "reproducibility": 9
+      },
+      "why": "5 for reach as it is posted online but not advertised widely to the public, 10 for inclusivity because it is translated into multiple languages and is written in easy to understand language, also colorblind friendly and accessible online, response 8, received many feedback from stakeholders and students who enjoyed the book and their parents, 10 for iterations because we revised it multiple times through feedback for a better version. 10 for method as it is made digitally and is engaging and easy to distribute, 9 for reproducibilty, writing and illustrating a book for children is challenging but manageable."
+    },
+    {
+      "id": "emvehiq7w8un3",
+      "factor": "outreach",
+      "name": "Riverwatch Workshops",
+      "sdgs": [
+        4,
+        15,
+        17
+      ],
+      "scores": {
+        "reach": 8,
+        "inclusivity": 7,
+        "response": 10,
+        "iterations": 9,
+        "method": 10,
+        "reproducibility": 7
+      },
+      "why": "8 for reach and 7 for inclusivity because it is advertised on social media and gained participation kids in middle school, 10 response because the students engaged and gave positive feedback later on, 10 for iteration because we gauged the interest and adjusted our lesson plan accordingly, 10 for method as it features fun experiments alongside the lesson, 7 for reproducibility as it depends on the materials available but the lesson is easy to reproduce."
+    },
+    {
+      "id": "emvehjq591qy8",
+      "factor": "outreach",
+      "name": "Biotech Bootcamp",
+      "sdgs": [
+        4,
+        15,
+        17
+      ],
+      "scores": {
+        "reach": 9,
+        "inclusivity": 8,
+        "response": 10,
+        "iterations": 10,
+        "method": 10,
+        "reproducibility": 6
+      },
+      "why": "9 and 8 for reach and inclusivity because students from many middle schools participated regardless of their background knowledge because it was advertised online for all, 10 response as students showed positive attitude when participating in class and is eager to learn. 10 method as we featured many complex experiments that engaged the student to think along with other activities, 6 for reproducibility because it requires an amount of resource and background knowledge from camp instructures and infrastructure. theory is accessible to teach."
+    },
+    {
+      "id": "emvehl3sw820f",
+      "factor": "outreach",
+      "name": "Pollinator Presentations",
+      "sdgs": [
+        2,
+        4,
+        11,
+        15
+      ],
+      "scores": {
+        "reach": 4,
+        "inclusivity": 4,
+        "response": 8,
+        "iterations": 3,
+        "method": 6,
+        "reproducibility": 10
+      },
+      "why": "4 for both reach and inclusivity because it is limited to science pathway students at lambert highschool. 8 response because participants showed positive response but a few werent interested. 3 for iterations as we received minimal feedback for and it could be further improved upon. 6 for method, a classic presentation and debate activity could be boring to many but it is an effort to have everyone think. 10 for reproducibility because it is easy to replicate the lesson"
+    },
+    {
+      "id": "emvehm43oi9d5",
+      "factor": "outreach",
+      "name": "Connectivity Night",
+      "sdgs": [
+        4,
+        17
+      ],
+      "scores": {
+        "reach": 6,
+        "inclusivity": 6,
+        "response": 4,
+        "iterations": 7,
+        "method": 5,
+        "reproducibility": 8
+      },
+      "why": "6 for both reach and inclusivity because it is limited to middle and high school students in the area. Response 4 as a few students showed interest, but not enough to be successful. 7 for iteration because it had been in use for multiple years and went through a few changes to be more adequate. method 5 because it is only presenting a posterboard. Reproducibility 8 because it is easy to do but requires a sufficient audience"
+    },
+    {
+      "id": "emvehmvhkotye",
+      "factor": "outreach",
+      "name": "iGEM Human Practices Collaboration Call",
+      "sdgs": [
+        4,
+        17
+      ],
+      "scores": {
+        "reach": 10,
+        "inclusivity": 9,
+        "response": 10,
+        "iterations": 7,
+        "method": 9,
+        "reproducibility": 10
+      },
+      "why": "10 for both reach and inclusivity b/c it reached igem teams from around the world and all types of team from highschool to overgrad. 10 for response because everyone participated in answering prompts and gave constructive feedback. 7 for iteration as we received feedback that helped us shape the call to be better, method 9 bc we had people work together on answering prompts on a whiteboard and had a team discussion. reproducibility 10 because it is simple to set up"
+    },
+    {
+      "id": "emvehnv5ni8dj",
+      "factor": "outreach",
+      "name": "Webinars",
+      "sdgs": [
+        2,
+        4,
+        8,
+        11,
+        15,
+        17
+      ],
+      "scores": {
+        "reach": 9,
+        "inclusivity": 8,
+        "response": 7,
+        "iterations": 8,
+        "method": 7,
+        "reproducibility": 10
+      },
+      "why": "9 for reach and 8 for inclusivity bc it reached many people online but not enough to get a 10 on inclusivity because of timezones, "
+    },
+    {
+      "id": "emvehp1reg6fz",
+      "factor": "outreach",
+      "name": "Concrete Jungle Workshop",
+      "sdgs": [
+        2,
+        4,
+        8,
+        11,
+        15,
+        17
+      ],
+      "scores": {
+        "reach": 6,
+        "inclusivity": 6,
+        "response": 5,
+        "iterations": 7,
+        "method": 10,
+        "reproducibility": 9
+      },
+      "why": "Concrete jungle workshop reached an adequate amount of students who came but it is still limited to our area, we received positive response and this is a very informative yet fun workshop"
+    },
+    {
+      "id": "emvehq67vercq",
+      "factor": "outreach",
+      "name": "NWGA RESA STEM for Tomorrow Forum",
+      "sdgs": [
+        4,
+        8,
+        17
+      ],
+      "scores": {
+        "reach": 9,
+        "inclusivity": 8,
+        "response": 8,
+        "iterations": 9,
+        "method": 7,
+        "reproducibility": 8
+      },
+      "why": "This teaching conference reached a plethora of teachers from all around GA and helped us spread our educational methods and gained feedback for our education efforts"
+    },
+    {
+      "id": "emvehr6f2s1u9",
+      "factor": "outreach",
+      "name": "Gardener's Handbook",
+      "sdgs": [
+        2,
+        4,
+        11,
+        15
+      ],
+      "scores": {
+        "reach": 4,
+        "inclusivity": 7,
+        "response": 4,
+        "iterations": 9,
+        "method": 10,
+        "reproducibility": 10
+      },
+      "why": "Although it didn't have an outward reach, we received many feedback from various gardeners and beekeepers about how we can futher improve, leading us to create this engaging guide book."
+    },
+    {
+      "id": "emvehstiencas",
+      "factor": "outreach",
+      "name": "Social Media",
+      "sdgs": [
+        2,
+        4,
+        5,
+        8,
+        11,
+        15,
+        17
+      ],
+      "scores": {
+        "reach": 10,
+        "inclusivity": 8,
+        "response": 8,
+        "iterations": 10,
+        "method": 7,
+        "reproducibility": 10
+      },
+      "why": "Our social media initiatives reached a wide variety of audiences throughout the internet, helping us receive feedback and information that prompted us to change many of our initiatives"
+    },
+    {
+      "id": "emvehtwireo0k",
+      "factor": "outreach",
+      "name": "Mentorship",
+      "sdgs": [
+        4,
+        17
+      ],
+      "scores": {
+        "reach": 5,
+        "inclusivity": 5,
+        "response": 8,
+        "iterations": 9,
+        "method": 8,
+        "reproducibility": 10
+      },
+      "why": "through this process of mutual feedback, we both helped each other with constructive feedback."
+    },
+    {
+      "id": "emvehursk7583",
+      "factor": "outreach",
+      "name": "Bee PSA",
+      "sdgs": [
+        4,
+        11,
+        15
+      ],
+      "scores": {
+        "reach": 5,
+        "inclusivity": 5,
+        "response": 4,
+        "iterations": 8,
+        "method": 5,
+        "reproducibility": 7
+      },
+      "why": "Although it wasn't broadcasted widely, our PSA recordings aimed to be a low cost easy informational output method"
+    },
+    {
+      "id": "emvehvnn1tvwr",
+      "factor": "outreach",
+      "name": "Flowers for the Future",
+      "sdgs": [
+        4,
+        5,
+        11,
+        15,
+        17
+      ],
+      "scores": {
+        "reach": 4,
+        "inclusivity": 9,
+        "response": 9,
+        "iterations": 10,
+        "method": 8,
+        "reproducibility": 9
+      },
+      "why": "FFF reached a specific minority that has been developed over the course of our project to bebetter and reproduceable "
+    },
+    {
+      "id": "emvehwcrx9xo3",
+      "factor": "outreach",
+      "name": "FFF-BioBuilderClub",
+      "sdgs": [
+        4,
+        5,
+        11,
+        15,
+        17
+      ],
+      "scores": {
+        "reach": 3,
+        "inclusivity": 9,
+        "response": 7,
+        "iterations": 5,
+        "method": 8,
+        "reproducibility": 9
+      },
+      "why": "Some FFF students expressed interest in forming a BioBuilderClub team to further their synthetic biology knowledge, so we formed a team that is getting ready to start their BioBuilderClub research."
+    },
+    {
+      "id": "emvehxe21p9nu",
+      "factor": "outreach",
+      "name": "Children's Book Translations",
+      "sdgs": [
+        4,
+        15
+      ],
+      "scores": {
+        "reach": 7,
+        "inclusivity": 9,
+        "response": 4,
+        "iterations": 8,
+        "method": 8,
+        "reproducibility": 10
+      },
+      "why": "This translation was distributed across the website and is made to be inclusive to all, going through multiple revisions."
+    },
+    {
+      "id": "emvehy85yr2z5",
+      "factor": "outreach",
+      "name": "Exceptional Science!",
+      "sdgs": [
+        4,
+        15
+      ],
+      "scores": {
+        "reach": 8,
+        "inclusivity": 9,
+        "response": 10,
+        "iterations": 10,
+        "method": 10,
+        "reproducibility": 8
+      },
+      "why": "Exceptional science reached all of our special eds student, with engaging lessons and hands-on approach."
+    },
+    {
+      "id": "emvehz3e246nx",
+      "factor": "outreach",
+      "name": "Neurodivergent Handbook",
+      "sdgs": [
+        4,
+        17
+      ],
+      "scores": {
+        "reach": 9,
+        "inclusivity": 9,
+        "response": 6,
+        "iterations": 5,
+        "method": 8,
+        "reproducibility": 9
+      },
+      "why": "Easily distributable towards a wide variety of audience, this book has informationn that could be tailored towards personal needs. making it inclusive to all"
+    },
+    {
+      "id": "emvei6tlphirc",
+      "factor": "stakeholder",
+      "name": "Timothy Stiven",
+      "sdgs": [
+        4,
+        5,
+        17
+      ],
+      "scores": {
+        "relevance": 7,
+        "impact": 8,
+        "iterations": 9,
+        "influence": 8,
+        "attitude": 6
+      },
+      "why": "Connected us with the Flowers for the Future organization, facilitating the creation of our introductory synthetic course."
+    },
+    {
+      "id": "emvei8q3bjheq",
+      "factor": "current",
+      "name": "Hardware Experimental Results",
+      "sdgs": [
+        11,
+        15
+      ],
+      "scores": {
+        "environment": 8,
+        "efficiency": 10,
+        "performance": 8,
+        "safety": 10
+      },
+      "why": "Because Vapor-X reduces the pressure of the environment, samples are able to evaporate faster at a lower temperature. However, although Vapor-X was highly effective for most samples, some results showed that Vapor-X could not retain effectiveness for certain biomolecules. We considered safety into every aspect of the design, with overtemperature checks at the software level and overcurrent protection at the hardware level."
+    },
+    {
+      "id": "emvei9kl8hth2",
+      "factor": "current",
+      "name": "Safety Forms",
+      "sdgs": [
+        8,
+        11,
+        15
+      ],
+      "scores": {
+        "environment": 8,
+        "efficiency": 10,
+        "performance": 4,
+        "safety": 10
+      },
+      "why": "When filling out the safety form, we took dedicated measures to make sure our project is safe and meets all requirements for both iGEM safety and general lab safety."
+    },
+    {
+      "id": "emveiavw2m9jk",
+      "factor": "current",
+      "name": "Wetlab Experimental Results",
+      "sdgs": [
+        2,
+        11,
+        15
+      ],
+      "scores": {
+        "environment": 9,
+        "efficiency": 7,
+        "performance": 6,
+        "safety": 7
+      },
+      "why": "Our wetlab is aimed to be beneficial, however it could have potential offtarget effects."
+    },
+    {
+      "id": "emveibhmsczn2",
+      "factor": "current",
+      "name": "Education Results",
+      "sdgs": [
+        4,
+        11,
+        15
+      ],
+      "scores": {
+        "environment": 8,
+        "efficiency": 6,
+        "performance": 8,
+        "safety": 9
+      },
+      "why": "Our educational efforts prompted many students to be more mindful of their surrounding environments and promoted healthy practices that promotes sustainability. additionally we enforced safety policies where appropriate"
+    },
+    {
+      "id": "emveicpyjlg98",
+      "factor": "projected",
+      "name": "Entrepreneurship",
+      "sdgs": [
+        2,
+        8,
+        11
+      ],
+      "scores": {
+        "environment": 6,
+        "agriculture": 8,
+        "economics": 5,
+        "technology": 8,
+        "implementation": 5
+      },
+      "why": "Our project is useful in the context of promoting agricultural production but may not be the most efficient way to do so, and we need to further consider implementation for our entrepreneurship to be completely accurate."
+    },
+    {
+      "id": "emveiepelpdea",
+      "factor": "projected",
+      "name": "Contribution",
+      "sdgs": [
+        4,
+        11,
+        15,
+        17
+      ],
+      "scores": {
+        "environment": 8,
+        "agriculture": 9,
+        "economics": 7,
+        "technology": 7,
+        "implementation": 6
+      },
+      "why": "Our project has promising results on the environment, although there might be some reluctance to implenment these solutions amongst beekeepers, our educational effort and frugal hardware contribute to a better environment and technoloy,"
+    },
+    {
+      "id": "emveigcfmxl54",
+      "factor": "current",
+      "name": "Sustainability Solution—SDG 2",
+      "sdgs": [
+        2
+      ],
+      "scores": {
+        "environment": 7,
+        "efficiency": 8,
+        "performance": 6,
+        "safety": 6
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    },
+    {
+      "id": "emveii9obl26c",
+      "factor": "projected",
+      "name": "Sustainability Projected Outlook—SDG 2",
+      "sdgs": [
+        2
+      ],
+      "scores": {
+        "environment": 8,
+        "agriculture": 9,
+        "economics": 7,
+        "technology": 7,
+        "implementation": 6
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    },
+    {
+      "id": "emvejepsiycp4",
+      "factor": "current",
+      "name": "Sustainability Solution—SDG 4",
+      "sdgs": [
+        4
+      ],
+      "scores": {
+        "environment": 5,
+        "efficiency": 7,
+        "performance": 8,
+        "safety": 9
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    },
+    {
+      "id": "emvejf3fjid6f",
+      "factor": "current",
+      "name": "Sustainability Solution—SDG 5",
+      "sdgs": [
+        5
+      ],
+      "scores": {
+        "environment": 5,
+        "efficiency": 6,
+        "performance": 6,
+        "safety": 8
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    },
+    {
+      "id": "emvejfnqfchqq",
+      "factor": "current",
+      "name": "Sustainability Solution—SDG 8",
+      "sdgs": [
+        8
+      ],
+      "scores": {
+        "environment": 4,
+        "efficiency": 5,
+        "performance": 8,
+        "safety": 8
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    },
+    {
+      "id": "emvejgbwf2coq",
+      "factor": "current",
+      "name": "Sustainability Solution—SDG 11",
+      "sdgs": [
+        11
+      ],
+      "scores": {
+        "environment": 8,
+        "efficiency": 6,
+        "performance": 6,
+        "safety": 8
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    },
+    {
+      "id": "emvejgtnryczb",
+      "factor": "current",
+      "name": "Sustainability Solution—SDG 15",
+      "sdgs": [
+        15
+      ],
+      "scores": {
+        "environment": 10,
+        "efficiency": 8,
+        "performance": 8,
+        "safety": 7
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    },
+    {
+      "id": "emvejhmq0rd9g",
+      "factor": "current",
+      "name": "Sustainability Solution—SDG 17",
+      "sdgs": [
+        17
+      ],
+      "scores": {
+        "environment": 7,
+        "efficiency": 10,
+        "performance": 9,
+        "safety": 10
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    },
+    {
+      "id": "emvejobgwtgbd",
+      "factor": "projected",
+      "name": "Sustainability Projected Outlook—SDG 4",
+      "sdgs": [
+        4
+      ],
+      "scores": {
+        "environment": 6,
+        "agriculture": 6,
+        "economics": 6,
+        "technology": 10,
+        "implementation": 9
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    },
+    {
+      "id": "emvejox8d4xee",
+      "factor": "projected",
+      "name": "Sustainability Projected Outlook—SDG 5",
+      "sdgs": [
+        5
+      ],
+      "scores": {
+        "environment": 6,
+        "agriculture": 6,
+        "economics": 6,
+        "technology": 10,
+        "implementation": 9
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    },
+    {
+      "id": "emvejqb4kb6qc",
+      "factor": "projected",
+      "name": "Sustainability Projected Outlook—SDG 8",
+      "sdgs": [
+        8
+      ],
+      "scores": {
+        "environment": 7,
+        "agriculture": 7,
+        "economics": 8,
+        "technology": 6,
+        "implementation": 6
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    },
+    {
+      "id": "emvejqyxzqup1",
+      "factor": "projected",
+      "name": "Sustainability Projected Outlook—SDG 11",
+      "sdgs": [
+        11
+      ],
+      "scores": {
+        "environment": 8,
+        "agriculture": 7,
+        "economics": 6,
+        "technology": 8,
+        "implementation": 6
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    },
+    {
+      "id": "emvejrjzvxhpp",
+      "factor": "projected",
+      "name": "Sustainability Projected Outlook—SDG 15",
+      "sdgs": [
+        15
+      ],
+      "scores": {
+        "environment": 10,
+        "agriculture": 8,
+        "economics": 7,
+        "technology": 9,
+        "implementation": 9
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    },
+    {
+      "id": "emvejs22uw824",
+      "factor": "projected",
+      "name": "Sustainability Projected Outlook—SDG 17",
+      "sdgs": [
+        17
+      ],
+      "scores": {
+        "environment": 10,
+        "agriculture": 10,
+        "economics": 10,
+        "technology": 10,
+        "implementation": 10
+      },
+      "why": "Based on our work throughout our wiki addressing all SDGs, we added a final SDG for each individual SDG"
+    }
+  ],
+  "sdgNotes": {}
+}
