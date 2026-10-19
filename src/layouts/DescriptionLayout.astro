@@ -14,14 +14,23 @@ const sidebarHeadings = headings.map((heading: MarkdownHeading) =>
 </ContentLayout>
 
 <style is:global>
+  /* One reading size for the summaries and article, with rem units for resizing. */
+  body.info-page { --fs-body: 1.125rem; }
+  @media (max-width: 760px) {
+    body.info-page { --fs-body: 1.0625rem; }
+  }
+
   /* Used by Project Description and Implementation. One grid gap replaces
      stacked paragraph, heading, and table margins. */
   #article.info-prose {
     --description-block-gap: 1.25rem;
     --description-section-gap: clamp(2.5rem, 5vw, 3.5rem);
     row-gap: var(--description-block-gap);
+    line-height: 1.65;
   }
 
+  #article.info-prose :where(p, li) { line-height: inherit; }
+  #article.info-prose strong { font-weight: 650; }
   #article.info-prose > * { margin-block: 0; }
 
   #article.info-prose > h1:not(:first-child),

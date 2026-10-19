@@ -104,10 +104,10 @@ const sections: Section[] = frontmatter.noTOC ? [] : headings
     z-index: 3;
     isolation: isolate;
     display: grid;
-    width: min(56rem, calc(100% - 2 * var(--gutter) - 12rem));
+    width: min(48rem, calc(100% - 2 * var(--gutter) - 12rem));
     margin: 0 0 clamp(2.5rem, 5vw, 3.5rem);
     margin-inline-start: max(var(--gutter), calc((100% - 78rem) / 2));
-    padding: clamp(1.25rem, 2.8vw, 2.25rem);
+    padding: clamp(1rem, 2vw, 1.5rem);
     overflow-wrap: anywhere;
   }
 
@@ -129,20 +129,16 @@ const sections: Section[] = frontmatter.noTOC ? [] : headings
   }
   .reading-summary__body {
     display: grid;
-    gap: 1rem;
+    gap: .875rem;
     min-width: 0;
   }
   .reading-summary__body > p {
     margin: 0;
-    font-size: clamp(1rem, .975rem + .2vw, 1.125rem);
+    font-size: var(--fs-body);
     line-height: 1.65;
     text-wrap: pretty;
   }
-  .reading-summary__body > p:first-child:not(:only-child) {
-    font-size: clamp(1.0625rem, .95rem + .55vw, 1.375rem);
-    line-height: 1.5;
-    letter-spacing: -.015em;
-  }
+  .reading-summary__body :global(strong) { font-weight: 650; }
 
   @media (max-width: 760px) {
     .reading-summary {
