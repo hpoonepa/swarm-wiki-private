@@ -1,7 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 export default {
     darkMode: ['class'],
-    content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+    content: [
+        './src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}',
+        // Bundled libraries and numeric datasets contain no UI classes. Scanning
+        // their long lines causes excessive backtracking in Tailwind's extractor.
+        '!./src/**/*.min.js',
+        '!./src/components/modeling/epidemiology/dwv-data.js',
+    ],
 	theme: {
     	extend: {
     		borderRadius: {
