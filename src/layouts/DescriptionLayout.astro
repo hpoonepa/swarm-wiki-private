@@ -14,7 +14,7 @@ const sidebarHeadings = headings.map((heading: MarkdownHeading) =>
 </ContentLayout>
 
 <style is:global>
-  /* This layout is used only by Project Description. One grid gap replaces
+  /* Used by Project Description and Implementation. One grid gap replaces
      stacked paragraph, heading, and table margins. */
   #article.info-prose {
     --description-block-gap: 1.25rem;
@@ -23,24 +23,6 @@ const sidebarHeadings = headings.map((heading: MarkdownHeading) =>
   }
 
   #article.info-prose > * { margin-block: 0; }
-
-  #article .description-summary {
-    display: grid;
-    gap: 1rem;
-    padding: clamp(1.25rem, 3vw, 2rem);
-    border: 1px solid #e5b14470;
-    border-radius: var(--r-card);
-    background: #fffaf0;
-  }
-
-  #article .description-summary > p { margin: 0; }
-  #article .description-summary__label {
-    color: var(--moss);
-    font-size: var(--fs-eyebrow);
-    font-weight: 600;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-  }
 
   #article.info-prose > h1:not(:first-child),
   #article.info-prose > .description-references {

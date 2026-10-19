@@ -14,10 +14,11 @@ import '../styles/global.css';
 import '../components/info/reading.css';
 
 interface Props {
-  frontmatter: { title: string; description?: string; noTOC?: boolean; tabLabels?: string[]; tabLinks?: string[]; color?: string; hero?: 'honeycomb' | 'canopy'; honeycombCorner?: HoneycombCorner; band?: 'sdg' };
+  frontmatter: { title: string; description?: string; summary?: string[]; noTOC?: boolean; tabLabels?: string[]; tabLinks?: string[]; color?: string; hero?: 'honeycomb' | 'canopy'; honeycombCorner?: HoneycombCorner; band?: 'sdg' };
   headings?: MarkdownHeading[];
 }
 const { frontmatter, headings = [] } = Astro.props;
+const summary = frontmatter.summary ?? [];
 const slug = Astro.url.pathname.split('/').filter(Boolean).pop() ?? '';
 const page = readingPage(slug);
 const hero = frontmatter.hero ?? 'honeycomb';
@@ -46,8 +47,13 @@ const sections: Section[] = frontmatter.noTOC ? [] : headings
         ? <HoneycombWindow title={frontmatter.title} corner={frontmatter.honeycombCorner} />
         : <CanopyWindow title={frontmatter.title} group={page.group} focal={page.focal} />}</slot>
       {frontmatter.band === 'sdg' && <SdgWheel />}
-      <div class="sheet" data-surface="sheet">
+      <div class:list={['sheet', { 'sheet--summary': summary.length > 0 }]} data-surface="sheet">
         {frontmatter.tabLabels && frontmatter.tabLinks && <div class="info-tabs"><TabReact labels={frontmatter.tabLabels} links={frontmatter.tabLinks} focus={slug} color={frontmatter.color ?? 'green'} /></div>}
+        {summary.length > 0 && <section class="reading-summary" aria-label="Summary">
+          <p class="reading-summary__label">Summary</p>
+          {/* Summary paragraphs are trusted, repository-authored frontmatter. */}
+          {summary.map(paragraph => <p set:html={paragraph} />)}
+        </section>}
         <div class:list={['longform', { 'longform--no-map': sections.length === 0 }]}>
           {sections.length > 0 && <div class="longform__map"><SideMap sections={sections} /></div>}
           <div class="longform__main">
@@ -86,3 +92,29 @@ const sections: Section[] = frontmatter.noTOC ? [] : headings
     </script>
   </body>
 </html>
+
+<style>
+  /* Keep the hero decoration behind the full-width summary. */
+  .sheet--summary { z-index: 2; }
+
+  .reading-summary {
+    display: grid;
+    gap: 1rem;
+    width: min(78rem, calc(100% - 2 * var(--gutter)));
+    margin: 0 auto clamp(2.5rem, 5vw, 3.5rem);
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border: 1px solid #e5b14470;
+    border-radius: var(--r-card);
+    background: #fffaf0;
+    overflow-wrap: anywhere;
+  }
+
+  .reading-summary > p { margin: 0; }
+  .reading-summary__label {
+    color: var(--moss);
+    font-size: var(--fs-eyebrow);
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+  }
+</style>

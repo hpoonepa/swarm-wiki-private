@@ -106,6 +106,8 @@ for (const path of await htmlFiles(output)) {
     }
     for (const child of node.childNodes || []) walk(child);
   }
+  const summary = find(doc, node => (attr(node, 'class') || '').split(/\s+/).includes('reading-summary'));
+  if (summary) walk(summary);
   if (article) walk(article);
   records.push({ title, href, group, text: clip([description, menuItem?.label || '', parts.join(' ')].join(' ')) });
   // Home has scroll-controlled scenes; link to the page rather than hidden beats.

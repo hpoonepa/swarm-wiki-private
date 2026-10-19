@@ -1,10 +1,73 @@
 ---
-layout: ../layouts/ContentLayout.astro
+layout: ../layouts/DescriptionLayout.astro
 title: Implementation
+description: 'Proposed delivery, production, and future deployment of SWARM for beekeepers.'
+summary:
+  - >-
+    Bringing SWARM into beekeeping practice requires treatments that are affordable and easy to use. Our proposed dsRNA treatment would be supplied in a syrup pouch placed near developing bees inside the hive. The minibinder would come in a freeze-dried packet that beekeepers mix into sucrose solution and administer through a standard hive-top feeder. Further testing would establish storage requirements, safety, and effectiveness, while beekeeper feedback would guide practical improvements.
 ---
 
+# Intended Users
 
+We designed SWARM for hobbyist and commercial beekeepers seeking to protect their colonies from deformed wing virus (DWV) and *Varroa destructor*. Hobbyist beekeepers need clear instructions and compatibility with familiar equipment, while commercial operations must also consider how preparation time and recurring costs accumulate across many colonies.
 
-# Overview
+These needs guided our decision to build SWARM around existing feeding practices. Our proposed treatment includes two components: double-stranded RNA (dsRNA) targeting the mite and a minibinder targeting DWV. We envision supplying both in prepared formats that beekeepers could use without laboratory equipment or experience.
 
-Placeholder. The Implementation write-up goes here.
+Our current work includes an experimentally confirmed VP3 binder and laboratory evaluation of our RNAi system (see [Experimentation](/lambert-ga/experiments/)). The delivery formats remain proposals informed by existing products, stakeholder conversations (see [Integrated Human Practices](/lambert-ga/human-practices/)), and our experience with freeze-drying equipment (see [Hardware](/lambert-ga/hardware/)). Neither component has been tested in honey bee colonies.
+
+# Delivery Design
+
+## RNAi
+
+SWARM’s proposed RNAi delivery format is a sealed, flexible pouch containing dsRNA mixed into sugar syrup. Conversations with representatives associated with Norroa™, an RNA-based Varroa treatment, informed this design (see [Integrated Human Practices](/lambert-ga/human-practices/)). In the existing Norroa format, an adhesive cover protects small openings during storage. These openings allow bees to collect syrup using their proboscis, a tube-like feeding mouthpart \[[1](#reference-1)\].
+
+{/* Figure 1: Add the iGEM-hosted figure here once its URL is supplied.
+    Restore "(see Figure 1)" after "sugar syrup" in the opening sentence above.
+*/}
+
+Worker bees redistribute the syrup into brood-area stores, and nurse bees incorporate it into brood food, providing a route for mite exposure \[[1](#reference-1)\]. In a field study, 36% of mite-infested cells in Norroa-treated colonies contained both male and female mite nymphs, compared with 79.3% in control colonies, indicating reduced reproductive success \[[1](#reference-1)\].
+
+SWARM builds on this feeding-based approach with a multiplexed RNAi system targeting three genes associated with mite feeding or survival (see [RNAi](/lambert-ga/rnai/)). Targeting multiple genes is intended to reduce reliance on a single target; any resulting benefit for resistance management remains to be established.
+
+## Minibinder
+
+We envision supplying SWARM’s minibinder as a freeze-dried packet that beekeepers mix into sucrose solution and administer through a standard hive-top feeder. Sugar syrup is already used for supplemental feeding, and hive-top feeders allow bees to access it within the hive \[[3](#reference-3)\]. Dr. Lewis Bartlett of the University of Georgia supported sucrose solution as a practical delivery format (see [Integrated Human Practices](/lambert-ga/human-practices/)). This approach would let beekeepers incorporate SWARM into familiar feeding routines. However, hive-top feeders may be less convenient for migratory commercial operations because they require additional equipment to transport \[[3](#reference-3)\].
+
+Freeze-drying removes water from a frozen preparation, producing a dry material that can be reconstituted before use. It is an established approach for protein formulations, although preserving activity requires formulation-specific evaluation \[[4](#reference-4)\]. Our experience operating an in-house frugal reagent freeze-dryer informed the proposed packet format. Further development would assess whether the minibinder retains its binding activity after drying, storage, and mixing into syrup.
+
+Dr. Bryony Bonning has offered to test our minibinder against intact DWV to evaluate its potential to neutralize infection. This collaboration would extend our binding results with isolated VP3 to evaluating antiviral activity, a step we could not carry out within our high school laboratory. The results would guide its further development as a hive treatment.
+
+# Production and Affordability
+
+Production and quality testing would take place before either component reaches the beekeeper. Supplying prepared components would simplify use and make the manufacturer responsible for product consistency.
+
+Industry-reported manufacturing targets provide context for the potential affordability of dsRNA. GreenLight Biosciences described a proprietary platform designed to manufacture technical-grade dsRNA at industrial scale for less than US\$1 per gram \[[5](#reference-5)\]. This figure represents a manufacturing target, rather than a finished treatment price. Reaching comparable costs for SWARM would require access to industrial production infrastructure, while formulation, packaging, and quality testing would add to the final cost.
+
+Our treatment cost estimates and commercial considerations are discussed on the Entrepreneurship page (see [Entrepreneurship](/lambert-ga/entrepreneurship/)).
+
+# Safety and Future Deployment
+
+Before deployment, SWARM would require evaluation of its effects on bees and other organisms. Commercial distribution of the mite-targeting dsRNA treatment in the United States would require addressing EPA pesticide registration requirements, including environmental and human health assessment, and applicable requirements for residues in honey \[[6](#reference-6)\]. The regulatory pathway for the antiviral minibinder would need to be confirmed separately. Our laboratory precautions and project-specific safety considerations are described on the Safety page (see [Safety](/lambert-ga/safety/)).
+
+Future testing would establish treatment effectiveness and storage requirements, while beekeeper feedback would help refine preparation, delivery, and cost for practical use.
+
+<details className="description-references">
+<summary>
+
+# References
+
+</summary>
+
+<p id="reference-1">[1] Rawn, D., Prouty, C., Gautam, A., Jamison, M., Talton, W., Youngs, K., Narva, K., Manley, B., & Jack, C. (2026). Evaluating the new product Norroa™ against Varroa destructor in managed honey bee (Apis mellifera) colonies. Frontiers in Insect Science, 6, 1751606. [https://doi.org/10.3389/finsc.2026.1751606](https://doi.org/10.3389/finsc.2026.1751606)</p>
+
+<p id="reference-2">[2] GreenLight Biosciences. Norroa™ product label. Reproduced in Maine Board of Pesticides Control, December 2025 meeting materials, “New Active Ingredient Labels.” [https://www.maine.gov/dacf/php/pesticides/documents2/bd_mtgs/Dec25/8_New_Active_Ingredient_Labels_2.0.pdf](https://www.maine.gov/dacf/php/pesticides/documents2/bd_mtgs/Dec25/8_New_Active_Ingredient_Labels_2.0.pdf)</p>
+
+<p id="reference-3">[3] Chakrabarti Basu, P. Honey Bee Nutrition: A Review and Guide to Supplemental Feeding. Honey Bee Health Coalition. See “Sugar Supplementation,” particularly the discussion of hive-top feeders. [https://entnemdept.ufl.edu/media/entnemdeptifasufledu/honeybee/pdfs/HBHC-Honey-Bee-Nutrition-Supplemental-Feeding-Guide-002.pdf](https://entnemdept.ufl.edu/media/entnemdeptifasufledu/honeybee/pdfs/HBHC-Honey-Bee-Nutrition-Supplemental-Feeding-Guide-002.pdf)</p>
+
+<p id="reference-4">[4] Cheng, Y., Duong, H. T. T., Hu, Q., Shameem, M., & Tang, X. C. (2025; published online November 21, 2024). Practical advice in the development of a lyophilized protein drug product. Antibody Therapeutics, 8(1), 13–25. [https://doi.org/10.1093/abt/tbae030](https://doi.org/10.1093/abt/tbae030)</p>
+
+<p id="reference-5">[5] GreenLight Biosciences Holdings, PBC. (2023). Annual report on Form 10-K for the year ended December 31, 2022. Filed March 28, 2023. See “Our Manufacturing Platform and Capabilities,” printed p. 6, and “Risks Related to the Production of dsRNA and mRNA,” printed p. 49. [https://www.annualreports.com/HostedData/AnnualReports/PDF/NASDAQ_GRNA_2022.pdf](https://www.annualreports.com/HostedData/AnnualReports/PDF/NASDAQ_GRNA_2022.pdf)</p>
+
+<p id="reference-6">[6] U.S. Environmental Protection Agency. Advisory on the Applicability of FIFRA and FFDCA for Substances Used to Control Varroa Mites in Beehives. [https://www.epa.gov/pollinator-protection/advisory-applicability-fifra-and-ffdca-substances-used-control-varroa-mites](https://www.epa.gov/pollinator-protection/advisory-applicability-fifra-and-ffdca-substances-used-control-varroa-mites)</p>
+
+</details>
