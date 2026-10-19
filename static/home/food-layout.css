@@ -1,56 +1,40 @@
-/* Three separated silhouettes extend in from the right edge. Size from both
-   viewport dimensions so the artwork stays beside the statement. */
 #statement .food .cluster {
-  right: -10vw;
-  top: 0;
-  width: min(46vw, 72vh);
-  height: 100%;
+  --u: min(1vw, 1.6vh);
+  --cy: 50%;
+  inset: 0;
+  width: auto;
+  height: auto;
   aspect-ratio: auto;
   transform: none;
 }
 
 #statement .food .f-almond {
-  right: -22%;
-  top: -25vh;
-  width: 108%;
-  --food-angle: -135deg;
+  right: calc(var(--u) * -14.5);
+  top: calc(var(--cy) - var(--u) * 36.8);
+  width: calc(var(--u) * 41.7);
+  z-index: 1;
+  --food-angle: -16deg;
 }
 
 #statement .food .f-berry {
-  right: 12%;
-  top: 24vh;
-  width: 64%;
-  --food-angle: 82deg;
+  right: calc(var(--u) * -5);
+  top: calc(var(--cy) - var(--u) * 15.6);
+  width: calc(var(--u) * 26.4);
+  z-index: 3;
+  --food-angle: -8deg;
 }
 
 #statement .food .f-cherries {
-  right: -6%;
-  top: 56vh;
-  width: 105%;
+  right: calc(var(--u) * -16);
+  top: calc(var(--cy) - var(--u) * 2);
+  width: calc(var(--u) * 38.9);
+  z-index: 2;
+  --food-angle: -24deg;
 }
 
 @media (max-width: 720px) {
   #statement .food .cluster {
-    right: -12vw;
-    width: min(72vw, 42vh);
-    height: 46vh;
-  }
-
-  #statement .food .f-almond {
-    right: -16%;
-    top: -12vh;
-    width: 104%;
-  }
-
-  #statement .food .f-berry {
-    right: 26%;
-    top: 2vh;
-    width: 61%;
-  }
-
-  #statement .food .f-cherries {
-    right: -8%;
-    top: 25vh;
-    width: 96%;
+    --u: min(1.8vw, .9vh);
+    --cy: 40%;
   }
 }

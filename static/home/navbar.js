@@ -1,6 +1,6 @@
 import { groups, sections } from './nav-data.js?v=3dfdc3383d85';
 import { mapStyles, mountMap } from './navmap.js?v=951a75de8fa3';
-import { searchStyles, searchTrigger, mountSearch } from './search.js?v=03a8510bbb86';
+import { searchStyles, searchTrigger, mountSearch } from './search.js?v=edeffedc3266';
 const styles = `
   :host { position: fixed; inset: 0; z-index: 70; font-family: 'Space Grotesk Variable', 'Space Grotesk', 'Inter', sans-serif; color: #1a322a; pointer-events: none; }
   :host([data-dark]) { color: #fff9e9; }
@@ -10,8 +10,8 @@ const styles = `
   button, summary { font: inherit; color: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
   button { border: 0; }
   :is(a, button, summary):focus-visible { outline: 2px solid #fcc42f; outline-offset: 4px; }
-  .bar { position: absolute; top: 26px; left: 50%; width: min(1320px, calc(100% - 80px)); padding-right: 56px; transform: translateX(-50%); display: flex; align-items: flex-start; justify-content: flex-end; gap: 24px; transition: transform .38s cubic-bezier(.23, 1, .32, 1), visibility .38s; }
-  :host([data-hidden]) .bar { visibility: hidden; transform: translate(-50%, calc(-100% - 40px)); pointer-events: none; }
+  .bar { position: absolute; top: 26px; left: 50%; width: min(1320px, calc(100% - 80px)); padding-right: 56px; transform: translateX(-50%); display: flex; align-items: flex-start; justify-content: flex-end; gap: 24px; transition: transform .38s cubic-bezier(.23, 1, .32, 1), visibility 0s; }
+  :host([data-hidden]) .bar { visibility: hidden; transform: translate(-50%, calc(-100% - 40px)); pointer-events: none; transition: transform .38s cubic-bezier(.23, 1, .32, 1), visibility 0s .38s; }
   .brand { pointer-events: auto; display: flex; align-items: center; height: 54px; margin-right: auto; border-radius: 12px; }
   .brand img { display: block; height: 58px; width: auto; filter: drop-shadow(0 2px 4px rgba(10, 36, 28, .18)); }
   .brand:hover img { transform: scale(1.04); transition: transform .16s; }
@@ -131,7 +131,19 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
         root.querySelector('.honey-label__short').textContent=open?'Close':'Menu';
         if(!open)honeyToggle.focus({preventScroll:true});
       }});
-      const search=mountSearch(root,{beforeOpen:()=>{close();if(map.isOpen())map.close();}});
+      const darkOver=this.getAttribute('dark-over');
+      let lastY=scrollY, hidden=false;
+      const setHidden=next=>{
+        hidden=next;
+        if(this.hasAttribute('data-hidden')===hidden)return;
+        this.toggleAttribute('data-hidden',hidden);
+        bar.inert=hidden||map.isOpen();bar.setAttribute('aria-hidden',String(hidden));
+        const focused=root.activeElement;
+        close();
+        if(hidden&&bar.contains(focused))honeyToggle.focus({preventScroll:true});
+        this.dispatchEvent(new CustomEvent('swarm-nav-state',{detail:{hidden},bubbles:true,composed:true}));
+      };
+      const search=mountSearch(root,{beforeOpen:()=>{close();if(map.isOpen())map.close();setHidden(false);}});
       this.search=search;
       honeyToggle.addEventListener('click',()=>{search.close();if(map.isOpen())map.close();else{close();map.open();}});
       toggle.addEventListener('click',()=>{const open=!nav.classList.contains('expanded');close();nav.classList.toggle('expanded',open);toggle.setAttribute('aria-expanded',String(open));});
@@ -150,20 +162,11 @@ if (typeof window !== 'undefined' && !customElements.get('swarm-nav')) {
       document.addEventListener('pointerdown',this.dismiss);
       this.dismissFocus=event=>{if(!event.composedPath().includes(this))close();};
       document.addEventListener('focusin',this.dismissFocus);
-      const darkOver=this.getAttribute('dark-over');
-      let lastY=scrollY, hidden=false;
       this.syncScroll=()=>{
         const y=scrollY, dy=y-lastY; lastY=y;
-        if(search.isOpen())return;
-        if(y<80)hidden=false;else if(dy>6)hidden=true;else if(dy<-6)hidden=false;
         if(darkOver){const surface=document.querySelector(darkOver);this.toggleAttribute('data-dark',!!surface&&surface.getBoundingClientRect().bottom>90);}
-        if(this.hasAttribute('data-hidden')===hidden)return;
-        this.toggleAttribute('data-hidden',hidden);
-        bar.inert=hidden||map.isOpen();bar.setAttribute('aria-hidden',String(hidden));
-        const focused=root.activeElement;
-        close();
-        if(hidden&&bar.contains(focused))honeyToggle.focus({preventScroll:true});
-        this.dispatchEvent(new CustomEvent('swarm-nav-state',{detail:{hidden},bubbles:true,composed:true}));
+        if(search.isOpen())return;
+        setHidden(y<80?false:dy>6?true:dy<-6?false:hidden);
       };
       addEventListener('scroll',this.syncScroll,{passive:true});this.syncScroll();
     }

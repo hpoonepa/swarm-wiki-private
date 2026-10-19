@@ -1,6 +1,3 @@
-/* Mouse play for the almond / strawberry / cherries on the first statement screen.
-   Parallax toward the cursor by depth, springy lift + tilt on hover (true shape hit-testing via alpha),
-   squishy pop on click. The statement layer is pointer-events:none, so everything listens on window. */
 (function () {
   const sec = document.getElementById('statement');
   const food = sec && sec.querySelector('.food');
@@ -8,13 +5,11 @@
   const foodOn = () => food.style.visibility !== 'hidden' && ['--vb', '--vs', '--vc'].every(v => +(food.style.getPropertyValue(v) || 1) > .9);
   const blueEl = sec.querySelector('.f-blue');
   const blueOn = () => blueEl && blueEl.style.visibility !== 'hidden' && +(blueEl.style.getPropertyValue('--vbl') || 0) > .9;
-  // front to back; topCut = art is cropped at the top edge too, so it may only drift up
-  const items = [['.f-cherries', 1, foodOn, false, food], ['.f-berry', .6, foodOn, false, food], ['.f-almond', .32, foodOn, false, food],
+  const items = [['.f-cherries', 1, foodOn, false, food], ['.f-almond', .32, foodOn, false, food], ['.f-berry', .6, foodOn, false, food],
                  ['.f-blue', .7, blueOn, true, sec]]
     .map(([sel, depth, on, topCut, root]) => ({ el: root.querySelector(sel), depth, on, topCut, mx: 0, my: 0, s: 1, sv: 0, r: 0, rv: 0, mask: null }))
     .filter(o => o.el);
 
-  // alpha masks so hovering follows each food's real outline, not its box
   items.forEach(o => {
     const build = () => {
       const w = o.el.naturalWidth || 600, h = o.el.naturalHeight || 600, k = 300 / Math.max(w, h);
@@ -28,8 +23,11 @@
     const r = o.el.getBoundingClientRect();
     if (x < r.left || x > r.right || y < r.top || y > r.bottom) return false;
     if (!o.mask) return true;
-    const u = Math.floor((x - r.left) / r.width * o.mask.w), v = Math.floor((y - r.top) / r.height * o.mask.h);
-    return o.mask.d[(v * o.mask.w + u) * 4 + 3] > 40;
+    const t = getComputedStyle(o.el).transform, m = (t === 'none' ? new DOMMatrix() : new DOMMatrix(t)).inverse();
+    const w = o.el.offsetWidth, h = o.el.offsetHeight, dx = x - (r.left + r.right) / 2, dy = y - (r.top + r.bottom) / 2;
+    const lx = w / 2 + m.a * dx + m.c * dy, ly = h / 2 + m.b * dx + m.d * dy;
+    if (lx < 0 || ly < 0 || lx >= w || ly >= h) return false;
+    return o.mask.d[(Math.floor(ly / h * o.mask.h) * o.mask.w + Math.floor(lx / w * o.mask.w)) * 4 + 3] > 40;
   }
 
   let px = innerWidth / 2, py = innerHeight / 2, hover = null, last = performance.now(), running = false;
@@ -43,8 +41,8 @@
 
   function frame(now) {
     const dt = Math.min(.05, (now - last) / 1000); last = now;
-    const right = px > innerWidth / 2;                           // only the right half of the screen plays with the food
-    const nx = Math.max(0, (px / innerWidth - .5) * 2), ny = (py / innerHeight - .5) * 2;   // never drift left: the art is cut at the right edge
+    const right = px > innerWidth / 2;
+    const nx = Math.max(0, (px / innerWidth - .5) * 2), ny = (py / innerHeight - .5) * 2;
     const h = right ? items.find(o => o.on() && hit(o, px, py)) || null : null;
     if (h !== hover) { hover = h; document.documentElement.style.cursor = h ? 'pointer' : ''; }
     let moving = false;
@@ -53,7 +51,7 @@
       const tx = on ? nx * 22 * o.depth : 0, ty = on ? (o.topCut ? Math.min(0, ny) : ny) * 16 * o.depth : 0;
       o.mx += (tx - o.mx) * (1 - Math.exp(-dt * 6)); o.my += (ty - o.my) * (1 - Math.exp(-dt * 6));
       const ts = o === hover ? 1.06 : 1, tr = o === hover ? -3 : 0;
-      o.sv += (ts - o.s) * 260 * dt; o.sv *= Math.exp(-dt * 14); o.s += o.sv * dt;       // springs
+      o.sv += (ts - o.s) * 260 * dt; o.sv *= Math.exp(-dt * 14); o.s += o.sv * dt;
       o.rv += (tr - o.r) * 200 * dt; o.rv *= Math.exp(-dt * 12); o.r += o.rv * dt;
       o.el.style.setProperty('--mx', o.mx.toFixed(2) + 'px'); o.el.style.setProperty('--my', o.my.toFixed(2) + 'px');
       o.el.style.setProperty('--hs', o.s.toFixed(4)); o.el.style.setProperty('--hr', o.r.toFixed(3) + 'deg');

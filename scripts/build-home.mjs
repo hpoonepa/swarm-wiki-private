@@ -34,7 +34,7 @@ const references=oldFooter?.match(/<details class="home-references">[\s\S]*?<\/d
 if(!oldFooter || !references) throw new Error('Homepage footer references are missing.');
 const footer=readFileSync(root+'static/home/site-footer.html','utf8').trim();
 html=html.replace(oldFooter,footer.replace('<!-- HOME_REFERENCES -->',references));
-for(const file of ['story.css','binder-illustration.css','project-overview.css','food-layout.css','site-footer.css','rnai-layout.css','ending.css','ending.js','globe.js','earth-scroll.js','colony-loss.js','dwv-virus.js','food.js','menu.js','navbar.js','mechanisms.js','flight.js','cursor.js','section-nav.css','section-nav.js']) {
+for(const file of ['story.css','binder-illustration.css','project-overview.css','food-layout.css','site-footer.css','rnai-layout.css','ending.css','ending.js','globe.js','earth-scroll.js','colony-loss.js','dwv-virus.js','food.js','menu.js','navbar.js','mechanisms.js','flight.js','cursor.js','section-nav.css','section-nav.js','statement.js']) {
   html=html.replace(new RegExp(file.replaceAll('.','\\.')+'\\?v=[^"\\s]+','g'),file+'?v='+hash(file));
 }
 writeFileSync(root+'static/home/index.html',html);

@@ -64,7 +64,7 @@ export const members: TeamMember[] = [
     id: 'ngoc', name: 'Ngoc Nguyen', color: 'peach', photo: photo('ngocnguyen'), grade: 'Junior', year: 1,
     bio: 'iGEM gives me a chance to gain experience and dilly-dally with my friends! Outside the lab, I’m gaming or birdwatching. #YOLO',
   },
-  { id: 'rohan', name: 'Rohan Kaushik', color: 'honey' },
+  { id: 'rohan', name: 'Rohan Kaushik', color: 'honey', photo: 'https://static.igem.wiki/teams/5612/teampage/members/rohan-hs.webp' },
   { id: 'scarlett', name: 'Scarlett', color: 'honey', photo: photo('scarlett') },
   { id: 'shashwat', name: 'Shashwat Balamurali', color: 'blue', photo: photo('shashwatbalamurali') },
   {
