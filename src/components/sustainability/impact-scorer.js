@@ -91,7 +91,9 @@ function renderSummary() {
     const result = sdgScore(goal.n);
     const factors = FACTORS.map(factor => {
       const part = result.parts[factor.key], weight = result.weights[factor.key] || 0;
-      return `<div class="factor-result${weight ? '' : ' off'}"><span>${esc(factor.name)}<small>${part.count} scored entries · ${weight}% weight</small></span><span class="factor-track"><i style="width:${part.score == null ? 0 : part.score * 10}%;background:${factor.color}"></i></span><b>${fmt(part.score)}</b></div>`;
+      const count = `${part.count} scored ${part.count === 1 ? 'entry' : 'entries'}`;
+      const records = part.count && !editing ? `<button type="button" class="factor-records" data-records-factor="${factor.key}" data-records-goal="${goal.n}" aria-label="View ${esc(factor.name)} records for SDG ${goal.n}">${count}</button>` : count;
+      return `<div class="factor-result${weight ? '' : ' off'}"><span>${esc(factor.name)}<small>${records} · ${weight}% weight</small></span><span class="factor-track"><i style="width:${part.score == null ? 0 : part.score * 10}%;background:${factor.color}"></i></span><b>${fmt(part.score)}</b></div>`;
     }).join('');
     return `<details class="score-goal" data-goal-number="${goal.n}"${openGoals.has(String(goal.n)) ? ' open' : ''}><summary><span class="sdg-sq" style="background:${goal.color};color:${goal.ink}">${goal.n}</span><span class="goal-name">${esc(goal.name)}</span><span class="goal-rating">${fmt(result.score)}<small> / 10</small></span><span class="disclosure" aria-hidden="true">+</span></summary><div class="goal-breakdown">${factors}<p class="factor-coverage">${result.used} of ${result.active} weighted factors have scored entries.</p>${state.sdgNotes[goal.n] ? `<p class="score-note view-only">${esc(state.sdgNotes[goal.n])}</p>` : ''}<div class="why edit-only"><label for="impact-why-${goal.n}">Assessment note</label><textarea id="impact-why-${goal.n}" data-why="${goal.n}" rows="3">${esc(state.sdgNotes[goal.n] || '')}</textarea></div></div></details>`;
   }).join('');
@@ -312,6 +314,14 @@ root.addEventListener("click",function(e){
   var b=e.target.closest("button"); if(!b) return;
   var d=b.dataset;
   if(d.tab){activeTab=d.tab;renderTabs();renderTable();$("tab-"+d.tab).focus();}
+  else if(d.recordsFactor && !editing){
+    activeTab=d.recordsFactor;
+    $("search").value="";
+    $("goal-filter").value=d.recordsGoal;
+    renderTabs();renderTable();
+    $("tab-"+activeTab).focus({preventScroll:true});
+    $("tabs").scrollIntoView({block:"start",behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?"auto":"smooth"});
+  }
   else if (!editing) return;
   else if(d.resetsdg){
     delete state.sdgWeights[d.resetsdg];refreshWeightTable();renderSummary();renderStatus();
