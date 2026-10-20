@@ -8,8 +8,14 @@ for(const [entry,out] of [['components/protein/scene.ts','capsid-engine'],['comp
   buildSync({absWorkingDir:root,entryPoints:['src/home/'+entry],bundle:true,format:'esm',minify:true,define:{'import.meta.env.DEV':'false'},outfile:'static/home/vendor/'+out+'.js'});
 }
 writeFileSync(root+'static/home/binder-scene.js', "// Illustrated molecule renderer; see source for Denmark-GA attribution.\nexport { mountBinderScene } from './vendor/binder-illustration.js?v="+hash('vendor/binder-illustration.js')+"';\n");
+const pin=(file,deps)=>{let text=readFileSync(root+'static/home/'+file,'utf8');for(const dep of deps)text=text.replace(new RegExp("\\./"+dep.replaceAll('.','\\.')+"(?:\\?v=[^']*)?(?=')",'g'),'./'+dep+'?v='+hash(dep));writeFileSync(root+'static/home/'+file,text);};
+pin('dwv-wing.js',['dwv-paper.js']);
+pin('dwv-bee.js',['dwv-paper.js','dwv-wing.js']);
+pin('dwv-mite.js',['dwv-paper.js']);
+pin('dwv-scene.js',['dwv-paper.js','dwv-bee.js','dwv-mite.js','dwv-ground.js','dwv-clips.js']);
 let journey=readFileSync(root+'static/home/journey.js','utf8');
 journey=journey.replace(/\.\/rnai-transition\.js(?:\?v=[^']*)?(?=')/g,'./rnai-transition.js?v='+hash('rnai-transition.js'));
+journey=journey.replace(/\.\/dwv-scene\.js(?:\?v=[^']*)?(?=')/g,'./dwv-scene.js?v='+hash('dwv-scene.js'));
 writeFileSync(root+'static/home/journey.js',journey);
 let controller=readFileSync(root+'static/home/mechanisms.js','utf8');
 for(const file of ['vendor/capsid-engine.js','vendor/rna-player.js','journey.js','binder-scene.js']) {
@@ -37,7 +43,7 @@ const references=oldFooter?.match(/<details class="home-references">[\s\S]*?<\/d
 if(!oldFooter || !references) throw new Error('Homepage footer references are missing.');
 const footer=readFileSync(root+'static/home/site-footer.html','utf8').trim();
 html=html.replace(oldFooter,footer.replace('<!-- HOME_REFERENCES -->',references));
-for(const file of ['story.css','binder-illustration.css','project-overview.css','project-overview.js','scroll-pace.js','food-layout.css','site-footer.css','rnai-layout.css','ending.css','ending.js','globe.js','earth-scroll.js','colony-loss.js','dwv-virus.js','food.js','menu.js','navbar.js','mechanisms.js','flight.js','cursor.js','section-nav.css','section-nav.js','statement.js']) {
+for(const file of ['story.css','dwv-scene.css','binder-illustration.css','project-overview.css','project-overview.js','scroll-pace.js','food-layout.css','site-footer.css','rnai-layout.css','ending.css','ending.js','globe.js','earth-scroll.js','colony-loss.js','dwv-virus.js','food.js','menu.js','navbar.js','mechanisms.js','flight.js','cursor.js','section-nav.css','section-nav.js','statement.js']) {
   html=html.replace(new RegExp(file.replaceAll('.','\\.')+'\\?v=[^"\\s]+','g'),file+'?v='+hash(file));
 }
 writeFileSync(root+'static/home/index.html',html);

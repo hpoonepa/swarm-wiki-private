@@ -1,5 +1,5 @@
 import { initRnaPlayer } from './vendor/rna-player.js?v=da6d243f14d4';
-import { initJourney, binderProgress, rnaProgress, rnaScroll } from './journey.js?v=eaca2c6cd33b';
+import { initJourney, binderProgress, rnaProgress, rnaScroll } from './journey.js?v=51bf9968cde9';
 
 initJourney();
 

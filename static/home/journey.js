@@ -1,4 +1,5 @@
 import { initRnaTransition } from './rnai-transition.js?v=e187ac17a66b';
+import { mountDwvScene } from './dwv-scene.js?v=abe1eff11c6d';
 
 // Camera positions are measured in five viewport heights. Extending the journey
 // does not change the timing of the original globe or its geographic zoom.
@@ -32,34 +33,14 @@ export function initJourney() {
   const captions = [...section.querySelectorAll('[data-disease-beat]')];
   const comparison = section.querySelector('.bee-comparison');
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  // DWV wings: each outline is sampled once, then shrunk toward its hinge,
-  // curled down and creased as the infection gets more severe.
-  const wings = [...comparison.querySelectorAll('.dwv-wing')].map(path => {
-    const [hx, hy] = path.dataset.hinge.split(',').map(Number), total = path.getTotalLength(), n = 180;
-    const pts = Array.from({length: n}, (_, i) => { const q = path.getPointAtLength(total * i / n); return [q.x - hx, q.y - hy]; });
-    const reach = Math.max(...pts.map(([x, y]) => Math.hypot(x, y)));
-    return { path, hx, hy, pts, reach, side: hx > 343 ? 1 : -1 };
+  const dwv = mountDwvScene(comparison, view => {
+    disease.dataset.beat = view.beat;
+    for (const caption of captions) layer(caption, view.captions[caption.dataset.diseaseBeat]);
+    comparison.style.opacity = view.opacity.toFixed(4);
+    comparison.inert = view.opacity < .02;
+    comparison.setAttribute('aria-hidden', String(view.opacity < .02));
   });
-  let shownSev = -1;
   let virusBase = 0;
-  function shrivel(sev) {
-    if (Math.abs(sev - shownSev) < .0005) return;
-    shownSev = sev;
-    for (const w of wings) {
-      let d = '';
-      w.pts.forEach(([x, y], i) => {
-        const u = i / w.pts.length, r = Math.hypot(x, y) / w.reach;
-        const crease = sev * r * (.13 * Math.sin(u * 6.283 * 4 + 1.3 * w.side) + .07 * Math.sin(u * 6.283 * 9 + .4));
-        const k = (1 - .62 * sev * Math.pow(r, .7)) * (1 + crease);
-        const a = w.side * sev * .55 * r;                                   // the tip curls down toward the body
-        const sx = x * k, sy = y * k * (1 - .25 * sev);
-        d += (i ? 'L' : 'M') + (w.hx + sx * Math.cos(a) - sy * Math.sin(a)).toFixed(1) + ' ' + (w.hy + sx * Math.sin(a) + sy * Math.cos(a)).toFixed(1);
-      });
-      w.path.setAttribute('d', d + 'Z');
-    }
-    comparison.style.setProperty('--sev', sev.toFixed(4));
-
-  }
   let width = 1, height = 1;
   const introBee = section.querySelector('.intro-bee'), introScene = section.querySelector('.intro-scene');
   const introMite = section.querySelector('.intro-mite');
@@ -119,25 +100,15 @@ export function initJourney() {
     virus.classList.toggle('on',p > .235 && p < .31 && virusAlpha > .002);
     const base = Math.min(height*.90, width*.72);
     const centerSize = Math.min(height*(mobile?.47:.60), width*(mobile?.9:.55));
-    comparison.style.setProperty('--bee', `${Math.round(Math.min(height*(mobile?.47:.65), width*(mobile?.9:.43)))}px`);
     const vx = mix(-base*.12,width*.5,rise);
     const vy = mix(height+base*.12,height*(mobile?.64:.62),riseY);
     const size = mix(base,centerSize,rise)*(1-.12*between(d,.27,.36));
     if (base !== virusBase) { virusBase = base; virus.style.width = virus.style.height = `${base}px`; }   // resize only when it actually changes
     virus.style.transform = `translate3d(${vx-base/2}px,${vy-base/2}px,0) scale(${size/base})`;
     virus.style.opacity = virusAlpha.toFixed(4);
-    layer(disease, between(d,.12,.21)*(1-depart));
-    const beat = d < .35 ? 'virus' : d < .51 ? 'bee' : d < .75 ? 'mite' : 'wings';
-    disease.dataset.beat = beat;
-    for (const caption of captions) layer(caption, Number(caption.dataset.diseaseBeat === beat));
-    comparison.style.opacity = compare.toFixed(4);
-    shrivel(between(d,.73,.97));
-    comparison.style.setProperty('--mite-arrival', between(d,.50,.66).toFixed(4));
-    comparison.style.setProperty('--mite-visible', between(d,.48,.53).toFixed(4));
-    comparison.style.setProperty('--bite', (between(d,.64,.69)*(1-between(d,.74,.81))).toFixed(4));
-    comparison.style.setProperty('--compare',compare.toFixed(4));
-    comparison.inert = compare < .02;
-    comparison.setAttribute('aria-hidden',String(compare < .02));
+    const diseaseAlpha = between(d,.12,.21)*(1-depart);
+    layer(disease, diseaseAlpha);
+    dwv.update(d, compare, compare > .002 && diseaseAlpha > .002, window.earthScroll().disease);
     document.body.classList.toggle('dwv-focus',p > .225 && p < .54);
 
     // Read the complete title first, then lift it before revealing the two approaches.

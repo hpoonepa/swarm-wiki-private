@@ -1,0 +1,11 @@
+.bee-comparison { position: absolute; inset: 0; overflow: hidden; opacity: 0; background: #fff; }
+.dwv-bee { position: absolute; inset: 0; margin: 0; }
+.dwv-gl { display: block; width: 100%; height: 100%; }
+.dwv-story[data-beat="wings"] .disease-caption { text-align: center; }
+.dwv-story[data-beat="wings"] .disease-caption article { top: 0; transform: none; }
+.dwv-story[data-beat="wings"] .disease-caption p { max-width: 46ch; margin-inline: auto; }
+@media (min-width: 761px) {
+  .dwv-story[data-beat="mite"] .disease-caption { left: auto; right: 6%; width: 32%; }
+  .dwv-story[data-beat="wings"] .disease-caption { left: 8%; top: 8%; width: 84%; transform: none; }
+  .dwv-story[data-beat="wings"] .disease-caption h2 { margin-bottom: 16px; }
+}
